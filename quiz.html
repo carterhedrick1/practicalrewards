@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Coach - Cards for Normals</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .quiz-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .question-card {
+            display: none;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .coach-message {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .coach-message::before {
+            content: "💬";
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #f0f9ff;
+            padding: 0 8px;
+            font-size: 1.2rem;
+        }
+
+        .coach-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #0c4a6e;
+            margin: 0;
+        }
+
+        .explanation-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .explanation-box h4 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .explanation-box p {
+            color: #92400e;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .question-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .answer-options {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .answer-option {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .answer-option:hover {
+            border-color: #667eea;
+            background: #f0f9ff;
+        }
+
+        .answer-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .answer-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .answer-option.selected .answer-description {
+            opacity: 1;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            border-color: #667eea;
+            background: #f0f9ff;
+        }
+
+        .comparison-card.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .comparison-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .comparison-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .comparison-card li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .comparison-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .comparison-card.selected li:before {
+            color: white;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .nav-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #5b6fd8;
+            transform: translateY(-2px);
+        }
+
+        .nav-button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-button {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .back-button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .results-card {
+            display: none;
+            text-align: center;
+        }
+
+        .results-card.active {
+            display: block;
+        }
+
+        .path-result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .path-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .learning-section {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .card-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .card-example {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .card-example h4 {
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .restart-button {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">Cards for Normals</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="quiz-container">
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Question 1: What do you care about? -->
+            <div class="question-card active" id="question1">
+                <div class="coach-message">
+                    <p class="coach-text">Hey! Let's figure out what kind of credit card actually makes sense for you. But first, I want to teach you something important: there are really only two types of rewards cards worth considering.</p>
+                </div>
+                
+                <h2 class="question-title">Cash Back vs Travel Rewards: What's the difference?</h2>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card" data-value="cashback">
+                        <h3>💰 Cash Back Cards</h3>
+                        <ul>
+                            <li>Get actual money back</li>
+                            <li>Easy to understand</li>
+                            <li>Use rewards for anything</li>
+                            <li>Usually no annual fees</li>
+                            <li>Simple math: 2% = $2 per $100</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card" data-value="travel">
+                        <h3>✈️ Travel Rewards Cards</h3>
+                        <ul>
+                            <li>Earn points for flights & hotels</li>
+                            <li>Can get huge value if used right</li>
+                            <li>Often have annual fees</li>
+                            <li>More complex to maximize</li>
+                            <li>Great perks like lounge access</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="explanation-box">
+                    <h4>💡 Here's the real talk:</h4>
+                    <p>Cash back is almost always the better choice for normal people. Travel cards can offer amazing value, but only if you're willing to learn the system and travel regularly. Don't let flashy signup bonuses fool you!</p>
+                </div>
+            </div>
+
+            <!-- Question 2: Cash Back Types -->
+            <div class="question-card" id="question2">
+                <div class="coach-message" id="coachMessage2">
+                    <p class="coach-text">Smart choice! Now let me teach you something most people don't know: there are actually three different types of cash back cards, and picking the wrong one can cost you hundreds of dollars a year.</p>
+                </div>
+                
+                <h2 class="question-title">What type of cash back card fits your life?</h2>
+                
+                <div class="answer-options">
+                    <div class="answer-option" data-value="flat-rate">
+                        <div class="answer-title">Flat Rate (1.5-2% on everything)</div>
+                        <div class="answer-description">Simple and consistent. Great if you don't want to think about categories.</div>
+                    </div>
+                    <div class="answer-option" data-value="categories">
+                        <div class="answer-title">Bonus Categories (3-6% on specific things)</div>
+                        <div class="answer-description">Higher rewards on groceries, gas, dining, etc. More money if you shop the categories.</div>
+                    </div>
+                    <div class="answer-option" data-value="rotating">
+                        <div class="answer-title">Rotating Categories (5% that changes quarterly)</div>
+                        <div class="answer-description">Highest potential rewards, but you have to remember to activate and track categories.</div>
+                    </div>
+                </div>
+
+                <div class="explanation-box">
+                    <h4>💡 The math that matters:</h4>
+                    <p>A 2% flat rate card beats a 5% category card if you only spend $2,000/year in those bonus categories. Most people overestimate how much they spend in specific categories!</p>
+                </div>
+            </div>
+
+            <!-- Question 3: Travel Deep Dive -->
+            <div class="question-card" id="question3">
+                <div class="coach-message" id="coachMessage3">
+                    <p class="coach-text">Alright, let's talk travel cards. Here's what the credit card companies don't want you to know: most people would save more money with a simple cash back card. But if you travel smart, these can be incredible.</p>
+                </div>
+                
+                <h2 class="question-title">What kind of traveler are you, really?</h2>
+                
+                <div class="answer-options">
+                    <div class="answer-option" data-value="domestic">
+                        <div class="answer-title">Mostly domestic travel</div>
+                        <div class="answer-description">Road trips, domestic flights, occasional weekend getaways</div>
+                    </div>
+                    <div class="answer-option" data-value="international">
+                        <div class="answer-title">International travel</div>
+                        <div class="answer-description">International trips, care about foreign transaction fees and travel insurance</div>
+                    </div>
+                    <div class="answer-option" data-value="luxury">
+                        <div class="answer-title">Premium travel experiences</div>
+                        <div class="answer-description">Business class, nice hotels, airport lounges matter to you</div>
+                    </div>
+                    <div class="answer-option" data-value="occasional">
+                        <div class="answer-title">Once or twice a year</div>
+                        <div class="answer-description">Maybe one big trip annually, mostly stay local</div>
+                    </div>
+                </div>
+
+                <div class="explanation-box">
+                    <h4>💡 Reality check:</h4>
+                    <p>If you travel less than 3-4 times per year, a cash back card probably makes more sense. You can always use cash back to book travel and keep things simple!</p>
+                </div>
+            </div>
+
+            <!-- Question 4: Individual vs Family -->
+            <div class="question-card" id="question4">
+                <div class="coach-message" id="coachMessage4">
+                    <p class="coach-text">This question matters more than you think! Family spending changes everything about which card strategy works best. Let me explain why...</p>
+                </div>
+                
+                <h2 class="question-title">Are you optimizing for yourself or a family?</h2>
+                
+                <div class="answer-options">
+                    <div class="answer-option" data-value="individual">
+                        <div class="answer-title">Just me (or me + partner)</div>
+                        <div class="answer-description">Lower total spending, more flexibility in travel dates and choices</div>
+                    </div>
+                    <div class="answer-option" data-value="family">
+                        <div class="answer-title">Family with kids</div>
+                        <div class="answer-description">Higher spending on groceries/necessities, travel is more expensive and complex</div>
+                    </div>
+                </div>
+
+                <div class="explanation-box">
+                    <h4>💡 Why this matters:</h4>
+                    <p>Families spend 2-3x more on groceries and necessities, making category bonus cards much more valuable. Plus, family travel is expensive enough that travel cards can actually pay for themselves through perks alone.</p>
+                </div>
+            </div>
+
+            <!-- Question 5: Spending Reality Check -->
+            <div class="question-card" id="question5">
+                <div class="coach-message" id="coachMessage5">
+                    <p class="coach-text">Last question, and it's the most important one. Most people completely misjudge their spending patterns. Let's figure out what you actually spend money on, not what you think you spend money on.</p>
+                </div>
+                
+                <h2 class="question-title">Where does most of your money actually go?</h2>
+                
+                <div class="answer-options">
+                    <div class="answer-option" data-value="groceries">
+                        <div class="answer-title">Groceries & household stuff</div>
+                        <div class="answer-description">Supermarkets, Target, drugstores, Amazon basics</div>
+                    </div>
+                    <div class="answer-option" data-value="dining">
+                        <div class="answer-title">Restaurants & takeout</div>
+                        <div class="answer-description">You eat out frequently or love ordering delivery</div>
+                    </div>
+                    <div class="answer-option" data-value="mixed">
+                        <div class="answer-title">Pretty even across categories</div>
+                        <div class="answer-description">No single category dominates your spending</div>
+                    </div>
+                    <div class="answer-option" data-value="online">
+                        <div class="answer-title">Online shopping</div>
+                        <div class="answer-description">Amazon, online stores, subscriptions make up most purchases</div>
+                    </div>
+                </div>
+
+                <div class="explanation-box">
+                    <h4>💡 Pro tip:</h4>
+                    <p>Log into your bank account right now and check your last 3 months of spending. Most people are completely wrong about where their money goes! This determines whether category cards are worth the mental overhead.</p>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="results-card" id="results">
+                <h2 class="question-title">Here's what you should actually do:</h2>
+                
+                <div class="path-result">
+                    <div class="path-title" id="pathTitle">Your Recommended Strategy</div>
+                    <p id="pathSummary">Based on your answers, here's the approach that makes the most sense...</p>
+                </div>
+
+                <div class="learning-section">
+                    <h3>Why this strategy works for you:</h3>
+                    <div id="strategyExplanation">
+                        <p>Detailed explanation will go here...</p>
+                    </div>
+
+                    <h3>Cards to consider:</h3>
+                    <div class="card-examples" id="cardExamples">
+                        <!-- Card examples will be populated here -->
+                    </div>
+                </div>
+
+                <div class="coach-message">
+                    <p class="coach-text" id="finalCoachMessage">Remember: the "best" credit card is the one you'll actually use consistently without overspending. Don't get caught up in maximizing every point - optimize for simplicity and your real life!</p>
+                </div>
+
+                <button class="restart-button" onclick="restartQuiz()">Start Over</button>
+            </div>
+
+            <!-- Navigation -->
+            <div class="navigation">
+                <button class="nav-button back-button" id="backBtn" onclick="previousQuestion()" disabled>Back</button>
+                <button class="nav-button" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/scripts.js"></script>
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 5;
+        let answers = {};
+
+        // Educational strategies and recommendations
+        const strategies = {
+            'cashback-flat-individual-mixed': {
+                title: 'Simple Flat Rate Cash Back',
+                summary: 'A straightforward 2% cash back card is perfect for your lifestyle',
+                explanation: 'Since you have mixed spending and want simplicity, a flat rate card eliminates any mental overhead. You\'ll earn consistent rewards without having to track categories or activate anything.',
+                cards: [
+                    { name: 'Citi Double Cash', details: '2% on everything (1% when you buy, 1% when you pay)' },
+                    { name: 'Fidelity Rewards Visa', details: '2% on everything, deposited into investment account' }
+                ]
+            },
+            'cashback-categories-family-groceries': {
+                title: 'Grocery-Focused Category Card',
+                summary: 'Maximize your biggest spending category with bonus rewards',
+                explanation: 'Family grocery spending is substantial and predictable. A card that gives 3-6% back on groceries will significantly outperform a flat rate card for your situation.',
+                cards: [
+                    { name: 'Blue Cash Preferred (Amex)', details: '6% on groceries (up to $6k/year), $95 annual fee' },
+                    { name: 'Blue Cash Everyday (Amex)', details: '3% on groceries (up to $6k/year), no annual fee' }
+                ]
+            },
+            'travel-domestic-individual': {
+                title: 'Flexible Travel Points Strategy',
+                summary: 'Build points for domestic travel with transfer flexibility',
+                explanation: 'For domestic travel, you want flexible points that transfer to multiple airlines and hotels. This gives you options and better redemption values than fixed-value points.',
+                cards: [
+                    { name: 'Chase Sapphire Preferred', details: '2x on travel/dining, transferable points, $95 fee' },
+                    { name: 'Capital One Venture', details: '2x on everything, easy travel redemptions, $95 fee' }
+                ]
+            },
+            'travel-international-luxury': {
+                title: 'Premium Travel Card Strategy',
+                summary: 'High-end cards with valuable perks for international travel',
+                explanation: 'International and luxury travel benefits significantly from premium card perks: no foreign fees, travel insurance, lounge access, and concierge services that can save hundreds per trip.',
+                cards: [
+                    { name: 'Chase Sapphire Reserve', details: '$300 travel credit, Priority Pass lounges, $550 fee' },
+                    { name: 'Amex Platinum', details: 'Multiple airline lounges, hotel status, $695 fee' }
+                ]
+            }
+        };
+
+        function updateProgress() {
+            const progress = (currentQuestion - 1) / totalQuestions * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateCoachMessage() {
+            // Update coach messages based on the path taken
+            if (currentQuestion === 2 && answers.question1 === 'travel') {
+                document.getElementById('coachMessage2').style.display = 'none';
+                // Skip to travel questions
+                currentQuestion = 3;
+                document.getElementById('question2').classList.remove('active');
+                document.getElementById('question3').classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function selectAnswer(element, value) {
+            // Remove selection from other options
+            element.parentNode.querySelectorAll('.answer-option, .comparison-card').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select this option
+            element.classList.add('selected');
+            
+            // Store answer
+            answers[`question${currentQuestion}`] = value;
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                // Handle special routing for cash back vs travel
+                if (currentQuestion === 1) {
+                    if (answers.question1 === 'travel') {
+                        // Skip cash back question, go to travel questions
+                        document.getElementById('question1').classList.remove('active');
+                        currentQuestion = 3;
+                        document.getElementById('question3').classList.add('active');
+                    } else {
+                        // Go to cash back questions
+                        document.getElementById('question1').classList.remove('active');
+                        currentQuestion = 2;
+                        document.getElementById('question2').classList.add('active');
+                    }
+                } else {
+                    // Normal progression
+                    document.getElementById(`question${currentQuestion}`).classList.remove('active');
+                    currentQuestion++;
+                    
+                    // Skip questions based on path
+                    if (answers.question1 === 'cashback' && currentQuestion === 3) {
+                        currentQuestion = 4; // Skip travel question
+                    }
+                    
+                    document.getElementById(`question${currentQuestion}`).classList.add('active');
+                }
+                
+                updateProgress();
+                
+                // Update navigation buttons
+                document.getElementById('backBtn').disabled = false;
+                document.getElementById('nextBtn').disabled = true;
+                
+                if (currentQuestion === totalQuestions) {
+                    document.getElementById('nextBtn').textContent = 'See My Strategy';
+                }
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                document.getElementById(`question${currentQuestion}`).classList.remove('active');
+                
+                // Handle special routing for back navigation
+                if (currentQuestion === 3 && answers.question1 === 'travel') {
+                    currentQuestion = 1;
+                } else if (currentQuestion === 4 && answers.question1 === 'cashback') {
+                    currentQuestion = 2;
+                } else {
+                    currentQuestion--;
+                }
+                
+                document.getElementById(`question${currentQuestion}`).classList.add('active');
+                updateProgress();
+                
+                if (currentQuestion === 1) {
+                    document.getElementById('backBtn').disabled = true;
+                }
+                document.getElementById('nextBtn').disabled = false;
+                document.getElementById('nextBtn').textContent = 'Next';
+            }
+        }
+
+        function showResults() {
+            document.getElementById(`question${currentQuestion}`).classList.remove('active');
+            document.querySelector('.navigation').style.display = 'none';
+            document.getElementById('results').classList.add('active');
+            
+            const strategy = generateStrategy();
+            document.getElementById('pathTitle').textContent = strategy.title;
+            document.getElementById('pathSummary').textContent = strategy.summary;
+            document.getElementById('strategyExplanation').innerHTML = `<p>${strategy.explanation}</p>`;
+            
+            // Populate card examples
+            const cardExamplesHtml = strategy.cards.map(card => 
+                `<div class="card-example">
+                    <h4>${card.name}</h4>
+                    <p>${card.details}</p>
+                </div>`
+            ).join('');
+            document.getElementById('cardExamples').innerHTML = cardExamplesHtml;
+            
+            document.getElementById('progressFill').style.width = '100%';
+        }
+
+        function generateStrategy() {
+            // Simple strategy matching based on key answers
+            const rewardType = answers.question1;
+            const cashType = answers.question2;
+            const travelType = answers.question3;
+            const familyType = answers.question4;
+            const spendingType = answers.question5;
+
+            // Build strategy key
+            if (rewardType === 'cashback') {
+                if (spendingType === 'groceries' && familyType === 'family') {
+                    return strategies['cashback-categories-family-groceries'];
+                } else if (cashType === 'flat-rate' || spendingType === 'mixed') {
+                    return strategies['cashback-flat-individual-mixed'];
+                } else {
+                    return strategies['cashback-categories-family-groceries'];
+                }
+            } else {
+                if (travelType === 'luxury' || travelType === 'international') {
+                    return strategies['travel-international-luxury'];
+                } else {
+                    return strategies['travel-domestic-individual'];
+                }
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 1;
+            answers = {};
+            
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('question1').classList.add('active');
+            
+            document.querySelector('.navigation').style.display = 'flex';
+            document.getElementById('backBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn').textContent = 'Next';
+            
+            updateProgress();
+            
+            document.querySelectorAll('.answer-option, .comparison-card').forEach(option => {
+                option.classList.remove('selected');
+            });
+        }
+
+        // Initialize
+        updateProgress();
+
+        // Add click handlers
+        document.querySelectorAll('.answer-option, .comparison-card').forEach(option => {
+            option.addEventListener('click', function() {
+                selectAnswer(this, this.dataset.value);
+            });
+        });
+    </script>
+</body>
+</html>
