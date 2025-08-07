@@ -7,19 +7,8 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav class="container">
-            <a href="index.html" class="logo">Cards for Normals</a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="quiz.html">Quiz</a></li>
-                <li><a href="learn.html">Learn</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+<div id="header-placeholder"></div>
+
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -27,7 +16,7 @@
             <div class="hero-content">
                 <h1>Credit Cards for Normal People</h1>
                 <p>Picking a credit card shouldn't feel like solving a puzzle. You shouldn't have to dig through 47 Reddit threads or decode what finance influencers actually mean. We'll tell you which card makes sense for your life.</p>
-                <a href="quiz.html" class="cta-button">Start CC Coach</a>
+                <a href="learning.html" class="cta-button">Start Your Learning</a>
             </div>
         </div>
     </section>
@@ -114,5 +103,12 @@
     </footer>
 
     <script src="js/scripts.js"></script>
+    <script>
+fetch('header.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('header-placeholder').innerHTML = data;
+    });
+</script>
 </body>
 </html>
