@@ -40,13 +40,7 @@
             padding: 0 1rem;
         }
 
-        header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+
 
         nav {
             display: flex;
@@ -574,17 +568,7 @@
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <nav class="container">
-            <a href="index.html" class="logo">Cards for Normals</a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="quiz.html">Learn</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div id="header-placeholder"></div>
 
     <div class="container">
         <div class="learning-container">
@@ -1987,6 +1971,12 @@
         // Initialize progress on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateModernProgress();
+        });
+
+        fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
         });
     </script>
 </body>

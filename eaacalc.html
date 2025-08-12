@@ -4,66 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Annual Fee Calculator - Cards for Normals</title>
+    <link rel="stylesheet" href="css/styles.css">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f8fafc;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #64748b;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #667eea;
-        }
+        /* Calculator-specific styles only */
 
         .calculator-container {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
 
         .hero-section {
@@ -139,10 +87,35 @@
             border-color: #667eea;
         }
 
-        .card-brand {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            display: block;
+        .card-image {
+            width: 100%;
+            max-width: 280px;
+            height: 180px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card-option:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-image-fallback {
+            width: 100%;
+            max-width: 280px;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .card-option h3 {
@@ -381,26 +354,23 @@
             .hero-section h1 {
                 font-size: 2rem;
             }
+
+            .card-image {
+                max-width: 240px;
+                height: 150px;
+            }
+
+            .card-image-fallback {
+                max-width: 240px;
+                height: 150px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav class="container">
-            <a href="index.html" class="logo">Cards for Normals</a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="learning.html">Learn</a></li>
-                <li><a href="calculator.html">Calculator</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div id="header-placeholder"></div>
 
-    <div class="container">
-        <div class="calculator-container">
+    <div class="calculator-container">
             
             <!-- Layer 1: Card Selection -->
             <div class="content-layer active" id="layer-home">
@@ -416,7 +386,8 @@
 
                 <div class="cards-grid">
                     <div class="card-option" onclick="calculateCard('venture-x')">
-                        <span class="card-brand">💳</span>
+                        <img src="images/venture-x.png" alt="Capital One Venture X" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="card-image-fallback" style="display: none;">Venture X</div>
                         <h3>Capital One Venture X</h3>
                         <div class="annual-fee">$395 Annual Fee</div>
                         <div class="card-highlights">
@@ -430,7 +401,8 @@
                     </div>
 
                     <div class="card-option" onclick="calculateCard('sapphire-reserved')">
-                        <span class="card-brand">💎</span>
+                        <img src="images/sapphire-reserve.jpg" alt="Chase Sapphire Reserve" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="card-image-fallback" style="display: none;">Sapphire Reserve</div>
                         <h3>Chase Sapphire Reserve</h3>
                         <div class="annual-fee">$550 Annual Fee</div>
                         <div class="card-highlights">
@@ -444,7 +416,8 @@
                     </div>
 
                     <div class="card-option" onclick="calculateCard('amex-platinum')">
-                        <span class="card-brand">🏆</span>
+                        <img src="images/amex-platinum.jpg" alt="American Express Platinum" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="card-image-fallback" style="display: none;">Amex Platinum</div>
                         <h3>American Express Platinum</h3>
                         <div class="annual-fee">$695 Annual Fee</div>
                         <div class="card-highlights">
@@ -685,8 +658,10 @@
             </div>
 
         </div>
-    </div>
 
+    <div id="footer-placeholder"></div>
+
+    <script src="js/scripts.js"></script>
     <script>
         // Card annual fees
         const cardFees = {
@@ -749,7 +724,25 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            // Any initialization code here
+            // Load universal header
+            fetch('header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error loading header:', error);
+                });
+
+            // Load universal footer
+            fetch('footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error loading footer:', error);
+                });
         });
     </script>
 </body>

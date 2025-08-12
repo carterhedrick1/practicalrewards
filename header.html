@@ -4,16 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cards for Normals - Find Your Perfect Credit Card</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Mobile menu styles */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                gap: 0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                text-align: center;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 1rem;
+                color: #64748b;
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+            .nav-links a:hover {
+                color: #667eea;
+                background: #f8fafc;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
     <header>
         <nav class="container">
             <a href="index.html" class="logo">Cards for Normals</a>
-            <ul class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">☰</button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="learning.html">Learning</a></li>
+                <li><a href="eaacalc.html">Calculator</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
