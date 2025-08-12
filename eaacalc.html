@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Fee Calculator - Cards for Normals</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8fafc;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .calculator-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-layer {
+            display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .content-layer.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card-option {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .card-option:hover::before {
+            left: 100%;
+        }
+
+        .card-option:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .card-brand {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card-option h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .annual-fee {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-highlights {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-highlights ul {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+
+        .card-highlights li {
+            margin-bottom: 0.5rem;
+        }
+
+        .calculator-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin: 2rem 0;
+        }
+
+        .calculator-section h2 {
+            color: #1e293b;
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
+            text-align: center;
+        }
+
+        .credit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .credit-item:hover {
+            border-color: #e2e8f0;
+            background: #fafbfc;
+        }
+
+        .credit-info {
+            flex: 1;
+        }
+
+        .credit-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .credit-description {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .credit-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-right: 2rem;
+        }
+
+        .credit-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .credit-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #10b981;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border: 2px solid #667eea;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .total-credits {
+            font-size: 1.5rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .effective-fee {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .effective-fee.positive {
+            color: #dc2626;
+        }
+
+        .effective-fee.negative {
+            color: #10b981;
+        }
+
+        .fee-interpretation {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 3rem 0 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .nav-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-btn.primary:hover {
+            background: #5b6fd8;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .nav-btn.secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .callout-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .callout-box h4 {
+            color: #92400e;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .callout-box p {
+            color: #92400e;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .credit-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">Cards for Normals</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="learning.html">Learn</a></li>
+                <li><a href="calculator.html">Calculator</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="calculator-container">
+            
+            <!-- Layer 1: Card Selection -->
+            <div class="content-layer active" id="layer-home">
+                <div class="hero-section">
+                    <h1>Annual Fee Calculator</h1>
+                    <p>See the real cost of premium credit cards after factoring in the credits you'll actually use</p>
+                </div>
+
+                <div class="callout-box">
+                    <h4>💡 How This Works</h4>
+                    <p>Premium cards advertise lots of credits, but they're only valuable if you actually use them. We'll show you which credits apply to your spending and calculate your effective annual fee.</p>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card-option" onclick="calculateCard('venture-x')">
+                        <span class="card-brand">💳</span>
+                        <h3>Capital One Venture X</h3>
+                        <div class="annual-fee">$395 Annual Fee</div>
+                        <div class="card-highlights">
+                            <ul>
+                                <li>2x miles on everything</li>
+                                <li>Multiple travel credits</li>
+                                <li>Priority Pass lounge access</li>
+                                <li>TSA PreCheck/Global Entry credit</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card-option" onclick="calculateCard('sapphire-reserved')">
+                        <span class="card-brand">💎</span>
+                        <h3>Chase Sapphire Reserve</h3>
+                        <div class="annual-fee">$550 Annual Fee</div>
+                        <div class="card-highlights">
+                            <ul>
+                                <li>3x points on travel and dining</li>
+                                <li>$300 annual travel credit</li>
+                                <li>Priority Pass lounge access</li>
+                                <li>1.5x point value through Chase portal</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card-option" onclick="calculateCard('amex-platinum')">
+                        <span class="card-brand">🏆</span>
+                        <h3>American Express Platinum</h3>
+                        <div class="annual-fee">$695 Annual Fee</div>
+                        <div class="card-highlights">
+                            <ul>
+                                <li>5x points on flights and hotels</li>
+                                <li>Multiple airline and hotel credits</li>
+                                <li>Centurion and Priority Pass lounges</li>
+                                <li>Elite status benefits</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layer 2: Venture X Calculator -->
+            <div class="content-layer" id="layer-venture-x">
+                <div class="hero-section">
+                    <h1>Capital One Venture X Calculator</h1>
+                    <p>Annual Fee: $395 - Let's see what credits you'll actually use</p>
+                </div>
+
+                <div class="calculator-section">
+                    <h2>Select the credits you'll use:</h2>
+                    
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Annual Travel Credit</div>
+                            <div class="credit-description">$300 credit for travel purchases (flights, hotels, rental cars, etc.)</div>
+                        </div>
+                        <div class="credit-value">$300</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('venture-x')" data-value="300">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">TSA PreCheck/Global Entry Credit</div>
+                            <div class="credit-description">Up to $100 every 4-5 years for application fees</div>
+                        </div>
+                        <div class="credit-value">$20/year</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('venture-x')" data-value="20">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Anniversary Bonus Miles</div>
+                            <div class="credit-description">10,000 bonus miles each year (worth ~$100)</div>
+                        </div>
+                        <div class="credit-value">$100</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('venture-x')" data-value="100">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="results-section">
+                        <div class="total-credits">Total Credits Used: $<span id="venture-x-total">0</span></div>
+                        <div class="effective-fee positive" id="venture-x-fee">$395</div>
+                        <div class="fee-interpretation" id="venture-x-interpretation">Select credits above to see your effective annual fee</div>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="nav-btn secondary" onclick="goToLayer('home')">← Back to Card Selection</button>
+                    <button class="nav-btn primary" onclick="calculateCard('sapphire-reserved')">Compare with Sapphire Reserve →</button>
+                </div>
+            </div>
+
+            <!-- Layer 2: Sapphire Reserve Calculator -->
+            <div class="content-layer" id="layer-sapphire-reserved">
+                <div class="hero-section">
+                    <h1>Chase Sapphire Reserve Calculator</h1>
+                    <p>Annual Fee: $550 - Let's see what credits you'll actually use</p>
+                </div>
+
+                <div class="calculator-section">
+                    <h2>Select the credits you'll use:</h2>
+                    
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Annual Travel Credit</div>
+                            <div class="credit-description">$300 automatic credit for travel purchases</div>
+                        </div>
+                        <div class="credit-value">$300</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('sapphire-reserved')" data-value="300">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">TSA PreCheck/Global Entry Credit</div>
+                            <div class="credit-description">Up to $100 every 4 years for application fees</div>
+                        </div>
+                        <div class="credit-value">$25/year</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('sapphire-reserved')" data-value="25">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Lyft Pink Benefits</div>
+                            <div class="credit-description">Complimentary Lyft Pink membership and ride credits</div>
+                        </div>
+                        <div class="credit-value">$60</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('sapphire-reserved')" data-value="60">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">DashPass Benefits</div>
+                            <div class="credit-description">Complimentary DashPass membership for delivery</div>
+                        </div>
+                        <div class="credit-value">$96</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('sapphire-reserved')" data-value="96">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="results-section">
+                        <div class="total-credits">Total Credits Used: $<span id="sapphire-reserved-total">0</span></div>
+                        <div class="effective-fee positive" id="sapphire-reserved-fee">$550</div>
+                        <div class="fee-interpretation" id="sapphire-reserved-interpretation">Select credits above to see your effective annual fee</div>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="nav-btn secondary" onclick="goToLayer('home')">← Back to Card Selection</button>
+                    <button class="nav-btn primary" onclick="calculateCard('amex-platinum')">Compare with Amex Platinum →</button>
+                </div>
+            </div>
+
+            <!-- Layer 2: Amex Platinum Calculator -->
+            <div class="content-layer" id="layer-amex-platinum">
+                <div class="hero-section">
+                    <h1>American Express Platinum Calculator</h1>
+                    <p>Annual Fee: $695 - Let's see what credits you'll actually use</p>
+                </div>
+
+                <div class="calculator-section">
+                    <h2>Select the credits you'll use:</h2>
+                    
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Airline Fee Credit</div>
+                            <div class="credit-description">$200 airline incidental fee credit (baggage, seat upgrades, etc.)</div>
+                        </div>
+                        <div class="credit-value">$200</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('amex-platinum')" data-value="200">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Hotel Credit</div>
+                            <div class="credit-description">$200 annual hotel credit (Fine Hotels & Resorts, The Hotel Collection)</div>
+                        </div>
+                        <div class="credit-value">$200</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('amex-platinum')" data-value="200">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Uber Credits</div>
+                            <div class="credit-description">$15 monthly Uber credits ($35 in December) = $200/year</div>
+                        </div>
+                        <div class="credit-value">$200</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('amex-platinum')" data-value="200">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Saks Fifth Avenue Credit</div>
+                            <div class="credit-description">$50 semiannual credit for Saks purchases = $100/year</div>
+                        </div>
+                        <div class="credit-value">$100</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('amex-platinum')" data-value="100">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">Entertainment Credit</div>
+                            <div class="credit-description">$240 annual digital entertainment credit (streaming services, etc.)</div>
+                        </div>
+                        <div class="credit-value">$240</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('amex-platinum')" data-value="240">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="credit-item">
+                        <div class="credit-info">
+                            <div class="credit-name">TSA PreCheck/Global Entry Credit</div>
+                            <div class="credit-description">Up to $100 every 4-5 years for application fees</div>
+                        </div>
+                        <div class="credit-value">$20/year</div>
+                        <label class="credit-toggle">
+                            <input type="checkbox" onchange="updateCalculation('amex-platinum')" data-value="20">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="results-section">
+                        <div class="total-credits">Total Credits Used: $<span id="amex-platinum-total">0</span></div>
+                        <div class="effective-fee positive" id="amex-platinum-fee">$695</div>
+                        <div class="fee-interpretation" id="amex-platinum-interpretation">Select credits above to see your effective annual fee</div>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="nav-btn secondary" onclick="goToLayer('home')">← Back to Card Selection</button>
+                    <button class="nav-btn primary" onclick="goToLayer('home')">Compare Other Cards →</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Card annual fees
+        const cardFees = {
+            'venture-x': 395,
+            'sapphire-reserved': 550,
+            'amex-platinum': 695
+        };
+
+        function goToLayer(layerId) {
+            document.querySelectorAll('.content-layer').forEach(function(layer) {
+                layer.classList.remove('active');
+            });
+            
+            document.getElementById('layer-' + layerId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function calculateCard(cardId) {
+            goToLayer(cardId);
+            // Reset all checkboxes for this card
+            const layer = document.getElementById('layer-' + cardId);
+            const checkboxes = layer.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateCalculation(cardId);
+        }
+
+        function updateCalculation(cardId) {
+            const layer = document.getElementById('layer-' + cardId);
+            const checkboxes = layer.querySelectorAll('input[type="checkbox"]:checked');
+            
+            let totalCredits = 0;
+            checkboxes.forEach(checkbox => {
+                totalCredits += parseInt(checkbox.getAttribute('data-value'));
+            });
+
+            const annualFee = cardFees[cardId];
+            const effectiveFee = annualFee - totalCredits;
+
+            // Update display
+            document.getElementById(cardId + '-total').textContent = totalCredits;
+            const feeElement = document.getElementById(cardId + '-fee');
+            const interpretationElement = document.getElementById(cardId + '-interpretation');
+
+            if (effectiveFee > 0) {
+                feeElement.textContent = '$' + effectiveFee;
+                feeElement.className = 'effective-fee positive';
+                interpretationElement.textContent = 'You still pay $' + effectiveFee + ' annually after credits';
+            } else if (effectiveFee === 0) {
+                feeElement.textContent = '$0';
+                feeElement.className = 'effective-fee';
+                interpretationElement.textContent = 'The credits exactly cover the annual fee!';
+            } else {
+                feeElement.textContent = '+$' + Math.abs(effectiveFee);
+                feeElement.className = 'effective-fee negative';
+                interpretationElement.textContent = 'You come out ahead by $' + Math.abs(effectiveFee) + ' per year!';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Any initialization code here
+        });
+    </script>
+</body>
+</html>
