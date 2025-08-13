@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Cards for Normals</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin: 2rem 0;
+        }
+
+        .content-section h2 {
+            color: #1e293b;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .content-section h3 {
+            color: #1e293b;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.4rem;
+        }
+
+        .content-section p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            color: #374151;
+        }
+
+        .contact-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .contact-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-card p {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-email {
+            background: #667eea;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: background 0.3s ease;
+        }
+
+        .contact-email:hover {
+            background: #5b6fd8;
+            color: white;
+        }
+
+        .faq-section {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .faq-item {
+            margin-bottom: 2rem;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .faq-answer {
+            color: #475569;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .callout-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .callout-box h4 {
+            color: #92400e;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .callout-box p {
+            color: #92400e;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .response-time {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .response-time p {
+            color: #065f46;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .contact-options {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="contact-container">
+        <div class="hero-section">
+            <h1>Get in Touch</h1>
+            <p>Questions about cards? Feedback on our advice? We'd love to hear from you</p>
+        </div>
+
+        <div class="content-section">
+            <h2>How to Reach Us</h2>
+            <p>We're a small team focused on providing honest, straightforward credit card advice. Here's how to get in touch:</p>
+
+            <div style="text-align: center; margin: 3rem 0;">
+                <div class="contact-icon">📧</div>
+                <h3 style="margin: 1rem 0; color: #1e293b;">Email Us</h3>
+                <p style="margin-bottom: 2rem; color: #64748b;">For questions about cards, feedback on recommendations, sharing your experience, or suggestions for new content.</p>
+                <a href="mailto:hello@cardsfornormals.com" class="contact-email" style="font-size: 1.2rem; padding: 1rem 2rem;">hello@cardsfornormals.com</a>
+            </div>
+
+            <div class="response-time">
+                <p>📬 We typically respond within 24-48 hours</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>What We Love to Hear About</h2>
+            
+            <h3>Questions We Can Help With:</h3>
+            <p>• "Which card should I get for my specific situation?"</p>
+            <p>• "Is this card actually worth the annual fee for someone like me?"</p>
+            <p>• "I'm confused about [specific credit card feature] - can you explain?"</p>
+            <p>• "Your recommendation doesn't seem right for my case because..."</p>
+
+            <h3>Feedback That Helps Us Improve:</h3>
+            <p>• "I got the card you recommended and here's how it's working out..."</p>
+            <p>• "Your explanation of [topic] was confusing because..."</p>
+            <p>• "You should cover [specific topic] because..."</p>
+            <p>• "I wish you had a tool that could..."</p>
+            <p>• "Here's my real-world experience with [card]..."</p>
+
+            <div class="callout-box">
+                <h4>💡 A Note on Personalized Advice</h4>
+                <p>While we love helping people find the right cards, we can't provide personalized financial advice. We'll point you toward the right resources and help you understand your options, but the final decision is always yours.</p>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Quick Answers to Common Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Do you make money from card recommendations?</div>
+                <div class="faq-answer">No. We don't have affiliate relationships with credit card companies. Our recommendations are based purely on what we think makes sense for different situations.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can you help me with my specific credit situation?</div>
+                <div class="faq-answer">We can point you toward the right type of card and explain the trade-offs, but we can't provide personalized financial advice. For specific credit issues, consider talking to a nonprofit credit counselor.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Why don't you cover [specific card]?</div>
+                <div class="faq-answer">We focus on cards that make sense for most people in common situations. If there's a card you think we should cover, let us know! We're always looking to expand our coverage of genuinely useful options.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How often do you update your recommendations?</div>
+                <div class="faq-answer">We review our recommendations regularly as card terms change. If you notice outdated information, please let us know so we can fix it quickly.</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>What We're Working On</h2>
+            <p>We're constantly working to make Cards for Normals more helpful. Currently on our list:</p>
+            
+            <p>• More detailed spending analysis tools</p>
+            <p>• Expanded coverage of business credit cards</p>
+            <p>• Better explanations of credit score impacts</p>
+            <p>• More real-world examples and case studies</p>
+
+            <p>Have ideas for what we should tackle next? We'd love to hear them.</p>
+
+            <h3>Thanks for Being Here</h3>
+            <p>Seriously - thank you for choosing straightforward advice over the typical credit card marketing noise. We're building this site for people like you who just want honest answers without the sales pitch.</p>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/scripts.js"></script>
+    <script src="js/header.js"></script>
+    <script>
+        // Load footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+    </script>
+</body>
+</html>
