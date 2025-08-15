@@ -3,16 +3,15 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>Cards for Normals</h3>
-                <p>Credit card advice for real people who are tired of wading through marketing fluff and just want a straight answer.</p>
+                <h3>Practical Rewards</h3>
+                <p>Credit card advice for practical people who are tired of wading through marketing fluff and just want a straight answer.</p>
             </div>
             <div class="footer-section">
                 <h3>Resources</h3>
                 <ul>
                     <li><a href="learning.html">Credit Card Basics</a></li>
-                    <li><a href="learn.html#credit-scores">Understanding Credit Scores</a></li>
-                    <li><a href="learn.html#responsible-use">Responsible Credit Use</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="eaacalc.html">Annual Fee Calculator</a></li>
+                    <li><a href="about.html">About Us</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -26,11 +25,87 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+            <p>&copy; 2025 Practical Rewards. All rights reserved.</p>
         </div>
     </div>
 </footer>
 
-<script src="scripts.js"></script>
-</body>
-</html>
+<style>
+    /* Footer Styles with Forest Fresh Brand Colors */
+    footer {
+        background: #292524;
+        color: #a8a29e;
+        padding: 3rem 0 1rem 0;
+        margin-top: 3rem;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+        color: white;
+        margin-bottom: 1rem;
+        font-size: 1.125rem;
+        font-weight: 600;
+    }
+
+    .footer-section p {
+        line-height: 1.6;
+        color: #a8a29e;
+    }
+
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-section ul li {
+        margin-bottom: 0.75rem;
+    }
+
+    .footer-section ul li a {
+        color: #a8a29e;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .footer-section ul li a:hover {
+        color: #10b981;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid #44403c;
+        padding-top: 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+        color: #78716c;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 1rem;
+        }
+
+        .footer-content {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        footer {
+            padding: 2rem 0 1rem 0;
+        }
+    }
+</style>

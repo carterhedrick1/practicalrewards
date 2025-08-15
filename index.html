@@ -3,84 +3,1001 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cards for Normals - Find Your Perfect Credit Card</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Practical Rewards - Find Your Perfect Credit Card</title>
+    <style>
+        /* Modern CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #292524;
+            background: #fafaf9;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header - Modern Desktop Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 250, 249, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(231, 229, 228, 0.6);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #047857;
+            transform: translateY(-1px);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #57534e;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #059669, #10b981);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #059669;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #047857 !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .cta-nav::after {
+            display: none;
+        }
+
+        .cta-nav:hover {
+            color: #047857 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
+            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+        }
+
+        /* Mobile Menu Toggle (Hidden on Desktop) */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #57534e;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 100px 0;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(254, 243, 199, 0.2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(254, 243, 199, 0.3);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+            line-height: 1.5;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #047857;
+            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.3);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(254, 243, 199, 0.5);
+            color: #047857;
+            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+        }
+
+        .btn-secondary {
+            background: rgba(240, 253, 244, 0.1);
+            color: white;
+            border: 2px solid rgba(240, 253, 244, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(240, 253, 244, 0.2);
+            border-color: rgba(240, 253, 244, 0.5);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Problem Statement Section */
+        .problem-section {
+            padding: 100px 0;
+            background: #f5f5f4;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #292524;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: #57534e;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e7e5e4;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(5, 150, 105, 0.1);
+            border-color: #d6d3d1;
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .problem-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #292524;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: #57534e;
+            line-height: 1.6;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .solution-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-text h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #292524;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .solution-text p {
+            font-size: 1.125rem;
+            color: #57534e;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            font-size: 1.125rem;
+            color: #44403c;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: #059669;
+            font-weight: bold;
+            margin-right: 1rem;
+            background: #f0fdf4;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .solution-visual {
+            background: linear-gradient(135deg, #f5f5f4 0%, #e7e5e4 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            border: 1px solid #d6d3d1;
+        }
+
+        .solution-visual h3 {
+            font-size: 1.5rem;
+            color: #292524;
+            margin-bottom: 2rem;
+        }
+
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            gap: 1rem;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-weight: 600;
+            color: #44403c;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background: #f5f5f4;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #e7e5e4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #059669, #10b981);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(5, 150, 105, 0.15);
+            border-color: #d6d3d1;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #292524;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #57534e;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 70% 30%, rgba(240, 253, 244, 0.1) 0%, transparent 70%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #292524;
+            color: #a8a29e;
+            padding: 3rem 0 1rem 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section ul li a {
+            color: #a8a29e;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #44403c;
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        } grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section ul li a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            /* Show mobile menu toggle */
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            /* Hide desktop navigation */
+            .nav-links {
+                display: none;
+            }
+
+            nav {
+                padding: 0 1rem;
+                height: 70px;
+            }
+
+            .hero {
+                padding: 120px 0 80px 0;
+            }
+
+            .hero-container {
+                padding: 0 1rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .solution-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .step {
+                text-align: center;
+                flex-direction: column;
+            }
+
+            .process-steps {
+                align-items: center;
+            }
+
+            .problems-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-card,
+            .feature-card {
+                padding: 2rem;
+            }
+
+            .solution-visual {
+                padding: 2rem;
+            }
+        }
+
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .nav-links {
+                gap: 2rem;
+            }
+
+            .hero-container,
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .solution-content {
+                gap: 3rem;
+            }
+        }
+
+        /* Smooth animations */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 <body>
-<div id="header-placeholder"></div>
-
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">Practical Rewards</a>
+            
+            <!-- Desktop Navigation -->
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="learning.html">Learning</a></li>
+                <li><a href="eaacalc.html">Calculator</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="learning.html" class="cta-nav">Get Started</a></li>
+            </ul>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="container">
+        <div class="hero-container">
             <div class="hero-content">
-                <h1>Credit Cards for Normal People</h1>
-                <p>Picking a credit card shouldn't feel like solving a puzzle. You shouldn't have to dig through 47 Reddit threads or decode what finance influencers actually mean. We'll tell you which card makes sense for your life.</p>
-                <a href="learning.html" class="cta-button">Start Your Learning</a>
+                <div class="hero-badge">✨ No affiliate links, no sales pitches</div>
+                <h1>Credit Cards for Practical People</h1>
+                <p class="hero-subtitle">Stop drowning in Reddit threads and confusing advice. Get straight answers about which credit card actually makes sense for your real-world spending.</p>
+                <div class="hero-cta">
+                    <a href="learning.html" class="btn btn-primary">
+                        Start Learning
+                        <span>→</span>
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        How It Works
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Statement Section -->
+    <section class="problem-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">The Problem</div>
+                <h2 class="section-title">Credit Card Advice is Broken</h2>
+                <p class="section-subtitle">Most advice assumes you want to become a points expert or manage 17 different cards. That's not practical.</p>
+            </div>
+            
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <span class="problem-icon">🤯</span>
+                    <h3>Information Overload</h3>
+                    <p>47 Reddit threads, 20 YouTube videos, and you still don't know which card to get. Every "expert" says something different.</p>
+                </div>
+                
+                <div class="problem-card">
+                    <span class="problem-icon">💸</span>
+                    <h3>Sales Pitch Disguised as Advice</h3>
+                    <p>Most sites push premium cards with high annual fees because they get paid more. You need advice, not a sales pitch.</p>
+                </div>
+                
+                <div class="problem-card">
+                    <span class="problem-icon">⏰</span>
+                    <h3>Complexity for Complexity's Sake</h3>
+                    <p>You just want a simple answer, but everyone assumes you want to optimize every purchase with spreadsheets and category tracking.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section">
+        <div class="container">
+            <div class="solution-content">
+                <div class="solution-text">
+                    <h2>We Give You Practical Answers</h2>
+                    <p>No 20-paragraph blog posts about card history. No affiliate marketing disguised as recommendations. Just clear, practical guidance to help you make smart decisions.</p>
+                    
+                    <ul class="solution-features">
+                        <li>Get practical answers in plain English</li>
+                        <li>Honest about when simple beats "optimal"</li>
+                        <li>Zero sales pitch, zero affiliate links</li>
+                        <li>Focus on real-world usage, not theory</li>
+                    </ul>
+                    
+                    <a href="learning.html" class="btn btn-primary">Start Learning</a>
+                </div>
+                
+                <div class="solution-visual">
+                    <h3>How It Actually Works</h3>
+                    <div class="process-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-text">Tell us your situation (2 minutes)</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-text">We explain your options clearly</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-text">Get your answer and understand why</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="features">
+    <section class="features-section" id="features">
         <div class="container">
-            <h2>Why Cards for Normals?</h2>
+            <div class="section-header">
+                <div class="section-badge">Why Choose Us</div>
+                <h2 class="section-title">Built for Normal People</h2>
+                <p class="section-subtitle">We're not trying to turn you into a credit card expert. We just want to help you make a good choice.</p>
+            </div>
+            
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>We Actually Answer Your Question</h3>
+                    <span class="feature-icon">🎯</span>
+                    <h3>Direct Answers</h3>
                     <p>Want the quick answer? We'll give it to you. Want to understand why? We'll explain it like you're a normal person, not a finance nerd.</p>
                 </div>
+                
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>No Reddit Rabbit Holes</h3>
-                    <p>Skip the endless forum threads and conflicting advice. Our quiz takes 2 minutes and gives you a clear recommendation.</p>
+                    <span class="feature-icon">🛡️</span>
+                    <h3>No Hidden Agenda</h3>
+                    <p>We don't get paid by credit card companies. Our recommendations are based on what actually makes sense for your situation.</p>
                 </div>
+                
                 <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>Zero Sales Pitch</h3>
-                    <p>We're not trying to upsell you on premium cards you don't need. Just honest advice about what actually makes sense for your situation.</p>
+                    <span class="feature-icon">⚡</span>
+                    <h3>Skip the Research</h3>
+                    <p>No more endless forum threads and conflicting advice. Get clear guidance that cuts through the noise.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🧠</span>
+                    <h3>Honest About Complexity</h3>
+                    <p>We'll tell you when simple beats optimal, and when the mental overhead isn't worth the extra rewards.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3>Real Math, Not Marketing</h3>
+                    <p>We calculate break-even points, factor in annual fees, and show you the actual dollar impact of different strategies.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🤝</span>
+                    <h3>Built for Your Life</h3>
+                    <p>Recommendations based on how you actually spend money, not theoretical optimization scenarios.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works" id="how-it-works">
+    <!-- CTA Section -->
+    <section class="cta-section">
         <div class="container">
-            <h2>How It Works</h2>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Tell Us Your Situation</h3>
-                    <p>Just the basics — how you spend money, what your credit's like, and what you're hoping to get out of a card.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>We Do the Thinking</h3>
-                    <p>No need to become a points expert. We'll figure out which cards actually fit your real life.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Get Your Answer</h3>
-                    <p>We'll tell you exactly which card to get and why it makes sense for you — in plain English.</p>
+            <div class="cta-content">
+                <h2>Ready to Find Your Perfect Card?</h2>
+                <p>Stop overthinking it. Get clear, honest advice that actually helps you make a decision.</p>
+                <div class="hero-cta">
+                    <a href="learning.html" class="btn btn-primary">Start Learning</a>
+                    <a href="eaacalc.html" class="btn btn-secondary">Try Our Calculator</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-<div id="footer-placeholder"></div>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Cards for Normals</h3>
+                    <p>Credit card advice for real people who are tired of wading through marketing fluff and just want a straight answer.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="learning.html">Credit Card Basics</a></li>
+                        <li><a href="eaacalc.html">Annual Fee Calculator</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-<script>
-fetch('footer.html')
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById('footer-placeholder').innerHTML = data;
-    });
-</script>
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
 
-    <script src="js/scripts.js"></script>
-    <script src="js/header.js"></script>
-</body>
-</html>
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(250, 250, 249, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(250, 250, 249, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Mobile menu toggle (placeholder function)
+        function toggleMobileMenu() {
+            // This would implement mobile menu functionality
+            console.log('Mobile menu toggle clicked');
+        }
+
+        // Add loading animation
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateElements = document.querySelectorAll('.problem-card, .feature-card, .solution-content > *, .section-header');
+            animateElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
