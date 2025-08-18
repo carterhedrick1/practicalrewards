@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>American Express Platinum - Cards for Normals</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="./card-styles.css">
+</head>
+<body>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
+
+    <div class="card-container">
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>American Express Platinum</h1>
+                    <p class="hero-subtitle">The Ultimate Luxury Travel Card</p>
+                    <p class="hero-description">The Platinum card is Amex's flagship offering with the most comprehensive suite of travel and lifestyle benefits. At $695/year, it's designed for frequent travelers who value premium experiences.</p>
+                </div>
+                <div class="hero-card">
+                    <img src="../../images/amex-platinum.jpg" alt="American Express Platinum" class="hero-card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="hero-card-fallback" style="display: none;">
+                        <div class="card-preview">
+                            <div class="card-chip"></div>
+                            <div class="card-logo">American Express</div>
+                            <div class="card-name">PLATINUM</div>
+                        </div>
+                    </div>
+                    <div class="card-details">
+                        <div class="annual-fee-badge">$695 Annual Fee</div>
+                        <div class="card-highlights">
+                            <div class="highlight-item">5x points on flights & hotels</div>
+                            <div class="highlight-item">Centurion lounges</div>
+                            <div class="highlight-item">Elite status benefits</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout-box">
+            <h4>💡 How This Works</h4>
+            <p>Select the credits you'll actually use to see your real annual cost. Only count credits for services you'd pay for anyway.</p>
+        </div>
+
+        <div class="card-section">
+            <h2>Select the credits you'll use:</h2>
+            
+            <div class="credit-item">
+                <div class="credit-info">
+                    <div class="credit-name">Airline Fee Credit</div>
+                    <div class="credit-description">$200 airline incidental fee credit (baggage, seat upgrades, etc.)</div>
+                </div>
+                <div class="credit-value">$200</div>
+                <label class="credit-toggle">
+                    <input type="checkbox" onchange="updateCalculation()" data-value="200">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="credit-item">
+                <div class="credit-info">
+                    <div class="credit-name">Hotel Credit</div>
+                    <div class="credit-description">$200 annual hotel credit (Fine Hotels & Resorts, The Hotel Collection)</div>
+                </div>
+                <div class="credit-value">$200</div>
+                <label class="credit-toggle">
+                    <input type="checkbox" onchange="updateCalculation()" data-value="200">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="credit-item">
+                <div class="credit-info">
+                    <div class="credit-name">Uber Credits</div>
+                    <div class="credit-description">$15 monthly Uber credits ($35 in December) = $200/year</div>
+                </div>
+                <div class="credit-value">$200</div>
+                <label class="credit-toggle">
+                    <input type="checkbox" onchange="updateCalculation()" data-value="200">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="credit-item">
+                <div class="credit-info">
+                    <div class="credit-name">Saks Fifth Avenue Credit</div>
+                    <div class="credit-description">$50 semiannual credit for Saks purchases = $100/year</div>
+                </div>
+                <div class="credit-value">$100</div>
+                <label class="credit-toggle">
+                    <input type="checkbox" onchange="updateCalculation()" data-value="100">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="credit-item">
+                <div class="credit-info">
+                    <div class="credit-name">Entertainment Credit</div>
+                    <div class="credit-description">$240 annual digital entertainment credit (streaming services, etc.)</div>
+                </div>
+                <div class="credit-value">$240</div>
+                <label class="credit-toggle">
+                    <input type="checkbox" onchange="updateCalculation()" data-value="240">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="credit-item">
+                <div class="credit-info">
+                    <div class="credit-name">TSA PreCheck/Global Entry Credit</div>
+                    <div class="credit-description">Up to $100 every 4-5 years for application fees</div>
+                </div>
+                <div class="credit-value">$20/year</div>
+                <label class="credit-toggle">
+                    <input type="checkbox" onchange="updateCalculation()" data-value="20">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="results-section">
+                <div class="total-credits">Total Credits Used: $<span id="total-credits">0</span></div>
+                <div class="effective-fee positive" id="effective-fee">$695</div>
+                <div class="fee-interpretation" id="fee-interpretation">Select credits above to see your effective annual fee</div>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="../../eaacalc.html" class="nav-btn secondary">← Back to Card Selection</a>
+            <a href="venture-x.html" class="nav-btn primary">Compare with Venture X →</a>
+        </div>
+    </div>
+
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
+
+    <script src="./card-scripts.js"></script>
+    <script>
+        // Page-specific configuration
+        const annualFee = 695;
+    </script>
+</body>
+</html> 

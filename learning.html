@@ -18,8 +18,9 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f8fafc;
+    background: #fafaf9;
     line-height: 1.6;
+    scroll-padding-top: 100px;
 }
 
 .container {
@@ -28,51 +29,149 @@ body {
     padding: 0 1rem;
 }
 
-/* Header */
-header {
-    background: white;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 1rem 0;
+/* Mobile Responsiveness for Container */
+@media (max-width: 767px) {
+    .container {
+        max-width: 100%;
+        width: 100%;
+        padding: 0 0.75rem;
+        box-sizing: border-box;
+    }
+    
+    /* Force full width on all content elements */
+    .content-layer {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .content-layer .container {
+        padding: 0 0.75rem !important;
+        margin: 0 !important;
+    }
 }
 
-.header-content {
+@media (max-width: 480px) {
+    .container {
+        max-width: 100%;
+        width: 100%;
+        padding: 0 0.5rem;
+        box-sizing: border-box;
+    }
+    
+    /* Force full width on all content elements */
+    .content-layer {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .content-layer .container {
+        padding: 0 0.5rem !important;
+        margin: 0 !important;
+    }
+}
+
+/* Header - Modern Desktop Navigation */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(250, 250, 249, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid #e7e5e4;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+nav {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+    height: 80px;
 }
 
 .logo {
     font-size: 1.5rem;
-    font-weight: bold;
-    color: #667eea;
+    font-weight: 700;
+    color: #059669;
     text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    color: #047857;
+    transform: translateY(-1px);
 }
 
 .nav-links {
     display: flex;
     list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 2rem;
+    gap: 3rem;
+    align-items: center;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: #64748b;
+    color: #57534e;
     font-weight: 500;
-    transition: color 0.3s ease;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #059669, #10b981);
+    transition: width 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: #667eea;
+    color: #059669;
 }
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.cta-nav {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #047857 !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.cta-nav::after {
+    display: none;
+}
+
+.cta-nav:hover {
+    color: #047857 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
+    background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+}
+
+/* Mobile menu styles are handled by the dynamic header */
 
 /* Hero Section */
 .hero-wrapper {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
     width: 100%;
     position: relative;
     color: white;
@@ -81,7 +180,7 @@ header {
 .hero-content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 4rem 2rem 6rem 2rem;
+    padding: 9rem 2rem 6rem 2rem;
     text-align: center;
 }
 
@@ -93,7 +192,7 @@ header {
 }
 
 .hero-content p {
-    font-size: 1.375rem;
+    font-size: 1.1rem;
     line-height: 1.5;
     opacity: 0.9;
     margin-bottom: 3rem;
@@ -104,22 +203,22 @@ header {
 
 /* Progress Bar */
 .progress-bar {
-    background: rgba(255, 255, 255, 0.95);
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     backdrop-filter: blur(10px);
     border-radius: 12px;
-    padding: 1rem 1.5rem;
+    padding: 1.5rem 2rem;
     margin: 3rem auto 0 auto;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(254, 243, 199, 0.3);
+    border: 2px solid rgba(5, 150, 105, 0.2);
     max-width: 600px;
 }
 
 .progress-track {
     position: relative;
-    background: #f1f5f9;
-    height: 6px;
-    border-radius: 3px;
-    margin-bottom: 1rem;
+    background: rgba(5, 150, 105, 0.2);
+    height: 8px;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
 }
 
 .progress-fill {
@@ -127,15 +226,15 @@ header {
     top: 0;
     left: 0;
     height: 100%;
-    background: linear-gradient(90deg, #10b981, #667eea);
-    border-radius: 3px;
+    background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+    border-radius: 4px;
     width: 25%;
     transition: width 0.4s ease;
 }
 
 .progress-steps {
     position: absolute;
-    top: -15px;
+    top: -16px;
     left: 0;
     right: 0;
     display: flex;
@@ -144,8 +243,8 @@ header {
 }
 
 .progress-step {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: white;
     border: 3px solid #e2e8f0;
@@ -162,9 +261,25 @@ header {
 }
 
 .progress-step.active {
-    border-color: #667eea;
-    background: #667eea;
+    border-color: #059669;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
     color: white;
+}
+
+/* Enhanced styling for Level 3 (final level) */
+.progress-step.active .step-icon {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Special styling when progress is at 100% (Level 3) */
+.progress-fill[style*="width: 100%"] + .progress-steps .progress-step.active {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
 }
 
 .progress-step.completed {
@@ -179,6 +294,8 @@ header {
     color: #94a3b8;
     cursor: not-allowed;
 }
+
+
 
 .step-icon {
     font-size: 0.9rem;
@@ -196,7 +313,7 @@ header {
 .cards-section {
     position: relative;
     z-index: 10;
-    margin-top: -4rem;
+    margin-top: -3rem;
     margin-bottom: 2rem;
 }
 
@@ -206,89 +323,54 @@ header {
     padding: 0 2rem;
 }
 
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3rem;
-}
 
+
+/* Clean, Simple Card Design - Matching the index page */
 .card {
     background: white;
+    padding: 2.5rem;
     border-radius: 20px;
-    padding: 3rem 2.5rem;
-    min-height: 180px;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.15);
-    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e7e5e4;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-content {
-    flex-grow: 1;
-}
-
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 24px 64px rgba(102, 126, 234, 0.25);
+    cursor: pointer;
 }
 
 .card::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.02) 0%, rgba(118, 75, 162, 0.02) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 20px;
+    height: 4px;
+    background: linear-gradient(90deg, #059669, #10b981);
 }
 
-.card:hover::before {
-    opacity: 1;
-}
-
-.card::after {
-    content: "→";
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    font-size: 1.5rem;
-    color: #667eea;
-    font-weight: bold;
-    opacity: 0.6;
-    transition: all 0.3s ease;
-}
-
-.card:hover::after {
-    opacity: 1;
-    transform: translateX(4px);
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(5, 150, 105, 0.15);
+    border-color: #d6d3d1;
 }
 
 .card-icon {
-    font-size: 3.5rem;
+    font-size: 3rem;
     margin-bottom: 1.5rem;
     display: block;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .card h3 {
-    font-size: 1.75rem;
-    line-height: 1.3;
-    margin-bottom: 1rem;
-    color: #1e293b;
+    font-size: 1.5rem;
     font-weight: 700;
+    color: #292524;
+    margin-bottom: 1rem;
 }
 
 .card p {
+    color: #57534e;
     line-height: 1.6;
     margin-bottom: 1rem;
-    color: #64748b;
-    padding-right: 3rem;
 }
 
 .card p:last-child {
@@ -296,43 +378,31 @@ header {
 }
 
 .card p strong {
-    color: #1e293b;
+    color: #292524;
     font-weight: 600;
 }
 
-.card-preview {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    padding: 1rem;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    color: #475569;
-    border-left: 4px solid #667eea;
-    margin-top: 1.5rem;
-}
 
-.card-preview strong {
-    color: #1e293b;
-    font-weight: 600;
-}
 
 /* Content Sections */
 .content-section {
     background: white;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 3rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     margin: 2rem auto;
     max-width: 1000px;
+    border: 1px solid #e7e5e4;
 }
 
 .content-section h2 {
-    color: #1e293b;
+    color: #292524;
     margin-bottom: 2rem;
     font-size: 2.2rem;
 }
 
 .content-section h3 {
-    color: #1e293b;
+    color: #292524;
     margin: 2rem 0 1rem 0;
     font-size: 1.5rem;
 }
@@ -341,26 +411,124 @@ header {
     line-height: 1.7;
     margin-bottom: 1.5rem;
     font-size: 1.05rem;
-    color: #374151;
+    color: #57534e;
+}
+
+/* Mobile Responsiveness for Content Sections */
+@media (max-width: 767px) {
+    .content-section {
+        margin: 1rem 0;
+        padding: 2rem 1.5rem;
+        border-radius: 15px;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        left: 0;
+        right: 0;
+        position: relative;
+    }
+    
+    .content-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .content-section h3 {
+        font-size: 1.3rem;
+        margin: 1.5rem 0 1rem 0;
+    }
+    
+    .content-section p {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-section {
+        padding: 1.5rem 1rem;
+        margin: 0.5rem 0;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        left: 0;
+        right: 0;
+    }
+    
+    .content-section h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .content-section h3 {
+        font-size: 1.2rem;
+        margin: 1.25rem 0 0.75rem 0;
+    }
+    
+    .content-section p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
 }
 
 .callout-box {
-    background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-    border-left: 4px solid #f59e0b;
-    padding: 1.5rem;
-    border-radius: 8px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid #059669;
+    padding: 2.5rem;
+    border-radius: 20px;
     margin: 2rem auto;
     max-width: 1000px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e7e5e4;
+}
+
+.callout-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Mobile Responsiveness for Callout Boxes */
+@media (max-width: 767px) {
+    .callout-box {
+        margin: 1rem 0;
+        padding: 2rem 1.5rem;
+        border-radius: 15px;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .callout-container {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .callout-box {
+        padding: 1.5rem 1rem;
+        margin: 0.5rem 0;
+    }
+    
+    .callout-container {
+        padding: 0 0.5rem;
+    }
 }
 
 .callout-box h4 {
-    color: #92400e;
+    color: #047857;
     margin-bottom: 1rem;
     font-size: 1.1rem;
 }
 
 .callout-box p {
-    color: #92400e;
+    color: #047857;
     margin: 0;
 }
 
@@ -372,6 +540,7 @@ header {
     flex-wrap: wrap;
     justify-content: center;
     max-width: 1000px;
+    padding: 0 2rem;
 }
 
 .nav-btn {
@@ -386,23 +555,25 @@ header {
 }
 
 .nav-btn.primary {
-    background: #667eea;
-    color: white;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #047857;
+    font-weight: 600;
 }
 
 .nav-btn.primary:hover {
-    background: #5b6fd8;
+    background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(254, 243, 199, 0.4);
 }
 
 .nav-btn.secondary {
     background: transparent;
-    color: #667eea;
-    border: 2px solid #667eea;
+    color: #059669;
+    border: 2px solid #059669;
 }
 
 .nav-btn.secondary:hover {
-    background: #667eea;
+    background: #059669;
     color: white;
 }
 
@@ -415,111 +586,173 @@ header {
     display: block;
 }
 
-/* Special Grid Modifier for 4 columns */
-.cards-grid.four-columns {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+/* Simple Grid System - All cards use the same styling */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
 }
-.cards-grid.four-columns .card {
-    padding: 2rem 1.5rem;
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+    color: #f0fdf4;
+    padding: 3rem 0 1rem 0;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+    color: #fef3c7;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-section ul li a {
+    color: #f0fdf4;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #fef3c7;
+}
+
+.footer-bottom {
+    border-top: 1px solid #10b981;
+    padding-top: 1rem;
     text-align: center;
+    font-size: 0.875rem;
 }
-.cards-grid.four-columns .card p {
-    padding-right: 0;
-    font-size: 0.95rem;
+
+/* Loading states */
+.loading-placeholder {
+    background: #f5f5f4;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    color: #78716c;
+    margin: 1rem 0;
 }
-.cards-grid.four-columns .card h3 {
-    font-size: 1.25rem;
-}
-.cards-grid.four-columns .card .card-icon {
-    font-size: 2.5rem;
+
+.loading-placeholder::before {
+    content: "Loading...";
+    display: block;
+    margin-bottom: 1rem;
 }
 
 /* Mobile Responsive */
-@media (max-width: 767px) {
-    .hero-content {
-        padding: 2rem 1rem 4rem 1rem;
-    }
-    .hero-content h1 {
-        font-size: 2rem;
-    }
-    .hero-content p {
-        font-size: 1.125rem;
-        margin-bottom: 2rem;
-    }
-    .progress-bar {
-        margin: 1.5rem 0.5rem 0 0.5rem;
-        padding: 1rem;
-    }
-    .cards-section {
-        margin-top: -3rem;
-    }
-    .cards-container {
-        padding: 0 1rem;
-    }
-    .cards-grid,
-    .cards-grid.four-columns {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    .card {
-        padding: 2rem 1.5rem;
-        min-height: 140px;
-        border-radius: 16px;
-    }
-    .card::after {
-        top: 1.5rem;
-        right: 1.5rem;
-        font-size: 1.25rem;
-    }
-    .card-icon {
-        font-size: 3rem;
-    }
-    .card h3 {
-        font-size: 1.5rem;
-    }
-    .card p {
-        padding-right: 2.5rem;
-        font-size: 0.95rem;
-    }
-    .cards-grid.four-columns .card {
-        text-align: left;
-    }
-    .cards-grid.four-columns .card p {
-        padding-right: 2.5rem;
-    }
-    .content-section {
-        padding: 1.5rem;
-        margin: 1rem;
-    }
-    .callout-box {
-        margin: 1.5rem 1rem;
-        padding: 1.25rem;
-    }
-    .nav-links {
-        display: none;
-    }
-    .navigation-buttons {
-        flex-direction: column;
-        margin: 2rem 1rem;
-    }
-    .nav-btn {
-        width: 100%;
-        margin: 0;
-        min-height: 52px;
-    }
-}
+        @media (max-width: 767px) {
+            .hero-content {
+                padding: 5rem 1rem 4rem 1rem;
+            }
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .hero-content p {
+                font-size: 1.125rem;
+                margin-bottom: 2rem;
+            }
+            .progress-bar {
+                margin: 1.5rem 0.5rem 0 0.5rem;
+                padding: 1.5rem 1.5rem;
+                border-radius: 12px;
+                background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+                border: 2px solid rgba(5, 150, 105, 0.2);
+            }
+            .progress-step {
+                width: 28px;
+                height: 28px;
+            }
+            .progress-track {
+                height: 6px;
+            }
+            .cards-section {
+                margin-top: -2rem;
+            }
+            .cards-container {
+                padding: 0 1rem;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .card {
+                padding: 2rem 1.5rem;
+                border-radius: 16px;
+            }
+            .card-icon {
+                font-size: 2.5rem;
+            }
+            .card h3 {
+                font-size: 1.25rem;
+            }
+            .card p {
+                font-size: 0.95rem;
+            }
+            .content-section {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            .callout-box {
+                margin: 1.5rem 1rem;
+                padding: 1.25rem;
+            }
+            /* Show mobile menu toggle */
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            /* Hide desktop navigation */
+            .nav-links {
+                display: none;
+            }
+
+            nav {
+                padding: 0 1rem;
+                height: 70px;
+            }
+            .navigation-buttons {
+                flex-direction: column;
+                margin: 2rem 1rem;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 0;
+                min-height: 52px;
+            }
+        }
 
 /* Tablet Responsive */
 @media (min-width: 768px) and (max-width: 1023px) {
+    .nav-links {
+        gap: 2rem;
+    }
+
+    nav {
+        padding: 0 1.5rem;
+    }
     .hero-content {
-        padding: 3rem 1.5rem 5rem 1.5rem;
+        padding: 6rem 1.5rem 5rem 1.5rem;
     }
     .hero-content h1 {
         font-size: 2.5rem;
     }
     .hero-content p {
-        font-size: 1.25rem;
+        font-size: 1rem;
     }
     .cards-container {
         padding: 0 1.5rem;
@@ -527,12 +760,9 @@ header {
     .cards-grid {
         gap: 2rem;
     }
-    .cards-grid.four-columns {
-        grid-template-columns: repeat(2, 1fr);
-    }
+
     .card {
         padding: 2.5rem 2rem;
-        min-height: 160px;
     }
     .nav-btn {
         width: auto;
@@ -543,16 +773,16 @@ header {
 /* Large Desktop */
 @media (min-width: 1200px) {
     .hero-content {
-        padding: 5rem 2rem 7rem 2rem;
+        padding: 10rem 2rem 8rem 2rem;
     }
     .hero-content h1 {
         font-size: 3.5rem;
     }
     .hero-content p {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
     .cards-section {
-        margin-top: -5rem;
+        margin-top: -4rem;
     }
     .cards-grid {
         gap: 4rem;
@@ -565,17 +795,21 @@ header {
     </style>
 </head>
 <body>
-    <div id="header-placeholder"></div>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
 
     <div class="content-layer active" id="layer-home">
         <section class="hero-wrapper">
             <div class="hero-content">
-                <h1>What do you want to learn about?</h1>
-                <p>Every credit card reward falls into one of two categories. Understanding the difference is crucial to picking the right strategy for your life.</p>
+                <h1>Clarity Over Clickbait</h1>
+                <p>Banks pitch perks. Influencers pitch FOMO. We translate the fine print so you can decide what's actually worth your time and money.</p>
+                <p>Pick Cash Back or Points and learn as much—or as little—as you want. No pressure to become a credit card nerd.</p>
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" id="progressFill"></div>
+                        <div class="progress-fill" id="progressFill" style="width: 33%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step active" onclick="goToLayer('home')" data-step="1">
                                 <span class="step-icon">🏠</span>
@@ -585,9 +819,6 @@ header {
                             </div>
                             <div class="progress-step disabled" onclick="goBack()" data-step="3">
                                 <span class="step-icon">🔍</span>
-                            </div>
-                            <div class="progress-step disabled" onclick="goBack()" data-step="4">
-                                <span class="step-icon">🎯</span>
                             </div>
                         </div>
                     </div>
@@ -602,36 +833,28 @@ header {
             <div class="cards-container">
                 <div class="cards-grid">
                     <div class="card" onclick="goToLayer('cashback-main')">
-                        <div class="card-content">
-                            <span class="card-icon">💰</span>
-                            <h3>Cash Back Cards</h3>
-                            <p><strong>What it is:</strong> You get actual money back (usually 1-6%) that you can use for anything.</p>
-                            <p><strong>Why choose this:</strong> Simple, predictable, and works for everyone. No complexity or restrictions.</p>
-                        </div>
-                        <div class="card-preview">
-                            <strong>You'll learn:</strong> Flat rate vs categories → Spending analysis → Best cards
-                        </div>
+                        <span class="card-icon">💰</span>
+                        <h3>Cash Back Cards</h3>
+                        <p><strong>What it is:</strong> You get actual money back (usually 1-6%) that you can use for anything. No made-up currency, no complex redemption math.</p>
+                        <p><strong>Why choose this:</strong> Simple, predictable, and works for everyone. You spend $1,000, you get $20 back. End of story. No complexity, no restrictions, no influencer BS about "maximum value."</p>
+                        <p><strong>Best for:</strong> Normal people who want predictable rewards without becoming credit card nerds.</p>
                     </div>
 
                     <div class="card" onclick="goToLayer('travel-main')">
-                         <div class="card-content">
-                            <span class="card-icon">✈️</span>
-                            <h3>Travel Cards</h3>
-                            <p><strong>What it is:</strong> You earn "points" or "miles" that can be redeemed for travel, often at higher values.</p>
-                            <p><strong>Why choose this:</strong> Potentially higher reward values and access to perks, but requires more knowledge.</p>
-                        </div>
-                        <div class="card-preview">
-                            <strong>You'll learn:</strong> Point types → Lounges → Transfer partners → Advanced strategies
-                        </div>
+                        <span class="card-icon">✈️</span>
+                        <h3>Travel Cards</h3>
+                        <p><strong>What it is:</strong> You earn "points" or "miles" that can be worth anywhere from 0.5 cents to 10+ cents each. The value depends entirely on how you use them.</p>
+                        <p><strong>Why choose this:</strong> Potentially higher reward values and access to perks, but requires significant knowledge and time investment. This is where the complexity starts.</p>
+                        <p><strong>Best for:</strong> People who travel frequently and enjoy optimizing complex systems. Not for the faint of heart.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="container">
+        <section class="callout-container">
             <div class="callout-box">
-                <h4>💡 Not Sure Which to Pick?</h4>
-                <p>Most people should start with cash back cards. They're simpler, more predictable, and you can't "waste" your rewards. Travel cards are only worth the complexity if you travel frequently and enjoy optimizing systems.</p>
+                <h4>💡 The Complexity Reality Check</h4>
+                <p>Cash back cards are straightforward - you spend money, you get money back. Travel cards are substantially more confusing to extract value from. You need to be a certain type of person who enjoys learning complex systems, researching transfer partners, and optimizing every redemption. If that sounds like work rather than fun, cash back might be your speed.</p>
             </div>
         </section>
     </div>
@@ -644,7 +867,7 @@ header {
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: 50%;"></div>
+                        <div class="progress-fill" style="width: 66%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
                                 <span class="step-icon">🏠</span>
@@ -654,9 +877,6 @@ header {
                             </div>
                             <div class="progress-step disabled">
                                 <span class="step-icon">🔍</span>
-                            </div>
-                            <div class="progress-step disabled">
-                                <span class="step-icon">🎯</span>
                             </div>
                         </div>
                     </div>
@@ -669,7 +889,7 @@ header {
 
         <section class="cards-section">
             <div class="cards-container">
-                <div class="cards-grid four-columns">
+                <div class="cards-grid">
                     <div class="card" onclick="goToLayer('cashback-types')">
                         <span class="card-icon">📊</span>
                         <h3>Types of Cash Back</h3>
@@ -697,7 +917,7 @@ header {
             </div>
         </section>
 
-        <section class="container">
+        <section class="callout-container">
             <div class="callout-box">
                 <h4>💡 Learning Path Recommendation</h4>
                 <p>Start with "Types of Cash Back" to understand the fundamentals, then move to "Analyze Your Spending" to see what fits your life. The math and card recommendations will make much more sense after that foundation.</p>
@@ -708,12 +928,12 @@ header {
     <div class="content-layer" id="layer-travel-main">
         <section class="hero-wrapper">
             <div class="hero-content">
-                <h1>Travel Cards Deep Dive</h1>
-                <p>Travel rewards are more complex than cash back, but they can offer significantly higher value if you understand the systems. Here's what you need to learn about each component.</p>
+                <h1>Travel Cards: The Nerd's Paradise</h1>
+                <p>Here's everything that goes into travel cards at a high level. The goal? You know these things exist and what they are. Click any topic to become an expert if you're a nerd. If you're normal, stay here and just understand the basics.</p>
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: 50%;"></div>
+                        <div class="progress-fill" style="width: 66%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
                                 <span class="step-icon">🏠</span>
@@ -724,13 +944,10 @@ header {
                             <div class="progress-step disabled">
                                 <span class="step-icon">🔍</span>
                             </div>
-                            <div class="progress-step disabled">
-                                <span class="step-icon">🎯</span>
-                            </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🗺️ Level 2 - Exploring Travel Cards
+                        🗺️ Level 2 - Here's What Exists in Travel Cards
                     </div>
                 </div>
             </div>
@@ -738,38 +955,70 @@ header {
 
         <section class="cards-section">
             <div class="cards-container">
-                <div class="cards-grid four-columns">
+                <div class="cards-grid">
                     <div class="card" onclick="goToLayer('travel-points')">
                         <span class="card-icon">❓</span>
-                        <h3>What Are Points?</h3>
-                        <p>Learn the 3 different types of points and why their values vary so much.</p>
+                        <h3>Points (The Made-Up Currency)</h3>
+                        <p><strong>What it is:</strong> Travel cards earn points instead of cash back. Points are a made-up value that can be worth anywhere from 0.5 cents to 10+ cents depending on how you use them.</p>
+                        <p><strong>Why it matters:</strong> This is where the complexity starts. Fixed value points are simple, transferable points can be valuable, and airline/hotel points are a gamble.</p>
+                    </div>
+
+                    <div class="card" onclick="goToLayer('travel-fees')">
+                        <span class="card-icon">💰</span>
+                        <h3>Effective Annual Fees</h3>
+                        <p><strong>What it is:</strong> Travel cards typically have annual fees that get "offset" with credits. The key question: are you using these credits for things you'd buy anyway?</p>
+                        <p><strong>Why it matters:</strong> If you're paying for things you wouldn't naturally buy, you're not offsetting the fee - you're just paying more for your card.</p>
+                    </div>
+
+                    <div class="card" onclick="goToLayer('travel-earning')">
+                        <span class="card-icon">📈</span>
+                        <h3>Earning Rates</h3>
+                        <p><strong>What it is:</strong> How many points you earn in each spending category. Your earning rate combined with your redemption rate is what unlocks real value.</p>
+                        <p><strong>Why it matters:</strong> This is why travel nerds want multiple cards - to earn better rates in different categories.</p>
+                    </div>
+
+                    <div class="card" onclick="goToLayer('travel-redemption')">
+                        <span class="card-icon">🎯</span>
+                        <h3>Redemption Rates</h3>
+                        <p><strong>What it is:</strong> What you can actually get for your points. You can redeem through portals, transfers, or direct bookings.</p>
+                        <p><strong>Why it matters:</strong> This is where most people get screwed. A point is only worth what you can actually redeem it for.</p>
                     </div>
 
                     <div class="card" onclick="goToLayer('travel-lounges')">
                         <span class="card-icon">🛂</span>
                         <h3>Airport Lounges</h3>
-                        <p>Understand the types of lounges and calculate if access is worth the cost.</p>
+                        <p><strong>What it is:</strong> Lounges are sick sometimes. They come with top-tier cards and there are 3 main types: airline lounges, Priority Pass, and bank lounges.</p>
+                        <p><strong>Why it matters:</strong> If you care about this, check what lounges exist at your home airport and where you frequently travel.</p>
                     </div>
 
                     <div class="card" onclick="goToLayer('travel-transfers')">
                         <span class="card-icon">🔄</span>
                         <h3>Transfer Partners</h3>
-                        <p>The key to high-value redemptions. Learn the basics of the major systems.</p>
+                        <p><strong>What it is:</strong> This is why most websites value points higher. Points are made-up currency and their value changes depending on where you use them.</p>
+                        <p><strong>Why it matters:</strong> This shit gets complicated. But it's where you can get the most value if you're willing to learn the systems.</p>
                     </div>
 
                     <div class="card" onclick="goToLayer('travel-portals')">
                         <span class="card-icon">🌐</span>
                         <h3>Travel Portals</h3>
-                        <p>The simple but less valuable way to book. Know when it makes sense to use them.</p>
+                        <p><strong>What it is:</strong> Each credit card issuer has a travel portal where you can redeem points. It's basically like using a travel agent.</p>
+                        <p><strong>Why it matters:</strong> Travel nerds always recommend against this, but practically portals are really cool ways to use travel cards without dealing with nonsense.</p>
+                    </div>
+
+                    <div class="card" onclick="goToLayer('travel-bonuses')">
+                        <span class="card-icon">🎁</span>
+                        <h3>Sign-Up Bonuses & Perks</h3>
+                        <p><strong>What it is:</strong> Sign-up bonuses are one of the prime areas of travel cards. They typically offer way bigger rewards than cash back cards.</p>
+                        <p><strong>Why it matters:</strong> Plus perks like cell phone protection, TSA PreCheck, and other benefits that might actually be useful.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="container">
+        <section class="callout-container">
             <div class="callout-box">
-                <h4>💡 Learning Path Recommendation</h4>
-                <p>Start with "What Are Points?" to understand the foundation. Then explore lounges if you're curious about perks, or dive into transfer partners if you want to maximize value. Travel portals are the "easy mode" option when you don't want complexity.</p>
+                <h4>💡 The Nerd vs Normal Approach</h4>
+                <p>If you're normal, understanding these concepts at a high level is enough. You know they exist, you know what they are, and you can make informed decisions. If you're a nerd, click any topic to dive deep and become an expert. There's no shame in either approach.</p>
             </div>
         </section>
     </div>
@@ -782,7 +1031,7 @@ header {
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: 75%;"></div>
+                        <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
                                 <span class="step-icon">🏠</span>
@@ -792,9 +1041,6 @@ header {
                             </div>
                             <div class="progress-step active">
                                 <span class="step-icon">🔍</span>
-                            </div>
-                            <div class="progress-step disabled">
-                                <span class="step-icon">🎯</span>
                             </div>
                         </div>
                     </div>
@@ -809,24 +1055,39 @@ header {
             <div class="cards-container">
                 <div class="cards-grid">
                     <div class="card" onclick="goToLayer('cashback-flat')">
-                        <span class="card-icon">📈</span>
-                        <h3>Flat Rate Cards</h3>
-                        <p><strong>What they are:</strong> Get 1.5-2% back on everything, always.</p>
-                        <p><strong>Best for:</strong> People who want to set it and forget it.</p>
+                        <div class="card-content">
+                            <span class="card-icon">📈</span>
+                            <h3>Flat Rate Cards</h3>
+                            <p><strong>What they are:</strong> Get 1.5-2% back on everything, always.</p>
+                            <p><strong>Best for:</strong> People who want to set it and forget it.</p>
+                        </div>
+                        <div class="card-preview">
+                            <strong>You'll learn:</strong> Best flat rate cards → When to use → Pros and cons
+                        </div>
                     </div>
 
                     <div class="card" onclick="goToLayer('cashback-categories')">
-                        <span class="card-icon">🏪</span>
-                        <h3>Category Cards</h3>
-                        <p><strong>What they are:</strong> Get 3-6% on specific categories, 1% on everything else.</p>
-                        <p><strong>Best for:</strong> Heavy spenders in specific categories.</p>
+                        <div class="card-content">
+                            <span class="card-icon">🏪</span>
+                            <h3>Category Cards</h3>
+                            <p><strong>What they are:</strong> Get 3-6% on specific categories, 1% on everything else.</p>
+                            <p><strong>Best for:</strong> Heavy spenders in specific categories.</p>
+                        </div>
+                        <div class="card-preview">
+                            <strong>You'll learn:</strong> Top category cards → Spending analysis → Value calculation
+                        </div>
                     </div>
 
                     <div class="card" onclick="goToLayer('cashback-rotating')">
-                        <span class="card-icon">🔄</span>
-                        <h3>Rotating Categories</h3>
-                        <p><strong>What they are:</strong> Get 5% on categories that change quarterly.</p>
-                        <p><strong>Best for:</strong> Organized people who don't mind complexity.</p>
+                        <div class="card-content">
+                            <span class="card-icon">🔄</span>
+                            <h3>Rotating Categories</h3>
+                            <p><strong>What they are:</strong> Get 5% on categories that change quarterly.</p>
+                            <p><strong>Best for:</strong> Organized people who don't mind complexity.</p>
+                        </div>
+                        <div class="card-preview">
+                            <strong>You'll learn:</strong> Rotating card options → Activation requirements → Worth the effort?
+                        </div>
                     </div>
                 </div>
             </div>
@@ -861,16 +1122,13 @@ header {
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
                                 <span class="step-icon">🗺️</span>
                             </div>
-                            <div class="progress-step completed" onclick="goToLayer('cashback-types')">
-                                <span class="step-icon">🔍</span>
-                            </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🎯</span>
+                                <span class="step-icon">🔍</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🎯 Level 4 - Expert Level on Cash Back Cards
+                        🔍 Level 3 - Deep Dive on Flat Rate Cards
                     </div>
                 </div>
             </div>
@@ -927,16 +1185,13 @@ header {
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
                                 <span class="step-icon">🗺️</span>
                             </div>
-                            <div class="progress-step completed" onclick="goToLayer('cashback-types')">
-                                <span class="step-icon">🔍</span>
-                            </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🎯</span>
+                                <span class="step-icon">🔍</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🎯 Level 4 - Expert Level on Cash Back Cards
+                        🔍 Level 3 - Deep Dive on Category Cards
                     </div>
                 </div>
             </div>
@@ -997,16 +1252,13 @@ header {
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
                                 <span class="step-icon">🗺️</span>
                             </div>
-                            <div class="progress-step completed" onclick="goToLayer('cashback-types')">
-                                <span class="step-icon">🔍</span>
-                            </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🎯</span>
+                                <span class="step-icon">🔍</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🎯 Level 4 - Expert Level on Cash Back Cards
+                        🔍 Level 3 - Deep Dive on Rotating Cards
                     </div>
                 </div>
             </div>
@@ -1059,7 +1311,7 @@ header {
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: 75%;"></div>
+                        <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
                                 <span class="step-icon">🏠</span>
@@ -1069,9 +1321,6 @@ header {
                             </div>
                             <div class="progress-step active">
                                 <span class="step-icon">🔍</span>
-                            </div>
-                            <div class="progress-step disabled">
-                                <span class="step-icon">🎯</span>
                             </div>
                         </div>
                     </div>
@@ -1086,24 +1335,39 @@ header {
             <div class="cards-container">
                 <div class="cards-grid">
                     <div class="card" onclick="goToLayer('spending-grocery')">
-                        <span class="card-icon">🛒</span>
-                        <h3>Grocery-Heavy Spender</h3>
-                        <p><strong>Your Profile:</strong> You spend $300+ per month on groceries and household items at supermarkets.</p>
-                        <p><strong>Your Goal:</strong> Find a card that gives a high return on this large, consistent spending category.</p>
+                        <div class="card-content">
+                            <span class="card-icon">🛒</span>
+                            <h3>Grocery-Heavy Spender</h3>
+                            <p><strong>Your Profile:</strong> You spend $300+ per month on groceries and household items at supermarkets.</p>
+                            <p><strong>Your Goal:</strong> Find a card that gives a high return on this large, consistent spending category.</p>
+                        </div>
+                        <div class="card-preview">
+                            <strong>You'll learn:</strong> Best grocery cards → Spending caps → Store coding rules
+                        </div>
                     </div>
 
                     <div class="card" onclick="goToLayer('spending-dining')">
-                        <span class="card-icon">🍽️</span>
-                        <h3>Dining-Heavy Spender</h3>
-                        <p><strong>Your Profile:</strong> You eat out frequently, order delivery often, or spend a lot at bars and coffee shops.</p>
-                        <p><strong>Your Goal:</strong> Earn bonus rewards on your social and convenience spending.</p>
+                        <div class="card-content">
+                            <span class="card-icon">🍽️</span>
+                            <h3>Dining-Heavy Spender</h3>
+                            <p><strong>Your Profile:</strong> You eat out frequently, order delivery often, or spend a lot at bars and coffee shops.</p>
+                            <p><strong>Your Goal:</strong> Earn bonus rewards on your social and convenience spending.</p>
+                        </div>
+                        <div class="card-preview">
+                            <strong>You'll learn:</strong> Top dining cards → Delivery coding → Bar/coffee rewards
+                        </div>
                     </div>
 
                     <div class="card" onclick="goToLayer('spending-mixed')">
-                        <span class="card-icon">📊</span>
-                        <h3>Mixed Spender</h3>
-                        <p><strong>Your Profile:</strong> No single category dominates your budget; it's spread out across many areas.</p>
-                        <p><strong>Your Goal:</strong> Find a simple solution that provides good value everywhere without complexity.</p>
+                        <div class="card-content">
+                            <span class="card-icon">📊</span>
+                            <h3>Mixed Spender</h3>
+                            <p><strong>Your Profile:</strong> No single category dominates your budget; it's spread out across many areas.</p>
+                            <p><strong>Your Goal:</strong> Find a simple solution that provides good value everywhere without complexity.</p>
+                        </div>
+                        <div class="card-preview">
+                            <strong>You'll learn:</strong> Flat rate strategies → Simple solutions → When to avoid complexity
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1126,16 +1390,13 @@ header {
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
                                 <span class="step-icon">🗺️</span>
                             </div>
-                            <div class="progress-step completed" onclick="goToLayer('cashback-spending')">
-                                <span class="step-icon">🔍</span>
-                            </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🎯</span>
+                                <span class="step-icon">🔍</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🎯 Level 4 - Expert Level on Cash Back Cards
+                        🔍 Level 3 - Deep Dive on Grocery Strategy
                     </div>
                 </div>
             </div>
@@ -1196,16 +1457,13 @@ header {
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
                                 <span class="step-icon">🗺️</span>
                             </div>
-                            <div class="progress-step completed" onclick="goToLayer('cashback-spending')">
-                                <span class="step-icon">🔍</span>
-                            </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🎯</span>
+                                <span class="step-icon">🔍</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🎯 Level 4 - Expert Level on Cash Back Cards
+                        🔍 Level 3 - Deep Dive on Dining Strategy
                     </div>
                 </div>
             </div>
@@ -1266,16 +1524,13 @@ header {
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
                                 <span class="step-icon">🗺️</span>
                             </div>
-                            <div class="progress-step completed" onclick="goToLayer('cashback-spending')">
-                                <span class="step-icon">🔍</span>
-                            </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🎯</span>
+                                <span class="step-icon">🔍</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🎯 Level 4 - Expert Level on Cash Back Cards
+                        🔍 Level 3 - Deep Dive on Mixed Spending Strategy
                     </div>
                 </div>
             </div>
@@ -1328,7 +1583,7 @@ header {
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: 75%;"></div>
+                        <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
                                 <span class="step-icon">🏠</span>
@@ -1338,9 +1593,6 @@ header {
                             </div>
                             <div class="progress-step active">
                                 <span class="step-icon">🔍</span>
-                            </div>
-                            <div class="progress-step disabled">
-                                <span class="step-icon">🎯</span>
                             </div>
                         </div>
                     </div>
@@ -1382,7 +1634,7 @@ header {
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: 75%;"></div>
+                        <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
                                 <span class="step-icon">🏠</span>
@@ -1392,9 +1644,6 @@ header {
                             </div>
                             <div class="progress-step active">
                                 <span class="step-icon">🔍</span>
-                            </div>
-                            <div class="progress-step disabled">
-                                <span class="step-icon">🎯</span>
                             </div>
                         </div>
                     </div>
@@ -1507,12 +1756,12 @@ header {
     <div class="content-layer" id="layer-travel-points">
         <section class="hero-wrapper">
             <div class="hero-content">
-                <h1>What Are Points, Really?</h1>
-                <p>The word "points" gets used for three totally different reward systems. They have different values, rules, and optimal uses. Understanding the type you're dealing with is crucial.</p>
+                <h1>Points: The Made-Up Currency Deep Dive</h1>
+                <p>Points are a made-up value that can be worth anywhere from 0.5 cents to 10+ cents depending on how you use them. This is where the complexity starts, and where most people get confused by influencer BS about "valuing points at 2.5 cents each."</p>
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: 75%;"></div>
+                        <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
                                 <span class="step-icon">🏠</span>
@@ -1523,49 +1772,68 @@ header {
                             <div class="progress-step active">
                                 <span class="step-icon">🔍</span>
                             </div>
-                            <div class="progress-step disabled">
-                                <span class="step-icon">🎯</span>
-                            </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Travel Cards
+                        🔍 Level 3 - Deep Dive on Points
                     </div>
                 </div>
             </div>
         </section>
-        
-        <section class="cards-section">
-            <div class="cards-container">
-                <div class="cards-grid">
-                    <div class="card" onclick="goToLayer('points-fixed')">
-                        <span class="card-icon">🎯</span>
-                        <h3>Fixed-Value Points</h3>
-                        <p><strong>Simple math:</strong> 1 point = 1 cent, always.</p>
-                        <p><strong>Best for:</strong> People who want travel rewards without complexity.</p>
-                    </div>
 
-                    <div class="card" onclick="goToLayer('points-transferable')">
-                        <span class="card-icon">🔄</span>
-                        <h3>Transferable Points</h3>
-                        <p><strong>Variable value:</strong> Can transfer to partners for potentially higher value.</p>
-                        <p><strong>Best for:</strong> People willing to learn transfer partners and award charts.</p>
-                    </div>
-
-                    <div class="card" onclick="goToLayer('points-airline')">
-                        <span class="card-icon">✈️</span>
-                        <h3>Airline/Hotel Points</h3>
-                        <p><strong>Brand-locked:</strong> Only good with one specific company.</p>
-                        <p><strong>Best for:</strong> People loyal to one brand who want perks.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
         <section class="container">
-            <div class="callout-box">
-                <h4>💡 The Expertise Requirement</h4>
-                <p>Fixed-value points require zero expertise - they work like cash. Transferable points require moderate expertise to get good value. Airline/hotel points can require significant expertise to maximize. Choose your complexity level wisely.</p>
+            <div class="content-section">
+                <h2>Why Points Are So Confusing (And Why That's By Design)</h2>
+                <p>Credit card companies love that points are confusing. The more complex the system, the easier it is to hide the real value and make you think you're getting amazing deals. But here's the truth: points are just a made-up currency that banks invented to make you feel like you're earning something valuable.</p>
+                
+                <p>The reason points are so confusing is that their value changes depending on how you use them. A Chase point might be worth 1 cent when booking through their travel portal, but could be worth 2+ cents when transferred to Hyatt hotels. This variability is what makes the system complex, and it's exactly what most people don't understand.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Influencer BS Reality Check</h4>
+                    <p>Stop listening to people who tell you to "value points at 2.5 cents each." A point is worth exactly what you can get for it when you redeem it. If you can't find a good redemption, your points are worth nothing. Don't let theoretical values fool you.</p>
+                </div>
+
+                <h3>Fixed-Value Points: The Simple Option</h3>
+                <p>Fixed-value points are the closest thing to cash back that travel cards offer. With these, 1 point always equals 1 cent, no matter how you use them. Capital One Venture, Discover it Miles, and Bank of America Travel Rewards all work this way.</p>
+                
+                <p>The beauty of fixed-value points is their simplicity. You never have to worry about "wasting" points or getting bad redemption values. If you have 50,000 points, you can book $500 worth of travel. End of story. No complicated ratios, no award charts, no blackout dates.</p>
+                
+                <p>This makes fixed-value points perfect for people who want travel rewards without the complexity. You get the benefits of travel cards (like travel protections and sometimes better earning rates) without having to become a travel nerd. There's absolutely no shame in choosing this option.</p>
+
+                <h3>Transferable Points: Where the Nerd Value Lives</h3>
+                <p>Transferable points are where things get interesting - and complicated. These points can be transferred to airline and hotel partners, and their value changes dramatically depending on where you transfer them. Chase Ultimate Rewards, Amex Membership Rewards, and Citi ThankYou Points all fall into this category.</p>
+                
+                <p>Here's how the value works: you might transfer 100,000 Chase points to Hyatt and get $2,000+ worth of hotel stays, or transfer them to United and get $800 worth of flights. The same points, completely different values. This is why travel nerds love transferable points - they offer the potential for much higher value than fixed-value points.</p>
+                
+                <p>But here's the catch: you have to actually know what you're doing. You need to understand award charts, transfer ratios, blackout dates, and availability patterns. If you're not willing to put in the time to learn these systems, transferable points are probably not for you.</p>
+
+                <h3>Airline and Hotel Points: The Brand-Locked Trap</h3>
+                <p>Airline and hotel points are the most restrictive type of travel currency. Delta SkyMiles only work with Delta, Marriott Bonvoy only works with Marriott, and so on. These points are designed to lock you into one brand, and they're usually the worst value for most people.</p>
+                
+                <p>The problem with brand-locked points is that you're at the mercy of one company's pricing and availability. If Delta decides to raise their award prices (which they do regularly), your SkyMiles become worth less overnight. If Marriott doesn't have availability at the hotel you want, your Bonvoy points are useless.</p>
+                
+                <p>These points only make sense if you're extremely loyal to one brand and travel frequently enough to justify the loyalty. For everyone else, they're usually a trap that limits your options and often provides worse value than simpler alternatives.</p>
+
+                <h3>The Expertise Requirement: Choose Your Complexity Level</h3>
+                <p>Here's the honest truth about what each type of points requires from you:</p>
+                
+                <p><strong>Fixed-value points:</strong> Zero expertise required. They work exactly like cash, and you never have to think about them. Perfect for normal people who want travel rewards without complexity.</p>
+                
+                <p><strong>Transferable points:</strong> Moderate to high expertise required. You need to understand transfer partners, award charts, and booking strategies. Great for people who enjoy optimizing systems and are willing to put in the time to learn.</p>
+                
+                <p><strong>Brand-locked points:</strong> High expertise required, plus brand loyalty. You need to understand the specific airline or hotel's award system, plus be willing to limit your options to one company.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Honest Assessment</h4>
+                    <p>There's no shame in wanting simple. Fixed-value points are often the smart choice for normal people who don't want to become travel hackers. Don't let influencers convince you that you need to optimize every redemption to get "maximum value." Sometimes the boring option is the smart option.</p>
+                </div>
+
+                <h3>How to Choose the Right Point System for You</h3>
+                <p>The key to choosing the right point system is being honest about your willingness to learn and optimize. If you want to set up your cards and never think about them again, go with fixed-value points. If you enjoy learning complex systems and want to maximize value, transferable points might be worth the effort.</p>
+                
+                <p>But here's the most important thing: don't get caught up in theoretical maximum values. A point is only worth what you can actually get for it. If you're not willing to learn transfer partners and deal with blackout dates, your points are probably worth 1 cent each. And that's totally fine.</p>
+                
+                <p>Remember: the goal is to get value from your credit cards, not to become a travel hacker. Choose the complexity level that matches your personality and time availability. There's no prize for making things more complicated than they need to be.</p>
             </div>
         </section>
     </div>
@@ -1586,16 +1854,13 @@ header {
                             <div class="progress-step completed" onclick="goToLayer('travel-main')">
                                 <span class="step-icon">🗺️</span>
                             </div>
-                            <div class="progress-step completed" onclick="goToLayer('travel-points')">
-                                <span class="step-icon">🔍</span>
-                            </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🎯</span>
+                                <span class="step-icon">🔍</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🎯 Level 4 - Expert Level on Travel Cards
+                        🔍 Level 3 - Deep Dive on Travel Cards
                     </div>
                 </div>
             </div>
@@ -1656,16 +1921,13 @@ header {
                             <div class="progress-step completed" onclick="goToLayer('travel-main')">
                                 <span class="step-icon">🗺️</span>
                             </div>
-                            <div class="progress-step completed" onclick="goToLayer('travel-transfers')">
-                                <span class="step-icon">🔍</span>
-                            </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🎯</span>
+                                <span class="step-icon">🔍</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🎯 Level 4 - Expert Level on Travel Cards
+                        🔍 Level 3 - Deep Dive on Transfer Partners
                     </div>
                 </div>
             </div>
@@ -1710,15 +1972,15 @@ header {
         </section>
     </div>
 
-    <div class="content-layer" id="layer-travel-portals">
+    <div class="content-layer" id="layer-travel-fees">
         <section class="hero-wrapper">
             <div class="hero-content">
-                <h1>Travel Portals: Booking Through Your Credit Card</h1>
-                <p>You can book travel directly through your credit card's website. It's convenient but has trade-offs you should understand.</p>
+                <h1>Effective Annual Fees: The "Offset" Scam Explained</h1>
+                <p>Travel cards typically have annual fees that get "offset" with credits. But here's the brutal truth: most people aren't actually offsetting anything. They're just paying more for their card while convincing themselves they're getting value.</p>
                 
                 <div class="progress-bar">
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: 75%;"></div>
+                        <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
                                 <span class="step-icon">🏠</span>
@@ -1729,71 +1991,806 @@ header {
                             <div class="progress-step active">
                                 <span class="step-icon">🔍</span>
                             </div>
-                            <div class="progress-step disabled">
-                                <span class="step-icon">🎯</span>
-                            </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Travel Cards
+                        🔍 Level 3 - Deep Dive on Annual Fees
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="cards-section">
-             <div class="cards-container">
-                 <div class="cards-grid four-columns">
-                     <div class="card">
-                         <span class="card-icon">💎</span>
-                         <h3>Chase Ultimate Rewards</h3>
-                         <p>Points are worth 1.25-1.5 cents each depending on the card, making it a strong portal option.</p>
-                     </div>
-                     <div class="card">
-                         <span class="card-icon">✈️</span>
-                         <h3>Amex Travel Portal</h3>
-                         <p>Points are generally worth 1 cent each. Better value is usually found by transferring points.</p>
-                     </div>
-                     <div class="card">
-                         <span class="card-icon">🚀</span>
-                         <h3>Capital One Travel Portal</h3>
-                         <p>Miles are worth 1 cent each. A simple, straightforward way to book any travel.</p>
-                     </div>
-                     <div class="card">
-                         <span class="card-icon">🏦</span>
-                         <h3>Citi ThankYou Portal</h3>
-                         <p>Points are worth 1 cent each. Like Amex, transferring points is often the better value.</p>
-                     </div>
-                 </div>
-            </div>
-        </section>
-
         <section class="container">
-            <div class="callout-box">
-                <h4>💡 Portal vs Direct Booking</h4>
-                <p>Portals are convenient, but you might miss out on elite benefits, hotel loyalty points, or the ability to make changes directly with the airline/hotel.</p>
-            </div>
-            <div class="navigation-buttons">
-                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back to Travel Topics</button>
-                <button class="nav-btn primary" onclick="goToLayer('home')">Start Over →</button>
+            <div class="content-section">
+                <h2>What "Effective Annual Fee" Actually Means</h2>
+                <p>When credit card companies talk about "offsetting" your annual fee, they're using marketing math that would make a used car salesman blush. The effective annual fee is what the card actually costs you after using all the credits and benefits they offer. But here's the catch: you have to actually use those credits for things you would buy anyway.</p>
+                
+                <p>Let me break this down with a real example. The Amex Platinum has a $695 annual fee, but they give you $200 in Uber credits, $240 in streaming credits, $200 in airline fee credits, and a bunch of other perks. They'll tell you this means your effective annual fee is only $55. But that's only true if you were already spending money on Uber, streaming services, and airline fees.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Marketing Math Reality Check</h4>
+                    <p>Card companies love to say "You get $2,000 in value!" but that's a lie and dumb. A credit is only valuable if you would have spent that money anyway. If you never use Uber and already have Netflix, those credits are worth exactly $0 to you.</p>
+                </div>
+
+                <h3>Good Offset Scenario: When Credits Actually Work</h3>
+                <p>Here's what a good offset looks like in practice. Let's say you're already spending $200/month on Uber rides for work, $100/month on streaming services, and you fly frequently enough that you'll use the $200 airline fee credit. In this case, the Amex Platinum's effective annual fee really does become $255 ($695 - $200 - $240 - $200).</p>
+                
+                <p>But notice the key word: "already." You were spending this money before you got the card. The card isn't saving you money - it's just giving you back some of what you were already spending. The question becomes: are the other benefits worth the remaining $255?</p>
+
+                <h3>Bad Offset Scenario: When Credits Are Worthless</h3>
+                <p>Now let's look at the bad scenario. You live in a city with great public transit, so you never use Uber. You already have Netflix and don't want to add more streaming services. And you only fly once or twice a year, so you might not even use the airline fee credit.</p>
+                
+                <p>In this case, your effective annual fee is still $695 because those credits are worthless to you. You're not offsetting anything - you're just paying $695 for a credit card. This is where most people get screwed. They see the big credit amounts and think they're getting value, but they're actually just paying more for their card.</p>
+
+                <h3>The Honest Math: How to Calculate Your Real Cost</h3>
+                <p>Here's how to actually calculate whether a card makes sense for you. First, list out all the credits and benefits the card offers. Then, for each one, ask yourself: "Would I spend this money anyway?"</p>
+                
+                <p>If the answer is yes, that credit counts toward offsetting your fee. If the answer is no, that credit is worth $0. Add up only the credits you would actually use, subtract that from the annual fee, and that's your real effective annual fee.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Brutal Truth About "Best Card" Lists</h4>
+                    <p>Every person is different. Just because one card is amazing for one person doesn't mean anything to another person. There is no "best card" - there's only the best card for your specific spending patterns and what you actually value. Stop reading generic "top 10" lists and start thinking about your own situation.</p>
+                </div>
+
+                <h3>When High Annual Fees Actually Make Sense</h3>
+                <p>High annual fees can make sense, but only in very specific circumstances. You need to be a heavy spender in the card's bonus categories, actually use the credits and benefits, and get enough value from the other perks to justify the remaining cost.</p>
+                
+                <p>For example, if you travel frequently for business, the Amex Platinum's lounge access, hotel status, and other travel perks might be worth the $255 effective annual fee. But if you're a casual traveler who just wants to earn some points, you're probably better off with a no-fee card or something with a much lower annual fee.</p>
+
+                <h3>The Bottom Line: Don't Fall for the Offset Trap</h3>
+                <p>Annual fees aren't inherently bad, but they need to be justified by actual value you'll use. Don't get a card because the marketing says you're getting "$2,000 in value." Get it because you've done the math and the benefits actually make sense for your spending patterns.</p>
+                
+                <p>Remember: a credit is only valuable if you would have spent that money anyway. If you're buying things you don't want just to "use your credits," you're not getting value - you're just spending more money to justify your credit card fee. And that's exactly what the banks want you to do.</p>
             </div>
         </section>
     </div>
 
-    <div id="footer-placeholder"></div>
+    <div class="content-layer" id="layer-travel-portals">
+        <section class="hero-wrapper">
+            <div class="hero-content">
+                <h1>Travel Portals: The "Easy Mode" Option That Nerds Hate</h1>
+            <p>Each credit card issuer has a travel portal where you can redeem points. Travel nerds always recommend against this, but practically portals are really cool ways to use travel cards without dealing with nonsense or making your travel plans around award availability.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                        <div class="progress-steps">
+                            <div class="progress-step completed" onclick="goToLayer('home')">
+                                <span class="step-icon">🏠</span>
+                            </div>
+                            <div class="progress-step completed" onclick="goToLayer('travel-main')">
+                                <span class="step-icon">🗺️</span>
+                            </div>
+                            <div class="progress-step active">
+                                <span class="step-icon">🔍</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-text">
+                        🔍 Level 3 - Deep Dive on Travel Portals
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <section class="container">
+            <div class="content-section">
+                <h2>What Are Travel Portals and Why Do They Exist?</h2>
+                <p>Travel portals are basically online travel agencies run by your credit card company. Instead of booking directly with airlines or hotels, you book through the credit card issuer's website. Chase has Ultimate Rewards Travel, Amex has Amex Travel, Capital One has Capital One Travel, and so on.</p>
+                
+                <p>The reason these exist is simple: credit card companies want to keep you in their ecosystem. If you book through their portal, they earn money from the travel providers, and you're more likely to use their cards for the booking. It's a win-win for them, and often a win for you too.</p>
+                
+                <p>Think of it like this: instead of going directly to the hotel website, you're going through a middleman (your credit card company) who then books with the hotel. The middleman gets a commission, and you get to use your points. It's not rocket science, but it's also not as simple as it sounds.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Middleman Reality</h4>
+                    <p>When you book through a portal, you're essentially using a travel agent. If something goes wrong with your booking, you're dealing with the portal, not the airline or hotel directly. This can be a pain in the ass, but it's usually not a deal-breaker for most people.</p>
+                </div>
+
+                <h3>Why Travel Portals Are Actually Pretty Cool</h3>
+                <p>Despite what travel nerds will tell you, portals have some serious advantages. The biggest one is that your points basically work like cash. You can book wherever you want, whenever you want, with no blackout dates or award availability issues.</p>
+                
+                <p>Here's how this works in practice: if you have 100,000 Chase points and want to book a hotel that costs $1,000, you can book it through the Chase portal for 100,000 points. The same booking might cost 50,000 points if you transferred to Hyatt, but you'd be limited to Hyatt hotels and would need to deal with award availability.</p>
+                
+                <p>Portals also have fixed point values, which means you can't get screwed by bad deals. A Chase point is always worth 1 cent in the portal (or 1.25-1.5 cents if you have the right card). You won't get the amazing 2+ cent values that transfer partners can offer, but you also won't get the 0.5 cent values that can happen with airline transfers.</p>
+
+                <h3>The Downsides That Travel Nerds Love to Complain About</h3>
+                <p>Travel nerds hate portals for several reasons, and some of them are actually valid. The biggest issue is that you're dealing with a middleman. If something goes wrong with your booking, you can't just call the hotel directly - you have to go through the portal's customer service.</p>
+                
+                <p>Another downside is that you might miss out on elite benefits and hotel loyalty points. When you book through a portal, you're usually not eligible for hotel elite status benefits, and you won't earn points with the hotel's loyalty program. This matters if you're trying to build status with a specific hotel chain.</p>
+                
+                <p>Some portals also have price differences compared to booking direct. They might mark up the prices slightly to cover their costs, or they might not have access to the same rates. This is why it's important to compare prices before booking through a portal.</p>
+
+                <h3>When Portals Make Sense (And When They Don't)</h3>
+                <p>Portals are perfect for people who want simplicity and don't want to become travel hackers. If you're booking a simple round-trip flight or a hotel stay, portals are often the easiest way to use your points. You don't need to research transfer partners, worry about award availability, or deal with blackout dates.</p>
+                
+                <p>They're also great for last-minute bookings where award availability might be limited. If you need to book a hotel tomorrow and there are no award rooms available, a portal booking might be your only option for using points.</p>
+                
+                <p>Portals don't make sense if you're a travel nerd who wants to maximize every point value. You'll get better value by transferring points to partners and learning award charts. But for most normal people, the slight value loss is worth the simplicity and flexibility.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Pro Tip: Price Matching</h4>
+                    <p>Some portals offer price matching, which can eliminate the price difference issue. Capital One Travel does this, and it's awesome. If you find a better price elsewhere, they'll match it. This makes portals even more valuable for normal people who don't want to become travel hackers.</p>
+                </div>
+
+                <h3>The Real Truth About Portal vs Transfer Value</h3>
+                <p>Here's what travel nerds don't tell you: portal bookings often provide better value than people think. Yes, you might get 1 cent per point instead of 2+ cents, but you're also getting flexibility and simplicity that transfer partners can't offer.</p>
+                
+                <p>Let me give you a real example. You have 100,000 Chase points and want to book a hotel. You could transfer them to Hyatt and potentially get $2,000+ worth of value, but you're limited to Hyatt hotels and need to deal with award availability. Or you could book through the Chase portal for $1,000 worth of any hotel you want, with no availability issues.</p>
+                
+                <p>The transfer option gives you higher theoretical value, but the portal option gives you flexibility and reliability. For most people, the flexibility is worth more than the extra theoretical value. You can't use points you can't redeem, and transfer partners often have limited availability.</p>
+
+                <h3>The Bottom Line: Portals Are Underrated</h3>
+                <p>Travel portals get a bad rap from the travel hacking community, but they're actually a great option for normal people. They offer simplicity, flexibility, and reliability that transfer partners can't match. Yes, you might get slightly lower value per point, but you're also avoiding the complexity and availability issues that come with transfer partners.</p>
+                
+                <p>Here's the honest truth: if you're not willing to become a travel nerd and learn award charts, portals are probably your best option. They let you use your points easily without having to research transfer partners or deal with blackout dates. Sometimes the "boring" option is the smart option.</p>
+                
+                <p>Remember: the goal is to get value from your credit cards, not to become a travel hacker. If portals let you use your points easily and get good value, that's a win. Don't let travel nerds convince you that you need to optimize every redemption to get "maximum value." Sometimes good enough is good enough.</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="content-layer" id="layer-travel-earning">
+        <section class="hero-wrapper">
+            <div class="hero-content">
+                <h1>Earning Rates: Where the Math Gets Real (And Complicated)</h1>
+                <p>Your earning rate combined with your redemption rate is what unlocks real value. This is why travel nerds want multiple cards - to earn better rates in different categories. But here's the brutal truth: most people aren't organized enough to make this strategy work.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                        <div class="progress-steps">
+                            <div class="progress-step completed" onclick="goToLayer('home')">
+                                <span class="step-icon">🏠</span>
+                            </div>
+                            <div class="progress-step completed" onclick="goToLayer('travel-main')">
+                                <span class="step-icon">🗺️</span>
+                            </div>
+                            <div class="progress-step active">
+                                <span class="step-icon">🔍</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-text">
+                        🔍 Level 3 - Deep Dive on Earning Rates
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="content-section">
+                <h2>The Basic Math: How Earning Rates Actually Work</h2>
+                <p>Earning rates are pretty straightforward on the surface. A 3x dining card means you get 3 points for every $1 you spend at restaurants. A 4x grocery card means you get 4 points for every $1 at supermarkets. Simple, right?</p>
+                
+                <p>But here's where it gets complicated: your actual return depends on both your earning rate AND your redemption rate. If you earn 4x points on groceries but those points are only worth 0.5 cents each when you redeem them, your actual return is only 2%. That's worse than a simple 2% cash back card.</p>
+                
+                <p>This is the fundamental flaw in most "earning rate" discussions. People focus on the earning side without considering the redemption side. A high earning rate is worthless if you can't get good value when you use the points.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Earning vs Redemption Reality</h4>
+                    <p>Your earning rate is only half the equation. A 5x grocery card that gives you points worth 0.5 cents each is actually worse than a 2% cash back card. Always consider both sides of the equation before getting excited about high earning rates.</p>
+                </div>
+
+                <h3>Category Optimization: The Multi-Card Strategy</h3>
+                <p>This is where travel nerds get really excited. The idea is simple: use different cards for different spending categories to maximize your earning potential. Amex Gold for 4x dining and groceries, Chase Sapphire for 3x travel, and a catch-all card for everything else.</p>
+                
+                <p>On paper, this strategy looks amazing. You could potentially earn 4x on dining, 4x on groceries, 3x on travel, and 2x on everything else. That's an average earning rate of over 3x, which sounds incredible.</p>
+                
+                <p>But here's the reality check: this only works if you're organized enough to remember which card to use when. If you forget to use your dining card 30% of the time, your 4x dining card becomes effectively a 2.8x card. If you forget 50% of the time, it becomes a 2x card. Suddenly the strategy doesn't look so amazing.</p>
+
+                <h3>When Multiple Cards Actually Make Sense</h3>
+                <p>Multiple cards make sense in very specific circumstances. You need to be a heavy spender in the bonus categories, organized enough to use the right card consistently, and willing to put in the mental effort to manage multiple cards.</p>
+                
+                <p>Here's a good example: you spend $800/month on groceries, $600/month on dining, and $400/month on travel. You're organized and always use the right card. In this case, a multi-card strategy could earn you significantly more than a single 2x everything card.</p>
+                
+                <p>But here's a bad example: you spend $300/month on groceries, $200/month on dining, and $100/month on travel. You're not very organized and forget which card to use about 40% of the time. In this case, a simple 2x everything card would probably give you better returns than trying to optimize multiple categories.</p>
+
+                <h3>The Mental Overhead That Nobody Talks About</h3>
+                <p>Managing multiple cards requires significant mental energy and organization. You need to remember which card to use for which category, track your spending to make sure you're using the right cards, and sometimes even carry multiple cards with you.</p>
+                
+                <p>This mental overhead is real, and it's something that most credit card websites and influencers don't mention. They show you the theoretical maximum returns without considering the practical reality of managing multiple cards.</p>
+                
+                <p>Here's what this looks like in practice: you're at the grocery store, and you need to remember to use your Amex Gold for 4x points. But what if you forget? What if you accidentally use your Chase Sapphire and only get 1x points? That's a 75% reduction in your earning rate for that purchase.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Organization Reality Check</h4>
+                    <p>Be brutally honest with yourself about your organizational skills. If you're the type of person who forgets appointments, loses things regularly, or struggles to maintain routines, a multi-card strategy is probably not for you. There's no shame in choosing simplicity over complexity.</p>
+                </div>
+
+                <h3>The Break-Even Analysis: When Complexity Pays Off</h3>
+                <p>Here's how to actually calculate whether a multi-card strategy makes sense for you. First, calculate how much you spend in each category per year. Then, calculate the difference in earnings between your multi-card strategy and a simple 2x everything card.</p>
+                
+                <p>Let's say you spend $6,000/year on groceries, $4,800/year on dining, and $2,400/year on travel. With a multi-card strategy (4x groceries, 4x dining, 3x travel, 2x everything else), you might earn 3.2x on average. With a 2x everything card, you earn 2x on average.</p>
+                
+                <p>The difference is 1.2x, which sounds significant. But you also need to factor in the mental overhead, the risk of forgetting to use the right card, and the complexity of managing multiple cards. For many people, the extra 0.2x return isn't worth the hassle.</p>
+
+                <h3>The Honest Truth About Earning Rate Optimization</h3>
+                <p>Here's what most people don't want to hear: earning rate optimization is often overrated. Yes, you can potentially earn more points with a multi-card strategy, but the difference is usually smaller than people think, and the complexity is usually higher than people expect.</p>
+                
+                <p>For most normal people, a simple 2x everything card provides a good balance of earning potential and simplicity. You don't have to think about which card to use, you don't have to worry about forgetting to use the right card, and you still get decent returns.</p>
+                
+                <p>The people who benefit most from earning rate optimization are heavy spenders who are naturally organized and enjoy optimizing systems. If that's not you, don't force it. There's no prize for making your credit card strategy more complicated than it needs to be.</p>
+
+                <h3>The Bottom Line: Choose Your Complexity Level</h3>
+                <p>The key to earning rate optimization is being honest about your personality and spending patterns. If you're naturally organized, spend heavily in specific categories, and enjoy optimizing systems, a multi-card strategy might be worth the effort.</p>
+                
+                <p>But if you're not naturally organized, don't spend heavily in specific categories, or don't enjoy optimizing systems, stick with simplicity. A 2x everything card will give you good returns without the mental overhead.</p>
+                
+                <p>Remember: the goal is to get value from your credit cards, not to become a credit card optimization expert. Choose the strategy that matches your personality and time availability. Sometimes the "boring" option is the smart option.</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="content-layer" id="layer-travel-redemption">
+        <section class="hero-wrapper">
+            <div class="hero-content">
+                <h1>Redemption Rates: Where Your Points Go to Die a Slow, Painful Death</h1>
+                <p>Your earning rate means absolutely nothing if you can't get good value when you redeem. This is where most people get absolutely destroyed by the travel rewards system, and where travel influencers conveniently forget to mention the fine print.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                        <div class="progress-steps">
+                            <div class="progress-step completed" onclick="goToLayer('home')">
+                                <span class="step-icon">🏠</span>
+                            </div>
+                            <div class="progress-step completed" onclick="goToLayer('travel-main')">
+                                <span class="step-icon">🗺️</span>
+                            </div>
+                            <div class="progress-step active">
+                                <span class="step-icon">🔍</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-text">
+                        🔍 Level 3 - Deep Dive on Redemption Rates
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="content-section">
+                <h2>The Core Concept: Why Your Points Are Probably Worthless</h2>
+                <p>Here's the brutal truth that nobody wants to hear: your points are only worth what you can actually get for them when you try to use them. A point that's worth 1 cent when you earn it might be worth 0.5 cents when you redeem it. Or it might be worth nothing at all because there's no availability.</p>
+                
+                <p>This is the fundamental flaw in the entire travel rewards system. Credit card companies love to brag about earning rates - "Earn 5x points on dining!" - but they're completely silent about redemption rates. Why? Because they know that most people will never get good value from their points.</p>
+                
+                <p>Think about it this way: you could earn 5x points on every purchase, but if those points are only worth 0.5 cents each when you try to use them, your actual return is only 2.5%. That's worse than a simple 2% cash back card, and you had to deal with all the complexity of travel rewards for nothing.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Influencer Lie</h4>
+                    <p>Travel influencers love to talk about earning rates but conveniently forget to mention that your points are worthless if you can't find good redemptions. They're basically selling you a car without telling you there's no gas station within 100 miles.</p>
+                </div>
+
+                <h3>Travel Portal Redemption: The "Easy Mode" That's Actually Hard</h3>
+                <p>Travel portal redemption sounds simple on paper. You book travel through your credit card's portal and pay with points. Usually gives you a fixed value (1 cent per point, or 1.25-1.5 cents if you have the right card). No blackout dates, no award availability issues, just book whatever you want.</p>
+                
+                <p>But here's the catch: you're dealing with a middleman who doesn't always have the best prices. The same hotel room that costs $200 when you book direct might cost $250 through the portal. Suddenly your 1 cent per point redemption becomes 0.8 cents per point, and you're getting screwed without even realizing it.</p>
+                
+                <p>Plus, if something goes wrong with your booking, you're dealing with the portal's customer service instead of the hotel directly. Good luck getting help when your flight gets cancelled and you're stuck in an airport at 2 AM. The portal will probably tell you to call the airline, and the airline will tell you to call the portal. It's a customer service nightmare disguised as convenience.</p>
+
+                <h3>Transfer Partner Redemption: Where Nerds Go to Feel Smart</h3>
+                <p>This is where travel nerds get really excited and start talking about "maximum value" and "award charts." The idea is that you transfer your points to airline or hotel partners and book through their award programs, potentially getting 2+ cents per point in value.</p>
+                
+                <p>Sounds amazing, right? Well, here's the reality: you're trading simplicity for complexity, and most people aren't smart enough or patient enough to make it work. You need to research transfer partners, understand award charts, deal with blackout dates, and hope that award availability exists when you want to travel.</p>
+                
+                <p>Let me give you a real example of how this works. You have 100,000 Chase points and want to fly to Europe. You could transfer them to United and potentially get a business class ticket worth $3,000. That's 3 cents per point - amazing value! But here's what actually happens: you check United's award availability and find that the only available dates are Tuesday at 3 AM with a 12-hour layover in Newark. Suddenly that "amazing value" doesn't look so amazing.</p>
+
+                <h3>Statement Credit Redemption: The Ultimate Admission of Defeat</h3>
+                <p>Statement credit redemption is basically the travel rewards equivalent of waving a white flag. You're taking your hard-earned travel points and using them to pay down your credit card bill, usually getting the worst possible value (0.5-0.8 cents per point).</p>
+                
+                <p>Here's when this makes sense: never. Okay, maybe if you're in a financial emergency and need cash flow, but even then, you're probably better off selling your points or using them for something else. Statement credit redemption is basically admitting that you couldn't figure out how to use your points for travel, which defeats the entire purpose of having a travel card.</p>
+                
+                <p>If you're doing statement credit redemption regularly, you probably shouldn't have a travel card. You're paying an annual fee for the privilege of getting worse returns than a simple cash back card. It's like paying for a gym membership and then only using the vending machine.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Statement Credit Reality</h4>
+                    <p>Using your travel points for statement credits is like buying a Ferrari and then using it to deliver pizzas. You're taking something designed for luxury and performance and using it for the most basic, low-value purpose possible. Just get a cash back card instead.</p>
+                </div>
+
+                <h3>The Availability Problem: Why Your Points Are Often Worthless</h3>
+                <p>Here's the dirty secret that travel companies don't want you to know: award availability is intentionally limited. Airlines and hotels only release a small percentage of their inventory as award seats/rooms, and they release them at times that are inconvenient for normal people.</p>
+                
+                <p>Want to fly to Europe during summer vacation? Good luck finding award availability. Want to stay at a popular hotel during peak season? You'll probably find that all the award rooms are mysteriously unavailable, but you can book the same room for cash at 3x the normal price.</p>
+                
+                <p>This is why transfer partners are so frustrating. You can have 200,000 points and still not be able to book the trip you want because there's no award availability. Your points become worthless not because you're not smart enough to use them, but because the travel companies are intentionally making it difficult to get good value.</p>
+
+                <h3>The Blackout Date Scam: Another Way to Screw You</h3>
+                <p>Blackout dates are the travel industry's way of saying "fuck you" to people who want to use their points. These are dates when award travel is not available, usually during peak travel times when normal people actually want to travel.</p>
+                
+                <p>Here's how the scam works: you earn points all year thinking you'll use them for your summer vacation. When summer rolls around, you discover that all the good dates are blacked out. The only available dates are Tuesday at 3 AM in February, when nobody wants to travel. Your points are essentially worthless during the times when you actually want to use them.</p>
+                
+                <p>This is why travel portals are often better than transfer partners for normal people. Portals don't have blackout dates - your points work like cash and you can book whatever you want whenever you want. Yes, you might get slightly lower value per point, but you're also avoiding the availability and blackout date issues that make transfer partners so frustrating.</p>
+
+                <h3>The Bottom Line: Redemption Rates Are Everything</h3>
+                <p>Here's what you need to understand: your earning rate is completely meaningless if you can't get good value when you redeem. A 5x dining card that gives you points worth 0.5 cents each is actually worse than a 2% cash back card.</p>
+                
+                <p>The people who get the most value from travel rewards are the ones who are willing to put in the time and effort to learn transfer partners, deal with availability issues, and work around blackout dates. If you're not willing to do that, you're probably better off with a simple cash back card.</p>
+                
+                <p>Remember: points are only valuable if you can actually use them for something you want. If you're constantly struggling to find good redemptions, your points are worthless regardless of how many you earn. Don't let earning rates fool you - redemption rates are what actually matter.</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="content-layer" id="layer-travel-lounges">
+        <section class="hero-wrapper">
+            <div class="hero-content">
+                <h1>Airport Lounges: The Overpriced Waiting Rooms That Sometimes Don't Suck</h1>
+                <p>Airport lounges are basically overpriced waiting rooms that sometimes have free food and alcohol. They come with top-tier credit cards and there are three main types, each with their own special way of disappointing you.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                        <div class="progress-steps">
+                            <div class="progress-step completed" onclick="goToLayer('home')">
+                                <span class="step-icon">🏠</span>
+                            </div>
+                            <div class="progress-step completed" onclick="goToLayer('travel-main')">
+                                <span class="step-icon">🗺️</span>
+                            </div>
+                            <div class="progress-step active">
+                                <span class="step-icon">🔍</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-text">
+                        🔍 Level 3 - Deep Dive on Airport Lounges
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="content-section">
+                <h2>What Are Airport Lounges and Why Do People Care?</h2>
+                <p>Airport lounges are basically fancy waiting rooms where you can sit in slightly more comfortable chairs while waiting for your delayed flight. They usually have free food (sometimes), free alcohol (sometimes), and free WiFi (usually). The main appeal is that they're less crowded and depressing than the main terminal.</p>
+                
+                <p>Here's why people get so excited about lounges: they make you feel like you're getting special treatment in an environment that's designed to make everyone feel like cattle. Instead of fighting for a seat at the overcrowded food court, you get to sit in a quiet room with other people who also paid too much for their credit cards.</p>
+                
+                <p>But here's the reality check: lounges are only worth it if you actually use them frequently, and most people don't travel enough to justify the annual fees. You're basically paying hundreds of dollars per year for the privilege of occasionally having a slightly better airport experience.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Lounge Math Reality</h4>
+                    <p>If you pay $550/year for a card that gives you lounge access, you need to use lounges about 10-15 times per year just to break even on the lounge benefit alone. Most people don't travel that much, which means they're paying for a benefit they'll never use.</p>
+                </div>
+
+                <h3>Airline Lounges: Where Status Goes to Die</h3>
+                <p>Airline lounges are run by specific airlines and are basically their way of saying "thanks for being loyal to us, here's a slightly less depressing place to wait for your delayed flight." Delta has Sky Club, United has United Club, American has Admirals Club, and so on.</p>
+                
+                <p>Here's how you get access: you either need elite status with the airline (which requires flying way too much) or you need to pay for an expensive annual membership (which is usually not worth it unless you're a road warrior). Some premium credit cards also give you access, but they usually have high annual fees.</p>
+                
+                <p>The quality of airline lounges varies wildly. Some are actually pretty nice with decent food, comfortable seating, and good WiFi. Others are depressing rooms with stale pretzels, uncomfortable chairs, and WiFi that's slower than dial-up. You're basically rolling the dice on whether you'll get a nice experience or a reminder of why you hate flying.</p>
+
+                <h3>Priority Pass: The Network of Mediocrity</h3>
+                <p>Priority Pass is a network of independent lounges around the world that many premium credit cards include as a benefit. The idea is that you get access to hundreds of lounges worldwide, which sounds amazing until you actually try to use them.</p>
+                
+                <p>Here's how it works: you get a Priority Pass membership (usually included with your credit card), and you can access any lounge in their network. You just show your card and walk in. Sounds simple, right?</p>
+                
+                <p>Well, here's the reality: Priority Pass lounges are hit or miss. Some are actually pretty nice with good food, comfortable seating, and decent amenities. Others are basically just a room with chairs and maybe a coffee machine. You're basically paying for access to a network where quality varies from "amazing" to "why did I even bother."</p>
+
+                <h3>Bank Lounges: Where Credit Card Companies Show Off</h3>
+                <p>Bank lounges are run by credit card companies and are usually the highest quality option. Amex has Centurion Lounges, Chase has Sapphire Lounges, and Capital One has Capital One Lounges. These are basically the credit card companies' way of showing off how much money they're making from your annual fees.</p>
+                
+                <p>Here's the catch: you usually need a specific premium card with a high annual fee to get access. The Amex Platinum ($695/year) gives you access to Centurion Lounges, the Chase Sapphire Reserve ($550/year) gives you access to Sapphire Lounges, and so on.</p>
+                
+                <p>The quality is usually the best of the three options, but there are two major problems: limited locations and overcrowding. Bank lounges only exist in major airports, so if you're flying out of a smaller airport, you're out of luck. Plus, since they're included with popular premium cards, they often get overcrowded, especially during peak travel times.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Overcrowding Reality</h4>
+                    <p>Bank lounges are often so overcrowded that you can't even find a seat. You're paying hundreds of dollars per year for the privilege of standing in a crowded room with other people who also paid hundreds of dollars per year. Sometimes the free airport food court is actually a better experience.</p>
+                </div>
+
+                <h3>The Location Problem: Why Most Lounges Are Useless</h3>
+                <p>Here's the brutal truth about lounge access: it only matters if you actually have lounges at the airports you use. If you live in a small city with a regional airport, you probably don't have any lounges worth visiting. If you only travel internationally once a year, you're paying for a benefit you'll rarely use.</p>
+                
+                <p>This is why it's so important to check what lounges exist at your home airport and where you frequently travel before paying for lounge access. You could have the most amazing lounge access in the world, but if there are no lounges where you actually fly, it's completely worthless.</p>
+                
+                <p>Here's a real example: you live in Boise, Idaho, and mostly fly to Seattle and Denver. You get a premium card with lounge access, thinking you'll use lounges all the time. Then you discover that Boise has no lounges, Seattle has a few mediocre Priority Pass options, and Denver has some decent lounges but you're only there for connections. Suddenly your $550 annual fee doesn't look so smart.</p>
+
+                <h3>The Quality Problem: Not All Lounges Are Created Equal</h3>
+                <p>Even when you do have lounge access, the quality varies dramatically. Some lounges are actually pretty nice with good food, comfortable seating, clean bathrooms, and decent WiFi. Others are depressing rooms with stale snacks, uncomfortable chairs, dirty bathrooms, and WiFi that's slower than your grandmother's dial-up connection.</p>
+                
+                <p>The problem is that you never know what you're going to get until you actually visit. You could have an amazing experience at one lounge and then visit another one in the same network and wonder why you even bothered. It's like paying for a premium restaurant experience and then discovering that some locations serve frozen pizza.</p>
+                
+                <p>This is especially true with Priority Pass, where quality varies not just between different lounges but between different locations of the same lounge chain. The Priority Pass lounge in Terminal A might be amazing, while the Priority Pass lounge in Terminal B might be a depressing room with chairs.</p>
+
+                <h3>The Overcrowding Problem: When "Exclusive" Means "Crowded"</h3>
+                <p>One of the biggest problems with lounges is that they're often overcrowded, especially during peak travel times. Since so many premium credit cards now include lounge access, the lounges that used to be exclusive are now packed with people who are all trying to get value from their annual fees.</p>
+                
+                <p>Here's what this looks like in practice: you walk into a Centurion Lounge expecting a quiet, relaxing experience, only to find that every seat is taken, there's a line for the food, and the bathroom has a 20-minute wait. You're basically paying hundreds of dollars per year for the privilege of standing in a crowded room with other people who also paid hundreds of dollars per year.</p>
+                
+                <p>This is especially bad during peak travel times like holidays and summer vacation. The lounges that are supposed to be your escape from the chaos of the main terminal become just as chaotic, just with slightly better chairs and free food.</p>
+
+                <h3>The Bottom Line: Are Lounges Actually Worth It?</h3>
+                <p>Here's the honest truth about lounge access: it's only worth it if you travel frequently enough to actually use it, and most people don't. If you only fly a few times per year, you're probably better off saving the annual fee and just dealing with the main terminal.</p>
+                
+                <p>The people who get the most value from lounges are frequent travelers who fly out of major airports with good lounge options. If you're a road warrior who flies weekly, lounges can actually make a significant difference in your travel experience. But if you're a normal person who flies a few times per year, lounges are probably not worth the cost.</p>
+                
+                <p>Remember: lounges are a luxury, not a necessity. You can absolutely have a fine travel experience without them. Sometimes the free airport food court is actually better than a crowded, mediocre lounge. Don't let credit card marketing convince you that you need lounge access to have a good travel experience.</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="content-layer" id="layer-travel-transfers">
+        <section class="hero-wrapper">
+            <div class="hero-content">
+                <h1>Transfer Partners: Where Nerds Go to Feel Smart and Normal People Go to Get Confused</h1>
+                <p>This is why most travel websites value points higher than they're actually worth. Points are made-up currency and their value changes depending on where you use them. This shit gets incredibly complicated, but it's where you can get the most value if you're willing to become a travel nerd and learn systems that were designed to confuse normal people.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                        <div class="progress-steps">
+                            <div class="progress-step completed" onclick="goToLayer('home')">
+                                <span class="step-icon">🏠</span>
+                            </div>
+                            <div class="progress-step completed" onclick="goToLayer('travel-main')">
+                                <span class="step-icon">🗺️</span>
+                            </div>
+                            <div class="progress-step active">
+                                <span class="step-icon">🔍</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-text">
+                        🔍 Level 3 - Deep Dive on Transfer Partners
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="content-section">
+                <h2>How Transfer Partners Actually Work (And Why They're So Confusing)</h2>
+                <p>Transfer partners are basically the travel industry's way of saying "we're going to make this as complicated as possible so you feel like you need to become an expert to get good value." Here's how the scam works: you transfer points from your credit card to airline or hotel partners, and the value changes dramatically based on where you transfer them.</p>
+                
+                <p>Here's a real example of how this works: you have 100,000 Chase points and want to book a hotel. You could use them in the Chase portal and get $1,000 worth of value (1 cent per point). Or you could transfer them to Hyatt and potentially get $2,000+ worth of value (2+ cents per point). Sounds amazing, right?</p>
+                
+                <p>Well, here's the catch: to get that amazing value, you need to learn Hyatt's award chart, understand their blackout dates, figure out when award availability is released, and hope that the hotel you want actually has award rooms available. You're basically trading simplicity for complexity, and most people aren't smart enough or patient enough to make it work.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Transfer Partner Reality</h4>
+                    <p>Transfer partners are like a video game where the tutorial is 50 hours long and the actual game is just managing spreadsheets. If you enjoy learning complex systems and optimizing every detail, you'll love them. If you just want to book a hotel and go on vacation, you'll hate them.</p>
+                </div>
+
+                <h3>Hotel Transfers: Where the Real Value Lives (Sometimes)</h3>
+                <p>Hotel transfers are usually where you get the best value from transfer partners, and this is why travel nerds get so excited about them. Hyatt is often the sweet spot for Chase transfers, Marriott can be good for Amex transfers, and Hilton can work for various programs.</p>
+                
+                <p>Here's why hotel transfers are usually better than airline transfers: hotels are more flexible with their award programs. They don't have the same blackout date issues that airlines have, and award availability is usually more predictable. Plus, hotel points are often worth more than airline points because hotels don't have the same capacity constraints.</p>
+                
+                <p>But here's the reality check: even hotel transfers require significant research and planning. You need to understand transfer ratios (usually 1:1, but some are better or worse), learn the hotel's award chart, figure out when award availability is released, and hope that the hotel you want actually has award rooms available. It's not rocket science, but it's also not something you can figure out in 5 minutes.</p>
+
+                <h3>Airline Transfers: The Ultimate Rollercoaster of Value</h3>
+                <p>Airline transfers are where things get really interesting - and really frustrating. The value can vary from amazing to terrible depending on the route, class of service, and when you're trying to book. International flights are usually where you get the best value, especially for business or first class.</p>
+                
+                <p>Here's how the value works: you might transfer 100,000 points to United and get a business class ticket to Europe worth $3,000 (3 cents per point). Or you might transfer the same points and get a domestic economy ticket worth $300 (0.3 cents per point). The same points, completely different values.</p>
+                
+                <p>International flights are usually the best value because airlines charge insane prices for international business and first class. A business class ticket to Europe might cost $5,000 in cash, but only 100,000 points. That's 5 cents per point - amazing value! But here's the catch: you need to find award availability, which is often limited and released at inconvenient times.</p>
+
+                <h3>The Award Chart Problem: Why This Is So Complicated</h3>
+                <p>Award charts are basically the travel industry's way of making simple math as complicated as possible. Instead of just saying "this flight costs X points," airlines and hotels have charts that vary based on destination, season, day of the week, phase of the moon, and probably the alignment of the stars.</p>
+                
+                <p>Here's how this works in practice: you want to fly from New York to London. You check the award chart and discover that the same flight costs different amounts of points depending on when you fly. Peak season (summer) might cost 100,000 points, while off-peak season (winter) might cost 60,000 points. But here's the catch: "peak season" is defined by the airline and can change at any time.</p>
+                
+                <p>Plus, airlines are constantly devaluing their award charts, which means what worked last year might not work this year. You could spend months learning a system only to have the airline change the rules and make your knowledge worthless. It's like studying for a test and then having the teacher change all the questions at the last minute.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Award Chart Reality</h4>
+                    <p>Award charts are designed to be confusing so that normal people give up and just pay cash. The airlines know that most people won't take the time to learn these systems, which means they can keep charging high prices while offering "amazing" award deals that nobody can actually book.</p>
+                </div>
+
+                <h3>The Availability Problem: Why Your Points Are Often Worthless</h3>
+                <p>Here's the dirty secret about transfer partners: award availability is intentionally limited and often released at times that are inconvenient for normal people. Airlines and hotels only release a small percentage of their inventory as award seats/rooms, and they release them at times that are designed to maximize their profits.</p>
+                
+                <p>Here's how this works: you want to fly to Europe during summer vacation (when normal people actually want to travel). You check award availability and discover that all the good dates are blacked out or require way more points than the award chart suggests. The only available dates are Tuesday at 3 AM in February, when nobody wants to travel.</p>
+                
+                <p>This is why transfer partners are so frustrating for normal people. You can have 200,000 points and still not be able to book the trip you want because there's no award availability. Your points become worthless not because you're not smart enough to use them, but because the travel companies are intentionally making it difficult to get good value.</p>
+
+                <h3>The Transfer Ratio Scam: Another Way to Screw You</h3>
+                <p>Transfer ratios are another way that travel companies make the system more complicated than it needs to be. Most transfers are 1:1 (1 credit card point = 1 airline/hotel point), but some are better or worse, and these ratios can change at any time.</p>
+                
+                <p>Here's how this works: you transfer 100,000 Chase points to Hyatt and get 100,000 Hyatt points (1:1 ratio). But if you transfer to some other partner, you might get 80,000 points (0.8:1 ratio) or 120,000 points (1.2:1 ratio). These ratios are often not clearly advertised, and they can change without notice.</p>
+                
+                <p>Plus, some transfer partners have minimum transfer amounts, transfer fees, or other restrictions that make the process even more complicated. You might think you're getting a great deal, only to discover that you need to transfer at least 50,000 points and pay a $50 fee. Suddenly that "amazing value" doesn't look so amazing.</p>
+
+                <h3>The Blackout Date Problem: When Your Points Become Worthless</h3>
+                <p>Blackout dates are the travel industry's way of saying "fuck you" to people who want to use their points during peak travel times. These are dates when award travel is not available, usually during the times when normal people actually want to travel.</p>
+                
+                <p>Here's how the scam works: you earn points all year thinking you'll use them for your summer vacation. When summer rolls around, you discover that all the good dates are blacked out. The only available dates are Tuesday at 3 AM in February, when nobody wants to travel. Your points are essentially worthless during the times when you actually want to use them.</p>
+                
+                <p>This is why transfer partners are often worse than travel portals for normal people. Portals don't have blackout dates - your points work like cash and you can book whatever you want whenever you want. Yes, you might get slightly lower value per point, but you're also avoiding the availability and blackout date issues that make transfer partners so frustrating.</p>
+
+                <h3>The Bottom Line: Are Transfer Partners Worth the Effort?</h3>
+                <p>Here's the honest truth about transfer partners: they're only worth it if you're willing to put in the time and effort to learn complex systems, and most people aren't. If you just want to book travel and go on vacation, you're probably better off with travel portals or fixed-value points.</p>
+                
+                <p>The people who get the most value from transfer partners are the ones who enjoy learning complex systems and are willing to put in the time to research award charts, deal with availability issues, and work around blackout dates. If you're not willing to do that, you're better off with simpler options.</p>
+                
+                <p>Remember: there's no shame in wanting simple. Transfer partners can give you amazing value, but they require significant expertise and time investment. Sometimes the "boring" portal booking is the smart choice. Don't let travel nerds convince you that you need to optimize every redemption to get "maximum value." Sometimes good enough is good enough.</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="content-layer" id="layer-travel-bonuses">
+        <section class="hero-wrapper">
+            <div class="hero-content">
+                <h1>Sign-Up Bonuses & Perks: The Only Things That Actually Matter</h1>
+                <p>Sign-up bonuses are basically the only reason to get most travel cards, and they're the one area where travel cards actually beat cash back cards. Plus perks like cell phone protection, TSA PreCheck, and other benefits that might actually be useful instead of just making you feel like you're getting value.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                        <div class="progress-steps">
+                            <div class="progress-step completed" onclick="goToLayer('home')">
+                                <span class="step-icon">🏠</span>
+                            </div>
+                            <div class="progress-step completed" onclick="goToLayer('travel-main')">
+                                <span class="step-icon">🗺️</span>
+                            </div>
+                            <div class="progress-step active">
+                                <span class="step-icon">🔍</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-text">
+                        🔍 Level 3 - Deep Dive on Sign-Up Bonuses & Perks
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="content-section">
+                <h2>Sign-Up Bonuses: The One Thing That Actually Makes Sense</h2>
+                <p>Sign-up bonuses are basically the only reason to get most travel cards, and here's why: they're the one area where travel cards actually beat cash back cards by a significant margin. While cash back cards might give you a $200 sign-up bonus, travel cards regularly offer 50,000-150,000 points, which can potentially be worth $500-$1,500+ in travel.</p>
+                
+                <p>Here's how this works: you get a Chase Sapphire Preferred with a 60,000 point sign-up bonus after spending $4,000 in 3 months. Those 60,000 points could be worth $600 in the Chase travel portal, $750+ if transferred to partners, or potentially $1,200+ if you're smart about transfers. That's a much better return than the $200 you'd get from most cash back cards.</p>
+                
+                <p>But here's the catch: you actually have to meet the spending requirement without buying things you wouldn't buy anyway. If you're spending $4,000 on stuff you don't need just to get the bonus, you're not actually getting ahead. You're just spending money to get money back, which is basically the same as not spending money in the first place.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The Spending Requirement Reality</h4>
+                    <p>Don't get a card with a $4,000 spending requirement if you normally only spend $2,000 in 3 months. You'll either miss the bonus entirely or end up buying things you don't need just to hit the target. Either way, you're losing money instead of making money.</p>
+                </div>
+
+                <h3>Travel Protections: The Insurance That's Actually Worth Something</h3>
+                <p>Travel protections are one of the few perks that can actually save you real money, and this is where premium travel cards start to make sense. These include trip cancellation insurance, baggage delay coverage, rental car insurance, and other protections that can save you hundreds or thousands of dollars if something goes wrong with your trip.</p>
+                
+                <p>Here's how this works: you book a $2,000 trip to Europe and then your flight gets cancelled due to weather. Without travel insurance, you're out $2,000. With the right travel card, you might get reimbursed for the entire trip. That's real money, not theoretical value from points.</p>
+                
+                <p>But here's the reality check: most travel protections have exclusions and limitations that make them less valuable than they seem. Trip cancellation insurance usually only covers specific reasons (weather, illness, death in family), not "I changed my mind" or "I found a better deal." Baggage delay coverage often has minimum delay requirements (usually 6+ hours), and rental car insurance usually has exclusions for certain types of vehicles or countries.</p>
+
+                <h3>Cell Phone Protection: The Perk That Actually Gets Used</h3>
+                <p>Cell phone protection is one of the most underrated perks of premium travel cards, and it's actually something that normal people can use. Most cards offer coverage up to $800 with a deductible (usually $25-50), which can save you from buying a new phone if yours gets damaged or stolen.</p>
+                
+                <p>Here's how this works: you drop your iPhone and crack the screen, or it gets stolen while traveling. Without protection, you're out $800+ for a new phone. With cell phone protection, you pay the deductible and get reimbursed for the replacement. That's real money saved, not theoretical value from points.</p>
+                
+                <p>But here's the catch: you have to actually pay your cell phone bill with the card to activate this benefit. If you're paying your cell phone bill with a different card or through your bank, the protection doesn't work. This is one of those "read the fine print" situations that most people miss until they try to file a claim.</p>
+
+                <h3>TSA PreCheck & Global Entry: The Airport Perks That Actually Matter</h3>
+                <p>TSA PreCheck and Global Entry are probably the most valuable airport perks that travel cards offer, and they're the one benefit that can actually make a significant difference in your travel experience. TSA PreCheck gives you expedited security screening at US airports, while Global Entry includes TSA PreCheck plus expedited entry when returning from international travel.</p>
+                
+                <p>Here's why these matter: they can save you 30+ minutes in security lines, which is huge when you're running late for a flight or just don't want to deal with the chaos of regular security. Plus, you don't have to take off your shoes, remove your laptop, or deal with the TSA's random selection process. It's basically like having a VIP pass to skip the worst part of flying.</p>
+                
+                <p>The cost is usually $85 for TSA PreCheck or $100 for Global Entry, but many premium travel cards reimburse these fees. This is one of those perks that's actually worth the annual fee if you travel frequently, because the time savings and reduced stress are real benefits that you can't get from points.</p>
+
+                <div class="callout-box">
+                    <h4>💡 The TSA PreCheck Reality</h4>
+                    <p>TSA PreCheck is worth it even if you only fly a few times per year. The $85 fee pays for itself in time savings and reduced stress, and many cards reimburse it anyway. Global Entry is worth it if you travel internationally, but TSA PreCheck alone is sufficient for most people.</p>
+                </div>
+
+                <h3>The Annual Fee Math: When Perks Actually Make Sense</h3>
+                <p>Here's the brutal truth about annual fees and perks: most people don't actually use enough perks to justify the annual fee. A $695 annual fee for the Amex Platinum sounds insane until you realize that it includes $200 in airline fee credits, $200 in hotel credits, $240 in digital entertainment credits, and various other benefits.</p>
+                
+                <p>But here's the reality check: you have to actually use these credits to get value from them. If you don't fly enough to use the airline credits, don't stay at hotels that qualify for the hotel credits, and don't use the digital entertainment services, you're basically paying $695 for lounge access and a metal card.</p>
+                
+                <p>This is why it's so important to calculate whether you'll actually use the perks before getting a premium card. A $550 annual fee for the Chase Sapphire Reserve might be worth it if you use the $300 travel credit, TSA PreCheck reimbursement, and Priority Pass access. But if you only use the travel credit, you're paying $250 for perks you don't use.</p>
+
+                <h3>The Perk Trap: Don't Get a Card Just for the Perks</h3>
+                <p>Here's what most people get wrong about travel card perks: they get a card because it has cool perks, not because they'll actually use them. This is how you end up paying $695 per year for benefits that you never use, which is basically the same as lighting money on fire.</p>
+                
+                <p>Here's a real example: you get the Amex Platinum because it has amazing perks, but you only fly twice per year and don't use any of the credits. You're paying $695 for lounge access that you'll use 4 times per year, which works out to about $175 per lounge visit. That's insane when you could just pay for food and drinks at the airport for much less.</p>
+                
+                <p>The key is to be honest about how much you'll actually use the perks. If you travel frequently and can use multiple card benefits, premium cards can absolutely be worth the annual fee. But if you only travel occasionally and won't use most of the perks, you're better off with a no-annual-fee card or a simpler premium card.</p>
+
+                <h3>The Bottom Line: Perks Are Only Worth What You Actually Use</h3>
+                <p>Here's the honest truth about travel card perks: they're only worth what you actually use, and most people don't use enough perks to justify high annual fees. Don't get a card just because it has cool benefits - get a card because you'll actually use those benefits.</p>
+                
+                <p>The people who get the most value from premium cards are frequent travelers who can use multiple card benefits. If you fly weekly, stay at hotels regularly, and can take advantage of the various credits and protections, premium cards can absolutely be worth the cost. But if you only travel occasionally, you're probably better off with simpler options.</p>
+                
+                <p>Remember: perks are a bonus, not the main reason to get a card. The sign-up bonus and earning rates are usually more important than the perks, especially for normal people who don't travel frequently. Don't let cool benefits fool you into paying for a card that doesn't make sense for your spending patterns.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
+
+    <script>
+        // Smart header and footer loading with fallbacks
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            loadComponent('header.html', 'header-placeholder', 'header-fallback');
+            
+            // Load footer
+            loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
+        });
+
+        function loadComponent(filename, placeholderId, fallbackId) {
+            const placeholder = document.getElementById(placeholderId);
+            
+            console.log(`Attempting to load ${filename}...`);
+            
+            // Try to load the component
+            fetch(filename)
+                .then(response => {
+                    console.log(`Response for ${filename}:`, response.status, response.statusText);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log(`Successfully loaded ${filename}, length:`, html.length);
+                    
+                    // Extract and execute JavaScript from the loaded HTML
+                    if (filename === 'header.html') {
+                        // Extract script tags
+                        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+                        const scripts = [];
+                        let match;
+                        
+                        while ((match = scriptRegex.exec(html)) !== null) {
+                            scripts.push(match[1]);
+                        }
+                        
+                        console.log(`Found ${scripts.length} script tags in header`);
+                        
+                        // Execute each script
+                        scripts.forEach((script, index) => {
+                            console.log(`Executing script ${index + 1}`);
+                            try {
+                                eval(script);
+                            } catch (error) {
+                                console.error(`Error executing script ${index + 1}:`, error);
+                            }
+                        });
+                        
+                        // Remove script tags from HTML before inserting
+                        const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+                        placeholder.innerHTML = cleanHtml;
+                    } else {
+                        // For non-header files, just insert the HTML
+                        placeholder.innerHTML = html;
+                    }
+                    
+                    // Initialize any JavaScript functionality in the loaded content
+                    initializeLoadedContent();
+                })
+                .catch(error => {
+                    console.error(`Could not load ${filename}:`, error);
+                    console.log('Using fallback content instead');
+                    
+                    // Show fallback content
+                    placeholder.innerHTML = getFallbackContent(filename);
+                });
+        }
+
+        function getFallbackContent(filename) {
+            if (filename === 'header.html') {
+                return `
+                    <header style="background: #059669; color: white; padding: 1rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+                        <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+                            <a href="index.html" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.5rem;">Practical Rewards</a>
+                            <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
+                                <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+                                <li><a href="learning.html" style="color: white; text-decoration: none;">Learning</a></li>
+                                <li><a href="eaacalc.html" style="color: white; text-decoration: none;">Calculator</a></li>
+                                <li><a href="about.html" style="color: white; text-decoration: none;">About</a></li>
+                            </ul>
+                        </nav>
+                    </header>
+                `;
+            } else if (filename === 'footer.html') {
+                return `
+                    <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
+                        <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
+                            <div style="text-align: center;">
+                                <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+                                <p style="margin-top: 1rem;">
+                                    <a href="learning.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
+                                    <a href="eaacalc.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
+                                    <a href="about.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+                `;
+            }
+            return '<p>Content could not be loaded.</p>';
+        }
+
+        function initializeLoadedContent() {
+            // Initialize header scroll effects
+            const header = document.querySelector('header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.style.background = 'rgba(250, 250, 249, 0.98)';
+                        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                    } else {
+                        header.style.background = 'rgba(250, 250, 249, 0.95)';
+                        header.style.boxShadow = 'none';
+                    }
+                });
+            }
+
+            // Mobile menu functionality is handled by the dynamic header
+        }
+    </script>
     <script>
         // --- SCRIPT FOR PAGE NAVIGATION ---
         window.currentPath = ['home'];
         
-        function goToLayer(layerId) {
+        // Initialize browser history on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there's a hash in the URL and restore the state
+            if (window.location.hash) {
+                const layerId = window.location.hash.substring(1);
+                if (document.getElementById('layer-' + layerId)) {
+                    goToLayer(layerId, false); // Don't add to history
+                }
+            }
+            
+            // Listen for browser back/forward buttons
+            window.addEventListener('popstate', function(event) {
+                if (event.state && event.state.layerId) {
+                    goToLayer(event.state.layerId, false);
+                } else {
+                    goToLayer('home', false);
+                }
+            });
+        });
+        
+        function goToLayer(layerId, addToHistory = true) {
+            console.log('Navigating to layer:', layerId);
+            
+            // Hide all layers first
             document.querySelectorAll('.content-layer').forEach(layer => {
                 layer.classList.remove('active');
             });
             
-            document.getElementById('layer-' + layerId).classList.add('active');
-            updatePath(layerId);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Find and show the target layer
+            const targetLayer = document.getElementById('layer-' + layerId);
+            if (targetLayer) {
+                targetLayer.classList.add('active');
+                console.log('Successfully navigated to:', layerId);
+                
+                // Update path and scroll
+                updatePath(layerId);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Add to browser history if requested
+                if (addToHistory) {
+                    const state = { layerId: layerId };
+                    const url = window.location.pathname + '#' + layerId;
+                    window.history.pushState(state, '', url);
+                }
+            } else {
+                console.error('Layer not found:', 'layer-' + layerId);
+                console.log('Available layers:', Array.from(document.querySelectorAll('.content-layer')).map(l => l.id));
+                // Fallback to home if layer doesn't exist
+                const homeLayer = document.getElementById('layer-home');
+                if (homeLayer) {
+                    homeLayer.classList.add('active');
+                    console.log('Falling back to home layer');
+                } else {
+                    console.error('Home layer not found either!');
+                }
+            }
         }
         
         function goBack() {
@@ -1806,21 +2803,20 @@ header {
                 goToLayer('home');
             } else if (window.currentPath.length === 3) {
                 goToLayer(window.currentPath[1]);
-            } else if (window.currentPath.length >= 4) {
-                goToLayer(window.currentPath[2]);
             }
         }
+    
         
         function updatePath(layerId) {
             var level1 = ['home'];
             var level2 = ['cashback-main', 'travel-main'];
             var level3 = ['cashback-types', 'cashback-spending', 'cashback-math', 'cashback-recommendations',
-                         'travel-points', 'travel-lounges', 'travel-transfers', 'travel-portals'];
-            var level4AndDeeper = ['cashback-flat', 'cashback-categories', 'cashback-rotating',
-                                   'spending-grocery', 'spending-dining', 'spending-mixed',
-                                   'points-fixed', 'points-transferable', 'points-airline',
-                                   'lounges-airline', 'lounges-credit', 'lounges-comparison',
-                                   'transfers-chase', 'transfers-amex', 'transfers-comparison'];
+                         'travel-points', 'travel-lounges', 'travel-transfers', 'travel-portals',
+                         'cashback-flat', 'cashback-categories', 'cashback-rotating',
+                         'spending-grocery', 'spending-dining', 'spending-mixed',
+                         'points-fixed', 'points-transferable', 'points-airline',
+                         'lounges-airline', 'lounges-credit', 'lounges-comparison',
+                         'transfers-chase', 'transfers-amex', 'transfers-comparison'];
             
             if (level1.includes(layerId)) {
                 window.currentPath = ['home'];
@@ -1829,66 +2825,27 @@ header {
             } else if (level3.includes(layerId)) {
                 var parentTopic = layerId.startsWith('cashback-') ? 'cashback-main' : 'travel-main';
                 window.currentPath = ['home', parentTopic, layerId];
-            } else if (level4AndDeeper.includes(layerId)) {
-                var parentTopic = '';
-                var grandparentTopic = '';
-                
-                if (layerId.startsWith('cashback-') || layerId.startsWith('spending-')) {
-                    grandparentTopic = 'cashback-main';
-                    if (layerId.startsWith('cashback-flat') || layerId.startsWith('cashback-categories') || layerId.startsWith('cashback-rotating')) {
-                        parentTopic = 'cashback-types';
-                    } else if (layerId.startsWith('spending-')) {
-                        parentTopic = 'cashback-spending';
-                    }
-                } else if (layerId.startsWith('points-')) {
-                    grandparentTopic = 'travel-main';
-                    parentTopic = 'travel-points';
-                } else if (layerId.startsWith('lounges-')) {
-                    grandparentTopic = 'travel-main';
-                    parentTopic = 'travel-lounges';
-                } else if (layerId.startsWith('transfers-')) {
-                    grandparentTopic = 'travel-main';
-                    parentTopic = 'travel-transfers';
-                }
-                
-                if (parentTopic) {
-                    window.currentPath = ['home', grandparentTopic, parentTopic, layerId];
-                } else {
-                    window.currentPath = ['home', grandparentTopic, layerId];
-                }
             }
         }
     </script>
     <script>
-        // --- SCRIPT FOR LOADING HEADER & FOOTER ---
-        // Ensure header.html and footer.html are in the same directory as this file.
-        // Run this page on a local server (like VS Code's Live Server) for fetch() to work.
-        
-        fetch('header.html')
-            .then(response => {
-                if (response.ok) return response.text();
-                throw new Error('header.html not found.');
-            })
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading header:', error);
-                document.getElementById('header-placeholder').innerHTML = '<p style="text-align: center; color: red;">Could not load header.</p>';
-            });
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(250, 250, 249, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(250, 250, 249, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
 
-        fetch('footer.html')
-            .then(response => {
-                if (response.ok) return response.text();
-                throw new Error('footer.html not found.');
-            })
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading footer:', error);
-                document.getElementById('footer-placeholder').innerHTML = '<p style="text-align: center; color: red;">Could not load footer.</p>';
-            });
+        // Mobile menu toggle (placeholder function)
+        function toggleMobileMenu() {
+            // This would implement mobile menu functionality
+            console.log('Mobile menu toggle clicked');
+        }
     </script>
 </body>
 </html>

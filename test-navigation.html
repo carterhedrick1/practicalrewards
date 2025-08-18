@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test - Cards for Normals</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .test-link { display: inline-block; margin: 10px; padding: 10px 20px; background: #f0f0f0; text-decoration: none; color: #333; border-radius: 4px; }
+        .test-link:hover { background: #e0e0e0; }
+        .status { margin-left: 10px; font-weight: bold; }
+        .working { color: green; }
+        .error { color: red; }
+        .info { background: #e7f3ff; padding: 15px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Navigation System Test</h1>
+    
+    <div class="info">
+        <h3>What This Tests:</h3>
+        <p>This page tests the new shared header system that automatically adjusts navigation paths based on the current page depth.</p>
+        <p><strong>Current URL:</strong> <code id="current-url"></code></p>
+        <p><strong>Detected Depth:</strong> <span id="detected-depth"></span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Header Loading</h2>
+        <p>Click the button below to load the shared header and test navigation:</p>
+        <button onclick="loadHeader()" style="padding: 10px 20px; background: #059669; color: white; border: none; border-radius: 4px; cursor: pointer;">Load Shared Header</button>
+        <div id="header-test"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Navigation Links</h2>
+        <p>These links should work from any page depth:</p>
+        <a href="index.html" class="test-link">Home (index.html)</a>
+        <a href="learning.html" class="test-link">Learning (learning.html)</a>
+        <a href="eaacalc.html" class="test-link">Calculator (eaacalc.html)</a>
+        <a href="about.html" class="test-link">About (about.html)</a>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Card Pages</h2>
+        <p>Test navigation to card pages (should work from root):</p>
+        <a href="card-pages/venture-x.html" class="test-link">Venture X</a>
+        <a href="card-pages/sapphire-reserve.html" class="test-link">Sapphire Reserve</a>
+        <a href="card-pages/amex-platinum.html" class="test-link">Amex Platinum</a>
+    </div>
+
+    <div class="test-section">
+        <h2>Navigation Path Detection</h2>
+        <p>The system automatically detects page depth and adjusts paths:</p>
+        <ul>
+            <li><strong>Root level</strong> (e.g., index.html): No prefix needed</li>
+            <li><strong>One level deep</strong> (e.g., card-pages/venture-x.html): Uses <code>../</code> prefix</li>
+            <li><strong>Two levels deep</strong> (e.g., card-pages/subfolder/page.html): Uses <code>../../</code> prefix</li>
+        </ul>
+    </div>
+
+    <script>
+        // Display current URL and detected depth
+        document.getElementById('current-url').textContent = window.location.href;
+        
+        const currentPath = window.location.pathname;
+        const depth = (currentPath.match(/\//g) || []).length - 1;
+        document.getElementById('detected-depth').textContent = depth + ' levels deep';
+
+        // Test header loading
+        function loadHeader() {
+            fetch('header.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('header-test').innerHTML = html;
+                    
+                    // Test the auto-path detection
+                    setTimeout(() => {
+                        const navLinks = document.querySelectorAll('#header-test a[href^="index.html"], #header-test a[href^="learning.html"], #header-test a[href^="eaacalc.html"], #header-test a[href^="about.html"]');
+                        console.log('Navigation links found:', navLinks.length);
+                        navLinks.forEach(link => {
+                            console.log('Link:', link.href);
+                        });
+                    }, 100);
+                })
+                .catch(error => {
+                    document.getElementById('header-test').innerHTML = '<p style="color: red;">Error loading header: ' + error.message + '</p>';
+                });
+        }
+    </script>
+</body>
+</html> 

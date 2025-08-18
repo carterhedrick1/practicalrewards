@@ -4,18 +4,345 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Cards for Normals</title>
-    <link rel="stylesheet" href="css/styles.css">
     <style>
+        /* Base page styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #374151;
+            background: #fafaf9;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header - Modern Desktop Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 250, 249, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(231, 229, 228, 0.6);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #047857;
+            transform: translateY(-1px);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #57534e;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #059669, #10b981);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #059669;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #047857 !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .cta-nav::after {
+            display: none;
+        }
+
+        .cta-nav:hover {
+            color: #047857 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
+            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+        }
+
+        /* Mobile Menu Toggle (Hidden on Desktop) */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .hamburger {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            width: 20px;
+            height: 2px;
+            background: #059669;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .mobile-menu-toggle.active .hamburger span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-menu-toggle.active .hamburger span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active .hamburger span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+        }
+
+        /* Mobile Menu Sidebar */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            padding-top: 80px;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            margin-top: -80px;
+            padding-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .mobile-menu-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 60px;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-nav-links li {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .mobile-nav-links a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .mobile-nav-links a:hover {
+            color: #059669;
+            background: #f8fafc;
+            padding-left: 2rem;
+        }
+
+        .mobile-nav-links a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #059669;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-nav-links a:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Close button */
+        .mobile-menu-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #292524;
+            color: #a8a29e;
+            padding: 3rem 0 1rem 0;
+            margin-top: 3rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #fafaf9;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #a8a29e;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #a8a29e;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #fafaf9;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #44403c;
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        /* About page specific styles */
         .about-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 120px 2rem 2rem 2rem;
         }
 
         .hero-section {
             text-align: center;
             padding: 3rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             color: white;
             border-radius: 16px;
             margin-bottom: 3rem;
@@ -99,35 +426,45 @@
             margin: 2rem 0;
         }
 
-        .callout-box h4 {
-            color: #92400e;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .callout-box p {
-            color: #92400e;
-            margin: 0;
-            font-size: 1rem;
-        }
-
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .values-grid {
-                grid-template-columns: 1fr;
+            .mobile-menu-toggle {
+                display: flex;
             }
 
-            .hero-section h1 {
-                font-size: 2rem;
+            .nav-links {
+                display: none;
+            }
+
+            nav {
+                padding: 0 1rem;
+                height: 70px;
+            }
+
+            .about-container {
+                padding: 100px 1rem 2rem 1rem;
             }
 
             .content-section {
                 padding: 2rem;
             }
+
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="header-placeholder"></div>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
 
     <div class="about-container">
         <div class="hero-section">
@@ -202,26 +539,182 @@
             <p>We're constantly working to make our recommendations more helpful, our explanations clearer, and our tools more useful for real-world decision making.</p>
 
             <h3>Have Feedback?</h3>
-            <p>We'd love to hear from you. If something isn't clear, if you have questions we haven't answered, or if you just want to tell us about your experience with the cards we've recommended, <a href="contact.html" style="color: #667eea; text-decoration: none;">get in touch</a>.</p>
+            <p>We'd love to hear from you. If something isn't clear, if you have questions we haven't answered, or if you just want to tell us about your experience with the cards we've recommended, <a href="contact.html" style="color: #059669; text-decoration: none;">get in touch</a>.</p>
 
             <p>After all, we're building this for normal people like you.</p>
         </div>
     </div>
 
-    <div id="footer-placeholder"></div>
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
 
-    <script src="js/scripts.js"></script>
-    <script src="js/header.js"></script>
     <script>
-        // Load footer
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading footer:', error);
-            });
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileOverlay = document.getElementById('mobile-menu-overlay');
+            const mobileClose = document.getElementById('mobile-menu-close');
+
+            function openMobileMenu() {
+                mobileMenu.classList.add('active');
+                mobileOverlay.classList.add('active');
+                mobileToggle.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            mobileToggle.addEventListener('click', openMobileMenu);
+            mobileClose.addEventListener('click', closeMobileMenu);
+            mobileOverlay.addEventListener('click', closeMobileMenu);
+        });
+
+        // Load shared header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('header.html', 'header-placeholder', 'header-fallback');
+            loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
+        });
+
+        function loadComponent(filename, placeholderId, fallbackId) {
+            const placeholder = document.getElementById(placeholderId);
+            
+            fetch(filename)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log(`Successfully loaded ${filename}, length:`, html.length);
+                    
+                    // Extract and execute JavaScript from the loaded HTML
+                    if (filename === 'header.html') {
+                        // Extract script tags
+                        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+                        const scripts = [];
+                        let match;
+                        
+                        while ((match = scriptRegex.exec(html)) !== null) {
+                            scripts.push(match[1]);
+                        }
+                        
+                        console.log(`Found ${scripts.length} script tags in header`);
+                        
+                        // Execute each script
+                        scripts.forEach((script, index) => {
+                            console.log(`Executing script ${index + 1}`);
+                            try {
+                                eval(script);
+                            } catch (error) {
+                                console.error(`Error executing script ${index + 1}:`, error);
+                            }
+                        });
+                        
+                        // Remove script tags from HTML before inserting
+                        const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+                        placeholder.innerHTML = cleanHtml;
+                    } else {
+                        // For non-header files, just insert the HTML
+                        placeholder.innerHTML = html;
+                    }
+                    
+                    initializeLoadedContent();
+                })
+                .catch(error => {
+                    console.warn(`Could not load ${filename}:`, error);
+                    placeholder.innerHTML = getFallbackContent(filename);
+                });
+        }
+
+        function getFallbackContent(filename) {
+            if (filename === 'header.html') {
+                return `
+                    <header style="background: rgba(250, 250, 249, 0.95); backdrop-filter: blur(12px); box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); position: sticky; top: 0; z-index: 1000; width: 100%; border-bottom: 1px solid #e7e5e4;">
+                        <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 80px;">
+                            <a href="#" class="logo" style="font-size: 1.5rem; font-weight: 700; color: #059669; text-decoration: none;">Practical Rewards</a>
+                            <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
+                                <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Home</a></li>
+                                <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Learning</a></li>
+                                <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Calculator</a></li>
+                                <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">About</a></li>
+                            </ul>
+                        </nav>
+                    </header>
+                    <script>
+                    // Simple absolute path navigation that works from anywhere
+                    (function() {
+                        function updateNavigationPaths() {
+                            // Get the current domain and protocol
+                            const protocol = window.location.protocol;
+                            const host = window.location.host;
+                            const baseUrl = protocol + '//' + host;
+                            
+                            // Update all navigation links to use absolute paths from root
+                            const navLinks = document.querySelectorAll('a[href="#"]');
+                            
+                            navLinks.forEach((link, index) => {
+                                const pages = ['index.html', 'learning.html', 'eaacalc.html', 'about.html'];
+                                if (index < pages.length) {
+                                    // Create absolute URL from root - this will work from any page depth
+                                    link.href = baseUrl + '/' + pages[index];
+                                }
+                            });
+                        }
+                        
+                        // Run immediately and also when DOM is ready
+                        updateNavigationPaths();
+                        
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', updateNavigationPaths);
+                        }
+                        
+                        // Also run after a short delay to catch any late-loading elements
+                        setTimeout(updateNavigationPaths, 50);
+                    })();
+                    <\/script>
+                `;
+            } else if (filename === 'footer.html') {
+                return `
+                    <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
+                        <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
+                            <div style="text-align: center;">
+                                <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+                                <p style="margin-top: 1rem;">
+                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
+                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
+                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+                `;
+            }
+            return '<p>Content could not be loaded.</p>';
+        }
+
+        function initializeLoadedContent() {
+            const header = document.querySelector('header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.style.background = 'rgba(250, 250, 249, 0.98)';
+                        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                    } else {
+                        header.style.background = 'rgba(250, 250, 249, 0.95)';
+                        header.style.boxShadow = 'none';
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Card Pages - Cards for Normals</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-link { display: block; margin: 10px 0; padding: 15px; background: #f0f0f0; border-radius: 8px; text-decoration: none; color: #333; }
+        .test-link:hover { background: #e0e0e0; }
+        .status { margin-left: 10px; font-weight: bold; }
+        .working { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Card Pages Test</h1>
+    <p>Click the links below to test if the card pages are working correctly:</p>
+    
+    <a href="card-pages/venture-x.html" class="test-link" target="_blank">
+        Venture X Card Page <span class="status working">✓ Should work</span>
+    </a>
+    
+    <a href="card-pages/sapphire-reserve.html" class="test-link" target="_blank">
+        Sapphire Reserve Card Page <span class="status working">✓ Should work</span>
+    </a>
+    
+    <a href="card-pages/amex-platinum.html" class="test-link" target="_blank">
+        Amex Platinum Card Page <span class="status working">✓ Should work</span>
+    </a>
+    
+    <h2>File Structure Verification</h2>
+    <p>All files should be in the <code>card-pages/</code> folder:</p>
+    <ul>
+        <li><code>card-pages/card-styles.css</code> - Shared CSS styles</li>
+        <li><code>card-pages/card-scripts.js</code> - Shared JavaScript</li>
+        <li><code>card-pages/venture-x.html</code> - Venture X page</li>
+        <li><code>card-pages/sapphire-reserve.html</code> - Sapphire Reserve page</li>
+        <li><code>card-pages/amex-platinum.html</code> - Amex Platinum page</li>
+    </ul>
+    
+    <h2>Troubleshooting</h2>
+    <p>If you're getting 404 errors:</p>
+    <ol>
+        <li>Make sure you're accessing the files through a web server (not opening them directly in the browser)</li>
+        <li>Check that all files are in the correct locations</li>
+        <li>Verify file permissions are correct</li>
+        <li>Clear browser cache</li>
+    </ol>
+    
+    <p><a href="eaacalc.html">← Back to main calculator</a></p>
+</body>
+</html> 

@@ -4,18 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Cards for Normals</title>
-    <link rel="stylesheet" href="css/styles.css">
     <style>
+        /* Base page styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #374151;
+            background: #fafaf9;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Contact page specific styles only */
         .contact-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 120px 2rem 2rem 2rem;
         }
 
         .hero-section {
             text-align: center;
             padding: 3rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             color: white;
             border-radius: 16px;
             margin-bottom: 3rem;
@@ -75,7 +91,7 @@
         }
 
         .contact-card:hover {
-            border-color: #667eea;
+            border-color: #059669;
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
@@ -99,43 +115,35 @@
         }
 
         .contact-email {
-            background: #667eea;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
             display: inline-block;
-            transition: background 0.3s ease;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #047857;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
         }
 
         .contact-email:hover {
-            background: #5b6fd8;
-            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
+            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
         }
 
-        .faq-section {
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 2rem;
+        .response-time {
+            text-align: center;
             margin: 2rem 0;
+            padding: 1rem;
+            background: #f0fdf4;
+            border-radius: 8px;
+            border: 1px solid #bbf7d0;
         }
 
-        .faq-item {
-            margin-bottom: 2rem;
-        }
-
-        .faq-question {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .faq-answer {
-            color: #475569;
-            line-height: 1.6;
+        .response-time p {
+            color: #047857;
+            font-weight: 500;
             margin: 0;
         }
 
@@ -159,38 +167,101 @@
             font-size: 1rem;
         }
 
-        .response-time {
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            text-align: center;
+        .faq-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin: 2rem 0;
         }
 
-        .response-time p {
-            color: #065f46;
-            margin: 0;
-            font-weight: 500;
+        .faq-section h2 {
+            color: #1e293b;
+            margin-bottom: 2rem;
+            font-size: 2rem;
         }
 
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1.5rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .faq-answer {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
+            .contact-container {
+                padding: 100px 1rem 2rem 1rem;
+            }
+
+            .content-section, .faq-section {
+                padding: 2rem;
+            }
+
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+
             .contact-options {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .hero-section h1 {
-                font-size: 2rem;
+        /* Loading states */
+        .loading-placeholder {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #6b7280;
+            margin: 1rem 0;
+        }
+
+        .loading-placeholder::before {
+            content: "Loading...";
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .contact-container {
+                padding: 100px 1rem 2rem 1rem;
             }
 
-            .content-section {
+            .content-section, .faq-section {
                 padding: 2rem;
+            }
+
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+
+            .contact-options {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div id="header-placeholder"></div>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
 
     <div class="contact-container">
         <div class="hero-section">
@@ -206,7 +277,7 @@
                 <div class="contact-icon">📧</div>
                 <h3 style="margin: 1rem 0; color: #1e293b;">Email Us</h3>
                 <p style="margin-bottom: 2rem; color: #64748b;">For questions about cards, feedback on recommendations, sharing your experience, or suggestions for new content.</p>
-                <a href="mailto:hello@cardsfornormals.com" class="contact-email" style="font-size: 1.2rem; padding: 1rem 2rem;">hello@cardsfornormals.com</a>
+                <a href="mailto:hello@cardsfornormals.com" class="contact-email">hello@cardsfornormals.com</a>
             </div>
 
             <div class="response-time">
@@ -276,20 +347,187 @@
         </div>
     </div>
 
-    <div id="footer-placeholder"></div>
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
 
-    <script src="js/scripts.js"></script>
-    <script src="js/header.js"></script>
     <script>
-        // Load footer
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading footer:', error);
-            });
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileOverlay = document.getElementById('mobile-menu-overlay');
+            const mobileClose = document.getElementById('mobile-menu-close');
+
+            function openMobileMenu() {
+                mobileMenu.classList.add('active');
+                mobileOverlay.classList.add('active');
+                mobileToggle.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            mobileToggle.addEventListener('click', openMobileMenu);
+            mobileClose.addEventListener('click', closeMobileMenu);
+            mobileOverlay.addEventListener('click', closeMobileMenu);
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(250, 250, 249, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(250, 250, 249, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+        // Load shared header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('header.html', 'header-placeholder', 'header-fallback');
+            loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
+        });
+
+        function loadComponent(filename, placeholderId, fallbackId) {
+            const placeholder = document.getElementById(placeholderId);
+            
+            fetch(filename)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log(`Successfully loaded ${filename}, length:`, html.length);
+                    
+                    // Extract and execute JavaScript from the loaded HTML
+                    if (filename === 'header.html') {
+                        // Extract script tags
+                        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+                        const scripts = [];
+                        let match;
+                        
+                        while ((match = scriptRegex.exec(html)) !== null) {
+                            scripts.push(match[1]);
+                        }
+                        
+                        console.log(`Found ${scripts.length} script tags in header`);
+                        
+                        // Execute each script
+                        scripts.forEach((script, index) => {
+                            console.log(`Executing script ${index + 1}`);
+                            try {
+                                eval(script);
+                            } catch (error) {
+                                console.error(`Error executing script ${index + 1}:`, error);
+                            }
+                        });
+                        
+                        // Remove script tags from HTML before inserting
+                        const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+                        placeholder.innerHTML = cleanHtml;
+                    } else {
+                        // For non-header files, just insert the HTML
+                        placeholder.innerHTML = html;
+                    }
+                    
+                    initializeLoadedContent();
+                })
+                .catch(error => {
+                    console.warn(`Could not load ${filename}:`, error);
+                    placeholder.innerHTML = getFallbackContent(filename);
+                });
+        }
+
+        function getFallbackContent(filename) {
+            if (filename === 'header.html') {
+                return `
+                    <header style="background: rgba(250, 250, 249, 0.95); backdrop-filter: blur(12px); box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); position: sticky; top: 0; z-index: 1000; width: 100%; border-bottom: 1px solid #e7e5e4;">
+                        <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 80px;">
+                            <a href="#" class="logo" style="font-size: 1.5rem; font-weight: 700; color: #059669; text-decoration: none;">Practical Rewards</a>
+                            <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
+                                <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Home</a></li>
+                                <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Learning</a></li>
+                                <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Calculator</a></li>
+                                <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">About</a></li>
+                            </ul>
+                        </nav>
+                    </header>
+                    <script>
+                    // Simple absolute path navigation that works from anywhere
+                    (function() {
+                        function updateNavigationPaths() {
+                            // Get the current domain and protocol
+                            const protocol = window.location.protocol;
+                            const host = window.location.host;
+                            const baseUrl = protocol + '//' + host;
+                            
+                            // Update all navigation links to use absolute paths from root
+                            const navLinks = document.querySelectorAll('a[href="#"]');
+                            
+                            navLinks.forEach((link, index) => {
+                                const pages = ['index.html', 'learning.html', 'eaacalc.html', 'about.html'];
+                                if (index < pages.length) {
+                                    // Create absolute URL from root - this will work from any page depth
+                                    link.href = baseUrl + '/' + pages[index];
+                                }
+                            });
+                        }
+                        
+                        // Run immediately and also when DOM is ready
+                        updateNavigationPaths();
+                        
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', updateNavigationPaths);
+                        }
+                        
+                        // Also run after a short delay to catch any late-loading elements
+                        setTimeout(updateNavigationPaths, 50);
+                    })();
+                    <\/script>
+                `;
+            } else if (filename === 'footer.html') {
+                return `
+                    <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
+                        <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
+                            <div style="text-align: center;">
+                                <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+                                <p style="margin-top: 1rem;">
+                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
+                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
+                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+                `;
+            }
+            return '<p>Content could not be loaded.</p>';
+        }
+
+        function initializeLoadedContent() {
+            const header = document.querySelector('header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.style.background = 'rgba(250, 250, 249, 0.98)';
+                        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                    } else {
+                        header.style.background = 'rgba(250, 250, 249, 0.95)';
+                        header.style.boxShadow = 'none';
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>

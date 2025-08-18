@@ -4,18 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service - Cards for Normals</title>
-    <link rel="stylesheet" href="css/styles.css">
     <style>
+        /* Modern CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #292524;
+            background: #fafaf9;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header - Modern Desktop Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 250, 249, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(231, 229, 228, 0.6);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #047857;
+            transform: translateY(-1px);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #57534e;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #059669, #10b981);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #059669;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #047857 !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .cta-nav::after {
+            display: none;
+        }
+
+        .cta-nav:hover {
+            color: #047857 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
+            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+        }
+
+        /* Mobile Menu Toggle (Hidden on Desktop) */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #57534e;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Footer */
+        footer {
+            background: #292524;
+            color: #a8a29e;
+            padding: 3rem 0 1rem 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section ul li a {
+            color: #a8a29e;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #44403c;
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        /* Terms page specific styles */
         .terms-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 120px 2rem 2rem 2rem;
         }
 
         .hero-section {
             text-align: center;
             padding: 3rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             color: white;
             border-radius: 16px;
             margin-bottom: 3rem;
@@ -107,24 +283,74 @@
             color: #64748b;
         }
 
+        /* Loading states */
+        .loading-placeholder {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #6b7280;
+            margin: 1rem 0;
+        }
+
+        .loading-placeholder::before {
+            content: "Loading...";
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .hero-section h1 {
-                font-size: 2rem;
+            /* Show mobile menu toggle */
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            /* Hide desktop navigation */
+            .nav-links {
+                display: none;
+            }
+
+            nav {
+                padding: 0 1rem;
+                height: 70px;
+            }
+
+            .terms-container {
+                padding: 100px 1rem 2rem 1rem;
             }
 
             .content-section {
                 padding: 2rem;
             }
+
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .nav-links {
+                gap: 2rem;
+            }
+
+            nav {
+                padding: 0 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="header-placeholder"></div>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
 
     <div class="terms-container">
         <div class="hero-section">
             <h1>Terms of Service</h1>
-            <p>The legal stuff, explained in plain English</p>
+            <p>The rules and guidelines for using Cards for Normals</p>
         </div>
 
         <div class="content-section">
@@ -133,107 +359,244 @@
             </div>
 
             <div class="callout-box">
-                <h4>💡 The Simple Version</h4>
-                <p>We provide credit card information and opinions. You make your own financial decisions. We're not your financial advisor, and we don't guarantee any outcomes. Be smart, read the fine print on any cards you apply for, and don't blame us if things don't work out as expected.</p>
+                <h4>📋 The Simple Version</h4>
+                <p>Use our site responsibly, don't try to break it, and understand that we provide general advice, not personalized financial guidance. That's pretty much it.</p>
             </div>
 
-            <h2>1. What This Site Is</h2>
-            <p>Cards for Normals is an informational website that provides educational content, opinions, and tools related to credit cards. We aim to help people understand credit card options and make informed decisions.</p>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing and using Cards for Normals ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
 
-            <h2>2. What We're Not</h2>
+            <h2>2. Description of Service</h2>
+            <p>Cards for Normals provides educational content, tools, and general advice about credit cards and personal finance. Our service includes:</p>
+            <ul>
+                <li>Educational articles and guides about credit cards</li>
+                <li>Interactive tools like our annual fee calculator</li>
+                <li>General advice and recommendations</li>
+                <li>Information about credit card benefits and features</li>
+            </ul>
+
+            <h2>3. Not Financial Advice</h2>
+            <p><strong>Important:</strong> The information provided on this website is for educational and informational purposes only. It is not intended to be and should not be construed as financial advice, investment advice, or any other type of professional advice.</p>
+            
             <p>We are not:</p>
             <ul>
-                <li>Financial advisors or licensed professionals</li>
-                <li>Responsible for your financial decisions</li>
-                <li>Guaranteeing any specific outcomes or benefits</li>
-                <li>A substitute for reading actual credit card terms and conditions</li>
-                <li>Affiliated with any credit card companies (we don't get paid for recommendations)</li>
+                <li>Financial advisors or financial planners</li>
+                <li>Credit counselors</li>
+                <li>Investment professionals</li>
+                <li>Legal professionals</li>
             </ul>
 
-            <h2>3. Your Responsibility</h2>
-            <p>When you use our site, you agree that:</p>
+            <p>Always consult with qualified professionals before making financial decisions.</p>
+
+            <h2>4. User Responsibilities</h2>
+            <p>When using our service, you agree to:</p>
             <ul>
-                <li>You'll make your own informed financial decisions</li>
-                <li>You'll read the actual terms and conditions of any credit cards you're considering</li>
-                <li>You understand that credit card terms can change, and information may become outdated</li>
-                <li>You won't hold us responsible for any financial outcomes, positive or negative</li>
-                <li>You'll use the site in a reasonable, legal manner</li>
+                <li>Use the information responsibly and at your own risk</li>
+                <li>Not rely solely on our content for financial decisions</li>
+                <li>Verify information independently before acting on it</li>
+                <li>Use the service in compliance with applicable laws</li>
+                <li>Not attempt to gain unauthorized access to our systems</li>
+                <li>Not use the service for any illegal or harmful purposes</li>
             </ul>
 
-            <h2>4. Information Accuracy</h2>
-            <p>We try our best to provide accurate, up-to-date information, but:</p>
+            <h2>5. Accuracy of Information</h2>
+            <p>While we strive to provide accurate and up-to-date information:</p>
             <ul>
-                <li>Credit card terms change frequently</li>
-                <li>We might make mistakes (we're human)</li>
-                <li>Information that's accurate today might not be tomorrow</li>
-                <li>Always verify information directly with credit card companies before making decisions</li>
+                <li>Credit card terms and conditions change frequently</li>
+                <li>Information may become outdated</li>
+                <li>We cannot guarantee the accuracy of all information</li>
+                <li>You should verify current terms with credit card issuers</li>
             </ul>
 
-            <h2>5. No Financial Advice</h2>
-            <p>Nothing on this site constitutes personalized financial advice. We provide general information and opinions about credit cards, but we don't know your specific financial situation. Always consult with qualified professionals for personalized advice.</p>
+            <p>We make no representations or warranties about the accuracy, completeness, or reliability of any information on this website.</p>
 
             <h2>6. Limitation of Liability</h2>
-            <p>We're not liable for any damages, losses, or negative outcomes that might result from using our site or following our suggestions. This includes but isn't limited to:</p>
+            <p>To the fullest extent permitted by applicable law, Cards for Normals shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:</p>
             <ul>
-                <li>Credit score impacts</li>
-                <li>Rejected credit applications</li>
-                <li>Financial losses</li>
-                <li>Missed opportunities</li>
-                <li>Emotional distress from bad credit card choices</li>
+                <li>Your use of the service</li>
+                <li>Any financial decisions made based on our content</li>
+                <li>Any errors or omissions in our information</li>
+                <li>Any interruption or cessation of the service</li>
             </ul>
 
-            <h2>7. User Conduct</h2>
-            <p>When using our site, please don't:</p>
-            <ul>
-                <li>Try to hack, break, or overwhelm our systems</li>
-                <li>Use our content for commercial purposes without permission</li>
-                <li>Post spam, malicious content, or illegal material</li>
-                <li>Impersonate us or misrepresent your relationship with us</li>
-                <li>Share other people's personal information</li>
-            </ul>
+            <h2>7. Intellectual Property</h2>
+            <p>The content on this website, including but not limited to text, graphics, images, logos, and software, is the property of Cards for Normals and is protected by copyright and other intellectual property laws.</p>
+            
+            <p>You may not reproduce, distribute, modify, or republish materials from this website without our prior written consent.</p>
 
-            <h2>8. Intellectual Property</h2>
-            <p>The content on this site (text, images, tools, etc.) belongs to us unless otherwise noted. You can:</p>
-            <ul>
-                <li>Read and use the information for personal, non-commercial purposes</li>
-                <li>Share links to our content</li>
-                <li>Quote small portions with proper attribution</li>
-            </ul>
-            <p>You can't copy large portions of our content, republish our tools, or use our material for commercial purposes without permission.</p>
+            <h2>8. Third-Party Links</h2>
+            <p>Our website may contain links to third-party websites. We are not responsible for the content, privacy policies, or practices of any third-party websites. Links to third-party websites do not constitute an endorsement or recommendation.</p>
 
             <h2>9. Privacy</h2>
-            <p>We respect your privacy. Check out our <a href="privacy.html" style="color: #667eea;">Privacy Policy</a> for details on how we handle any information you might share with us.</p>
+            <p>Your privacy is important to us. Please review our <a href="privacy.html" style="color: #059669;">Privacy Policy</a>, which also governs your use of the service.</p>
 
-            <h2>10. Changes to These Terms</h2>
-            <p>We might update these terms occasionally. If we make significant changes, we'll update the date at the top and might mention it on the site. Continued use of the site means you accept any changes.</p>
+            <h2>10. Modifications to Terms</h2>
+            <p>We reserve the right to modify these terms at any time. We will notify users of any material changes by updating the "Last Updated" date at the top of this page. Your continued use of the service after any changes constitutes acceptance of the new terms.</p>
 
-            <h2>11. Governing Law</h2>
-            <p>These terms are governed by the laws of the United States. If there are disputes, they'll be resolved in accordance with applicable federal and state laws.</p>
+            <h2>11. Termination</h2>
+            <p>We may terminate or suspend your access to the service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the terms.</p>
 
-            <h2>12. Contact</h2>
-            <p>Questions about these terms? Email us at <a href="mailto:hello@cardsfornormals.com" style="color: #667eea;">hello@cardsfornormals.com</a>. We'll do our best to clarify anything that's confusing.</p>
+            <h2>12. Governing Law</h2>
+            <p>These terms shall be governed by and construed in accordance with the laws of the United States, without regard to its conflict of law provisions.</p>
+
+            <h2>13. Contact Information</h2>
+            <p>If you have any questions about these terms, please contact us at <a href="mailto:hello@cardsfornormals.com" style="color: #059669;">hello@cardsfornormals.com</a>.</p>
 
             <div class="callout-box">
-                <h4>💡 The Bottom Line</h4>
-                <p>We're here to help you understand credit cards better, but ultimately, your financial decisions are your own. We're not trying to hide behind legal jargon - we genuinely want to be helpful while being clear about the boundaries of that help.</p>
+                <h4>💡 Questions About These Terms?</h4>
+                <p>We've tried to keep these terms simple and clear. If anything is confusing or if you have questions, please reach out. We're happy to clarify anything that isn't clear.</p>
             </div>
         </div>
     </div>
 
-    <div id="footer-placeholder"></div>
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
 
-    <script src="js/scripts.js"></script>
-    <script src="js/header.js"></script>
     <script>
-        // Load footer
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading footer:', error);
-            });
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(250, 250, 249, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(250, 250, 249, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Mobile menu toggle (placeholder function)
+        function toggleMobileMenu() {
+            // This would implement mobile menu functionality
+            console.log('Mobile menu toggle clicked');
+        }
+
+        // Smart header and footer loading with fallbacks
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            loadComponent('header.html', 'header-placeholder', 'header-fallback');
+            
+            // Load footer
+            loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
+        });
+
+        function loadComponent(filename, placeholderId, fallbackId) {
+            const placeholder = document.getElementById(placeholderId);
+            
+            // Try to load the component
+            fetch(filename)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log(`Successfully loaded ${filename}, length:`, html.length);
+                    
+                    // Extract and execute JavaScript from the loaded HTML
+                    if (filename === 'header.html') {
+                        // Extract script tags
+                        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+                        const scripts = [];
+                        let match;
+                        
+                        while ((match = scriptRegex.exec(html)) !== null) {
+                            scripts.push(match[1]);
+                        }
+                        
+                        console.log(`Found ${scripts.length} script tags in header`);
+                        
+                        // Execute each script
+                        scripts.forEach((script, index) => {
+                            console.log(`Executing script ${index + 1}`);
+                            try {
+                                eval(script);
+                            } catch (error) {
+                                console.error(`Error executing script ${index + 1}:`, error);
+                            }
+                        });
+                        
+                        // Remove script tags from HTML before inserting
+                        const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+                        placeholder.innerHTML = cleanHtml;
+                    } else {
+                        // For non-header files, just insert the HTML
+                        placeholder.innerHTML = html;
+                    }
+                    
+                    // Initialize any JavaScript functionality in the loaded content
+                    initializeLoadedContent();
+                })
+                .catch(error => {
+                    console.warn(`Could not load ${filename}:`, error);
+                    
+                    // Show fallback content
+                    placeholder.innerHTML = getFallbackContent(filename);
+                });
+        }
+
+        function getFallbackContent(filename) {
+            if (filename === 'header.html') {
+                return `
+                    <header style="background: #059669; color: white; padding: 1rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+                        <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+                            <a href="index.html" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.5rem;">Practical Rewards</a>
+                            <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
+                                <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+                                <li><a href="learning.html" style="color: white; text-decoration: none;">Learning</a></li>
+                                <li><a href="eaacalc.html" style="color: white; text-decoration: none;">Calculator</a></li>
+                                <li><a href="about.html" style="color: white; text-decoration: none;">About</a></li>
+                                <li><a href="contact.html" style="color: white; text-decoration: none;">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </header>
+                `;
+            } else if (filename === 'footer.html') {
+                return `
+                    <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
+                        <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
+                            <div style="text-align: center;">
+                                <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+                                <p style="margin-top: 1rem;">
+                                    <a href="learning.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
+                                    <a href="eaacalc.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
+                                    <a href="about.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+                `;
+            }
+            return '<p>Content could not be loaded.</p>';
+        }
+
+        function initializeLoadedContent() {
+            // Initialize header scroll effects
+            const header = document.querySelector('header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.style.background = 'rgba(250, 250, 249, 0.98)';
+                        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                    } else {
+                        header.style.background = 'rgba(250, 250, 249, 0.95)';
+                        header.style.boxShadow = 'none';
+                    }
+                });
+            }
+
+            // Initialize mobile menu functionality
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    console.log('Mobile menu toggle clicked');
+                    // Add mobile menu functionality here
+                });
+            }
+        }
     </script>
 </body>
 </html>

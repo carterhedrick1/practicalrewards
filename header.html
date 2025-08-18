@@ -1,410 +1,427 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        /* Modern Header Styles with Forest Fresh Brand Colors */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(250, 250, 249, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(231, 229, 228, 0.6);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
+<!-- Universal Header -->
+<!-- Navigation now uses absolute paths from root - no JavaScript needed -->
+<style>
+    /* Header - Modern Desktop Navigation */
+    header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(250, 250, 249, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(231, 229, 228, 0.6);
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
 
-        nav {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
+    nav {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #059669;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo:hover {
+        color: #047857;
+        transform: translateY(-1px);
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 3rem;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #57534e;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.5rem 0;
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #059669, #10b981);
+        transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        color: #059669;
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .cta-nav {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        color: #047857 !important;
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .cta-nav::after {
+        display: none;
+    }
+
+    .cta-nav:hover {
+        color: #047857 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
+        background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+    }
+
+    /* Mobile Menu Toggle - Bulletproof */
+    .mobile-menu-toggle {
+        display: none;
+        width: 44px;
+        height: 44px;
+        background: #059669;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .hamburger {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .hamburger span {
+        width: 20px;
+        height: 3px;
+        background: white;
+        border-radius: 2px;
+        position: absolute;
+        left: 0;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger span:nth-child(1) {
+        top: 3px;
+    }
+
+    .hamburger span:nth-child(2) {
+        top: 8px;
+    }
+
+    .hamburger span:nth-child(3) {
+        top: 13px;
+    }
+
+    /* Mobile Menu - Beautiful Slide Out from Right */
+    .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: -320px;
+        width: 320px;
+        height: 100vh;
+        background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%);
+        z-index: 99999;
+        box-shadow: -4px 0 20px rgba(5, 150, 105, 0.15);
+        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        border-left: 2px solid #10b981;
+    }
+
+    .mobile-menu.active {
+        display: block;
+        right: 0;
+    }
+
+    /* Mobile Menu Overlay - Beautiful Darkening Effect */
+    .mobile-menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(4, 120, 87, 0.15);
+        backdrop-filter: blur(4px);
+        z-index: 99998;
+        opacity: 0;
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-menu-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    .mobile-menu-header {
+        padding: 2rem 1.5rem 1.5rem 1.5rem;
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: #fafaf9;
+        position: relative;
+        margin-bottom: 0;
+        border-radius: 0 0 16px 0;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+
+    .mobile-menu-header h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 0 1px 2px rgba(4, 120, 87, 0.2);
+    }
+
+    .mobile-nav-links {
+        list-style: none;
+        padding: 1rem 0;
+        margin: 0;
+    }
+
+    .mobile-nav-links li {
+        margin: 0.5rem 1rem;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-nav-links li:hover {
+        background: rgba(254, 243, 199, 0.4);
+        transform: translateX(4px);
+    }
+
+    .mobile-nav-links a {
+        display: block;
+        padding: 1rem 1.5rem;
+        color: #57534e;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        position: relative;
+        border-radius: 12px;
+    }
+
+    .mobile-nav-links a:hover {
+        color: #047857;
+        background: rgba(5, 150, 105, 0.06);
+    }
+
+    .mobile-nav-links a::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+        border-radius: 0 2px 2px 0;
+    }
+
+    .mobile-nav-links a:hover::before {
+        transform: scaleY(1);
+    }
+
+    /* Close button */
+    .mobile-menu-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(254, 243, 199, 0.2);
+        border: none;
+        font-size: 1.5rem;
+        color: #fafaf9;
+        cursor: pointer;
+        padding: 0.5rem;
+        z-index: 1001;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-menu-close:hover {
+        background: rgba(254, 243, 199, 0.3);
+        transform: scale(1.1);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .mobile-menu-toggle {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #059669;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .logo:hover {
-            color: #047857;
-            transform: translateY(-1px);
         }
 
         .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 3rem;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #57534e;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #059669, #10b981);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #059669;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .cta-nav {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            color: #047857 !important;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .cta-nav::after {
             display: none;
         }
 
-        .cta-nav:hover {
-            color: #047857 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
-            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+        nav {
+            padding: 0 1rem;
+            height: 70px;
         }
+    }
+</style>
 
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
-            background: none;
-            border: none;
-            position: relative;
-            z-index: 1001;
-        }
-
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            width: 25px;
-            height: 18px;
-            justify-content: space-between;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 100%;
-            height: 3px;
-            background: #57534e;
-            transition: all 0.3s ease;
-            border-radius: 3px;
-        }
-
-        .mobile-menu-toggle.active .hamburger span:first-child {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .mobile-menu-toggle.active .hamburger span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-toggle.active .hamburger span:last-child {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        /* Mobile Menu Overlay */
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 998;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Mobile Menu Sidebar */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: min(320px, 85vw);
-            height: 100vh;
-            background: white;
-            z-index: 999;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-menu.active {
-            right: 0;
-        }
-
-        .mobile-menu-header {
-            padding: 2rem 1.5rem 1.5rem 1.5rem;
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            color: white;
-            position: relative;
-        }
-
-        .mobile-menu-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: white;
-            cursor: pointer;
-            padding: 0.5rem;
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .mobile-menu-header h3 {
-            margin: 0;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .mobile-nav-links li {
-            border-bottom: 1px solid #e7e5e4;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1.25rem 1.5rem;
-            color: #57534e;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .mobile-nav-links a:hover {
-            color: #059669;
-            background: #f0fdf4;
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-links a::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #059669;
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .mobile-nav-links a:hover::before {
-            transform: scaleY(1);
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .mobile-menu-toggle {
-                display: flex;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-overlay,
-            .mobile-menu {
-                display: block;
-            }
-
-            nav {
-                padding: 0 1rem;
-                height: 70px;
-            }
-
-            .logo {
-                font-size: 1.375rem;
-            }
-        }
-
-        /* Header scroll effect */
-        .header-scrolled {
-            background: rgba(250, 250, 249, 0.98) !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header id="main-header">
-        <nav>
-            <a href="index.html" class="logo">Practical Rewards</a>
-            
-            <!-- Desktop Navigation -->
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="learning.html">Learning</a></li>
-                <li><a href="eaacalc.html">Calculator</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="learning.html" class="cta-nav">Get Started</a></li>
-            </ul>
-            
-            <!-- Mobile Menu Toggle -->
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </button>
-        </nav>
-    </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
-
-    <!-- Mobile Menu Sidebar -->
-    <div class="mobile-menu" id="mobile-menu">
-        <div class="mobile-menu-header">
-            <button class="mobile-menu-close" id="mobile-menu-close">&times;</button>
-            <h3>Menu</h3>
-        </div>
-        <ul class="mobile-nav-links">
-            <li><a href="index.html">🏠 Home</a></li>
-            <li><a href="learning.html">📚 Learning</a></li>
-            <li><a href="eaacalc.html">🧮 Calculator</a></li>
-            <li><a href="about.html">ℹ️ About</a></li>
-            <li><a href="contact.html">📧 Contact</a></li>
+<header>
+    <nav>
+        <a href="/index.html" class="logo">Practical Rewards</a>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        
+        <!-- Desktop Navigation -->
+        <ul class="nav-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/learning.html">Learning</a></li>
+            <li><a href="/eaacalc.html">Calculator</a></li>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="/contact.html" class="cta-nav">Contact</a></li>
         </ul>
-    </div>
+    </nav>
+</header>
 
-    <script>
-        // Mobile menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-header">
+        <button class="mobile-menu-close" id="mobile-menu-close">&times;</button>
+        <h3>Menu</h3>
+    </div>
+    <ul class="mobile-nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/learning.html">Learning</a></li>
+        <li><a href="/eaacalc.html">Calculator</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+    </ul>
+</div>
+
+<script>
+    // Bulletproof mobile menu - works every time
+    (function() {
+        'use strict';
+        
+        function setupMobileMenu() {
+            console.log('Setting up mobile menu...');
+            
+            // Get elements
             const toggle = document.getElementById('mobile-menu-toggle');
             const menu = document.getElementById('mobile-menu');
             const overlay = document.getElementById('mobile-menu-overlay');
             const close = document.getElementById('mobile-menu-close');
-
+            
+            console.log('Found elements:', {
+                toggle: toggle ? 'YES' : 'NO',
+                menu: menu ? 'YES' : 'NO',
+                overlay: overlay ? 'YES' : 'NO',
+                close: close ? 'YES' : 'NO'
+            });
+            
+            // Check if we have all elements
+            if (!toggle || !menu || !overlay || !close) {
+                console.log('Missing elements, will retry...');
+                return false;
+            }
+            
+            // Open menu
             function openMenu() {
-                menu.classList.add('active');
+                console.log('OPENING MENU');
                 overlay.classList.add('active');
-                toggle.classList.add('active');
+                menu.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
-
+            
+            // Close menu
             function closeMenu() {
-                menu.classList.remove('active');
+                console.log('CLOSING MENU');
                 overlay.classList.remove('active');
-                toggle.classList.remove('active');
+                menu.classList.remove('active');
                 document.body.style.overflow = '';
             }
-
-            if (toggle) {
-                toggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    if (menu.classList.contains('active')) {
-                        closeMenu();
-                    } else {
-                        openMenu();
-                    }
-                });
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', closeMenu);
-            }
-
-            if (close) {
-                close.addEventListener('click', closeMenu);
-            }
-
-            // Close menu when clicking nav links
-            const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', closeMenu);
-            });
-
-            // Header scroll effect
-            let lastScrollY = window.scrollY;
-            const header = document.getElementById('main-header');
-
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 100) {
-                    header.classList.add('header-scrolled');
-                } else {
-                    header.classList.remove('header-scrolled');
-                }
-            });
-
-            // Set active navigation link
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-            const navLinks = document.querySelectorAll('.nav-links a, .mobile-nav-links a');
             
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-                    link.style.color = '#059669';
-                    link.style.fontWeight = '600';
+            // Add click handlers
+            toggle.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('HAMBURGER CLICKED!');
+                openMenu();
+            };
+            
+            close.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('CLOSE CLICKED!');
+                closeMenu();
+            };
+            
+            // Close on overlay click
+            overlay.onclick = function(e) {
+                if (e.target === overlay) {
+                    console.log('Overlay clicked - closing menu');
+                    closeMenu();
                 }
-            });
-        });
-    </script>
-</body>
-</html>
+            };
+            
+            // Close on escape
+            document.onkeydown = function(e) {
+                if (e.key === 'Escape') {
+                    closeMenu();
+                }
+            };
+            
+            console.log('Mobile menu setup complete!');
+            return true;
+        }
+        
+        // Try to setup immediately
+        if (!setupMobileMenu()) {
+            // Keep trying until it works
+            const interval = setInterval(function() {
+                if (setupMobileMenu()) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+        
+    })();
+</script>

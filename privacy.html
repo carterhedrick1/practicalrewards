@@ -4,18 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - Cards for Normals</title>
-    <link rel="stylesheet" href="css/styles.css">
     <style>
+        /* Modern CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #292524;
+            background: #fafaf9;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header - Modern Desktop Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 250, 249, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(231, 229, 228, 0.6);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #047857;
+            transform: translateY(-1px);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #57534e;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #059669, #10b981);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #059669;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #047857 !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .cta-nav::after {
+            display: none;
+        }
+
+        .cta-nav:hover {
+            color: #047857 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
+            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+        }
+
+        /* Mobile Menu Toggle (Hidden on Desktop) */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #57534e;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Footer */
+        footer {
+            background: #292524;
+            color: #a8a29e;
+            padding: 3rem 0 1rem 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section ul li a {
+            color: #a8a29e;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #44403c;
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        /* Privacy page specific styles */
         .privacy-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 120px 2rem 2rem 2rem;
         }
 
         .hero-section {
             text-align: center;
             padding: 3rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             color: white;
             border-radius: 16px;
             margin-bottom: 3rem;
@@ -100,188 +276,382 @@
             background: #ecfdf5;
             border: 1px solid #a7f3d0;
             border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
+            padding: 1rem;
+            margin: 1rem 0;
         }
 
         .privacy-highlight h4 {
             color: #065f46;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
         }
 
         .privacy-highlight p {
             color: #065f46;
             margin: 0;
-        }
-
-        .last-updated {
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            text-align: center;
             font-size: 0.9rem;
-            color: #64748b;
         }
 
+        /* Loading states */
+        .loading-placeholder {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #6b7280;
+            margin: 1rem 0;
+        }
+
+        .loading-placeholder::before {
+            content: "Loading...";
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .hero-section h1 {
-                font-size: 2rem;
+            /* Show mobile menu toggle */
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            /* Hide desktop navigation */
+            .nav-links {
+                display: none;
+            }
+
+            nav {
+                padding: 0 1rem;
+                height: 70px;
+            }
+
+            .privacy-container {
+                padding: 100px 1rem 2rem 1rem;
             }
 
             .content-section {
                 padding: 2rem;
             }
+
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .nav-links {
+                gap: 2rem;
+            }
+
+            nav {
+                padding: 0 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="header-placeholder"></div>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
 
     <div class="privacy-container">
         <div class="hero-section">
             <h1>Privacy Policy</h1>
-            <p>How we handle your information (spoiler: we collect very little)</p>
+            <p>How we handle your information and protect your privacy</p>
         </div>
 
         <div class="content-section">
-            <div class="last-updated">
-                <strong>Last Updated:</strong> January 2025
+            <h2>Information We Collect</h2>
+            <p>We collect minimal information to provide you with the best possible credit card advice experience:</p>
+            
+            <h3>Information You Provide</h3>
+            <ul>
+                <li><strong>Contact Information:</strong> If you reach out to us via email, we'll have your email address and any other information you choose to share.</li>
+                <li><strong>Feedback and Questions:</strong> Any questions, feedback, or experiences you share with us about credit cards.</li>
+                <li><strong>Calculator Usage:</strong> When you use our annual fee calculator, we don't store any of your personal spending information.</li>
+            </ul>
+
+            <h3>Information We Don't Collect</h3>
+            <ul>
+                <li><strong>Personal Financial Data:</strong> We never ask for or store your credit card numbers, bank account information, or detailed spending data.</li>
+                <li><strong>Credit Reports:</strong> We don't access or store your credit reports or credit scores.</li>
+                <li><strong>Social Security Numbers:</strong> We never request or store your SSN or other sensitive personal identifiers.</li>
+            </ul>
+
+            <div class="callout-box">
+                <h4>🔒 Our Privacy Promise</h4>
+                <p>We're committed to collecting only the information we absolutely need to help you make better credit card decisions. Your financial privacy is important to us.</p>
             </div>
+        </div>
 
-            <div class="privacy-highlight">
-                <h4>🔒 The Simple Version</h4>
-                <p>We don't collect much information about you. We don't sell your data. We don't track you across the internet. We just want to help you understand credit cards without being creepy about it.</p>
-            </div>
-
-            <h2>1. What Information We Collect</h2>
+        <div class="content-section">
+            <h2>How We Use Your Information</h2>
+            <p>We use the information you provide for these specific purposes:</p>
             
-            <h3>Information You Give Us Directly</h3>
             <ul>
-                <li><strong>Email:</strong> If you contact us, we'll have your email address and whatever you tell us in your message</li>
-                <li><strong>Feedback:</strong> If you share experiences with cards or suggestions for the site</li>
-                <li><strong>Calculator Data:</strong> When you use our tools, the information stays in your browser - we don't store it</li>
-            </ul>
-
-            <h3>Information We Collect Automatically</h3>
-            <ul>
-                <li><strong>Basic Analytics:</strong> We use simple analytics to understand which pages people visit and how they use the site</li>
-                <li><strong>Technical Info:</strong> Your browser type, device type, and general location (like "United States" not your home address)</li>
-                <li><strong>No Personal Tracking:</strong> We don't create profiles of you or track your behavior across other websites</li>
-            </ul>
-
-            <h2>2. What We Don't Collect</h2>
-            <p>We specifically avoid collecting:</p>
-            <ul>
-                <li>Your real name (unless you tell us in an email)</li>
-                <li>Your address, phone number, or other contact details</li>
-                <li>Your credit score, income, or financial information</li>
-                <li>Your social security number or other sensitive identifiers</li>
-                <li>Your browsing history on other websites</li>
-                <li>Detailed location data (we don't need to know your exact whereabouts)</li>
-            </ul>
-
-            <h2>3. How We Use Your Information</h2>
-            
-            <h3>If You Email Us</h3>
-            <p>We use your email and message to:</p>
-            <ul>
-                <li>Respond to your questions</li>
-                <li>Improve our content based on your feedback</li>
-                <li>Understand what topics people are confused about</li>
-            </ul>
-
-            <h3>Analytics Data</h3>
-            <p>We use website analytics to:</p>
-            <ul>
-                <li>Understand which content is most helpful</li>
-                <li>Fix pages that aren't working well</li>
-                <li>Decide what new content to create</li>
-                <li>Make the site faster and easier to use</li>
-            </ul>
-
-            <h2>4. Who We Share Information With</h2>
-            
-            <h3>The Short Answer: Almost Nobody</h3>
-            <ul>
-                <li><strong>Analytics Provider:</strong> We use a privacy-focused analytics service that doesn't track individuals</li>
-                <li><strong>Email Service:</strong> If you email us, our email provider (like Gmail) will have that data</li>
-                <li><strong>Web Hosting:</strong> Our hosting provider stores the website but doesn't have access to personal information</li>
-                <li><strong>Legal Requirements:</strong> We'd comply with valid legal requests, but we don't have much data to share anyway</li>
+                <li><strong>Providing Advice:</strong> To answer your questions about credit cards and provide personalized recommendations.</li>
+                <li><strong>Improving Our Service:</strong> To understand what information is most helpful and what we can explain better.</li>
+                <li><strong>Communication:</strong> To respond to your emails and provide follow-up information when helpful.</li>
+                <li><strong>Content Development:</strong> To identify topics we should cover or explain better on the site.</li>
             </ul>
 
             <h3>What We Don't Do</h3>
             <ul>
-                <li>We don't sell your information to anyone</li>
-                <li>We don't share data with credit card companies</li>
-                <li>We don't participate in advertising networks that track you</li>
-                <li>We don't give your information to data brokers</li>
+                <li>We don't sell your information to third parties</li>
+                <li>We don't use your information for marketing purposes without your explicit consent</li>
+                <li>We don't share your personal information with credit card companies or financial institutions</li>
+                <li>We don't use your information to make credit decisions or financial recommendations beyond general advice</li>
             </ul>
+        </div>
 
-            <h2>5. Cookies and Tracking</h2>
-            <p>We use minimal tracking:</p>
+        <div class="content-section">
+            <h2>Information Sharing and Disclosure</h2>
+            <p>We're committed to keeping your information private and secure:</p>
+            
+            <h3>When We Might Share Information</h3>
             <ul>
-                <li><strong>Essential Cookies:</strong> Basic cookies that make the website work properly</li>
-                <li><strong>Analytics Cookies:</strong> Simple analytics to understand site usage (no personal tracking)</li>
-                <li><strong>No Advertising Cookies:</strong> We don't use cookies for ads or cross-site tracking</li>
-                <li><strong>Your Choice:</strong> You can disable cookies in your browser if you prefer</li>
+                <li><strong>Legal Requirements:</strong> Only if required by law or to protect our rights and safety.</li>
+                <li><strong>Service Providers:</strong> We may use trusted third-party services (like email providers) that have access to the information you send us.</li>
+                <li><strong>With Your Consent:</strong> Only if you explicitly ask us to share information with someone else.</li>
             </ul>
 
-            <h2>6. Data Security</h2>
-            <p>We protect information by:</p>
+            <div class="privacy-highlight">
+                <h4>💡 Important Note</h4>
+                <p>While we protect your privacy, remember that any information you share publicly (like in public forums or social media) is not under our control.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Data Security</h2>
+            <p>We take reasonable steps to protect your information:</p>
+            
             <ul>
-                <li>Using secure hosting with encryption</li>
-                <li>Not storing sensitive information we don't need</li>
-                <li>Keeping email correspondence secure</li>
-                <li>Following basic security best practices</li>
+                <li>We use secure, encrypted connections (HTTPS) for all website interactions</li>
+                <li>We limit access to your information to only those who need it to help you</li>
+                <li>We regularly review and update our security practices</li>
+                <li>We don't store sensitive information on our servers</li>
             </ul>
-            <p>However, no website is 100% secure. Don't email us sensitive financial information like account numbers or social security numbers.</p>
 
-            <h2>7. Your Rights and Choices</h2>
-            <p>You can:</p>
+            <p>However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Your Rights and Choices</h2>
+            <p>You have control over your information:</p>
+            
             <ul>
-                <li><strong>Access:</strong> Ask what information we have about you (probably just your email if you contacted us)</li>
-                <li><strong>Delete:</strong> Ask us to delete your information</li>
-                <li><strong>Correct:</strong> Tell us if we have incorrect information</li>
-                <li><strong>Opt Out:</strong> Stop using the site anytime you want</li>
-                <li><strong>Browser Settings:</strong> Control cookies and tracking through your browser</li>
+                <li><strong>Access:</strong> You can ask us what information we have about you.</li>
+                <li><strong>Correction:</strong> You can ask us to correct any inaccurate information.</li>
+                <li><strong>Deletion:</strong> You can ask us to delete your information (though this may limit our ability to help you).</li>
+                <li><strong>Opt-out:</strong> You can stop receiving communications from us at any time.</li>
             </ul>
 
-            <h2>8. Children's Privacy</h2>
-            <p>This site is intended for adults. We don't knowingly collect information from children under 13. If you're under 13, please don't use the site or contact us. If we learn we've collected information from a child, we'll delete it.</p>
+            <p>To exercise any of these rights, simply email us at <a href="mailto:hello@cardsfornormals.com" style="color: #059669;">hello@cardsfornormals.com</a>.</p>
+        </div>
 
-            <h2>9. Changes to This Policy</h2>
-            <p>We might update this policy occasionally. If we make significant changes, we'll update the date at the top and might mention it on the site. We won't make the policy worse for your privacy without notice.</p>
+        <div class="content-section">
+            <h2>Cookies and Tracking</h2>
+            <p>We use minimal cookies and tracking:</p>
+            
+            <ul>
+                <li><strong>Essential Cookies:</strong> Basic cookies that make the website function properly.</li>
+                <li><strong>Analytics:</strong> Basic analytics to understand how people use our site (no personal identification).</li>
+                <li><strong>No Advertising:</strong> We don't use tracking cookies for advertising purposes.</li>
+            </ul>
 
-            <h2>10. International Users</h2>
-            <p>This site is based in the United States and primarily intended for US users. If you're outside the US and use the site, your information might be transferred to and processed in the US.</p>
+            <p>You can control cookies through your browser settings, though this may affect site functionality.</p>
+        </div>
 
-            <h2>11. Contact Us About Privacy</h2>
-            <p>Questions about this privacy policy? Want to know what information we have about you? Want us to delete your information? Email us at <a href="mailto:hello@cardsfornormals.com" style="color: #667eea;">hello@cardsfornormals.com</a>.</p>
+        <div class="content-section">
+            <h2>Children's Privacy</h2>
+            <p>Our service is not intended for children under 13. We don't knowingly collect personal information from children under 13. If you're a parent or guardian and believe your child has provided us with personal information, please contact us immediately.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Changes to This Policy</h2>
+            <p>We may update this privacy policy from time to time. We'll notify you of any material changes by:</p>
+            
+            <ul>
+                <li>Posting the new policy on this page</li>
+                <li>Updating the "Last Updated" date at the bottom</li>
+                <li>Sending you an email if the changes significantly affect how we handle your information</li>
+            </ul>
+
+            <p>Your continued use of our service after any changes constitutes acceptance of the new policy.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Contact Us</h2>
+            <p>If you have any questions about this privacy policy or how we handle your information, please contact us:</p>
+            
+            <ul>
+                <li><strong>Email:</strong> <a href="mailto:hello@cardsfornormals.com" style="color: #059669;">hello@cardsfornormals.com</a></li>
+                <li><strong>Response Time:</strong> We typically respond within 24-48 hours</li>
+            </ul>
 
             <div class="callout-box">
-                <h4>💡 Our Philosophy</h4>
-                <p>We believe privacy should be the default, not something you have to fight for. We collect as little information as possible and use it only to make the site more helpful. If you have concerns about privacy, we're happy to discuss them.</p>
+                <h4>🤝 We're Here to Help</h4>
+                <p>Privacy questions are important, and we want to make sure you understand how we protect your information. Don't hesitate to reach out if anything isn't clear.</p>
             </div>
+        </div>
+
+        <div class="content-section">
+            <p style="text-align: center; color: #6b7280; font-size: 0.9rem; margin-top: 3rem;">
+                <strong>Last Updated:</strong> January 2025<br>
+                This privacy policy applies to all users of Cards for Normals services.
+            </p>
         </div>
     </div>
 
-    <div id="footer-placeholder"></div>
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
 
-    <script src="js/scripts.js"></script>
-    <script src="js/header.js"></script>
     <script>
-        // Load footer
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading footer:', error);
-            });
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(250, 250, 249, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(250, 250, 249, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Mobile menu toggle (placeholder function)
+        function toggleMobileMenu() {
+            // This would implement mobile menu functionality
+            console.log('Mobile menu toggle clicked');
+        }
+
+        // Smart header and footer loading with fallbacks
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            loadComponent('header.html', 'header-placeholder', 'header-fallback');
+            
+            // Load footer
+            loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
+        });
+
+        function loadComponent(filename, placeholderId, fallbackId) {
+            const placeholder = document.getElementById(placeholderId);
+            
+            // Try to load the component
+            fetch(filename)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log(`Successfully loaded ${filename}, length:`, html.length);
+                    
+                    // Extract and execute JavaScript from the loaded HTML
+                    if (filename === 'header.html') {
+                        // Extract script tags
+                        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+                        const scripts = [];
+                        let match;
+                        
+                        while ((match = scriptRegex.exec(html)) !== null) {
+                            scripts.push(match[1]);
+                        }
+                        
+                        console.log(`Found ${scripts.length} script tags in header`);
+                        
+                        // Execute each script
+                        scripts.forEach((script, index) => {
+                            console.log(`Executing script ${index + 1}`);
+                            try {
+                                eval(script);
+                            } catch (error) {
+                                console.error(`Error executing script ${index + 1}:`, error);
+                            }
+                        });
+                        
+                        // Remove script tags from HTML before inserting
+                        const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+                        placeholder.innerHTML = cleanHtml;
+                    } else {
+                        // For non-header files, just insert the HTML
+                        placeholder.innerHTML = html;
+                    }
+                    
+                    // Initialize any JavaScript functionality in the loaded content
+                    initializeLoadedContent();
+                })
+                .catch(error => {
+                    console.warn(`Could not load ${filename}:`, error);
+                    
+                    // Show fallback content
+                    placeholder.innerHTML = getFallbackContent(filename);
+                });
+        }
+
+        function getFallbackContent(filename) {
+            if (filename === 'header.html') {
+                return `
+                    <header style="background: #059669; color: white; padding: 1rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+                        <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+                            <a href="index.html" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.5rem;">Practical Rewards</a>
+                            <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
+                                <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+                                <li><a href="learning.html" style="color: white; text-decoration: none;">Learning</a></li>
+                                <li><a href="eaacalc.html" style="color: white; text-decoration: none;">Calculator</a></li>
+                                <li><a href="about.html" style="color: white; text-decoration: none;">About</a></li>
+                            </ul>
+                        </nav>
+                    </header>
+                `;
+            } else if (filename === 'footer.html') {
+                return `
+                    <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
+                        <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
+                            <div style="text-align: center;">
+                                <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+                                <p style="margin-top: 1rem;">
+                                    <a href="learning.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
+                                    <a href="eaacalc.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
+                                    <a href="about.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+                `;
+            }
+            return '<p>Content could not be loaded.</p>';
+        }
+
+        function initializeLoadedContent() {
+            // Initialize header scroll effects
+            const header = document.querySelector('header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.style.background = 'rgba(250, 250, 249, 0.98)';
+                        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                    } else {
+                        header.style.background = 'rgba(250, 250, 249, 0.95)';
+                        header.style.boxShadow = 'none';
+                    }
+                });
+            }
+
+            // Initialize mobile menu functionality
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    console.log('Mobile menu toggle clicked');
+                    // Add mobile menu functionality here
+                });
+            }
+        }
     </script>
 </body>
 </html>
