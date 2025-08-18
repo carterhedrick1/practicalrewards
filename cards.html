@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Cards - Cards for Normals</title>
+
+    <style>
+        /* Modern CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #292524;
+            background: #fafaf9;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header - Modern Desktop Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 250, 249, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(231, 229, 228, 0.6);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #047857;
+            transform: translateY(-1px);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #57534e;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #059669, #10b981);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #059669;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #047857 !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .cta-nav::after {
+            display: none;
+        }
+
+        .cta-nav:hover {
+            color: #047857 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
+            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
+        }
+
+        /* Mobile Menu Toggle (Hidden on Desktop) */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #57534e;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Footer */
+        footer {
+            background: #292524;
+            color: #a8a29e;
+            padding: 3rem 0 1rem 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section ul li a {
+            color: #a8a29e;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #44403c;
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        /* Cards Grid Page Styles */
+        .cards-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 2rem 2rem 2rem;
+        }
+
+        .hero-section {
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            margin: 0 -2rem 3rem -2rem;
+            overflow: hidden;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            font-weight: 500;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filter Pills Section */
+        .filter-pills-section {
+            margin-bottom: 2rem;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            position: relative;
+        }
+
+        .pill-button {
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            color: #475569;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 120px;
+            justify-content: space-between;
+        }
+
+        .pill-button:hover {
+            border-color: #059669;
+            background: #f0fdf4;
+        }
+
+        .pill-arrow {
+            font-size: 0.8rem;
+            transition: transform 0.2s ease;
+        }
+
+        .pill-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            min-width: 250px;
+            z-index: 1000;
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        .pill-dropdown.active {
+            display: block;
+        }
+
+        .dropdown-content {
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dropdown-content label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        .dropdown-content input[type="radio"],
+        .dropdown-content input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .filter-description {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .dropdown-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .reset-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            color: #6b7280;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .apply-btn {
+            padding: 0.5rem 1rem;
+            background: #059669;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .apply-btn:hover {
+            background: #047857;
+        }
+
+        /* Active Filters Line */
+        .active-filters-line {
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .active-filters-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .active-filters-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .active-filters-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .results-summary {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .active-filter-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: #059669;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .remove-filter {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .remove-filter:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .clear-all-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-all-btn:hover {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        /* Mobile Quick Filter Pills */
+        .mobile-quick-filters {
+            display: none;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .mobile-quick-pill {
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            color: #475569;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .mobile-quick-pill:hover {
+            border-color: #059669;
+            background: #f0fdf4;
+        }
+
+        .mobile-quick-pill.active {
+            background: #059669;
+            color: white;
+            border-color: #059669;
+        }
+
+        .filters-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Mobile Filters Overlay */
+        .mobile-filters-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .mobile-filters-overlay.active {
+            display: block;
+        }
+
+        .mobile-filters-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .mobile-filters-title h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .mobile-filters-title p {
+            margin: 0.25rem 0 0 0;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .mobile-filters-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .mobile-reset-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            color: #6b7280;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .mobile-done-btn {
+            padding: 0.5rem 1rem;
+            background: #059669;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .mobile-filters-body {
+            padding: 1rem;
+        }
+
+        .mobile-filter-section {
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .mobile-filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8fafc;
+            cursor: pointer;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .mobile-filter-header h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .mobile-arrow {
+            font-size: 0.8rem;
+            transition: transform 0.2s ease;
+        }
+
+        .mobile-filter-header.expanded .mobile-arrow {
+            transform: rotate(180deg);
+        }
+
+        .mobile-filter-options {
+            padding: 1rem;
+            display: none;
+        }
+
+        .mobile-filter-options.expanded {
+            display: block;
+        }
+
+        .mobile-filter-options label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        .mobile-filter-options input[type="radio"],
+        .mobile-filter-options input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .mobile-filters-footer {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .mobile-show-results-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #059669;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mobile-show-results-btn:hover {
+            background: #047857;
+        }
+
+        .filter-results {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .results-count {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card-item {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .card-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .card-item:hover::before {
+            left: 100%;
+        }
+
+        .card-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #059669;
+        }
+
+        .card-image {
+            width: 100%;
+            max-width: 280px;
+            height: 180px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card-item:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-image-fallback {
+            width: 100%;
+            max-width: 280px;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .card-badge {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-fee {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+
+        .card-features {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-features ul {
+            margin: 0;
+            padding-left: 1.2rem;
+            list-style: none;
+        }
+
+        .card-features li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .card-features li::before {
+            content: "✓";
+            color: #059669;
+            font-weight: bold;
+            position: absolute;
+            left: -1.2rem;
+        }
+
+
+
+        /* Loading states */
+        .loading-placeholder {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #6b7280;
+            margin: 1rem 0;
+        }
+
+        .loading-placeholder::before {
+            content: "Loading...";
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .nav-links {
+                gap: 2rem;
+            }
+
+            nav {
+                padding: 0 1.5rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Show mobile menu toggle */
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            /* Hide desktop navigation */
+            .nav-links {
+                display: none;
+            }
+
+            nav {
+                padding: 0 1rem;
+                height: 70px;
+            }
+
+            .cards-container {
+                padding: 100px 1rem 2rem 1rem;
+            }
+
+            .hero-section {
+                margin: 0 -1rem 3rem -1rem;
+                padding: 2rem 1rem;
+                width: 100vw;
+                position: relative;
+                left: 50%;
+                right: 50%;
+                margin-left: -50vw;
+                margin-right: -50vw;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-pills {
+                display: none;
+            }
+
+            .mobile-quick-filters {
+                display: flex;
+                margin-top: 1rem;
+            }
+
+            .pill-dropdown {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                max-width: 300px;
+                max-height: 80vh;
+            }
+
+            .card-image {
+                max-width: 240px;
+                height: 150px;
+            }
+
+                    .card-image-fallback {
+            max-width: 240px;
+            height: 150px;
+        }
+
+
+
+        .card-item.fade-out {
+            /* We'll handle this with JavaScript animations */
+        }
+
+        .card-item.fade-in {
+            animation: fadeInScale 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .cards-grid {
+            transition: all 0.3s ease-in-out;
+        }
+
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
+
+    <div class="cards-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Credit Cards</h1>
+            <p class="hero-subtitle">Find the perfect credit card for your lifestyle and spending habits</p>
+        </div>
+
+        <!-- Filter Pills Section -->
+        <div class="filter-pills-section">
+            <div class="filter-pills">
+                <div class="filter-pill" data-filter="type">
+                    <button class="pill-button" onclick="toggleFilterDropdown('type')">
+                        <span class="pill-label">Card Type</span>
+                        <span class="pill-arrow">▼</span>
+                    </button>
+                    <div class="pill-dropdown" id="type-dropdown">
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="type" value="travel" onchange="autoApplyFilters()"> Travel</label>
+                            <label><input type="checkbox" name="type" value="cashback" onchange="autoApplyFilters()"> Cashback</label>
+                            <label><input type="checkbox" name="type" value="hybrid" onchange="autoApplyFilters()"> Hybrid</label>
+                            <label><input type="checkbox" name="type" value="business" onchange="autoApplyFilters()"> Business</label>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button class="reset-btn" onclick="resetFilter('type')">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-pill" data-filter="issuer">
+                    <button class="pill-button" onclick="toggleFilterDropdown('issuer')">
+                        <span class="pill-label">Issuer / Brand</span>
+                        <span class="pill-arrow">▼</span>
+                    </button>
+                    <div class="pill-dropdown" id="issuer-dropdown">
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="issuer" value="amex" onchange="autoApplyFilters()"> American Express</label>
+                            <label><input type="checkbox" name="issuer" value="chase" onchange="autoApplyFilters()"> Chase</label>
+                            <label><input type="checkbox" name="issuer" value="capital-one" onchange="autoApplyFilters()"> Capital One</label>
+                            <label><input type="checkbox" name="issuer" value="citi" onchange="autoApplyFilters()"> Citi</label>
+                            <label><input type="checkbox" name="issuer" value="bilt" onchange="autoApplyFilters()"> Bilt</label>
+                            <label><input type="checkbox" name="issuer" value="airlines" onchange="autoApplyFilters()"> Airlines</label>
+                            <label><input type="checkbox" name="issuer" value="hotels" onchange="autoApplyFilters()"> Hotels</label>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button class="reset-btn" onclick="resetFilter('issuer')">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-pill" data-filter="fee">
+                    <button class="pill-button" onclick="toggleFilterDropdown('fee')">
+                        <span class="pill-label">Annual Fee</span>
+                        <span class="pill-arrow">▼</span>
+                    </button>
+                    <div class="pill-dropdown" id="fee-dropdown">
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="fee" value="no-fee" onchange="autoApplyFilters()"> No Annual Fee</label>
+                            <label><input type="checkbox" name="fee" value="low" onchange="autoApplyFilters()"> $0-$95</label>
+                            <label><input type="checkbox" name="fee" value="medium" onchange="autoApplyFilters()"> $95-$250</label>
+                            <label><input type="checkbox" name="fee" value="high" onchange="autoApplyFilters()"> $250+</label>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button class="reset-btn" onclick="resetFilter('fee')">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-pill" data-filter="perks">
+                    <button class="pill-button" onclick="toggleFilterDropdown('perks')">
+                        <span class="pill-label">Perks</span>
+                        <span class="pill-arrow">▼</span>
+                    </button>
+                    <div class="pill-dropdown" id="perks-dropdown">
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="perks" value="lounge-access" onchange="autoApplyFilters()"> Lounge Access</label>
+                            <label><input type="checkbox" name="perks" value="tsa-precheck" onchange="autoApplyFilters()"> TSA Pre/Global Entry/CLEAR Credit</label>
+                            <label><input type="checkbox" name="perks" value="free-checked-bags" onchange="autoApplyFilters()"> Free Checked Bags</label>
+                            <label><input type="checkbox" name="perks" value="companion-benefit" onchange="autoApplyFilters()"> Companion Benefit</label>
+                            <label><input type="checkbox" name="perks" value="free-night-certificate" onchange="autoApplyFilters()"> Free Night Certificate</label>
+                            <label><input type="checkbox" name="perks" value="travel-dining-credits" onchange="autoApplyFilters()"> Travel/Dining/Portal Credits</label>
+                            <label><input type="checkbox" name="perks" value="elite-status-boosts" onchange="autoApplyFilters()"> Elite/Status Boosts</label>
+                            <label><input type="checkbox" name="perks" value="portal-extras" onchange="autoApplyFilters()"> Portal Extras</label>
+                            <label><input type="checkbox" name="perks" value="authorized-user-perks" onchange="autoApplyFilters()"> Authorized User Perks</label>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button class="reset-btn" onclick="resetFilter('perks')">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-pill" data-filter="protections">
+                    <button class="pill-button" onclick="toggleFilterDropdown('protections')">
+                        <span class="pill-label">Protections</span>
+                        <span class="pill-arrow">▼</span>
+                    </button>
+                    <div class="pill-dropdown" id="protections-dropdown">
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="protections" value="cell-phone-protection" onchange="autoApplyFilters()"> Cell Phone Protection</label>
+                            <label><input type="checkbox" name="protections" value="no-foreign-transaction-fees" onchange="autoApplyFilters()"> No Foreign Transaction Fees</label>
+                            <label><input type="checkbox" name="protections" value="primary-rental-car-cdw" onchange="autoApplyFilters()"> Primary Rental Car CDW</label>
+                            <label><input type="checkbox" name="protections" value="trip-delay-cancellation" onchange="autoApplyFilters()"> Trip Delay / Cancellation / Interruption</label>
+                            <label><input type="checkbox" name="protections" value="baggage-delay-lost" onchange="autoApplyFilters()"> Baggage Delay / Lost Baggage</label>
+                            <label><input type="checkbox" name="protections" value="purchase-protection" onchange="autoApplyFilters()"> Purchase Protection / Extended Warranty / Return</label>
+                            <label><input type="checkbox" name="protections" value="coverage-rules" onchange="autoApplyFilters()"> Coverage Rules</label>
+                            <label><input type="checkbox" name="protections" value="au-coverage" onchange="autoApplyFilters()"> AU Coverage</label>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button class="reset-btn" onclick="resetFilter('protections')">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Quick Filter Pills -->
+            <div class="mobile-quick-filters">
+                <button class="mobile-quick-pill" onclick="openMobileFilters()">
+                    <span class="filters-icon">☰</span>
+                    Filters
+                </button>
+                <button class="mobile-quick-pill" onclick="quickFilter('type', 'travel')">
+                    Travel
+                </button>
+                <button class="mobile-quick-pill" onclick="quickFilter('type', 'cashback')">
+                    Cash Back
+                </button>
+            </div>
+        </div>
+
+        <!-- Active Filters Line -->
+        <div class="active-filters-line" id="active-filters-line" style="display: none;">
+            <div class="active-filters-content">
+                <div class="active-filters-left">
+                    <div class="active-filters-chips" id="active-filters-chips">
+                        <!-- Active filter chips will be displayed here -->
+                    </div>
+                    <div class="results-summary">
+                        <span id="results-count">0</span> of <span id="total-count">0</span> cards found
+                    </div>
+                </div>
+                <button class="clear-all-btn" onclick="resetAllFilters()">CLEAR ALL</button>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- Cards Grid -->
+        <div class="cards-grid" id="cards-grid">
+            <!-- Cards will be dynamically loaded here -->
+        </div>
+
+        <!-- Mobile Filters Overlay -->
+        <div class="mobile-filters-overlay" id="mobile-filters-overlay">
+            <div class="mobile-filters-content">
+                <div class="mobile-filters-header">
+                    <div class="mobile-filters-title">
+                        <h3>FILTERS (<span id="mobile-active-count">0</span>)</h3>
+                        <p id="mobile-results-count">0 FOUND</p>
+                    </div>
+                    <div class="mobile-filters-actions">
+                        <button class="mobile-reset-btn" onclick="resetAllFilters()">Reset</button>
+                        <button class="mobile-done-btn" onclick="closeMobileFilters()">Done</button>
+                    </div>
+                </div>
+
+                <div class="mobile-filters-body">
+                    <!-- Card Type Section -->
+                    <div class="mobile-filter-section">
+                        <div class="mobile-filter-header" onclick="toggleMobileSection('type')">
+                            <h4>Card Type</h4>
+                            <span class="mobile-arrow">▼</span>
+                        </div>
+                        <div class="mobile-filter-options" id="mobile-type-options">
+                            <label><input type="checkbox" name="mobile-type" value="travel" onchange="autoApplyMobileFilters()"> Travel</label>
+                            <label><input type="checkbox" name="mobile-type" value="cashback" onchange="autoApplyMobileFilters()"> Cashback</label>
+                            <label><input type="checkbox" name="mobile-type" value="hybrid" onchange="autoApplyMobileFilters()"> Hybrid</label>
+                            <label><input type="checkbox" name="mobile-type" value="business" onchange="autoApplyMobileFilters()"> Business</label>
+                        </div>
+                    </div>
+
+                    <!-- Issuer Section -->
+                    <div class="mobile-filter-section">
+                        <div class="mobile-filter-header" onclick="toggleMobileSection('issuer')">
+                            <h4>Issuer / Brand</h4>
+                            <span class="mobile-arrow">▼</span>
+                        </div>
+                        <div class="mobile-filter-options" id="mobile-issuer-options">
+                            <label><input type="checkbox" name="mobile-issuer" value="amex" onchange="autoApplyMobileFilters()"> American Express</label>
+                            <label><input type="checkbox" name="mobile-issuer" value="chase" onchange="autoApplyMobileFilters()"> Chase</label>
+                            <label><input type="checkbox" name="mobile-issuer" value="capital-one" onchange="autoApplyMobileFilters()"> Capital One</label>
+                            <label><input type="checkbox" name="mobile-issuer" value="citi" onchange="autoApplyMobileFilters()"> Citi</label>
+                            <label><input type="checkbox" name="mobile-issuer" value="bilt" onchange="autoApplyMobileFilters()"> Bilt</label>
+                            <label><input type="checkbox" name="mobile-issuer" value="airlines" onchange="autoApplyMobileFilters()"> Airlines</label>
+                            <label><input type="checkbox" name="mobile-issuer" value="hotels" onchange="autoApplyMobileFilters()"> Hotels</label>
+                        </div>
+                    </div>
+
+                    <!-- Annual Fee Section -->
+                    <div class="mobile-filter-section">
+                        <div class="mobile-filter-header" onclick="toggleMobileSection('fee')">
+                            <h4>Annual Fee</h4>
+                            <span class="mobile-arrow">▼</span>
+                        </div>
+                        <div class="mobile-filter-options" id="mobile-fee-options">
+                            <label><input type="checkbox" name="mobile-fee" value="no-fee" onchange="autoApplyMobileFilters()"> No Annual Fee</label>
+                            <label><input type="checkbox" name="mobile-fee" value="low" onchange="autoApplyMobileFilters()"> $0-$95</label>
+                            <label><input type="checkbox" name="mobile-fee" value="medium" onchange="autoApplyMobileFilters()"> $95-$250</label>
+                            <label><input type="checkbox" name="mobile-fee" value="high" onchange="autoApplyMobileFilters()"> $250+</label>
+                        </div>
+                    </div>
+
+                    <!-- Perks Section -->
+                    <div class="mobile-filter-section">
+                        <div class="mobile-filter-header" onclick="toggleMobileSection('perks')">
+                            <h4>Perks</h4>
+                            <span class="mobile-arrow">▼</span>
+                        </div>
+                        <div class="mobile-filter-options" id="mobile-perks-options">
+                            <label><input type="checkbox" name="mobile-perks" value="lounge-access" onchange="autoApplyMobileFilters()"> Lounge Access</label>
+                            <label><input type="checkbox" name="mobile-perks" value="tsa-precheck" onchange="autoApplyMobileFilters()"> TSA Pre/Global Entry/CLEAR Credit</label>
+                            <label><input type="checkbox" name="mobile-perks" value="free-checked-bags" onchange="autoApplyMobileFilters()"> Free Checked Bags</label>
+                            <label><input type="checkbox" name="mobile-perks" value="companion-benefit" onchange="autoApplyMobileFilters()"> Companion Benefit</label>
+                            <label><input type="checkbox" name="mobile-perks" value="free-night-certificate" onchange="autoApplyMobileFilters()"> Free Night Certificate</label>
+                            <label><input type="checkbox" name="mobile-perks" value="travel-dining-credits" onchange="autoApplyMobileFilters()"> Travel/Dining/Portal Credits</label>
+                            <label><input type="checkbox" name="mobile-perks" value="elite-status-boosts" onchange="autoApplyMobileFilters()"> Elite/Status Boosts</label>
+                            <label><input type="checkbox" name="mobile-perks" value="portal-extras" onchange="autoApplyMobileFilters()"> Portal Extras</label>
+                            <label><input type="checkbox" name="mobile-perks" value="authorized-user-perks" onchange="autoApplyMobileFilters()"> Authorized User Perks</label>
+                        </div>
+                    </div>
+
+                    <!-- Protections Section -->
+                    <div class="mobile-filter-section">
+                        <div class="mobile-filter-header" onclick="toggleMobileSection('protections')">
+                            <h4>Protections</h4>
+                            <span class="mobile-arrow">▼</span>
+                        </div>
+                        <div class="mobile-filter-options" id="mobile-protections-options">
+                            <label><input type="checkbox" name="mobile-protections" value="cell-phone-protection" onchange="autoApplyMobileFilters()"> Cell Phone Protection</label>
+                            <label><input type="checkbox" name="mobile-protections" value="no-foreign-transaction-fees" onchange="autoApplyMobileFilters()"> No Foreign Transaction Fees</label>
+                            <label><input type="checkbox" name="mobile-protections" value="primary-rental-car-cdw" onchange="autoApplyMobileFilters()"> Primary Rental Car CDW</label>
+                            <label><input type="checkbox" name="mobile-protections" value="trip-delay-cancellation" onchange="autoApplyMobileFilters()"> Trip Delay / Cancellation / Interruption</label>
+                            <label><input type="checkbox" name="mobile-protections" value="baggage-delay-lost" onchange="autoApplyMobileFilters()"> Baggage Delay / Lost Baggage</label>
+                            <label><input type="checkbox" name="mobile-protections" value="purchase-protection" onchange="autoApplyMobileFilters()"> Purchase Protection / Extended Warranty / Return</label>
+                            <label><input type="checkbox" name="mobile-protections" value="coverage-rules" onchange="autoApplyMobileFilters()"> Coverage Rules</label>
+                            <label><input type="checkbox" name="mobile-protections" value="au-coverage" onchange="autoApplyMobileFilters()"> AU Coverage</label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="mobile-filters-footer">
+                    <button class="mobile-show-results-btn" onclick="applyMobileFilters()">
+                        Show Results (<span id="mobile-results-btn-count">0</span>)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
+
+    <script>
+        // Smart header and footer loading with fallbacks
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            loadComponent('header.html', 'header-placeholder', 'header-fallback');
+            
+            // Load footer
+            loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
+
+            // Initialize cards and filters
+            initializeCards();
+            initializeFilters();
+        });
+
+        function loadComponent(filename, placeholderId, fallbackId) {
+            const placeholder = document.getElementById(placeholderId);
+            
+            // Try to load the component
+            fetch(filename)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log(`Successfully loaded ${filename}, length:`, html.length);
+                    
+                    // Extract and execute JavaScript from the loaded HTML
+                    if (filename === 'header.html') {
+                        // Extract script tags
+                        const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+                        const scripts = [];
+                        let match;
+                        
+                        while ((match = scriptRegex.exec(html)) !== null) {
+                            scripts.push(match[1]);
+                        }
+                        
+                        console.log(`Found ${scripts.length} script tags in header`);
+                        
+                        // Execute each script
+                        scripts.forEach((script, index) => {
+                            console.log(`Executing script ${index + 1}`);
+                            try {
+                                eval(script);
+                            } catch (error) {
+                                console.error(`Error executing script ${index + 1}:`, error);
+                            }
+                        });
+                        
+                        // Remove script tags from HTML before inserting
+                        const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+                        placeholder.innerHTML = cleanHtml;
+                    } else {
+                        // For non-header files, just insert the HTML
+                        placeholder.innerHTML = html;
+                    }
+                    
+                    // Initialize any JavaScript functionality in the loaded content
+                    initializeLoadedContent();
+                })
+                .catch(error => {
+                    console.warn(`Could not load ${filename}:`, error);
+                    
+                    // Show fallback content
+                    placeholder.innerHTML = getFallbackContent(filename);
+                });
+        }
+
+        function getFallbackContent(filename) {
+            if (filename === 'header.html') {
+                return `
+                    <header style="background: #059669; color: white; padding: 1rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
+                        <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+                            <a href="index.html" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.5rem;">Practical Rewards</a>
+                            <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
+                                <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
+                                <li><a href="learning.html" style="color: white; text-decoration: none;">Learning</a></li>
+                                <li><a href="cards.html" style="color: white; text-decoration: none;">Cards</a></li>
+                                <li><a href="about.html" style="color: white; text-decoration: none;">About</a></li>
+                            </ul>
+                        </nav>
+                    </header>
+                `;
+            } else if (filename === 'footer.html') {
+                return `
+                    <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
+                        <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
+                            <div style="text-align: center;">
+                                <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+                                <p style="margin-top: 1rem;">
+                                    <a href="learning.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
+                                    <a href="cards.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Cards</a>
+                                    <a href="about.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+                `;
+            }
+            return '<p>Content could not be loaded.</p>';
+        }
+
+        function initializeLoadedContent() {
+            // Initialize header scroll effects
+            const header = document.querySelector('header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.style.background = 'rgba(250, 250, 249, 0.98)';
+                        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                    } else {
+                        header.style.background = 'rgba(250, 250, 249, 0.95)';
+                        header.style.boxShadow = 'none';
+                    }
+                });
+            }
+
+            // Initialize mobile menu functionality
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    console.log('Mobile menu toggle clicked');
+                    // Add mobile menu functionality here
+                });
+            }
+        }
+
+        // Cards data and functionality
+        let allCards = [];
+        let filteredCards = [];
+
+        function initializeCards() {
+            // Load cards from admin system (localStorage)
+            const storedCards = localStorage.getItem('adminCards');
+            if (storedCards) {
+                allCards = JSON.parse(storedCards).filter(card => card.status === 'active');
+            } else {
+                // Fallback to sample cards if no admin data exists
+                allCards = [
+                    {
+                        id: 1,
+                        name: "Capital One Venture X",
+                        type: "travel",
+                        annualFee: 395,
+                        bankType: "bank",
+                        rewards: "miles",
+                        image: "images/venture-x.png",
+                        features: ["2x miles on everything", "Multiple travel credits", "Priority Pass lounge access", "TSA PreCheck/Global Entry credit"],
+                        featureCategories: ["lounge-access", "tsa-precheck", "global-entry"],
+                        url: "card-pages/venture-x.html"
+                    },
+                    {
+                        id: 2,
+                        name: "Chase Sapphire Reserve",
+                        type: "travel",
+                        annualFee: 795,
+                        bankType: "bank",
+                        rewards: "points",
+                        image: "images/sapphire-reserve.jpg",
+                        features: ["3x points on travel and dining", "$300 annual travel credit", "Priority Pass lounge access", "1.5x point value through Chase portal"],
+                        featureCategories: ["lounge-access", "travel-insurance"],
+                        url: "card-pages/sapphire-reserve.html"
+                    },
+                    {
+                        id: 3,
+                        name: "American Express Platinum",
+                        type: "travel",
+                        annualFee: 695,
+                        bankType: "bank",
+                        rewards: "points",
+                        image: "images/amex-platinum.jpg",
+                        features: ["5x points on flights and hotels", "Multiple airline and hotel credits", "Centurion and Priority Pass lounges", "Elite status benefits"],
+                        featureCategories: ["lounge-access", "travel-insurance", "rental-car-insurance"],
+                        url: "card-pages/amex-platinum.html"
+                    }
+                ];
+            }
+
+            filteredCards = [...allCards];
+            
+            // Read filters from URL if any exist
+            readFiltersFromURL();
+            
+            renderCards();
+            updateResultsCount();
+            
+
+        }
+
+                function renderCards() {
+            const grid = document.getElementById('cards-grid');
+            const existingCards = grid.querySelectorAll('.card-item');
+            
+            console.log('renderCards called, existing cards:', existingCards.length);
+            
+            if (existingCards.length > 0) {
+                console.log('Fading out existing cards with JavaScript animations...');
+                
+                // Use JavaScript to animate fade-out
+                const fadeOutPromises = Array.from(existingCards).map((card, index) => {
+                    return new Promise((resolve) => {
+                        // Remove fade-in class and animation delays
+                        card.classList.remove('fade-in');
+                        card.style.animationDelay = '';
+                        
+                        // Set initial state
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                        card.style.transition = 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out';
+                        
+                        // Force a reflow to ensure initial state is applied
+                        card.offsetHeight;
+                        
+                        // Animate to fade-out state
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.95)';
+                        
+                        // Resolve after animation completes
+                        setTimeout(resolve, 300);
+                    });
+                });
+                
+                // Wait for all fade-out animations to complete
+                Promise.all(fadeOutPromises).then(() => {
+                    console.log('All fade-out animations completed, removing old cards...');
+                    
+                    // Remove old cards after they've faded out
+                    existingCards.forEach(card => {
+                        if (card.parentNode) {
+                            card.parentNode.removeChild(card);
+                        }
+                    });
+                    
+                    // Add new cards with fade-in animation
+                    filteredCards.forEach((card, index) => {
+                        const cardElement = createCardElement(card);
+                        cardElement.classList.add('fade-in');
+                        cardElement.style.animationDelay = `${index * 50}ms`; // Stagger animation
+                        grid.appendChild(cardElement);
+                    });
+                });
+            } else {
+                console.log('Initial load, adding cards with fade-in...');
+                // Initial load - just add cards with fade-in animation
+                filteredCards.forEach((card, index) => {
+                    const cardElement = createCardElement(card);
+                    cardElement.classList.add('fade-in');
+                    cardElement.style.animationDelay = `${index * 50}ms`; // Stagger animation
+                    grid.appendChild(cardElement);
+                });
+            }
+        }
+
+        function createCardElement(card) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card-item';
+            cardDiv.onclick = () => window.location.href = card.url;
+
+            const feeText = card.annualFee === 0 ? 'No Annual Fee' : `$${card.annualFee} Annual Fee`;
+            const badgeText = card.annualFee === 0 ? 'No Fee' : 'Premium';
+
+            cardDiv.innerHTML = `
+                <img src="${card.image}" alt="${card.name}" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="card-image-fallback" style="display: none;">${card.name}</div>
+                
+                <div class="card-header">
+                    <h3 class="card-title">${card.name}</h3>
+                    <span class="card-badge">${badgeText}</span>
+                </div>
+                
+                <div class="card-fee">${feeText}</div>
+                
+                <div class="card-features">
+                    <ul>
+                        ${card.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                </div>
+                
+
+            `;
+
+            return cardDiv;
+        }
+
+        function initializeFilters() {
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.filter-pill')) {
+                    closeAllDropdowns();
+                }
+            });
+        }
+
+        // New Google Flights style filter functions
+        let activeFilters = {};
+
+        function toggleFilterDropdown(filterType) {
+            const dropdown = document.getElementById(`${filterType}-dropdown`);
+            const isActive = dropdown.classList.contains('active');
+            
+            // Close all other dropdowns
+            closeAllDropdowns();
+            
+            // Toggle current dropdown
+            if (!isActive) {
+                dropdown.classList.add('active');
+                // Rotate arrow
+                const arrow = dropdown.previousElementSibling.querySelector('.pill-arrow');
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.pill-dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+            document.querySelectorAll('.pill-arrow').forEach(arrow => {
+                arrow.style.transform = 'rotate(0deg)';
+            });
+        }
+
+        function resetFilter(filterType) {
+            // Reset all checkboxes for the given filter type
+            document.querySelectorAll(`input[name="${filterType}"]`).forEach(cb => {
+                cb.checked = false;
+            });
+            
+            // Auto-apply the reset
+            autoApplyFilters();
+        }
+
+        function applyFilter(filterType) {
+            const dropdown = document.getElementById(`${filterType}-dropdown`);
+            
+            if (filterType === 'features') {
+                // Handle checkbox features
+                const selectedFeatures = Array.from(document.querySelectorAll(`input[name="${filterType}"]:checked`)).map(cb => cb.value);
+                if (selectedFeatures.length > 0) {
+                    activeFilters[filterType] = selectedFeatures;
+                } else {
+                    delete activeFilters[filterType];
+                }
+            } else {
+                // Handle radio buttons
+                const selectedValue = document.querySelector(`input[name="${filterType}"]:checked`).value;
+                if (selectedValue !== 'all') {
+                    activeFilters[filterType] = [selectedValue];
+                } else {
+                    delete activeFilters[filterType];
+                }
+            }
+            
+            // Close dropdown
+            closeAllDropdowns();
+            
+            // Apply filters and update UI
+            applyNewFilters();
+            updateActiveFilterChips();
+            updateActiveFilterCount();
+        }
+
+        function applyNewFilters() {
+            // Apply the new filter system
+            filteredCards = allCards.filter(card => {
+                for (const [filterType, filterValues] of Object.entries(activeFilters)) {
+                    if (filterType === 'fee') {
+                        if (filterValues.includes('no-fee') && card.annualFee !== 0) return false;
+                        if (filterValues.includes('low') && (card.annualFee < 0 || card.annualFee > 95)) return false;
+                        if (filterValues.includes('medium') && (card.annualFee < 95 || card.annualFee > 250)) return false;
+                        if (filterValues.includes('high') && card.annualFee < 250) return false;
+                    } else if (filterType === 'type' || filterType === 'bankType' || filterType === 'rewards') {
+                        if (!filterValues.includes(card[filterType])) return false;
+                    } else if (filterType === 'features') {
+                        // Check if card has any of the selected features
+                        const cardFeatures = card.featureCategories || [];
+                        const hasFeature = filterValues.some(feature => cardFeatures.includes(feature));
+                        if (!hasFeature) return false;
+                    }
+                }
+                return true;
+            });
+
+            renderCards();
+            updateResultsCount();
+        }
+
+        function updateActiveFilterChips() {
+            const container = document.getElementById('active-filters-chips');
+            const line = document.getElementById('active-filters-line');
+            container.innerHTML = '';
+            
+            if (Object.keys(activeFilters).length === 0) {
+                line.style.display = 'none';
+                return;
+            }
+            
+            line.style.display = 'block';
+            
+            for (const [filterType, filterValues] of Object.entries(activeFilters)) {
+                filterValues.forEach(value => {
+                    const chip = document.createElement('div');
+                    chip.className = 'active-filter-chip';
+                    chip.innerHTML = `
+                        ${getFilterDisplayName(filterType, value)}
+                        <button class="remove-filter" onclick="removeFilter('${filterType}', '${value}')">&times;</button>
+                    `;
+                    container.appendChild(chip);
+                });
+            }
+            
+            // Update URL with current filters
+            updateURLWithFilters();
+        }
+
+        function getFilterDisplayName(filterType, value) {
+            const displayNames = {
+                'type': {
+                    'travel': 'Travel',
+                    'cashback': 'Cashback',
+                    'hybrid': 'Hybrid',
+                    'business': 'Business'
+                },
+                'issuer': {
+                    'amex': 'American Express',
+                    'chase': 'Chase',
+                    'capital-one': 'Capital One',
+                    'citi': 'Citi',
+                    'bilt': 'Bilt',
+                    'airlines': 'Airlines',
+                    'hotels': 'Hotels'
+                },
+                'fee': {
+                    'no-fee': 'No Annual Fee',
+                    'low': '$0-$95',
+                    'medium': '$95-$250',
+                    'high': '$250+'
+                },
+                'perks': {
+                    'lounge-access': 'Lounge Access',
+                    'tsa-precheck': 'TSA Pre/Global Entry/CLEAR Credit',
+                    'free-checked-bags': 'Free Checked Bags',
+                    'companion-benefit': 'Companion Benefit',
+                    'free-night-certificate': 'Free Night Certificate',
+                    'travel-dining-credits': 'Travel/Dining/Portal Credits',
+                    'elite-status-boosts': 'Elite/Status Boosts',
+                    'portal-extras': 'Portal Extras',
+                    'authorized-user-perks': 'Authorized User Perks'
+                },
+                'protections': {
+                    'cell-phone-protection': 'Cell Phone Protection',
+                    'no-foreign-transaction-fees': 'No Foreign Transaction Fees',
+                    'primary-rental-car-cdw': 'Primary Rental Car CDW',
+                    'trip-delay-cancellation': 'Trip Delay/Cancellation/Interruption',
+                    'baggage-delay-lost': 'Baggage Delay/Lost Baggage',
+                    'purchase-protection': 'Purchase Protection/Extended Warranty/Return',
+                    'coverage-rules': 'Coverage Rules',
+                    'au-coverage': 'AU Coverage'
+                }
+            };
+            
+            return displayNames[filterType]?.[value] || value;
+        }
+
+        function removeFilter(filterType, value) {
+            if (activeFilters[filterType]) {
+                if (Array.isArray(activeFilters[filterType])) {
+                    activeFilters[filterType] = activeFilters[filterType].filter(v => v !== value);
+                    if (activeFilters[filterType].length === 0) {
+                        delete activeFilters[filterType];
+                    }
+                } else {
+                    delete activeFilters[filterType];
+                }
+            }
+            
+            applyNewFilters();
+            updateActiveFilterChips();
+            updateActiveFilterCount();
+        }
+
+        function updateActiveFilterCount() {
+            const count = Object.values(activeFilters).flat().length;
+            const activeFilterCountElement = document.getElementById('active-filter-count');
+            if (activeFilterCountElement) {
+                activeFilterCountElement.textContent = count;
+            }
+        }
+
+        function openAllFiltersModal() {
+            // For now, just show an alert. In a full implementation, this would open a modal
+            alert('All Filters Modal - This would show all filter options in a modal with accordion sections.');
+        }
+
+        // Update URL with current filters
+        function updateURLWithFilters() {
+            const url = new URL(window.location);
+            const searchParams = url.searchParams;
+            
+            // Clear existing filter params
+            searchParams.delete('type');
+            searchParams.delete('issuer');
+            searchParams.delete('fee');
+            searchParams.delete('perks');
+            searchParams.delete('protections');
+            
+            // Add current filters to URL
+            Object.entries(activeFilters).forEach(([filterType, values]) => {
+                if (Array.isArray(values)) {
+                    values.forEach(value => {
+                        searchParams.append(filterType, value);
+                    });
+                }
+            });
+            
+            // Update URL without reloading the page
+            window.history.replaceState({}, '', url);
+        }
+
+        // Read filters from URL and apply them
+        function readFiltersFromURL() {
+            const url = new URL(window.location);
+            const searchParams = url.searchParams;
+            const urlFilters = {};
+            
+            // Read all filter parameters from URL
+            ['type', 'issuer', 'fee', 'perks', 'protections'].forEach(filterType => {
+                const values = searchParams.getAll(filterType);
+                if (values.length > 0) {
+                    urlFilters[filterType] = values;
+                }
+            });
+            
+            // Apply URL filters if any exist
+            if (Object.keys(urlFilters).length > 0) {
+                activeFilters = urlFilters;
+                
+                // Update checkboxes to match URL filters
+                updateCheckboxesFromFilters();
+                
+                // Apply filters and update UI
+                applyNewFilters();
+                updateActiveFilterChips();
+                updateActiveFilterCount();
+            }
+        }
+
+        // Update checkboxes to match current filters
+        function updateCheckboxesFromFilters() {
+            // Clear all checkboxes first
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Check boxes that match current filters
+            Object.entries(activeFilters).forEach(([filterType, values]) => {
+                values.forEach(value => {
+                    // Update desktop checkboxes
+                    const desktopCheckbox = document.querySelector(`input[name="${filterType}"][value="${value}"]`);
+                    if (desktopCheckbox) {
+                        desktopCheckbox.checked = true;
+                    }
+                    
+                    // Update mobile checkboxes
+                    const mobileCheckbox = document.querySelector(`input[name="mobile-${filterType}"][value="${value}"]`);
+                    if (mobileCheckbox) {
+                        mobileCheckbox.checked = true;
+                    }
+                });
+            });
+        }
+
+        // Add error handling to prevent null reference errors
+        function safeUpdateElement(elementId, textContent) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = textContent;
+            }
+        }
+
+        // Mobile Filters Functions
+        function openMobileFilters() {
+            const overlay = document.getElementById('mobile-filters-overlay');
+            overlay.classList.add('active');
+            
+            // Sync mobile filters with current active filters
+            syncMobileFilters();
+            
+            // Update mobile counts
+            updateMobileCounts();
+        }
+
+        function closeMobileFilters() {
+            const overlay = document.getElementById('mobile-filters-overlay');
+            overlay.classList.remove('active');
+        }
+
+        function toggleMobileSection(sectionType) {
+            const header = document.querySelector(`[onclick="toggleMobileSection('${sectionType}')"]`);
+            const options = document.getElementById(`mobile-${sectionType}-options`);
+            
+            header.classList.toggle('expanded');
+            options.classList.toggle('expanded');
+        }
+
+        function syncMobileFilters() {
+            // Sync all filter types
+            ['type', 'issuer', 'fee', 'perks', 'protections'].forEach(filterType => {
+                if (activeFilters[filterType] && activeFilters[filterType].length > 0) {
+                    // Check the checkboxes that match current filters
+                    activeFilters[filterType].forEach(value => {
+                        const checkbox = document.querySelector(`input[name="mobile-${filterType}"][value="${value}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                } else {
+                    // Uncheck all checkboxes for this filter type
+                    document.querySelectorAll(`input[name="mobile-${filterType}"]`).forEach(cb => {
+                        cb.checked = false;
+                    });
+                }
+            });
+        }
+
+        function applyMobileFilters() {
+            // Collect mobile filter values
+            const newFilters = {};
+
+            // Handle all filter types
+            ['type', 'issuer', 'fee', 'perks', 'protections'].forEach(filterType => {
+                const selected = Array.from(document.querySelectorAll(`input[name="mobile-${filterType}"]:checked`)).map(cb => cb.value);
+                if (selected.length > 0) {
+                    newFilters[filterType] = selected;
+                }
+            });
+
+            // Update active filters
+            activeFilters = newFilters;
+
+            // Apply filters and update UI
+            applyNewFilters();
+            updateActiveFilterChips();
+            updateActiveFilterCount();
+            updateMobileCounts();
+
+            // Close mobile overlay
+            closeMobileFilters();
+        }
+
+        function resetAllFilters() {
+            console.log('resetAllFilters called - clearing all filters');
+            
+            // Reset all mobile inputs
+            document.querySelectorAll('input[name^="mobile-"]').forEach(input => {
+                if (input.type === 'radio') {
+                    if (input.value === 'all') input.checked = true;
+                    else input.checked = false;
+                } else {
+                    input.checked = false;
+                }
+            });
+
+            // Clear active filters
+            activeFilters = {};
+            console.log('Active filters cleared, activeFilters:', activeFilters);
+
+            // Apply changes
+            applyNewFilters();
+            updateActiveFilterChips();
+            updateActiveFilterCount();
+            updateMobileCounts();
+            
+            // Force reset mobile pills multiple times to ensure they're cleared
+            forceResetMobilePills();
+        }
+
+        // Dedicated function to force reset mobile pills
+        function forceResetMobilePills() {
+            console.log('forceResetMobilePills called');
+            
+            // Remove active class immediately
+            document.querySelectorAll('.mobile-quick-pill').forEach(pill => {
+                console.log('Immediately removing active from:', pill.textContent.trim());
+                pill.classList.remove('active');
+            });
+            
+            // Remove again after a short delay
+            setTimeout(() => {
+                document.querySelectorAll('.mobile-quick-pill').forEach(pill => {
+                    console.log('Delayed removal of active from:', pill.textContent.trim());
+                    pill.classList.remove('active');
+                });
+            }, 50);
+            
+            // Remove one more time after a longer delay
+            setTimeout(() => {
+                document.querySelectorAll('.mobile-quick-pill').forEach(pill => {
+                    console.log('Final removal of active from:', pill.textContent.trim());
+                    pill.classList.remove('active');
+                });
+                console.log('Mobile pills force reset complete');
+            }, 200);
+        }
+
+        function updateMobileCounts() {
+            const activeCount = Object.values(activeFilters).flat().length;
+            const resultsCount = filteredCards.length;
+            
+            safeUpdateElement('mobile-active-count', activeCount);
+            safeUpdateElement('mobile-results-count', `${resultsCount} FOUND`);
+            safeUpdateElement('mobile-results-btn-count', resultsCount);
+        }
+
+        function clearAllFilters() {
+            activeFilters = {};
+            applyNewFilters();
+            updateActiveFilterChips();
+            updateActiveFilterCount();
+        }
+
+        // Auto-apply filters function for desktop
+        function autoApplyFilters() {
+            // Collect all checkbox values
+            const newFilters = {};
+            
+            // Collect type filters
+            const typeCheckboxes = document.querySelectorAll('input[name="type"]:checked');
+            if (typeCheckboxes.length > 0) {
+                newFilters.type = Array.from(typeCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect issuer filters
+            const issuerCheckboxes = document.querySelectorAll('input[name="issuer"]:checked');
+            if (issuerCheckboxes.length > 0) {
+                newFilters.issuer = Array.from(issuerCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect fee filters
+            const feeCheckboxes = document.querySelectorAll('input[name="fee"]:checked');
+            if (feeCheckboxes.length > 0) {
+                newFilters.fee = Array.from(feeCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect perks filters
+            const perksCheckboxes = document.querySelectorAll('input[name="perks"]:checked');
+            if (perksCheckboxes.length > 0) {
+                newFilters.perks = Array.from(perksCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect protections filters
+            const protectionsCheckboxes = document.querySelectorAll('input[name="protections"]:checked');
+            if (protectionsCheckboxes.length > 0) {
+                newFilters.protections = Array.from(protectionsCheckboxes).map(cb => cb.value);
+            }
+            
+            // Update active filters
+            activeFilters = newFilters;
+            
+            // Apply filters and update UI
+            applyNewFilters();
+            updateActiveFilterChips();
+            updateActiveFilterCount();
+        }
+
+        // Auto-apply filters function for mobile
+        function autoApplyMobileFilters() {
+            // Collect all mobile checkbox values
+            const newFilters = {};
+            
+            // Collect type filters
+            const typeCheckboxes = document.querySelectorAll('input[name="mobile-type"]:checked');
+            if (typeCheckboxes.length > 0) {
+                newFilters.type = Array.from(typeCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect issuer filters
+            const issuerCheckboxes = document.querySelectorAll('input[name="mobile-issuer"]:checked');
+            if (issuerCheckboxes.length > 0) {
+                newFilters.issuer = Array.from(issuerCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect fee filters
+            const feeCheckboxes = document.querySelectorAll('input[name="mobile-fee"]:checked');
+            if (feeCheckboxes.length > 0) {
+                newFilters.fee = Array.from(feeCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect perks filters
+            const perksCheckboxes = document.querySelectorAll('input[name="mobile-perks"]:checked');
+            if (perksCheckboxes.length > 0) {
+                newFilters.perks = Array.from(perksCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect protections filters
+            const protectionsCheckboxes = document.querySelectorAll('input[name="mobile-protections"]:checked');
+            if (protectionsCheckboxes.length > 0) {
+                newFilters.protections = Array.from(protectionsCheckboxes).map(cb => cb.value);
+            }
+            
+            // Update active filters
+            activeFilters = newFilters;
+            
+            // Apply filters and update UI
+            applyNewFilters();
+            updateActiveFilterChips();
+            updateActiveFilterCount();
+            updateMobileCounts();
+        }
+
+        // Quick filter function for mobile pills
+        function quickFilter(filterType, value) {
+            console.log('quickFilter called with:', filterType, value);
+            
+            // Clear any existing filters of this type
+            delete activeFilters[filterType];
+            
+            // Set the new filter
+            activeFilters[filterType] = [value];
+            
+            // Apply filters and update UI
+            applyNewFilters();
+            updateActiveFilterChips();
+            updateActiveFilterCount();
+            
+            // Update mobile pill active states
+            updateMobilePillStates(filterType, value);
+        }
+
+        function updateMobilePillStates(activeType, activeValue) {
+            // Remove active class from all mobile pills
+            document.querySelectorAll('.mobile-quick-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            
+            // Add active class to the selected pill (only if we have valid values)
+            if (activeType && activeValue) {
+                if (activeType === 'type') {
+                    if (activeValue === 'travel') {
+                        document.querySelector('.mobile-quick-pill:nth-child(2)').classList.add('active');
+                    } else if (activeValue === 'cashback') {
+                        document.querySelector('.mobile-quick-pill:nth-child(3)').classList.add('active');
+                    }
+                }
+            }
+            // If no activeType/activeValue (reset case), all pills remain inactive
+        }
+
+
+
+        function applySorting(sortBy) {
+            switch(sortBy) {
+                case 'name':
+                    filteredCards.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'fee-low':
+                    filteredCards.sort((a, b) => a.annualFee - b.annualFee);
+                    break;
+                case 'fee-high':
+                    filteredCards.sort((a, b) => b.annualFee - a.annualFee);
+                    break;
+                case 'rating':
+                    // Placeholder for rating sorting
+                    break;
+                default:
+                    // Featured order (original order)
+                    filteredCards = [...allCards];
+                    applyNewFilters(); // Re-apply filters
+                    return;
+            }
+            
+            renderCards();
+        }
+
+        function updateResultsCount() {
+            // Update results count in the active filters line if it exists
+            const resultsCountElement = document.getElementById('results-count');
+            if (resultsCountElement) {
+                resultsCountElement.textContent = filteredCards.length;
+            }
+            
+            const totalCountElement = document.getElementById('total-count');
+            if (totalCountElement) {
+                totalCountElement.textContent = allCards.length;
+            }
+
+            // Update the main results display
+            const resultsDisplayCount = document.getElementById('results-display-count');
+            if (resultsDisplayCount) {
+                resultsDisplayCount.textContent = filteredCards.length;
+            }
+
+            const resultsDisplayTotal = document.getElementById('results-display-total');
+            if (resultsDisplayTotal) {
+                resultsDisplayTotal.textContent = allCards.length;
+            }
+        }
+
+        function refreshCards() {
+            // Reload cards from storage and reapply current filters
+            initializeCards();
+            applyNewFilters();
+        }
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (header && window.scrollY > 100) {
+                header.style.background = 'rgba(250, 250, 249, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else if (header) {
+                header.style.background = 'rgba(250, 250, 249, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Mobile menu toggle (placeholder function)
+        function toggleMobileMenu() {
+            // This would implement mobile menu functionality
+            console.log('Mobile menu toggle clicked');
+        }
+    </script>
+    <script src="js/scripts.js"></script>
+</body>
+</html>

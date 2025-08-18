@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Annual Fee Calculator - Cards for Normals</title>
+    <title>Credit Cards - Cards for Normals</title>
 
     <style>
         /* Modern CSS Reset */
@@ -182,12 +182,11 @@
             font-size: 0.875rem;
         }
 
-        /* Calculator-specific styles only */
-
-        .calculator-container {
-            max-width: 1200px;
+        /* Cards Grid Page Styles */
+        .cards-container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 2rem 2rem 2rem;
+            padding: 120px 2rem 2rem 2rem;
         }
 
         .hero-section {
@@ -202,154 +201,130 @@
             right: 50%;
             margin-left: -50vw;
             margin-right: -50vw;
+            text-align: center;
         }
 
-        .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .hero-text {
-            text-align: left;
-        }
-
-        .hero-text h1 {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
             font-weight: 800;
         }
 
         .hero-subtitle {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
+            font-weight: 500;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filter System */
+        .filter-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 3rem;
+        }
+
+        .filter-section h2 {
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            opacity: 0.9;
         }
 
-        .hero-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            opacity: 0.9;
+        .filter-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .hero-card {
-            position: relative;
+        .filter-category {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
+            gap: 0.75rem;
         }
 
-        .hero-card-image {
-            width: 280px;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            transform: rotate(-5deg);
-            transition: transform 0.3s ease;
-        }
-
-        .hero-card-image:hover {
-            transform: rotate(0deg) scale(1.05);
-        }
-
-        .hero-card-fallback {
-            width: 280px;
-            height: 180px;
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            transform: rotate(-5deg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-preview {
-            width: 100%;
-            height: 100%;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            color: white;
-        }
-
-        .card-chip {
-            width: 40px;
-            height: 30px;
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            border-radius: 6px;
-            align-self: flex-start;
-        }
-
-        .card-logo {
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .card-name {
+        .filter-category h3 {
             font-size: 0.9rem;
             font-weight: 600;
-            text-align: center;
-            letter-spacing: 1px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .card-details {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .annual-fee-badge {
-            background: #dc2626;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-
-        .card-highlights {
+        .filter-buttons {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 0.5rem;
         }
 
-        .highlight-item {
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            background: white;
+            color: #64748b;
             font-size: 0.9rem;
-            color: white;
-            font-weight: 600;
-            padding: 0.25rem 0;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
+        .filter-btn:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
 
+        .filter-btn.active {
+            background: #059669;
+            color: white;
+            border-color: #059669;
+        }
 
+        .filter-btn.active:hover {
+            background: #047857;
+            border-color: #047857;
+        }
+
+        .filter-results {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .results-count {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .sort-dropdown {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #1e293b;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Cards Grid */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 2rem;
             margin: 2rem 0;
         }
 
-        .card-option {
+        .card-item {
             background: white;
             border-radius: 16px;
-            padding: 2.5rem;
+            padding: 2rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -361,7 +336,7 @@
             display: block;
         }
 
-        .card-option::before {
+        .card-item::before {
             content: '';
             position: absolute;
             top: 0;
@@ -372,11 +347,11 @@
             transition: left 0.5s;
         }
 
-        .card-option:hover::before {
+        .card-item:hover::before {
             left: 100%;
         }
 
-        .card-option:hover {
+        .card-item:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             border-color: #059669;
@@ -393,7 +368,7 @@
             transition: transform 0.3s ease;
         }
 
-        .card-option:hover .card-image {
+        .card-item:hover .card-image {
             transform: scale(1.05);
         }
 
@@ -413,233 +388,76 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .card-option h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: #1e293b;
-        }
-
-        .annual-fee {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #dc2626;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-highlights {
-            color: #64748b;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-highlights ul {
-            margin: 0;
-            padding-left: 1.2rem;
-        }
-
-        .card-highlights li {
-            margin-bottom: 0.5rem;
-        }
-
-        .calculator-section {
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin: 2rem 0;
-        }
-
-        .calculator-section h2 {
-            color: #1e293b;
-            margin-bottom: 2rem;
-            font-size: 2.2rem;
-            text-align: center;
-        }
-
-        .credit-item {
+        .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border: 2px solid #f1f5f9;
-            border-radius: 12px;
+            align-items: flex-start;
             margin-bottom: 1rem;
-            transition: all 0.3s ease;
         }
 
-        .credit-item:hover {
-            border-color: #e2e8f0;
-            background: #fafbfc;
-        }
-
-        .credit-info {
-            flex: 1;
-        }
-
-        .credit-name {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 1.1rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .credit-description {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .credit-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #10b981;
-            margin-right: 2rem;
-        }
-
-        .credit-toggle {
-            position: relative;
-            width: 60px;
-            height: 30px;
-        }
-
-        .credit-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #cbd5e1;
-            transition: .4s;
-            border-radius: 30px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: #10b981;
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(30px);
-        }
-
-        .results-section {
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            border: 2px solid #667eea;
-            border-radius: 16px;
-            padding: 2rem;
-            margin-top: 2rem;
-            text-align: center;
-        }
-
-        .total-credits {
+        .card-title {
             font-size: 1.5rem;
-            color: #10b981;
-            margin-bottom: 1rem;
-        }
-
-        .effective-fee {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        .effective-fee.positive {
-            color: #dc2626;
-        }
-
-        .effective-fee.negative {
-            color: #10b981;
-        }
-
-        .fee-interpretation {
-            font-size: 1.1rem;
-            color: #64748b;
-            font-style: italic;
-        }
-
-        .navigation-buttons {
-            display: flex;
-            gap: 1rem;
-            margin: 3rem 0 2rem 0;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .nav-btn {
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .nav-btn.primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .nav-btn.primary:hover {
-            background: #5b6fd8;
-            transform: translateY(-2px);
-        }
-
-        .nav-btn.secondary {
-            background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .nav-btn.secondary:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .callout-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-            border-left: 4px solid #f59e0b;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 2rem 0;
-        }
-
-        .callout-box h4 {
-            color: #92400e;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .callout-box p {
-            color: #92400e;
+            font-weight: 700;
+            color: #1e293b;
             margin: 0;
         }
 
-        /* Tablet Responsive */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .nav-links {
-                gap: 2rem;
-            }
+        .card-badge {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-            nav {
-                padding: 0 1.5rem;
-            }
+        .card-fee {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+
+        .card-features {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-features ul {
+            margin: 0;
+            padding-left: 1.2rem;
+            list-style: none;
+        }
+
+        .card-features li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .card-features li::before {
+            content: "✓";
+            color: #059669;
+            font-weight: bold;
+            position: absolute;
+            left: -1.2rem;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .card-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         /* Loading states */
@@ -658,6 +476,21 @@
             margin-bottom: 1rem;
         }
 
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .nav-links {
+                gap: 2rem;
+            }
+
+            nav {
+                padding: 0 1.5rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
             /* Show mobile menu toggle */
             .mobile-menu-toggle {
@@ -674,7 +507,7 @@
                 height: 70px;
             }
 
-            .calculator-container {
+            .cards-container {
                 padding: 100px 1rem 2rem 1rem;
             }
 
@@ -689,38 +522,24 @@
                 margin-right: -50vw;
             }
 
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
             .cards-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .credit-item {
+
+            .filter-categories {
                 flex-direction: column;
-                text-align: center;
-                gap: 1rem;
             }
 
-            .hero-section h1 {
-                font-size: 2rem;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                text-align: center;
-            }
-
-            .hero-text {
-                text-align: center;
-            }
-
-            .hero-card-image {
-                width: 240px;
-                height: 150px;
-            }
-
-            .hero-card-fallback {
-                width: 240px;
-                height: 150px;
+            .filter-buttons {
+                justify-content: center;
             }
 
             .card-image {
@@ -741,75 +560,82 @@
         <div class="loading-placeholder">Loading navigation...</div>
     </div>
 
-    <div class="calculator-container">
+    <div class="cards-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Credit Cards</h1>
+            <p class="hero-subtitle">Find the perfect credit card for your lifestyle and spending habits</p>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h2>Filter Cards</h2>
             
-            <!-- Layer 1: Card Selection -->
-            <div class="content-layer active" id="layer-home">
-                <div class="hero-section">
-                    <h1>Annual Fee Calculator</h1>
-                    <p>See the real cost of premium credit cards after factoring in the credits you'll actually use</p>
+            <div class="filter-categories">
+                <div class="filter-category">
+                    <h3>Card Type</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="type" data-value="all">All Cards</button>
+                        <button class="filter-btn" data-filter="type" data-value="travel">Travel</button>
+                        <button class="filter-btn" data-filter="type" data-value="cashback">Cashback</button>
+                        <button class="filter-btn" data-filter="type" data-value="business">Business</button>
+                        <button class="filter-btn" data-filter="type" data-value="student">Student</button>
+                    </div>
                 </div>
 
-                <div class="callout-box">
-                    <h4>💡 How This Works</h4>
-                    <p>Premium cards advertise lots of credits, but they're only valuable if you actually use them. We'll show you which credits apply to your spending and calculate your effective annual fee.</p>
+                <div class="filter-category">
+                    <h3>Annual Fee</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="fee" data-value="all">Any Fee</button>
+                        <button class="filter-btn" data-filter="fee" data-value="no-fee">No Annual Fee</button>
+                        <button class="filter-btn" data-filter="fee" data-value="low">$0-$95</button>
+                        <button class="filter-btn" data-filter="fee" data-value="medium">$95-$250</button>
+                        <button class="filter-btn" data-filter="fee" data-value="high">$250+</button>
+                    </div>
                 </div>
 
-                <div class="cards-grid">
-                    <a href="card-pages/venture-x.html" class="card-option">
-                        <img src="images/venture-x.png" alt="Capital One Venture X" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="card-image-fallback" style="display: none;">Venture X</div>
-                        <h3>Capital One Venture X</h3>
-                        <div class="annual-fee">$395 Annual Fee</div>
-                        <div class="card-highlights">
-                            <ul>
-                                <li>2x miles on everything</li>
-                                <li>Multiple travel credits</li>
-                                <li>Priority Pass lounge access</li>
-                                <li>TSA PreCheck/Global Entry credit</li>
-                            </ul>
-                        </div>
-                    </a>
+                <div class="filter-category">
+                    <h3>Credit Score</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="credit" data-value="all">Any Score</button>
+                        <button class="filter-btn" data-filter="credit" data-value="excellent">Excellent (720+)</button>
+                        <button class="filter-btn" data-filter="credit" data-value="good">Good (690-719)</button>
+                        <button class="filter-btn" data-filter="credit" data-value="fair">Fair (630-689)</button>
+                        <button class="filter-btn" data-filter="credit" data-value="poor">Poor (300-629)</button>
+                    </div>
+                </div>
 
-                    <a href="card-pages/sapphire-reserve.html" class="card-option">
-                        <img src="images/sapphire-reserve.jpg" alt="Chase Sapphire Reserve" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="card-image-fallback" style="display: none;">Sapphire Reserve</div>
-                        <h3>Chase Sapphire Reserve</h3>
-                        <div class="annual-fee">$795 Annual Fee</div>
-                        <div class="card-highlights">
-                            <ul>
-                                <li>3x points on travel and dining</li>
-                                <li>$300 annual travel credit</li>
-                                <li>Priority Pass lounge access</li>
-                                <li>1.5x point value through Chase portal</li>
-                            </ul>
-                        </div>
-                    </a>
-
-                    <a href="card-pages/amex-platinum.html" class="card-option">
-                        <img src="images/amex-platinum.jpg" alt="American Express Platinum" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="card-image-fallback" style="display: none;">Amex Platinum</div>
-                        <h3>American Express Platinum</h3>
-                        <div class="annual-fee">$695 Annual Fee</div>
-                        <div class="card-highlights">
-                            <ul>
-                                <li>5x points on flights and hotels</li>
-                                <li>Multiple airline and hotel credits</li>
-                                <li>Centurion and Priority Pass lounges</li>
-                                <li>Elite status benefits</li>
-                            </ul>
-                        </div>
-                    </a>
+                <div class="filter-category">
+                    <h3>Rewards</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="rewards" data-value="all">All Rewards</button>
+                        <button class="filter-btn" data-filter="rewards" data-value="points">Points</button>
+                        <button class="filter-btn" data-filter="rewards" data-value="miles">Miles</button>
+                        <button class="filter-btn" data-filter="rewards" data-value="cashback">Cashback</button>
+                        <button class="filter-btn" data-filter="rewards" data-value="hybrid">Hybrid</button>
+                    </div>
                 </div>
             </div>
 
-
-
-
-
-
-
+            <div class="filter-results">
+                <div class="results-count">
+                    Showing <span id="results-count">12</span> of <span id="total-count">12</span> cards
+                </div>
+                <select class="sort-dropdown" id="sort-dropdown">
+                    <option value="featured">Featured</option>
+                    <option value="name">Name A-Z</option>
+                    <option value="fee-low">Fee: Low to High</option>
+                    <option value="fee-high">Fee: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                </select>
+            </div>
         </div>
+
+        <!-- Cards Grid -->
+        <div class="cards-grid" id="cards-grid">
+            <!-- Cards will be dynamically loaded here -->
+        </div>
+    </div>
 
     <!-- Footer placeholder -->
     <div id="footer-placeholder">
@@ -824,6 +650,10 @@
             
             // Load footer
             loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
+
+            // Initialize cards and filters
+            initializeCards();
+            initializeFilters();
         });
 
         function loadComponent(filename, placeholderId, fallbackId) {
@@ -891,7 +721,7 @@
                             <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
                                 <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
                                 <li><a href="learning.html" style="color: white; text-decoration: none;">Learning</a></li>
-                                <li><a href="eaacalc.html" style="color: white; text-decoration: none;">Calculator</a></li>
+                                <li><a href="cards.html" style="color: white; text-decoration: none;">Cards</a></li>
                                 <li><a href="about.html" style="color: white; text-decoration: none;">About</a></li>
                             </ul>
                         </nav>
@@ -905,7 +735,7 @@
                                 <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
                                 <p style="margin-top: 1rem;">
                                     <a href="learning.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
-                                    <a href="eaacalc.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
+                                    <a href="cards.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Cards</a>
                                     <a href="about.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
                                 </p>
                             </div>
@@ -940,18 +770,228 @@
                 });
             }
         }
-    </script>
-    <script src="js/scripts.js"></script>
-    <script>
 
+        // Cards data and functionality
+        let allCards = [];
+        let filteredCards = [];
+
+        function initializeCards() {
+            // Sample cards data - this would come from a backend in production
+            allCards = [
+                {
+                    id: 1,
+                    name: "Capital One Venture X",
+                    type: "travel",
+                    annualFee: 395,
+                    creditScore: "excellent",
+                    rewards: "miles",
+                    image: "images/venture-x.png",
+                    features: ["2x miles on everything", "Multiple travel credits", "Priority Pass lounge access", "TSA PreCheck/Global Entry credit"],
+                    tags: ["Premium", "Travel", "Lounge Access"],
+                    url: "card-pages/venture-x.html"
+                },
+                {
+                    id: 2,
+                    name: "Chase Sapphire Reserve",
+                    type: "travel",
+                    annualFee: 795,
+                    creditScore: "excellent",
+                    rewards: "points",
+                    image: "images/sapphire-reserve.jpg",
+                    features: ["3x points on travel and dining", "$300 annual travel credit", "Priority Pass lounge access", "1.5x point value through Chase portal"],
+                    tags: ["Premium", "Travel", "Dining"],
+                    url: "card-pages/sapphire-reserve.html"
+                },
+                {
+                    id: 3,
+                    name: "American Express Platinum",
+                    type: "travel",
+                    annualFee: 695,
+                    creditScore: "excellent",
+                    rewards: "points",
+                    image: "images/amex-platinum.jpg",
+                    features: ["5x points on flights and hotels", "Multiple airline and hotel credits", "Centurion and Priority Pass lounges", "Elite status benefits"],
+                    tags: ["Premium", "Travel", "Elite Status"],
+                    url: "card-pages/amex-platinum.html"
+                },
+                {
+                    id: 4,
+                    name: "Chase Freedom Unlimited",
+                    type: "cashback",
+                    annualFee: 0,
+                    creditScore: "good",
+                    rewards: "cashback",
+                    image: "images/venture-x.png", // Placeholder
+                    features: ["1.5% cashback on everything", "3% on dining and drugstores", "5% on travel through Chase", "No annual fee"],
+                    tags: ["No Annual Fee", "Cashback", "Everyday"],
+                    url: "#"
+                },
+                {
+                    id: 5,
+                    name: "Citi Double Cash",
+                    type: "cashback",
+                    annualFee: 0,
+                    creditScore: "good",
+                    rewards: "cashback",
+                    image: "images/venture-x.png", // Placeholder
+                    features: ["2% cashback on everything", "1% when you buy, 1% when you pay", "No annual fee", "No rotating categories"],
+                    tags: ["No Annual Fee", "Cashback", "Simple"],
+                    url: "#"
+                },
+                {
+                    id: 6,
+                    name: "Discover it Cash Back",
+                    type: "cashback",
+                    annualFee: 0,
+                    creditScore: "fair",
+                    rewards: "cashback",
+                    image: "images/venture-x.png", // Placeholder
+                    features: ["5% rotating categories", "1% on everything else", "First year cashback match", "No annual fee"],
+                    tags: ["No Annual Fee", "Rotating Categories", "Student Friendly"],
+                    url: "#"
+                }
+            ];
+
+            filteredCards = [...allCards];
+            renderCards();
+            updateResultsCount();
+        }
+
+        function renderCards() {
+            const grid = document.getElementById('cards-grid');
+            grid.innerHTML = '';
+
+            filteredCards.forEach(card => {
+                const cardElement = createCardElement(card);
+                grid.appendChild(cardElement);
+            });
+        }
+
+        function createCardElement(card) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card-item';
+            cardDiv.onclick = () => window.location.href = card.url;
+
+            const feeText = card.annualFee === 0 ? 'No Annual Fee' : `$${card.annualFee} Annual Fee`;
+            const badgeText = card.annualFee === 0 ? 'No Fee' : 'Premium';
+
+            cardDiv.innerHTML = `
+                <img src="${card.image}" alt="${card.name}" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="card-image-fallback" style="display: none;">${card.name}</div>
+                
+                <div class="card-header">
+                    <h3 class="card-title">${card.name}</h3>
+                    <span class="card-badge">${badgeText}</span>
+                </div>
+                
+                <div class="card-fee">${feeText}</div>
+                
+                <div class="card-features">
+                    <ul>
+                        ${card.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="card-tags">
+                    ${card.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+                </div>
+            `;
+
+            return cardDiv;
+        }
+
+        function initializeFilters() {
+            // Filter button click handlers
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filterType = this.dataset.filter;
+                    const filterValue = this.dataset.value;
+                    
+                    // Update active state
+                    document.querySelectorAll(`[data-filter="${filterType}"]`).forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    applyFilters();
+                });
+            });
+
+            // Sort dropdown handler
+            document.getElementById('sort-dropdown').addEventListener('change', function() {
+                applySorting(this.value);
+            });
+        }
+
+        function applyFilters() {
+            const activeFilters = {};
+            
+            // Collect all active filter values
+            document.querySelectorAll('.filter-btn.active').forEach(btn => {
+                const filterType = btn.dataset.filter;
+                const filterValue = btn.dataset.value;
+                
+                if (filterValue !== 'all') {
+                    if (!activeFilters[filterType]) {
+                        activeFilters[filterType] = [];
+                    }
+                    activeFilters[filterType].push(filterValue);
+                }
+            });
+
+            // Apply filters
+            filteredCards = allCards.filter(card => {
+                for (const [filterType, filterValues] of Object.entries(activeFilters)) {
+                    if (filterType === 'fee') {
+                        if (filterValues.includes('no-fee') && card.annualFee !== 0) return false;
+                        if (filterValues.includes('low') && (card.annualFee < 0 || card.annualFee > 95)) return false;
+                        if (filterValues.includes('medium') && (card.annualFee < 95 || card.annualFee > 250)) return false;
+                        if (filterValues.includes('high') && card.annualFee < 250) return false;
+                    } else if (filterType === 'type' || filterType === 'credit' || filterType === 'rewards') {
+                        if (!filterValues.includes(card[filterType])) return false;
+                    }
+                }
+                return true;
+            });
+
+            renderCards();
+            updateResultsCount();
+        }
+
+        function applySorting(sortBy) {
+            switch(sortBy) {
+                case 'name':
+                    filteredCards.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'fee-low':
+                    filteredCards.sort((a, b) => a.annualFee - b.annualFee);
+                    break;
+                case 'fee-high':
+                    filteredCards.sort((a, b) => b.annualFee - a.annualFee);
+                    break;
+                case 'rating':
+                    // Placeholder for rating sorting
+                    break;
+                default:
+                    // Featured order (original order)
+                    filteredCards = [...allCards];
+                    applyFilters(); // Re-apply filters
+                    return;
+            }
+            
+            renderCards();
+        }
+
+        function updateResultsCount() {
+            document.getElementById('results-count').textContent = filteredCards.length;
+            document.getElementById('total-count').textContent = allCards.length;
+        }
 
         // Header background on scroll
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
-            if (window.scrollY > 100) {
+            if (header && window.scrollY > 100) {
                 header.style.background = 'rgba(250, 250, 249, 0.98)';
                 header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-            } else {
+            } else if (header) {
                 header.style.background = 'rgba(250, 250, 249, 0.95)';
                 header.style.boxShadow = 'none';
             }
@@ -963,7 +1003,6 @@
             console.log('Mobile menu toggle clicked');
         }
     </script>
-
-
+    <script src="js/scripts.js"></script>
 </body>
 </html>

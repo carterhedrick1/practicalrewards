@@ -475,7 +475,7 @@
                             const navLinks = document.querySelectorAll('a[href="#"]');
                             
                             navLinks.forEach((link, index) => {
-                                const pages = ['index.html', 'learning.html', 'eaacalc.html', 'about.html'];
+                                const pages = ['index.html', 'learning.html', 'cards.html', 'about.html'];
                                 if (index < pages.length) {
                                     // Create absolute URL from root - this will work from any page depth
                                     link.href = baseUrl + '/' + pages[index];

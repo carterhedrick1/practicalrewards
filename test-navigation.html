@@ -37,7 +37,7 @@
         <p>These links should work from any page depth:</p>
         <a href="index.html" class="test-link">Home (index.html)</a>
         <a href="learning.html" class="test-link">Learning (learning.html)</a>
-        <a href="eaacalc.html" class="test-link">Calculator (eaacalc.html)</a>
+                        <a href="cards.html" class="test-link">Cards (cards.html)</a>
         <a href="about.html" class="test-link">About (about.html)</a>
     </div>
 
@@ -76,7 +76,7 @@
                     
                     // Test the auto-path detection
                     setTimeout(() => {
-                        const navLinks = document.querySelectorAll('#header-test a[href^="index.html"], #header-test a[href^="learning.html"], #header-test a[href^="eaacalc.html"], #header-test a[href^="about.html"]');
+                        const navLinks = document.querySelectorAll('#header-test a[href^="index.html"], #header-test a[href^="learning.html"], #header-test a[href^="cards.html"], #header-test a[href^="about.html"]');
                         console.log('Navigation links found:', navLinks.length);
                         navLinks.forEach(link => {
                             console.log('Link:', link.href);
