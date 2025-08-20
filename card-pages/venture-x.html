@@ -64,27 +64,35 @@
         </div>
 
         <!-- EAA CALCULATOR SECTION -->
-        <div class="calculator-section">
-            <div class="calculator-header">
-                <h2>Effective Annual Fee Calculator</h2>
-                <p>Calculate your real cost after credits. Select the credits you'll actually use to see your real annual cost. Only count credits for services you'd pay for anyway.</p>
-                <div class="practicality-legend">
-                    <div class="legend-item">
-                        <span class="legend-dot easy"></span>
-                        <span>Easy to use</span>
+        <div class="calculator-section collapsible-section">
+            <div class="section-container">
+                <div class="calculator-header" id="calculator-header" role="button" tabindex="0" aria-expanded="true" aria-controls="calculator-content" onclick="toggleCalculatorSection()" onkeydown="handleKeyToggle(event)">
+                    <div class="section-header-content">
+                        <h2>Effective Annual Fee Calculator</h2>
+                        <p>Calculate your real cost after credits. Select the credits you'll actually use to see your real annual cost. Only count credits for services you'd pay for anyway.</p>
+                        <div class="practicality-legend">
+                            <div class="legend-item">
+                                <span class="legend-dot easy"></span>
+                                <span>Easy to use</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot moderate"></span>
+                                <span>Moderate effort</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot hard"></span>
+                                <span>Hard to maximize</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="legend-item">
-                        <span class="legend-dot moderate"></span>
-                        <span>Moderate effort</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-dot hard"></span>
-                        <span>Hard to maximize</span>
+                    <div class="section-toggle-icon" aria-hidden="true">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
                 </div>
-            </div>
             
-            <div class="calculator-content">
+                <div class="calculator-content" id="calculator-content" role="region" aria-labelledby="calculator-header">
                 <div class="calculator-table">
                     <div class="table-header">
                         <div class="header-credit">Credit</div>
@@ -106,10 +114,28 @@
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
-                        <div class="value-input">
-                            <span class="currency">$</span>
-                            <input type="number" value="0" min="0" max="300" onchange="updateCalculation()" data-max="300">
-                            <div class="value-placeholder">$0</div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="300" onchange="syncInputValues(this)" data-max="300">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="300">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <input type="number" value="0" min="0" max="300" onchange="syncInputValues(this)" data-max="300">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
                         </div>
                     </div>
 
@@ -127,10 +153,29 @@
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
-                        <div class="value-input">
-                            <span class="currency">$</span>
-                            <input type="number" value="0" min="0" max="20" onchange="updateCalculation()" data-max="20">
-                            <div class="value-placeholder">$0</div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="20" onchange="syncInputValues(this)" data-max="20">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="20">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+
+                                    <input type="number" value="0" min="0" max="20" onchange="syncInputValues(this)" data-max="20">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
                         </div>
                     </div>
 
@@ -148,10 +193,29 @@
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
-                        <div class="value-input">
-                            <span class="currency">$</span>
-                            <input type="number" value="0" min="0" max="100" onchange="updateCalculation()" data-max="100">
-                            <div class="value-placeholder">$0</div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="100" onchange="syncInputValues(this)" data-max="100">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="100">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+
+                                    <input type="number" value="0" min="0" max="100" onchange="syncInputValues(this)" data-max="100">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -165,9 +229,8 @@
                         <span class="result-label">Effective Annual Fee:</span>
                         <span class="result-value" id="effective-fee">$395</span>
                     </div>
-                    <div class="result-row">
-                        <span class="result-label" id="fee-interpretation">You still pay $395 annually after credits</span>
-                    </div>
+
+                </div>
                 </div>
             </div>
         </div>

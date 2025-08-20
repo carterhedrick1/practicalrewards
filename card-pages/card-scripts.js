@@ -4,6 +4,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadComponent('../../header.html', 'header-placeholder', 'header-fallback');
     loadComponent('../../footer.html', 'footer-placeholder', 'footer-fallback');
+    
+    // Initialize calculator placeholders when page loads
+    initializeCalculatorPlaceholders();
 });
 
 function loadComponent(filename, placeholderId, fallbackId) {
@@ -136,25 +139,45 @@ document.addEventListener('DOMContentLoaded', function() {
             toggleSection(sectionId);
         });
     });
+    
+    // Initialize calculator section
+    initializeCalculatorSection();
 }); 
 
 // Initialize calculator placeholders to show $0 when toggles are off
 function initializeCalculatorPlaceholders() {
+    console.log('Initializing calculator placeholders...');
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    console.log('Found checkboxes:', checkboxes.length);
     
     checkboxes.forEach(checkbox => {
         const creditItem = checkbox.closest('.table-row');
         const placeholder = creditItem.querySelector('.value-placeholder');
         const valueInput = creditItem.querySelector('.value-input');
         
+        console.log('Credit item:', creditItem);
+        console.log('Placeholder:', placeholder);
+        console.log('Value input:', valueInput);
+        
         if (placeholder && valueInput) {
             if (!checkbox.checked) {
-                placeholder.style.display = 'block';
+                placeholder.style.setProperty('display', 'block', 'important');
                 placeholder.textContent = '$0';
+                valueInput.style.setProperty('display', 'none', 'important');
                 valueInput.classList.remove('active');
+                // Ensure mobile placeholders have consistent styling
+                if (placeholder.closest('.mobile-controls-table')) {
+                    placeholder.style.setProperty('color', '#9ca3af', 'important');
+                    placeholder.style.setProperty('background', 'transparent', 'important');
+                    placeholder.style.setProperty('border', 'none', 'important');
+                    placeholder.style.setProperty('box-shadow', 'none', 'important');
+                }
+                console.log('Set placeholder visible for unchecked checkbox');
             } else {
-                placeholder.style.display = 'none';
+                placeholder.style.setProperty('display', 'none', 'important');
+                valueInput.style.setProperty('display', 'flex', 'important');
                 valueInput.classList.add('active');
+                console.log('Set input visible for checked checkbox');
             }
         }
     });
@@ -162,24 +185,110 @@ function initializeCalculatorPlaceholders() {
 
 // Toggle credit function - sets input to max value when toggled on
 function toggleCredit(checkbox) {
+    console.log('Toggle credit called for:', checkbox);
     const creditItem = checkbox.closest('.table-row');
-    const inputField = creditItem.querySelector('input[type="number"]');
-    const valueInput = creditItem.querySelector('.value-input');
-    const placeholder = creditItem.querySelector('.value-placeholder');
     const maxValue = parseInt(checkbox.getAttribute('data-max'));
     
+    // Find ALL related controls in this credit item (both desktop and mobile)
+    const allInputFields = creditItem.querySelectorAll('input[type="number"]');
+    const allValueInputs = creditItem.querySelectorAll('.value-input');
+    const allPlaceholders = creditItem.querySelectorAll('.value-placeholder');
+    const allCheckboxes = creditItem.querySelectorAll('input[type="checkbox"]');
+    
+    console.log('Credit item:', creditItem);
+    console.log('All input fields:', allInputFields.length);
+    console.log('All value inputs:', allValueInputs.length);
+    console.log('All placeholders:', allPlaceholders.length);
+    console.log('All checkboxes:', allCheckboxes.length);
+    console.log('Max value:', maxValue);
+    console.log('Checkbox checked:', checkbox.checked);
+    
+    // Synchronize all checkboxes in this credit item
+    allCheckboxes.forEach(cb => {
+        cb.checked = checkbox.checked;
+    });
+    
     if (checkbox.checked) {
-        inputField.value = maxValue;
-        valueInput.classList.add('active');
-        placeholder.style.display = 'none';
+        // Toggle ON - show input field, hide placeholder for ALL controls
+        allInputFields.forEach(inputField => {
+            inputField.value = maxValue;
+        });
+        allValueInputs.forEach(valueInput => {
+            valueInput.style.setProperty('display', 'flex', 'important');
+            // Add active class for animation after a short delay
+            setTimeout(() => {
+                valueInput.classList.add('active');
+            }, 10);
+        });
+        allPlaceholders.forEach(placeholder => {
+            placeholder.style.setProperty('display', 'none', 'important');
+        });
+        console.log('Turned ON - showing inputs, hiding placeholders');
     } else {
-        inputField.value = 0;
-        valueInput.classList.remove('active');
-        placeholder.style.display = 'block';
-        placeholder.textContent = '$0';
+        // Toggle OFF - hide input field, show placeholder for ALL controls
+        allInputFields.forEach(inputField => {
+            inputField.value = 0;
+        });
+        allValueInputs.forEach(valueInput => {
+            valueInput.classList.remove('active');
+            // Hide after animation completes
+            setTimeout(() => {
+                valueInput.style.setProperty('display', 'none', 'important');
+            }, 300);
+        });
+        allPlaceholders.forEach(placeholder => {
+            placeholder.style.setProperty('display', 'block', 'important');
+            placeholder.textContent = '$0';
+            // Ensure mobile placeholders have consistent styling
+            if (placeholder.closest('.mobile-controls-table')) {
+                placeholder.style.setProperty('color', '#9ca3af', 'important');
+                placeholder.style.setProperty('background', 'transparent', 'important');
+                placeholder.style.setProperty('border', 'none', 'important');
+                placeholder.style.setProperty('box-shadow', 'none', 'important');
+            }
+        });
+        console.log('Turned OFF - hiding inputs, showing placeholders');
     }
     
     updateCalculation();
+}
+
+// Function to sync input values between desktop and mobile when manually changed
+function syncInputValues(inputField) {
+    const creditItem = inputField.closest('.table-row');
+    const allInputFields = creditItem.querySelectorAll('input[type="number"]');
+    
+    // Sync all input fields in this credit item
+    allInputFields.forEach(field => {
+        if (field !== inputField) {
+            field.value = inputField.value;
+        }
+    });
+    
+    updateCalculation();
+}
+
+// Debug function to force show all placeholders
+function forceShowPlaceholders() {
+    console.log('Force showing all placeholders...');
+    const placeholders = document.querySelectorAll('.value-placeholder');
+    const valueInputs = document.querySelectorAll('.value-input');
+    
+    console.log('Found placeholders:', placeholders.length);
+    console.log('Found value inputs:', valueInputs.length);
+    
+    placeholders.forEach((placeholder, index) => {
+        placeholder.style.display = 'block';
+        placeholder.style.color = 'red';
+        placeholder.style.border = '2px solid red';
+        placeholder.textContent = '$0';
+        console.log(`Placeholder ${index}:`, placeholder);
+    });
+    
+    valueInputs.forEach((input, index) => {
+        input.style.display = 'none';
+        console.log(`Value input ${index}:`, input);
+    });
 }
 
 // Generic calculator functionality - each page should define its own annualFee variable
@@ -189,15 +298,19 @@ function updateCalculation() {
         return;
     }
     
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    // Get unique credit items to avoid double counting
+    const creditItems = document.querySelectorAll('.table-row');
     
     let totalCredits = 0;
-    checkboxes.forEach(checkbox => {
-        // Find the corresponding input field for this credit item
-        const creditItem = checkbox.closest('.table-row');
-        const inputField = creditItem.querySelector('input[type="number"]');
-        if (inputField) {
-            totalCredits += parseInt(inputField.value) || 0;
+    creditItems.forEach(creditItem => {
+        // Check if any checkbox in this credit item is checked
+        const checkbox = creditItem.querySelector('input[type="checkbox"]:checked');
+        if (checkbox) {
+            // Get the first input field value (all should be synced)
+            const inputField = creditItem.querySelector('input[type="number"]');
+            if (inputField) {
+                totalCredits += parseInt(inputField.value) || 0;
+            }
         }
     });
 
@@ -206,19 +319,55 @@ function updateCalculation() {
     // Update display
     document.getElementById('total-credits').textContent = totalCredits;
     const feeElement = document.getElementById('effective-fee');
-    const interpretationElement = document.getElementById('fee-interpretation');
 
     if (effectiveFee > 0) {
         feeElement.textContent = '$' + effectiveFee;
         feeElement.className = 'effective-fee positive';
-        interpretationElement.textContent = 'You still pay $' + effectiveFee + ' annually after credits';
     } else if (effectiveFee === 0) {
         feeElement.textContent = '$0';
         feeElement.className = 'effective-fee';
-        interpretationElement.textContent = 'The credits exactly cover the annual fee!';
     } else {
         feeElement.textContent = '+$' + Math.abs(effectiveFee);
         feeElement.className = 'effective-fee negative';
-        interpretationElement.textContent = 'You come out ahead by $' + Math.abs(effectiveFee) + ' per year!';
+    }
+}
+
+// Modern Collapsible Section Functionality
+function toggleCalculatorSection() {
+    const header = document.querySelector('.calculator-header');
+    const content = document.querySelector('.calculator-content');
+    const isExpanded = header.getAttribute('aria-expanded') === 'true';
+    
+    header.setAttribute('aria-expanded', !isExpanded);
+    
+    if (isExpanded) {
+        content.classList.add('collapsed');
+    } else {
+        content.classList.remove('collapsed');
+    }
+    
+    localStorage.setItem('calculatorExpanded', !isExpanded);
+}
+
+function handleKeyToggle(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleCalculatorSection();
+    }
+}
+
+// Initialize section state on page load
+function initializeCalculatorSection() {
+    const savedState = localStorage.getItem('calculatorExpanded');
+    const header = document.querySelector('.calculator-header');
+    const content = document.querySelector('.calculator-content');
+    
+    if (savedState !== null) {
+        const isExpanded = savedState === 'true';
+        header.setAttribute('aria-expanded', isExpanded);
+        
+        if (!isExpanded) {
+            content.classList.add('collapsed');
+        }
     }
 } 
