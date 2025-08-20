@@ -125,15 +125,144 @@
             flex-direction: column;
             cursor: pointer;
             padding: 0.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .hamburger span {
             width: 25px;
             height: 3px;
-            background: #57534e;
+            background: #059669;
             margin: 3px 0;
             transition: 0.3s;
             border-radius: 3px;
+        }
+
+        /* Mobile Menu Styles - Ensure they work on home page */
+        .mobile-menu {
+            position: fixed !important;
+            top: 70px !important;
+            right: -320px !important;
+            width: 320px !important;
+            height: calc(100vh - 70px) !important;
+            background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%) !important;
+            z-index: 99999 !important;
+            box-shadow: -4px 0 20px rgba(5, 150, 105, 0.15) !important;
+            transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+            overflow-y: auto !important;
+            border-left: 2px solid #10b981 !important;
+            transform: none !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .mobile-menu.active {
+            right: 0 !important;
+        }
+
+        .mobile-menu-overlay {
+            position: fixed !important;
+            top: 70px !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: calc(100vh - 70px) !important;
+            background: rgba(4, 120, 87, 0.15) !important;
+            backdrop-filter: blur(4px) !important;
+            z-index: 99998 !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, visibility 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .mobile-menu-header {
+            padding: 0;
+            background: transparent;
+            position: relative;
+            margin-bottom: 0;
+            height: 0;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 1rem 0 1rem 0;
+            margin: 0;
+        }
+
+        .mobile-nav-links li {
+            margin: 0.5rem 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-links li:hover {
+            background: rgba(254, 243, 199, 0.4);
+            transform: translateX(4px);
+        }
+
+        .mobile-nav-links a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #57534e;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            border-radius: 12px;
+        }
+
+        .mobile-nav-links a:hover {
+            color: #047857;
+            background: rgba(5, 150, 105, 0.06);
+        }
+
+        .mobile-nav-links a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .mobile-nav-links a:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Force smooth transitions and prevent aggressive popping */
+        .mobile-menu,
+        .mobile-menu-overlay {
+            will-change: right, opacity, visibility !important;
+            backface-visibility: hidden !important;
+            -webkit-backface-visibility: hidden !important;
+        }
+
+        /* Ensure no display:none conflicts */
+        .mobile-menu:not(.active) {
+            display: block !important;
+            right: -320px !important;
+        }
+
+        .mobile-menu.active {
+            display: block !important;
+            right: 0 !important;
         }
 
         /* Hero Section */
@@ -914,11 +1043,7 @@
             }
         });
 
-        // Mobile menu toggle (placeholder function)
-        function toggleMobileMenu() {
-            // This would implement mobile menu functionality
-            console.log('Mobile menu toggle clicked');
-        }
+        // Mobile menu functionality is handled by the dynamic header
 
         // Add loading animation
         document.addEventListener('DOMContentLoaded', function() {
@@ -997,15 +1122,38 @@
                             }
                         });
                         
-                        // Remove script tags from HTML before inserting
-                        const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
-                        placeholder.innerHTML = cleanHtml;
-                    } else {
-                        // For non-header files, just insert the HTML
-                        placeholder.innerHTML = html;
-                    }
-                    
+                                            // Remove script tags from HTML before inserting
+                    const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+                    placeholder.innerHTML = cleanHtml;
+                } else {
+                    // For non-header files, just insert the HTML
+                    placeholder.innerHTML = html;
+                }
+                
+                // Initialize content after a short delay to ensure DOM is ready
+                setTimeout(() => {
+                    console.log('Initializing loaded content...');
                     initializeLoadedContent();
+                    
+                    // Check if mobile menu elements exist
+                    const mobileToggle = document.getElementById('mobile-menu-toggle');
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const mobileOverlay = document.getElementById('mobile-menu-overlay');
+                    
+                    console.log('Mobile menu elements check:', {
+                        toggle: mobileToggle ? 'FOUND' : 'MISSING',
+                        menu: mobileMenu ? 'FOUND' : 'MISSING',
+                        overlay: mobileOverlay ? 'FOUND' : 'MISSING'
+                    });
+                    
+                    // Ensure mobile menu is set up
+                    if (typeof window.setupMobileMenu === 'function') {
+                        console.log('Calling window.setupMobileMenu...');
+                        window.setupMobileMenu();
+                    } else {
+                        console.log('window.setupMobileMenu function not found!');
+                    }
+                }, 100);
                 })
                 .catch(error => {
                     console.warn(`Could not load ${filename}:`, error);
@@ -1091,6 +1239,17 @@
                         header.style.boxShadow = 'none';
                     }
                 });
+                
+                // Ensure mobile menu is properly set up
+                setTimeout(() => {
+                    console.log('initializeLoadedContent: Setting up mobile menu...');
+                    if (typeof window.setupMobileMenu === 'function') {
+                        console.log('initializeLoadedContent: Calling setupMobileMenu...');
+                        window.setupMobileMenu();
+                    } else {
+                        console.log('initializeLoadedContent: setupMobileMenu function not found!');
+                    }
+                }, 200);
             }
         }
     </script>

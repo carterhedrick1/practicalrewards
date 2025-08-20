@@ -19,83 +19,162 @@
                 <div class="hero-text">
                     <h1>Capital One Venture X</h1>
                     <p class="hero-subtitle">Capital One's Premium Travel Card</p>
-                    <p class="hero-description">The Venture X offers premium travel benefits at a more accessible price point than the Amex Platinum. At $395/year, it's a great middle ground for serious travelers.</p>
-                </div>
-                <div class="hero-card">
-                    <img src="../../images/venture-x.png" alt="Capital One Venture X" class="hero-card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="hero-card-fallback" style="display: none;">
-                        <div class="card-preview">
-                            <div class="card-chip"></div>
-                            <div class="card-logo">Capital One</div>
-                            <div class="card-name">VENTURE X</div>
+                    <div class="hero-card-container">
+                        <div class="hero-card">
+                            <img src="../../images/venture-x.png" alt="Capital One Venture X" class="hero-card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hero-card-fallback" style="display: none;">
+                                <div class="card-preview">
+                                    <div class="card-chip"></div>
+                                    <div class="card-logo">Capital One</div>
+                                    <div class="card-name">VENTURE X</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-details">
-                        <div class="annual-fee-badge">$395 Annual Fee</div>
-                        <div class="card-highlights">
-                            <div class="highlight-item">2x miles on everything</div>
-                            <div class="highlight-item">Priority Pass lounges</div>
-                            <div class="highlight-item">TSA PreCheck credit</div>
+                </div>
+                <div class="hero-info">
+                    <div class="info-section">
+                        <div class="info-row">
+                            <span class="info-label">Annual Fee</span>
+                            <span class="info-value">$395</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Earning Rate</span>
+                            <span class="info-value">2x miles on everything</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Perks</span>
+                            <span class="info-value">Priority Pass lounges, Capital One lounges</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Protections</span>
+                            <span class="info-value">Extended warranty, trip cancellation</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Welcome Bonus</span>
+                            <span class="info-value">75,000 miles after $4,000 spend in 3 months</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Card Material</span>
+                            <span class="info-value">Metal card with premium finish</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="callout-box">
-            <h4>💡 How This Works</h4>
-            <p>Select the credits you'll actually use to see your real annual cost. Only count credits for services you'd pay for anyway.</p>
-        </div>
-
-        <div class="card-section">
-            <h2>Select the credits you'll use:</h2>
+        <!-- EAA CALCULATOR SECTION -->
+        <div class="calculator-section">
+            <div class="calculator-header">
+                <h2>Effective Annual Fee Calculator</h2>
+                <p>Calculate your real cost after credits. Select the credits you'll actually use to see your real annual cost. Only count credits for services you'd pay for anyway.</p>
+                <div class="practicality-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot easy"></span>
+                        <span>Easy to use</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot moderate"></span>
+                        <span>Moderate effort</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot hard"></span>
+                        <span>Hard to maximize</span>
+                    </div>
+                </div>
+            </div>
             
-            <div class="credit-item">
-                <div class="credit-info">
-                    <div class="credit-name">Annual Travel Credit</div>
-                    <div class="credit-description">$300 credit for travel purchases (flights, hotels, rental cars, etc.)</div>
-                </div>
-                <div class="credit-value">$300</div>
-                <label class="credit-toggle">
-                    <input type="checkbox" onchange="updateCalculation()" data-value="300">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
+            <div class="calculator-content">
+                <div class="calculator-table">
+                    <div class="table-header">
+                        <div class="header-credit">Credit</div>
+                        <div class="header-toggle">Include</div>
+                        <div class="header-value">Your Value</div>
+                    </div>
+                    
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                Annual Travel Credit
+                                <span class="practicality-meter" data-level="easy"></span>
+                            </div>
+                            <div class="credit-description">$300 credit for travel purchases including flights, hotels, car rentals, and other travel expenses. This credit automatically applies to your statement when you make qualifying travel purchases.</div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="300">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-input">
+                            <span class="currency">$</span>
+                            <input type="number" value="0" min="0" max="300" onchange="updateCalculation()" data-max="300">
+                            <div class="value-placeholder">$0</div>
+                        </div>
+                    </div>
 
-            <div class="credit-item">
-                <div class="credit-info">
-                    <div class="credit-name">TSA PreCheck/Global Entry Credit</div>
-                    <div class="credit-description">Up to $100 every 4-5 years for application fees</div>
-                </div>
-                <div class="credit-value">$20/year</div>
-                <label class="credit-toggle">
-                    <input type="checkbox" onchange="updateCalculation()" data-value="20">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                TSA PreCheck Credit
+                                <span class="practicality-meter" data-level="moderate"></span>
+                            </div>
+                            <div class="credit-description">$20 credit for TSA PreCheck application fees. TSA PreCheck allows you to keep your shoes, belt, and light jacket on during security screening, and you can use dedicated lanes at most airports.</div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="20">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-input">
+                            <span class="currency">$</span>
+                            <input type="number" value="0" min="0" max="20" onchange="updateCalculation()" data-max="20">
+                            <div class="value-placeholder">$0</div>
+                        </div>
+                    </div>
 
-            <div class="credit-item">
-                <div class="credit-info">
-                    <div class="credit-name">Anniversary Bonus Miles</div>
-                    <div class="credit-description">10,000 bonus miles each year (worth ~$100)</div>
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                Anniversary Bonus
+                                <span class="practicality-meter" data-level="easy"></span>
+                            </div>
+                            <div class="credit-description">10,000 miles bonus on your account anniversary, worth approximately $100 when redeemed for travel. These miles can be transferred to airline partners or used for statement credits.</div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="100">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-input">
+                            <span class="currency">$</span>
+                            <input type="number" value="0" min="0" max="100" onchange="updateCalculation()" data-max="100">
+                            <div class="value-placeholder">$0</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="credit-value">$100</div>
-                <label class="credit-toggle">
-                    <input type="checkbox" onchange="updateCalculation()" data-value="100">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
 
-            <div class="results-section">
-                <div class="total-credits">Total Credits Used: $<span id="total-credits">0</span></div>
-                <div class="effective-fee positive" id="effective-fee">$395</div>
-                <div class="fee-interpretation" id="fee-interpretation">Select credits above to see your effective annual fee</div>
+                <div class="calculator-results">
+                    <div class="result-row">
+                        <span class="result-label">Total Credits:</span>
+                        <span class="result-value">$<span id="total-credits">0</span></span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Effective Annual Fee:</span>
+                        <span class="result-value" id="effective-fee">$395</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label" id="fee-interpretation">You still pay $395 annually after credits</span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="navigation-buttons">
-                            <a href="../../cards.html" class="nav-btn secondary">← Back to Cards</a>
-            <a href="sapphire-reserve.html" class="nav-btn primary">Compare with Sapphire Reserve →</a>
+            <a href="../../cards.html" class="nav-btn secondary">Back to All Cards</a>
+            <a href="#" class="nav-btn primary">Apply for Venture X</a>
         </div>
     </div>
 

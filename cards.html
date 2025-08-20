@@ -126,6 +126,15 @@
             flex-direction: column;
             cursor: pointer;
             padding: 0.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .hamburger span {
@@ -190,7 +199,7 @@
         }
 
         .hero-section {
-            padding: 3rem 2rem;
+            padding: 4rem 2rem;
             background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             color: white;
             margin: 0 -2rem 3rem -2rem;
@@ -202,6 +211,7 @@
             margin-left: -50vw;
             margin-right: -50vw;
             text-align: center;
+            margin-top: -130px;
         }
 
         .hero-section h1 {
@@ -215,7 +225,16 @@
             font-weight: 500;
             opacity: 0.9;
             max-width: 600px;
+            margin: 0 auto 1rem auto;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.85;
+            max-width: 700px;
             margin: 0 auto;
+            line-height: 1.6;
         }
 
         /* Filter Pills Section */
@@ -686,19 +705,19 @@
         /* Cards Grid */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
             margin: 2rem 0;
         }
 
         .card-item {
             background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             cursor: pointer;
             transition: all 0.3s ease-in-out;
-            border: 2px solid transparent;
+            border: 1px solid #e5e7eb;
             position: relative;
             overflow: hidden;
             text-decoration: none;
@@ -706,6 +725,7 @@
             display: block;
             opacity: 1;
             transform: scale(1);
+            text-align: center;
         }
 
         .card-item::before {
@@ -731,89 +751,134 @@
 
         .card-image {
             width: 100%;
-            max-width: 280px;
-            height: 180px;
+            max-width: 200px;
+            height: 140px;
             object-fit: contain;
-            margin-bottom: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            box-shadow: none;
+            border: none;
             transition: transform 0.3s ease;
         }
 
         .card-item:hover .card-image {
-            transform: scale(1.05);
+            transform: scale(1.02);
         }
 
         .card-image-fallback {
             width: 100%;
-            max-width: 280px;
-            height: 180px;
+            max-width: 240px;
+            height: 140px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            box-shadow: none;
+            border: none;
         }
 
         .card-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            height: 40px;
+            flex-shrink: 0;
         }
 
         .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: #1e293b;
             margin: 0;
+            line-height: 1.3;
+            text-align: center;
         }
 
-        .card-badge {
-            background: #fef3c7;
-            color: #92400e;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
+        .card-meta-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            height: 32px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .meta-chip {
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .card-earning-rates {
+            color: #374151;
+            margin-bottom: 0.5rem;
             font-size: 0.8rem;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        .card-perks {
+            color: #6b7280;
+            font-size: 0.75rem;
+            line-height: 1.3;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+
+
+        .card-line-label {
             font-weight: 600;
+            color: #374151;
+            margin-right: 0.5rem;
+        }
+
+        .card-line-content {
+            color: #64748b;
+        }
+
+        .card-advice {
+            background: #f8fafc;
+            border-left: 3px solid #059669;
+            padding: 1rem;
+            margin-top: 0.75rem;
+            border-radius: 0 8px 8px 0;
+            text-align: center;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .card-advice-label {
+            font-weight: 600;
+            color: #059669;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .card-fee {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #dc2626;
-            margin-bottom: 1rem;
-        }
-
-        .card-features {
-            color: #64748b;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-features ul {
-            margin: 0;
-            padding-left: 1.2rem;
-            list-style: none;
-        }
-
-        .card-features li {
             margin-bottom: 0.5rem;
-            position: relative;
         }
 
-        .card-features li::before {
-            content: "✓";
-            color: #059669;
-            font-weight: bold;
-            position: absolute;
-            left: -1.2rem;
+        .card-advice-text {
+            color: #475569;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            font-style: italic;
+            text-align: center;
+            max-width: 100%;
         }
 
 
@@ -845,7 +910,7 @@
             }
 
             .cards-grid {
-                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
         }
 
@@ -870,7 +935,7 @@
             }
 
             .hero-section {
-                margin: 0 -1rem 3rem -1rem;
+                margin: -125px -1rem 3rem -1rem;
                 padding: 2rem 1rem;
                 width: 100vw;
                 position: relative;
@@ -917,14 +982,14 @@
             }
 
             .card-image {
-                max-width: 240px;
-                height: 150px;
+                max-width: 200px;
+                height: 120px;
             }
 
-                    .card-image-fallback {
-            max-width: 240px;
-            height: 150px;
-        }
+            .card-image-fallback {
+                max-width: 200px;
+                height: 120px;
+            }
 
 
 
@@ -965,7 +1030,8 @@
         <!-- Hero Section -->
         <div class="hero-section">
             <h1>Credit Cards</h1>
-            <p class="hero-subtitle">Find the perfect credit card for your lifestyle and spending habits</p>
+            <p class="hero-subtitle">Use the filters to see what's important to you and discover which cards actually fit your priorities</p>
+            <p class="hero-description">Only you know what matters most. Whether it's lounge access, no foreign fees, or maximizing travel rewards, filter for what you'll actually use and find cards that work for your lifestyle.</p>
         </div>
 
         <!-- Filter Pills Section -->
@@ -1035,15 +1101,11 @@
                     </button>
                     <div class="pill-dropdown" id="perks-dropdown">
                         <div class="dropdown-content">
-                            <label><input type="checkbox" name="perks" value="lounge-access" onchange="autoApplyFilters()"> Lounge Access</label>
-                            <label><input type="checkbox" name="perks" value="tsa-precheck" onchange="autoApplyFilters()"> TSA Pre/Global Entry/CLEAR Credit</label>
-                            <label><input type="checkbox" name="perks" value="free-checked-bags" onchange="autoApplyFilters()"> Free Checked Bags</label>
-                            <label><input type="checkbox" name="perks" value="companion-benefit" onchange="autoApplyFilters()"> Companion Benefit</label>
-                            <label><input type="checkbox" name="perks" value="free-night-certificate" onchange="autoApplyFilters()"> Free Night Certificate</label>
-                            <label><input type="checkbox" name="perks" value="travel-dining-credits" onchange="autoApplyFilters()"> Travel/Dining/Portal Credits</label>
-                            <label><input type="checkbox" name="perks" value="elite-status-boosts" onchange="autoApplyFilters()"> Elite/Status Boosts</label>
-                            <label><input type="checkbox" name="perks" value="portal-extras" onchange="autoApplyFilters()"> Portal Extras</label>
-                            <label><input type="checkbox" name="perks" value="authorized-user-perks" onchange="autoApplyFilters()"> Authorized User Perks</label>
+                                    <label><input type="checkbox" name="perks" value="lounge-access" onchange="autoApplyFilters()"> Lounge Access</label>
+        <label><input type="checkbox" name="perks" value="tsa-precheck" onchange="autoApplyFilters()"> TSA Pre/Global Entry</label>
+        <label><input type="checkbox" name="perks" value="clear" onchange="autoApplyFilters()"> CLEAR</label>
+        <label><input type="checkbox" name="perks" value="no-foreign-fees" onchange="autoApplyFilters()"> No Foreign Transaction Fees</label>
+        <label><input type="checkbox" name="perks" value="metal-card" onchange="autoApplyFilters()"> Metal Card</label>
                         </div>
                         <div class="dropdown-footer">
                             <button class="reset-btn" onclick="resetFilter('perks')">Reset</button>
@@ -1180,15 +1242,11 @@
                             <span class="mobile-arrow">▼</span>
                         </div>
                         <div class="mobile-filter-options" id="mobile-perks-options">
-                            <label><input type="checkbox" name="mobile-perks" value="lounge-access" onchange="autoApplyMobileFilters()"> Lounge Access</label>
-                            <label><input type="checkbox" name="mobile-perks" value="tsa-precheck" onchange="autoApplyMobileFilters()"> TSA Pre/Global Entry/CLEAR Credit</label>
-                            <label><input type="checkbox" name="mobile-perks" value="free-checked-bags" onchange="autoApplyMobileFilters()"> Free Checked Bags</label>
-                            <label><input type="checkbox" name="mobile-perks" value="companion-benefit" onchange="autoApplyMobileFilters()"> Companion Benefit</label>
-                            <label><input type="checkbox" name="mobile-perks" value="free-night-certificate" onchange="autoApplyMobileFilters()"> Free Night Certificate</label>
-                            <label><input type="checkbox" name="mobile-perks" value="travel-dining-credits" onchange="autoApplyMobileFilters()"> Travel/Dining/Portal Credits</label>
-                            <label><input type="checkbox" name="mobile-perks" value="elite-status-boosts" onchange="autoApplyMobileFilters()"> Elite/Status Boosts</label>
-                            <label><input type="checkbox" name="mobile-perks" value="portal-extras" onchange="autoApplyMobileFilters()"> Portal Extras</label>
-                            <label><input type="checkbox" name="mobile-perks" value="authorized-user-perks" onchange="autoApplyMobileFilters()"> Authorized User Perks</label>
+                                    <label><input type="checkbox" name="mobile-perks" value="lounge-access" onchange="autoApplyMobileFilters()"> Lounge Access</label>
+        <label><input type="checkbox" name="mobile-perks" value="tsa-precheck" onchange="autoApplyMobileFilters()"> TSA Pre/Global Entry</label>
+        <label><input type="checkbox" name="mobile-perks" value="clear" onchange="autoApplyMobileFilters()"> CLEAR</label>
+        <label><input type="checkbox" name="mobile-perks" value="no-foreign-fees" onchange="autoApplyMobileFilters()"> No Foreign Transaction Fees</label>
+        <label><input type="checkbox" name="mobile-perks" value="metal-card" onchange="autoApplyMobileFilters()"> Metal Card</label>
                         </div>
                     </div>
 
@@ -1376,7 +1434,10 @@
                         bankType: "bank",
                         rewards: "miles",
                         image: "images/venture-x.png",
-                        features: ["2x miles on everything", "Multiple travel credits", "Priority Pass lounge access", "TSA PreCheck/Global Entry credit"],
+                        welcomeBonus: "75k miles",
+                        features: ["2x miles on everything", "3x travel & dining", "Priority Pass lounges", "TSA PreCheck credit"],
+                        perks: ["Lounge Access", "TSA Pre/Global Entry"],
+                        protections: ["Rental car CDW", "Trip delay"],
                         featureCategories: ["lounge-access", "tsa-precheck", "global-entry"],
                         url: "card-pages/venture-x.html"
                     },
@@ -1388,7 +1449,10 @@
                         bankType: "bank",
                         rewards: "points",
                         image: "images/sapphire-reserve.jpg",
-                        features: ["3x points on travel and dining", "$300 annual travel credit", "Priority Pass lounge access", "1.5x point value through Chase portal"],
+                        welcomeBonus: "60k points",
+                        features: ["3x points on travel & dining", "1x everything else", "Priority Pass lounges", "TSA PreCheck credit"],
+                        perks: ["Lounge Access", "TSA Pre/Global Entry"],
+                        protections: ["Rental car CDW", "Trip delay", "Baggage delay"],
                         featureCategories: ["lounge-access", "travel-insurance"],
                         url: "card-pages/sapphire-reserve.html"
                     },
@@ -1400,9 +1464,42 @@
                         bankType: "bank",
                         rewards: "points",
                         image: "images/amex-platinum.jpg",
-                        features: ["5x points on flights and hotels", "Multiple airline and hotel credits", "Centurion and Priority Pass lounges", "Elite status benefits"],
+                        welcomeBonus: "80k points",
+                        features: ["5x flights & hotels", "1x everything else", "Centurion lounges", "Elite status benefits"],
+                        perks: ["Lounge Access", "CLEAR"],
+                        protections: ["Rental car CDW", "Trip delay", "Purchase protection"],
                         featureCategories: ["lounge-access", "travel-insurance", "rental-car-insurance"],
                         url: "card-pages/amex-platinum.html"
+                    },
+                    {
+                        id: 4,
+                        name: "Chase Freedom Unlimited",
+                        type: "cashback",
+                        annualFee: 0,
+                        bankType: "bank",
+                        rewards: "cashback",
+                        image: "images/venture-x.png", // Using placeholder image
+                        welcomeBonus: "20k points",
+                        features: ["1.5x on everything", "3x on dining & drugstores", "5x on travel via Chase", "No foreign fees"],
+                        perks: ["No foreign fees"],
+                        protections: ["Purchase protection", "Extended warranty"],
+                        featureCategories: ["no-foreign-transaction-fees"],
+                        url: "#"
+                    },
+                    {
+                        id: 5,
+                        name: "Bilt Mastercard",
+                        type: "hybrid",
+                        annualFee: 0,
+                        bankType: "fintech",
+                        rewards: "points",
+                        image: "images/venture-x.png", // Using placeholder image
+                        welcomeBonus: "5x on rent",
+                        features: ["1x on everything", "2x on dining", "3x on dining", "Rent day bonuses"],
+                        perks: ["No foreign fees"],
+                        protections: ["Cell protection", "Purchase protection"],
+                        featureCategories: ["no-foreign-transaction-fees"],
+                        url: "#"
                     }
                 ];
             }
@@ -1482,13 +1579,61 @@
             }
         }
 
+        function generatePracticalAdvice(card) {
+            // Generate practical advice based on card characteristics
+            if (card.annualFee === 0) {
+                if (card.type === 'cashback') {
+                    return "Perfect starter card with no risk. Use for everyday spending and build credit history.";
+                } else if (card.type === 'hybrid') {
+                    return "Great for renters! Pay rent with this card to earn points on your biggest monthly expense.";
+                } else {
+                    return "No annual fee means this card pays for itself. Great for building credit and earning rewards.";
+                }
+            } else if (card.annualFee <= 95) {
+                if (card.type === 'travel') {
+                    return "Low annual fee for solid travel benefits. Make sure you'll use the credits to offset the cost.";
+                } else {
+                    return "Modest annual fee for enhanced rewards. Calculate if the extra earning rates justify the cost.";
+                }
+            } else if (card.annualFee <= 250) {
+                if (card.name.includes('Venture X')) {
+                    return "At $395/year, this is premium travel at a discount. The $300 travel credit + 10k anniversary miles make it worth it if you travel 2+ times per year.";
+                } else {
+                    return "Premium card with significant annual fee. Only worth it if you travel frequently and will use all the credits and benefits.";
+                }
+            } else {
+                if (card.name.includes('Platinum')) {
+                    return "The $695 fee is steep, but the credits add up quickly. Only get this if you'll use airline credits, hotel credits, and lounge access regularly.";
+                } else if (card.name.includes('Reserve')) {
+                    return "At $795/year, this is Chase's premium offering. The $300 travel credit helps, but you need to travel frequently to justify this cost.";
+                } else {
+                    return "High annual fee card. Carefully calculate if the benefits outweigh the cost for your specific spending patterns.";
+                }
+            }
+        }
+
         function createCardElement(card) {
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card-item';
             cardDiv.onclick = () => window.location.href = card.url;
 
-            const feeText = card.annualFee === 0 ? 'No Annual Fee' : `$${card.annualFee} Annual Fee`;
-            const badgeText = card.annualFee === 0 ? 'No Fee' : 'Premium';
+            // Format annual fee text (not red, not big)
+            const feeText = card.annualFee === 0 ? 'No AF' : `$${card.annualFee} AF`;
+
+            // Format welcome bonus (if available)
+            const welcomeBonus = card.welcomeBonus || 'None';
+
+            // Format earning rates (condensed)
+            const earningRates = card.features ? card.features.slice(0, 2).join(' • ') : '';
+
+            // Format perks using dedicated perks array
+            const perks = card.perks ? card.perks.join(' • ') : '';
+
+            // Format protections using dedicated protections array
+            const protections = card.protections ? card.protections.join(' • ') : '';
+
+            // Generate practical advice based on card type and features
+            const advice = generatePracticalAdvice(card);
 
             cardDiv.innerHTML = `
                 <img src="${card.image}" alt="${card.name}" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -1496,18 +1641,21 @@
                 
                 <div class="card-header">
                     <h3 class="card-title">${card.name}</h3>
-                    <span class="card-badge">${badgeText}</span>
                 </div>
                 
-                <div class="card-fee">${feeText}</div>
-                
-                <div class="card-features">
-                    <ul>
-                        ${card.features.map(feature => `<li>${feature}</li>`).join('')}
-                    </ul>
+                <div class="card-meta-row">
+                    <span class="meta-chip">${feeText}</span>
+                    <span class="meta-chip">Welcome: ${welcomeBonus}</span>
                 </div>
                 
-
+                <div class="card-earning-rates">${earningRates || '1x on everything'}</div>
+                
+                ${perks ? `<div class="card-perks">${perks}</div>` : ''}
+                
+                <div class="card-advice">
+                    <div class="card-advice-label">Practical Advice</div>
+                    <div class="card-advice-text">${advice}</div>
+                </div>
             `;
 
             return cardDiv;
@@ -1668,14 +1816,9 @@
                 },
                 'perks': {
                     'lounge-access': 'Lounge Access',
-                    'tsa-precheck': 'TSA Pre/Global Entry/CLEAR Credit',
-                    'free-checked-bags': 'Free Checked Bags',
-                    'companion-benefit': 'Companion Benefit',
-                    'free-night-certificate': 'Free Night Certificate',
-                    'travel-dining-credits': 'Travel/Dining/Portal Credits',
-                    'elite-status-boosts': 'Elite/Status Boosts',
-                    'portal-extras': 'Portal Extras',
-                    'authorized-user-perks': 'Authorized User Perks'
+                    'tsa-precheck': 'TSA Pre/Global Entry',
+                    'clear': 'CLEAR',
+                    'no-foreign-fees': 'No Foreign Transaction Fees'
                 },
                 'protections': {
                     'cell-phone-protection': 'Cell Phone Protection',
@@ -1898,6 +2041,7 @@
             updateActiveFilterChips();
             updateActiveFilterCount();
             updateMobileCounts();
+            updateURLWithFilters();
             
             // Force reset mobile pills multiple times to ensure they're cleared
             forceResetMobilePills();
@@ -1945,6 +2089,7 @@
             applyNewFilters();
             updateActiveFilterChips();
             updateActiveFilterCount();
+            updateURLWithFilters();
         }
 
         // Auto-apply filters function for desktop
@@ -2142,11 +2287,7 @@
             }
         });
 
-        // Mobile menu toggle (placeholder function)
-        function toggleMobileMenu() {
-            // This would implement mobile menu functionality
-            console.log('Mobile menu toggle clicked');
-        }
+        // Mobile menu functionality is handled by the dynamic header
     </script>
     <script src="js/scripts.js"></script>
 </body>

@@ -107,6 +107,81 @@ function initializeLoadedContent() {
     }
 }
 
+// Collapsible section functionality
+function toggleSection(sectionId) {
+    const sectionContent = document.getElementById(sectionId);
+    const sectionHeader = sectionContent.previousElementSibling;
+    const toggleIcon = sectionHeader.querySelector('.toggle-icon');
+    
+    if (sectionContent.classList.contains('collapsed')) {
+        // Expand section
+        sectionContent.classList.remove('collapsed');
+        sectionHeader.classList.remove('collapsed');
+        toggleIcon.textContent = '−';
+    } else {
+        // Collapse section
+        sectionContent.classList.add('collapsed');
+        sectionHeader.classList.add('collapsed');
+        toggleIcon.textContent = '+';
+    }
+}
+
+// Initialize collapsible sections when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click event listeners to all section headers
+    const sectionHeaders = document.querySelectorAll('.section-header');
+    sectionHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const sectionId = this.nextElementSibling.id;
+            toggleSection(sectionId);
+        });
+    });
+}); 
+
+// Initialize calculator placeholders to show $0 when toggles are off
+function initializeCalculatorPlaceholders() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    
+    checkboxes.forEach(checkbox => {
+        const creditItem = checkbox.closest('.table-row');
+        const placeholder = creditItem.querySelector('.value-placeholder');
+        const valueInput = creditItem.querySelector('.value-input');
+        
+        if (placeholder && valueInput) {
+            if (!checkbox.checked) {
+                placeholder.style.display = 'block';
+                placeholder.textContent = '$0';
+                valueInput.classList.remove('active');
+            } else {
+                placeholder.style.display = 'none';
+                valueInput.classList.add('active');
+            }
+        }
+    });
+}
+
+// Toggle credit function - sets input to max value when toggled on
+function toggleCredit(checkbox) {
+    const creditItem = checkbox.closest('.table-row');
+    const inputField = creditItem.querySelector('input[type="number"]');
+    const valueInput = creditItem.querySelector('.value-input');
+    const placeholder = creditItem.querySelector('.value-placeholder');
+    const maxValue = parseInt(checkbox.getAttribute('data-max'));
+    
+    if (checkbox.checked) {
+        inputField.value = maxValue;
+        valueInput.classList.add('active');
+        placeholder.style.display = 'none';
+    } else {
+        inputField.value = 0;
+        valueInput.classList.remove('active');
+        placeholder.style.display = 'block';
+        placeholder.textContent = '$0';
+    }
+    
+    updateCalculation();
+}
+
 // Generic calculator functionality - each page should define its own annualFee variable
 function updateCalculation() {
     if (typeof annualFee === 'undefined') {
@@ -118,7 +193,12 @@ function updateCalculation() {
     
     let totalCredits = 0;
     checkboxes.forEach(checkbox => {
-        totalCredits += parseInt(checkbox.getAttribute('data-value'));
+        // Find the corresponding input field for this credit item
+        const creditItem = checkbox.closest('.table-row');
+        const inputField = creditItem.querySelector('input[type="number"]');
+        if (inputField) {
+            totalCredits += parseInt(inputField.value) || 0;
+        }
     });
 
     const effectiveFee = annualFee - totalCredits;

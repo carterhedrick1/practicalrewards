@@ -103,7 +103,7 @@
         display: none;
         width: 44px;
         height: 44px;
-        background: #059669;
+        background: transparent;
         border: none;
         cursor: pointer;
         border-radius: 8px;
@@ -122,7 +122,7 @@
     .hamburger span {
         width: 20px;
         height: 3px;
-        background: white;
+        background: #059669;
         border-radius: 2px;
         position: absolute;
         left: 0;
@@ -130,66 +130,62 @@
     }
 
     .hamburger span:nth-child(1) {
-        top: 3px;
+        top: 1px;
     }
 
     .hamburger span:nth-child(2) {
-        top: 8px;
+        top: 6px;
     }
 
     .hamburger span:nth-child(3) {
-        top: 13px;
+        top: 11px;
     }
 
     /* Mobile Menu - Beautiful Slide Out from Right */
     .mobile-menu {
-        display: none;
         position: fixed;
-        top: 0;
+        top: 70px;
         right: -320px;
         width: 320px;
-        height: 100vh;
+        height: calc(100vh - 70px);
         background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%);
         z-index: 99999;
         box-shadow: -4px 0 20px rgba(5, 150, 105, 0.15);
-        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         overflow-y: auto;
         border-left: 2px solid #10b981;
     }
 
     .mobile-menu.active {
-        display: block;
         right: 0;
     }
 
     /* Mobile Menu Overlay - Beautiful Darkening Effect */
     .mobile-menu-overlay {
-        display: none;
         position: fixed;
-        top: 0;
+        top: 70px;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: calc(100vh - 70px);
         background: rgba(4, 120, 87, 0.15);
         backdrop-filter: blur(4px);
         z-index: 99998;
         opacity: 0;
-        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        visibility: hidden;
+        transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     .mobile-menu-overlay.active {
-        display: block;
         opacity: 1;
+        visibility: visible;
     }
 
     .mobile-menu-header {
-        padding: 2rem 1.5rem 1.5rem 1.5rem;
-        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        color: #fafaf9;
+        padding: 0;
+        background: transparent;
         position: relative;
         margin-bottom: 0;
-        border-radius: 0 0 16px 0;
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        height: 0;
     }
 
     .mobile-menu-header h3 {
@@ -201,7 +197,7 @@
 
     .mobile-nav-links {
         list-style: none;
-        padding: 1rem 0;
+        padding: 1rem 0 1rem 0;
         margin: 0;
     }
 
@@ -253,13 +249,11 @@
 
     /* Close button */
     .mobile-menu-close {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        background: rgba(254, 243, 199, 0.2);
-        border: none;
+        position: relative;
+        background: rgba(5, 150, 105, 0.1);
+        border: 2px solid #059669;
         font-size: 1.5rem;
-        color: #fafaf9;
+        color: #059669;
         cursor: pointer;
         padding: 0.5rem;
         z-index: 1001;
@@ -273,7 +267,7 @@
     }
 
     .mobile-menu-close:hover {
-        background: rgba(254, 243, 199, 0.3);
+        background: rgba(5, 150, 105, 0.2);
         transform: scale(1.1);
     }
 
@@ -324,8 +318,6 @@
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobile-menu">
     <div class="mobile-menu-header">
-        <button class="mobile-menu-close" id="mobile-menu-close">&times;</button>
-        <h3>Menu</h3>
     </div>
     <ul class="mobile-nav-links">
         <li><a href="/index.html">Home</a></li>
@@ -338,90 +330,101 @@
 
 <script>
     // Bulletproof mobile menu - works every time
-    (function() {
-        'use strict';
+    function setupMobileMenu() {
+        console.log('setupMobileMenu called, checking for elements...');
         
-        function setupMobileMenu() {
-            console.log('Setting up mobile menu...');
-            
-            // Get elements
-            const toggle = document.getElementById('mobile-menu-toggle');
-            const menu = document.getElementById('mobile-menu');
-            const overlay = document.getElementById('mobile-menu-overlay');
-            const close = document.getElementById('mobile-menu-close');
-            
-            console.log('Found elements:', {
-                toggle: toggle ? 'YES' : 'NO',
-                menu: menu ? 'YES' : 'NO',
-                overlay: overlay ? 'YES' : 'NO',
-                close: close ? 'YES' : 'NO'
-            });
-            
-            // Check if we have all elements
-            if (!toggle || !menu || !overlay || !close) {
-                console.log('Missing elements, will retry...');
-                return false;
-            }
-            
-            // Open menu
-            function openMenu() {
-                console.log('OPENING MENU');
-                overlay.classList.add('active');
-                menu.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-            
-            // Close menu
-            function closeMenu() {
-                console.log('CLOSING MENU');
-                overlay.classList.remove('active');
-                menu.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            
-            // Add click handlers
+        // Get elements
+        const toggle = document.getElementById('mobile-menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('mobile-menu-overlay');
+        
+        console.log('Found elements:', {
+            toggle: toggle ? 'YES' : 'NO',
+            menu: menu ? 'YES' : 'NO',
+            overlay: overlay ? 'YES' : 'NO'
+        });
+        
+        // Check if we have all elements
+        if (!toggle || !menu || !overlay) {
+            console.log('Missing elements, will retry...');
+            console.log('toggle:', toggle);
+            console.log('menu:', menu);
+            console.log('overlay:', overlay);
+            return false;
+        }
+        
+        // Open menu
+        function openMenu() {
+            console.log('OPENING MENU');
+            overlay.classList.add('active');
+            menu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Close menu
+        function closeMenu() {
+            console.log('CLOSING MENU');
+            overlay.classList.remove('active');
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+                    // Add click handlers
             toggle.onclick = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 console.log('HAMBURGER CLICKED!');
-                openMenu();
+                if (menu.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
             };
             
-            close.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('CLOSE CLICKED!');
+            console.log('Click handler attached to toggle button');
+        
+        // Close on overlay click
+        overlay.onclick = function(e) {
+            if (e.target === overlay) {
+                console.log('Overlay clicked - closing menu');
                 closeMenu();
-            };
-            
-            // Close on overlay click
-            overlay.onclick = function(e) {
-                if (e.target === overlay) {
-                    console.log('Overlay clicked - closing menu');
-                    closeMenu();
-                }
-            };
-            
-            // Close on escape
-            document.onkeydown = function(e) {
-                if (e.key === 'Escape') {
-                    closeMenu();
-                }
-            };
-            
-            console.log('Mobile menu setup complete!');
-            return true;
-        }
+            }
+        };
         
-        // Try to setup immediately
-        if (!setupMobileMenu()) {
-            // Keep trying until it works
-            const interval = setInterval(function() {
-                if (setupMobileMenu()) {
-                    clearInterval(interval);
-                }
-            }, 100);
-        }
+        // Close on escape
+        document.onkeydown = function(e) {
+            if (e.key === 'Escape') {
+                closeMenu();
+            }
+        };
         
-    })();
+        console.log('Mobile menu setup complete!');
+        return true;
+    }
+    
+    // Try to setup immediately
+    console.log('Header loaded, attempting mobile menu setup...');
+    if (!setupMobileMenu()) {
+        console.log('Initial setup failed, retrying...');
+        // Keep trying until it works
+        const interval = setInterval(function() {
+            if (setupMobileMenu()) {
+                console.log('Mobile menu setup successful on retry');
+                clearInterval(interval);
+            }
+        }, 100);
+    }
+    
+    // Also try to setup when DOM is ready
+    if (document.readyState === 'loading') {
+        console.log('DOM still loading, adding DOMContentLoaded listener');
+        document.addEventListener('DOMContentLoaded', setupMobileMenu);
+    } else {
+        console.log('DOM already ready, calling setupMobileMenu directly');
+        setupMobileMenu();
+    }
+    
+    // Make function globally available for pages that need it
+    window.setupMobileMenu = setupMobileMenu;
+    console.log('setupMobileMenu function made globally available');
 </script>
