@@ -1043,15 +1043,17 @@ input:checked + .toggle-slider:before {
 }
 
 .calculator-content {
-    overflow: hidden;
+    overflow: visible; /* Changed from hidden to visible to ensure content shows */
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: 2000px;
+    max-height: none; /* Remove max-height constraint when expanded */
+    height: auto; /* Allow natural height expansion */
     opacity: 1;
     padding-bottom: 2rem;
 }
 
 .calculator-content.collapsed {
     max-height: 0;
+    overflow: hidden; /* Hide overflow when collapsed */
     opacity: 0;
     margin: 0;
     padding: 0;
@@ -1155,15 +1157,27 @@ input:checked + .toggle-slider:before {
 }
 
 /* PERKS AND PROTECTIONS SIDE-BY-SIDE LAYOUT */
+/* This layout ensures both Perks and Protections containers are always the same height */
 .perks-protections-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     margin: 2rem 0;
+    align-items: stretch; /* Ensures equal height */
 }
 
 .perks-protections-wrapper .recommendation-section {
     margin: 0;
+    height: 100%; /* Takes full height of grid cell */
+    display: flex;
+    flex-direction: column;
+}
+
+.perks-protections-wrapper .recommendation-content {
+    flex: 1; /* Takes remaining space */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 /* Mobile responsiveness for recommendation section */
@@ -1172,10 +1186,18 @@ input:checked + .toggle-slider:before {
         grid-template-columns: 1fr;
         gap: 1rem;
         margin: 0 0 1rem 0;
+        align-items: stretch; /* Maintain equal height behavior */
     }
     .recommendation-section {
         margin: 0;
         padding: 0;
+        height: auto; /* Allow natural height on mobile */
+        display: block; /* Reset flex behavior on mobile */
+    }
+    
+    .perks-protections-wrapper .recommendation-content {
+        height: auto; /* Allow natural height on mobile */
+        flex: none; /* Reset flex behavior on mobile */
     }
     
     .recommendation-header { display: none; }
@@ -2800,12 +2822,12 @@ input:checked + .toggle-slider:before {
         width: 100px !important;
         padding: 0.75rem !important;
         font-size: 1rem !important;
-        border: 2px solid #e2e8f0;
+        border: none !important;
         border-radius: 8px;
-        background: white !important;
+        background: transparent !important;
         font-weight: 600;
         color: #9ca3af;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        box-shadow: none !important;
         text-align: center;
         display: flex;
         align-items: center;

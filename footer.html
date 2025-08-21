@@ -80,19 +80,19 @@
             <div class="footer-section">
                 <h3>Resources</h3>
                 <ul>
-                    <li><a href="learning.html">Credit Card Basics</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                                            <li><a href="cards.html">Cards</a></li>
+                    <li><a href="/learning.html">Credit Card Basics</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                    <li><a href="/cards.html">Cards</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h3>Company</h3>
                 <ul>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="privacy.html">Privacy Policy</a></li>
-                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                    <li><a href="/privacy.html">Privacy Policy</a></li>
+                    <li><a href="/terms.html">Terms of Service</a></li>
                 </ul>
             </div>
         </div>
@@ -101,3 +101,40 @@
         </div>
     </div>
 </footer>
+
+<script>
+    // Function to fix footer navigation paths based on current directory level
+    function fixFooterPaths() {
+        console.log('Fixing footer paths...');
+        
+        // Determine if we're in a subdirectory
+        const currentPath = window.location.pathname;
+        const isInSubdirectory = currentPath.includes('/card-pages/');
+        const pathPrefix = isInSubdirectory ? '../' : '';
+        
+        console.log('Footer - Current path:', currentPath);
+        console.log('Footer - Is in subdirectory:', isInSubdirectory);
+        console.log('Footer - Path prefix:', pathPrefix);
+        
+        // Fix all footer links
+        const footerLinks = document.querySelectorAll('footer a[href^="/"]');
+        footerLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href.startsWith('/')) {
+                const newHref = pathPrefix + href.substring(1);
+                link.setAttribute('href', newHref);
+                console.log(`Fixed footer link: ${href} -> ${newHref}`);
+            }
+        });
+    }
+    
+    // Fix paths when footer loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fixFooterPaths);
+    } else {
+        fixFooterPaths();
+    }
+    
+    // Make function globally available
+    window.fixFooterPaths = fixFooterPaths;
+</script>

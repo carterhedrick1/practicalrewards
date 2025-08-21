@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCalculatorPlaceholders();
 });
 
-// Build an absolute path from site root so it works from any subdirectory
+// Build a relative path that works from the card-pages subdirectory
 function getRootPath(fileName) {
-    return window.location.origin + '/' + fileName;
+    return '../' + fileName;
 }
 
 function loadComponent(filename, placeholderId, fallbackId) {
@@ -94,7 +94,7 @@ function getFallbackContent(filename) {
             </style>
             <header style="background: rgba(250, 250, 249, 0.95); backdrop-filter: blur(12px); box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); position: sticky; top: 0; z-index: 1000; width: 100%; border-bottom: 1px solid #e7e5e4;">
                 <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 80px;">
-                    <a href="#" class="logo" style="font-size: 1.5rem; font-weight: 700; color: #059669; text-decoration: none;">Practical Rewards</a>
+                    <a href="../index.html" class="logo" style="font-size: 1.5rem; font-weight: 700; color: #059669; text-decoration: none;">Practical Rewards</a>
                     
                     <button class="mobile-menu-toggle" id="mobile-menu-toggle">
                         <div class="hamburger">
@@ -105,10 +105,11 @@ function getFallbackContent(filename) {
                     </button>
                     
                     <ul class="nav-links" style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
-                        <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Home</a></li>
-                        <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Learning</a></li>
-                        <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">Calculator</a></li>
-                        <li><a href="#" style="color: #57534e; text-decoration: none; font-weight: 500;">About</a></li>
+                        <li><a href="../index.html" style="color: #57534e; text-decoration: none; font-weight: 500;">Home</a></li>
+                        <li><a href="../learning.html" style="color: #57534e; text-decoration: none; font-weight: 500;">Learning</a></li>
+                        <li><a href="../cards.html" style="color: #57534e; text-decoration: none; font-weight: 500;">Cards</a></li>
+                        <li><a href="../about.html" style="color: #57534e; text-decoration: none; font-weight: 500;">About</a></li>
+                        <li><a href="../contact.html" style="color: #57534e; text-decoration: none; font-weight: 500; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 0.5rem 1rem; border-radius: 25px;">Contact</a></li>
                     </ul>
                 </nav>
             </header>
@@ -116,11 +117,11 @@ function getFallbackContent(filename) {
             <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
             <div class="mobile-menu" id="mobile-menu">
                 <ul class="mobile-nav-links">
-                    <li><a href="/index.html">Home</a></li>
-                    <li><a href="/learning.html">Learning</a></li>
-                    <li><a href="/cards.html">Cards</a></li>
-                    <li><a href="/about.html">About</a></li>
-                    <li><a href="/contact.html">Contact</a></li>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../learning.html">Learning</a></li>
+                    <li><a href="../cards.html">Cards</a></li>
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
                 </ul>
             </div>
             <script>
@@ -245,6 +246,17 @@ function initializeLoadedContent() {
         } else {
             console.log('initializeLoadedContent: setupMobileMenu function not found, using local setup...');
             setupLocalMobileMenu();
+        }
+
+        // Fix navigation paths for subdirectory compatibility
+        if (typeof window.fixNavigationPaths === 'function') {
+            console.log('initializeLoadedContent: Fixing navigation paths...');
+            window.fixNavigationPaths();
+        }
+        
+        if (typeof window.fixFooterPaths === 'function') {
+            console.log('initializeLoadedContent: Fixing footer paths...');
+            window.fixFooterPaths();
         }
 
         // As a final safety, bind basic handlers if nothing attached yet

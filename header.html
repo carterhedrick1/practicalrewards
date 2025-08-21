@@ -402,6 +402,31 @@
         return true;
     }
     
+    // Function to fix navigation paths based on current directory level
+    function fixNavigationPaths() {
+        console.log('Fixing navigation paths...');
+        
+        // Determine if we're in a subdirectory
+        const currentPath = window.location.pathname;
+        const isInSubdirectory = currentPath.includes('/card-pages/');
+        const pathPrefix = isInSubdirectory ? '../' : '';
+        
+        console.log('Current path:', currentPath);
+        console.log('Is in subdirectory:', isInSubdirectory);
+        console.log('Path prefix:', pathPrefix);
+        
+        // Fix all navigation links
+        const allLinks = document.querySelectorAll('header a[href^="/"], .mobile-menu a[href^="/"]');
+        allLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href.startsWith('/')) {
+                const newHref = pathPrefix + href.substring(1);
+                link.setAttribute('href', newHref);
+                console.log(`Fixed link: ${href} -> ${newHref}`);
+            }
+        });
+    }
+    
     // Try to setup immediately
     console.log('Header loaded, attempting mobile menu setup...');
     if (!setupMobileMenu()) {
@@ -418,13 +443,18 @@
     // Also try to setup when DOM is ready
     if (document.readyState === 'loading') {
         console.log('DOM still loading, adding DOMContentLoaded listener');
-        document.addEventListener('DOMContentLoaded', setupMobileMenu);
+        document.addEventListener('DOMContentLoaded', function() {
+            setupMobileMenu();
+            fixNavigationPaths();
+        });
     } else {
         console.log('DOM already ready, calling setupMobileMenu directly');
         setupMobileMenu();
+        fixNavigationPaths();
     }
     
-    // Make function globally available for pages that need it
+    // Make functions globally available for pages that need them
     window.setupMobileMenu = setupMobileMenu;
-    console.log('setupMobileMenu function made globally available');
+    window.fixNavigationPaths = fixNavigationPaths;
+    console.log('setupMobileMenu and fixNavigationPaths functions made globally available');
 </script>

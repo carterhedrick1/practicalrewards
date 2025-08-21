@@ -4,8 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CARD NAME - Cards for Normals</title>
-    <link rel="stylesheet" href="../../css/styles.css">
-    <link rel="stylesheet" href="./card-styles.css">
+    
+    <!-- Preload critical resources for better performance -->
+    <link rel="preload" href="../../css/styles.css" as="style">
+    <link rel="preload" href="./card-styles.css" as="style">
+    <link rel="preload" href="./card-scripts.js" as="script">
+    
+    <!-- CSS with cache-busting version -->
+    <link rel="stylesheet" href="../../css/styles.css?v=1.0">
+    <link rel="stylesheet" href="./card-styles.css?v=1.0">
+    
+    <!-- Meta tags for better SEO and social sharing -->
+    <meta name="description" content="CARD NAME credit card review - annual fee, benefits, and practical recommendations for normal people.">
+    <meta name="keywords" content="credit card, CARD NAME, annual fee, benefits, review">
+    <meta property="og:title" content="CARD NAME - Cards for Normals">
+    <meta property="og:description" content="CARD NAME credit card review with practical recommendations.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cardsfornormals.com/card-pages/CARD-FILENAME.html">
+    <meta property="og:image" content="https://cardsfornormals.com/images/CARD-IMAGE.jpg">
+    
+    <!-- Structured data for search engines -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Review",
+        "itemReviewed": {
+            "@type": "Product",
+            "name": "CARD NAME",
+            "category": "Credit Card"
+        },
+        "reviewBody": "Practical review of CARD NAME credit card with annual fee analysis and recommendations.",
+        "author": {
+            "@type": "Organization",
+            "name": "Cards for Normals"
+        }
+    }
+    </script>
 </head>
 <body>
     <!-- Header placeholder -->
@@ -19,141 +53,181 @@
                 <div class="hero-text">
                     <h1>CARD NAME</h1>
                     <p class="hero-subtitle">CARD SUBTITLE</p>
-                    <p class="hero-description">Card description goes here. Explain what makes this card unique and who it's best for.</p>
-                </div>
-                <div class="hero-card">
-                    <img src="../../images/CARD-IMAGE.jpg" alt="CARD NAME" class="hero-card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="hero-card-fallback" style="display: none;">
-                        <div class="card-preview">
-                            <div class="card-chip"></div>
-                            <div class="card-logo">BANK NAME</div>
-                            <div class="card-name">CARD NAME</div>
-                        </div>
-                    </div>
-                    <div class="card-details">
-                        <div class="annual-fee-badge">$XXX Annual Fee</div>
-                        <div class="card-highlights">
-                            <div class="highlight-item">Key benefit 1</div>
-                            <div class="highlight-item">Key benefit 2</div>
-                            <div class="highlight-item">Key benefit 3</div>
+                    <div class="hero-card-container">
+                        <div class="hero-card">
+                            <img src="../../images/CARD-IMAGE.jpg" alt="CARD NAME" class="hero-card-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hero-card-fallback" style="display: none;">
+                                <div class="card-preview">
+                                    <div class="card-chip"></div>
+                                    <div class="card-logo">BANK NAME</div>
+                                    <div class="card-name">CARD NAME</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- FEATURES SECTION - Standardized format for all cards -->
-        <div class="features-section">
-            <div class="features-grid">
-                <!-- EARNING RATE SECTION -->
-                <div class="feature-card earning-rates">
-                    <div class="feature-header">
-                        <h3>💳 Earning Rates</h3>
-                        <p class="feature-subtitle">How you earn points/miles on purchases</p>
-                    </div>
-                    <div class="earning-categories">
-                        <div class="earning-category">
-                            <div class="category-name">Travel & Dining</div>
-                            <div class="earning-rate">5x points</div>
+                <div class="hero-info">
+                    <div class="info-section">
+                        <div class="info-row">
+                            <span class="info-label">Annual Fee</span>
+                            <span class="info-value">$XXX</span>
                         </div>
-                        <div class="earning-category">
-                            <div class="category-name">Gas & Groceries</div>
-                            <div class="earning-rate">3x points</div>
+                        <div class="info-row">
+                            <span class="info-label">Earning Rate</span>
+                            <span class="info-value">Xx points on category</span>
                         </div>
-                        <div class="earning-category">
-                            <div class="category-name">All Other Purchases</div>
-                            <div class="earning-rate">1x points</div>
+                        <div class="info-row">
+                            <span class="info-label">Welcome Bonus</span>
+                            <span class="info-value">XX,XXX points after $X,XXX spend in X months</span>
                         </div>
-                    </div>
-                </div>
-
-                <!-- PERKS SECTION -->
-                <div class="feature-card perks">
-                    <div class="feature-header">
-                        <h3>🎁 Perks & Benefits</h3>
-                        <p class="feature-subtitle">Luxury benefits and exclusive access</p>
-                    </div>
-                    <div class="perks-list">
-                        <div class="perk-item">
-                            <span class="perk-icon">✈️</span>
-                            <span class="perk-text">Airport lounge access</span>
-                        </div>
-                        <div class="perk-item">
-                            <span class="perk-icon">🏨</span>
-                            <span class="perk-text">Hotel elite status</span>
-                        </div>
-                        <div class="perk-item">
-                            <span class="perk-icon">🚗</span>
-                            <span class="perk-text">Car rental insurance</span>
-                        </div>
-                        <div class="perk-item">
-                            <span class="perk-icon">💳</span>
-                            <span class="perk-text">Purchase protection</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PROTECTIONS SECTION -->
-                <div class="feature-card protections">
-                    <div class="feature-header">
-                        <h3>🛡️ Protections</h3>
-                        <p class="feature-subtitle">Insurance and security features</p>
-                    </div>
-                    <div class="protections-list">
-                        <div class="protection-item">
-                            <span class="protection-icon">🛡️</span>
-                            <span class="protection-text">Extended warranty</span>
-                        </div>
-                        <div class="protection-item">
-                            <span class="protection-icon">🚫</span>
-                            <span class="protection-text">Fraud protection</span>
-                        </div>
-                        <div class="protection-item">
-                            <span class="protection-icon">📱</span>
-                            <span class="protection-text">Mobile app security</span>
-                        </div>
-                        <div class="protection-item">
-                            <span class="protection-icon">🔒</span>
-                            <span class="protection-text">Zero liability</span>
+                        <div class="info-row">
+                            <span class="info-label">Card Material</span>
+                            <span class="info-value">Metal card with premium finish</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="callout-box">
-            <h4>💡 How This Works</h4>
-            <p>Select the credits you'll actually use to see your real annual cost. Only count credits for services you'd pay for anyway.</p>
+        <!-- PRACTICAL RECOMMENDATION SECTION -->
+        <div class="recommendation-section">
+            <div class="recommendation-content">
+                <h2>Practical Recommendation</h2>
+                <div class="recommendation-text">
+                    <p>The <strong>CARD NAME</strong> is best suited for [target audience]. With a $XXX annual fee, this card makes financial sense if you:</p>
+                    <ul class="recommendation-list">
+                        <li><strong>Criteria 1</strong> - explanation</li>
+                        <li><strong>Criteria 2</strong> - explanation</li>
+                        <li><strong>Criteria 3</strong> - explanation</li>
+                        <li><strong>Criteria 4</strong> - explanation</li>
+                    </ul>
+                </div>
+                </div>
         </div>
 
-        <div class="card-section">
-            <h2>Select the credits you'll use:</h2>
+        <!-- PERKS AND PROTECTIONS WRAPPER -->
+        <div class="perks-protections-wrapper">
+            <!-- PERKS SECTION -->
+            <div class="recommendation-section perks-section">
+                <div class="recommendation-content">
+                    <h2>Perks</h2>
+                    <div class="recommendation-text">
+                        <p>Key benefits and access with the CARD NAME:</p>
+                        <ul class="recommendation-list">
+                            <li>Perk 1</li>
+                            <li>Perk 2</li>
+                            <li>Perk 3</li>
+                            <li>Perk 4</li>
+                            <li>Perk 5</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROTECTIONS SECTION -->
+            <div class="recommendation-section protections-section">
+                <div class="recommendation-content">
+                    <h2>Protections</h2>
+                    <div class="recommendation-text">
+                        <p>Insurance and security features included:</p>
+                        <ul class="recommendation-list">
+                            <li>Protection 1</li>
+                            <li>Protection 2</li>
+                            <li>Protection 3</li>
+                            <li>Protection 4</li>
+                            <li>Protection 5</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EAA CALCULATOR SECTION -->
+        <div class="calculator-section collapsible-section">
+            <div class="section-container">
+                <div class="calculator-header" id="calculator-header" role="button" tabindex="0" aria-expanded="true" aria-controls="calculator-content" onclick="toggleCalculatorSection()" onkeydown="handleKeyToggle(event)">
+                    <div class="section-header-content">
+                        <h2>Effective Annual Fee Calculator</h2>
+                        <p>Calculate your real cost after credits. Select the credits you'll actually use to see your real annual cost. Only count credits for services you'd pay for anyway.</p>
+
+                    </div>
+                    <div class="section-toggle-icon" aria-hidden="true">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
             
-            <!-- Copy this credit-item structure for each credit -->
-            <div class="credit-item">
-                <div class="credit-info">
-                    <div class="credit-name">Credit Name</div>
-                    <div class="credit-description">Description of the credit and any important notes about usage.</div>
+                <div class="calculator-content" id="calculator-content" role="region" aria-labelledby="calculator-header">
+                <div class="calculator-table">
+                    <div class="table-header">
+                        <div class="header-credit">Credit</div>
+                        <div class="header-toggle">Include</div>
+                        <div class="header-value">Your Value</div>
+                    </div>
+                    
+                    <!-- Copy this table-row structure for each credit -->
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                Credit Name
+                            </div>
+                            <div class="credit-description">Description of the credit and any important notes about usage.</div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="XXX">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="XXX" onchange="syncInputValues(this)" data-max="XXX">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="XXX">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="XXX" onchange="syncInputValues(this)" data-max="XXX">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add more table-row elements for additional credits -->
+
                 </div>
-                <div class="credit-value">$XXX</div>
-                <label class="credit-toggle">
-                    <input type="checkbox" onchange="updateCalculation()" data-value="XXX">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
 
-            <!-- Add more credit items as needed -->
+                <div class="calculator-results">
+                    <div class="result-row">
+                        <span class="result-label">Total Credits:</span>
+                        <span class="result-value">$<span id="total-credits">0</span></span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Effective Annual Fee:</span>
+                        <span class="result-value" id="effective-fee">$XXX</span>
+                    </div>
 
-            <div class="results-section">
-                <div class="total-credits">Total Credits Used: $<span id="total-credits">0</span></div>
-                <div class="effective-fee positive" id="effective-fee">$XXX</div>
-                <div class="fee-interpretation" id="fee-interpretation">Select credits above to see your effective annual fee</div>
+                </div>
+                </div>
             </div>
         </div>
 
         <div class="navigation-buttons">
-                            <a href="../../cards.html" class="nav-btn secondary">← Back to Cards</a>
-            <a href="other-card-page.html" class="nav-btn primary">Compare with Other Card →</a>
+            <a href="../../cards.html" class="nav-btn secondary">Back to All Cards</a>
+            <a href="#" class="nav-btn primary">Apply for CARD NAME</a> <!-- TODO: Update href with actual application link -->
         </div>
     </div>
 
@@ -162,10 +236,41 @@
         <div class="loading-placeholder">Loading footer...</div>
     </div>
 
-    <script src="./card-scripts.js"></script>
+    <!-- JavaScript with cache-busting version -->
+    <script src="./card-scripts.js?v=1.0"></script>
     <script>
         // Page-specific configuration - CHANGE THIS!
         const annualFee = XXX; // Replace with actual annual fee
+        
+        // Performance monitoring (remove in production)
+        const pageLoadTime = performance.now();
+        console.log(`CARD NAME page load time: ${pageLoadTime}ms`);
+        
+        // Debug mobile menu after page loads (remove in production)
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                console.log('=== CARD NAME DEBUG ===');
+                const toggle = document.getElementById('mobile-menu-toggle');
+                const menu = document.getElementById('mobile-menu');
+                const overlay = document.getElementById('mobile-menu-overlay');
+                
+                console.log('Mobile menu elements found:', {
+                    toggle: toggle ? 'YES' : 'NO',
+                    menu: menu ? 'YES' : 'NO',
+                    overlay: overlay ? 'YES' : 'NO'
+                });
+                
+                if (toggle) {
+                    console.log('Toggle button found, testing click...');
+                    toggle.addEventListener('click', function() {
+                        console.log('CARD NAME: Toggle button clicked!');
+                    });
+                }
+                
+                console.log('setupMobileMenu function available:', typeof window.setupMobileMenu);
+                console.log('Header placeholder content:', document.getElementById('header-placeholder').innerHTML.substring(0, 200));
+            }, 3000);
+        });
     </script>
 </body>
 </html>
@@ -176,10 +281,13 @@ TEMPLATE USAGE INSTRUCTIONS:
 1. Copy this file and rename it to your-card-name.html
 2. Update the title, card name, subtitle, and description
 3. Update the image path and fallback card details
-4. Add your credit items using the credit-item structure
-5. Update the annual fee variable at the bottom
-6. Update navigation links to point to other relevant card pages
-7. All styling and functionality is automatically included!
+4. Update the hero info section with card-specific details
+5. Update the practical recommendation section
+6. Update the perks and protections sections
+7. Add your credit items using the table-row structure
+8. Update the annual fee variable at the bottom
+9. Update the apply button link (currently set to "#")
+10. All styling and functionality is automatically included!
 
 The shared files handle:
 - All CSS styling (card-styles.css)
@@ -189,4 +297,27 @@ The shared files handle:
 - Navigation and interactions
 
 To add new cards, just copy this template and fill in the card-specific details!
+
+CREDIT ITEM STRUCTURE:
+Each credit should follow this exact format:
+- credit-name: Short, clear name
+- credit-description: Detailed explanation with usage notes
+- data-max: Maximum value of the credit
+- Update both desktop and mobile controls
+- Include realistic usage notes in descriptions
+
+HERO INFO SECTION:
+Include these 4 key details:
+- Annual Fee
+- Earning Rate (main category)
+- Welcome Bonus
+- Card Material
+
+PERFORMANCE OPTIMIZATIONS:
+- Preloaded critical resources
+- Lazy loading for images
+- Cache-busting versions for CSS/JS
+- Structured data for SEO
+- Meta tags for social sharing
+- Performance monitoring
 --> 
