@@ -63,6 +63,53 @@
             </div>
         </div>
 
+        <!-- PRACTICAL RECOMMENDATION SECTION -->
+        <div class="recommendation-section">
+            <div class="recommendation-content">
+                <h2>Practical Recommendation</h2>
+                <div class="recommendation-text">
+                    <p>The <strong>Capital One Venture X</strong> is best suited for frequent travelers who can maximize its premium perks. With a $395 annual fee, this card makes financial sense if you:</p>
+                    <ul class="recommendation-list">
+                        <li><strong>Travel 3+ times per year</strong> and can use the $300 travel credit</li>
+                        <li><strong>Have airport lounge access needs</strong> worth the Priority Pass benefit</li>
+                        <li><strong>Spend $4,000+ annually</strong> to earn meaningful 2X miles on all purchases</li>
+                        <li><strong>Value transfer partners</strong> for maximizing mile redemptions</li>
+                    </ul>
+                </div>
+                </div>
+        </div>
+
+        <!-- PERKS AND PROTECTIONS WRAPPER -->
+        <div class="perks-protections-wrapper">
+            <!-- PERKS SECTION -->
+            <div class="recommendation-section perks-section">
+                <div class="recommendation-content">
+                    <h2>Perks</h2>
+                    <div class="recommendation-text">
+                        <p>Premium travel benefits and access with the Capital One Venture X:</p>
+                        <ul class="recommendation-list">
+                            <li>Lounge Access</li>
+                            <li>TSA Pre/Global Entry</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROTECTIONS SECTION -->
+            <div class="recommendation-section protections-section">
+                <div class="recommendation-content">
+                    <h2>Protections</h2>
+                    <div class="recommendation-text">
+                        <p>Insurance and security features included:</p>
+                        <ul class="recommendation-list">
+                            <li>Rental car CDW</li>
+                            <li>Trip delay</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- EAA CALCULATOR SECTION -->
         <div class="calculator-section collapsible-section">
             <div class="section-container">
@@ -70,20 +117,7 @@
                     <div class="section-header-content">
                         <h2>Effective Annual Fee Calculator</h2>
                         <p>Calculate your real cost after credits. Select the credits you'll actually use to see your real annual cost. Only count credits for services you'd pay for anyway.</p>
-                        <div class="practicality-legend">
-                            <div class="legend-item">
-                                <span class="legend-dot easy"></span>
-                                <span>Easy to use</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-dot moderate"></span>
-                                <span>Moderate effort</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-dot hard"></span>
-                                <span>Hard to maximize</span>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="section-toggle-icon" aria-hidden="true">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -104,7 +138,6 @@
                         <div class="credit-info">
                             <div class="credit-name">
                                 Annual Travel Credit
-                                <span class="practicality-meter" data-level="easy"></span>
                             </div>
                             <div class="credit-description">$300 credit for travel purchases including flights, hotels, car rentals, and other travel expenses. This credit automatically applies to your statement when you make qualifying travel purchases.</div>
                         </div>
@@ -132,6 +165,7 @@
                             </div>
                             <div class="value-column">
                                 <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
                                     <input type="number" value="0" min="0" max="300" onchange="syncInputValues(this)" data-max="300">
                                 </div>
                                 <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
@@ -143,7 +177,6 @@
                         <div class="credit-info">
                             <div class="credit-name">
                                 TSA PreCheck Credit
-                                <span class="practicality-meter" data-level="moderate"></span>
                             </div>
                             <div class="credit-description">$20 credit for TSA PreCheck application fees. TSA PreCheck allows you to keep your shoes, belt, and light jacket on during security screening, and you can use dedicated lanes at most airports.</div>
                         </div>
@@ -171,7 +204,7 @@
                             </div>
                             <div class="value-column">
                                 <div class="value-input" style="display: none !important;">
-
+                                    <span class="currency">$</span>
                                     <input type="number" value="0" min="0" max="20" onchange="syncInputValues(this)" data-max="20">
                                 </div>
                                 <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
@@ -183,7 +216,6 @@
                         <div class="credit-info">
                             <div class="credit-name">
                                 Anniversary Bonus
-                                <span class="practicality-meter" data-level="easy"></span>
                             </div>
                             <div class="credit-description">10,000 miles bonus on your account anniversary, worth approximately $100 when redeemed for travel. These miles can be transferred to airline partners or used for statement credits.</div>
                         </div>
@@ -211,7 +243,7 @@
                             </div>
                             <div class="value-column">
                                 <div class="value-input" style="display: none !important;">
-
+                                    <span class="currency">$</span>
                                     <input type="number" value="0" min="0" max="100" onchange="syncInputValues(this)" data-max="100">
                                 </div>
                                 <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
@@ -250,6 +282,32 @@
     <script>
         // Page-specific configuration
         const annualFee = 395;
+        
+        // Debug mobile menu after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                console.log('=== VENTURE X DEBUG ===');
+                const toggle = document.getElementById('mobile-menu-toggle');
+                const menu = document.getElementById('mobile-menu');
+                const overlay = document.getElementById('mobile-menu-overlay');
+                
+                console.log('Mobile menu elements found:', {
+                    toggle: toggle ? 'YES' : 'NO',
+                    menu: menu ? 'YES' : 'NO',
+                    overlay: overlay ? 'YES' : 'NO'
+                });
+                
+                if (toggle) {
+                    console.log('Toggle button found, testing click...');
+                    toggle.addEventListener('click', function() {
+                        console.log('VENTURE X: Toggle button clicked!');
+                    });
+                }
+                
+                console.log('setupMobileMenu function available:', typeof window.setupMobileMenu);
+                console.log('Header placeholder content:', document.getElementById('header-placeholder').innerHTML.substring(0, 200));
+            }, 3000);
+        });
     </script>
 </body>
 </html> 
