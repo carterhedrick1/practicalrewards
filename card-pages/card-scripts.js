@@ -44,7 +44,6 @@ function loadComponent(filename, placeholderId, fallbackId) {
                 // Execute scripts safely
                 scripts.forEach((script, index) => {
                     try {
-                        console.log(`Executing header script ${index + 1}`);
                         eval(script);
                     } catch (error) {
                         console.error(`Error executing header script ${index + 1}:`, error);

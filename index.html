@@ -178,7 +178,9 @@
             z-index: 99998 !important;
             opacity: 0 !important;
             visibility: hidden !important;
-            transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, visibility 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+            transition-property: opacity, visibility !important;
+            transition-duration: 0.4s !important;
+            transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
         }
 
         .mobile-menu-overlay.active {
@@ -267,8 +269,8 @@
 
         /* Hero Section */
         .hero {
-            padding: 140px 0 100px 0;
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            padding: 100px 0 100px 0;
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
             position: relative;
             overflow: hidden;
         }
@@ -298,18 +300,7 @@
             color: white;
         }
 
-        .hero-badge {
-            display: inline-block;
-            background: rgba(254, 243, 199, 0.2);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(254, 243, 199, 0.3);
-        }
+
 
         .hero h1 {
             font-size: clamp(2.5rem, 5vw, 4rem);
@@ -400,16 +391,7 @@
             margin-bottom: 4rem;
         }
 
-        .section-badge {
-            display: inline-block;
-            background: #fef3c7;
-            color: #92400e;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
+
 
         .section-title {
             font-size: clamp(2rem, 4vw, 3rem);
@@ -582,7 +564,7 @@
 
         /* Features Section */
         .features-section {
-            padding: 100px 0;
+            padding: 100px 0 0 0;
             background: #f5f5f4;
         }
 
@@ -722,7 +704,10 @@
             padding-top: 1rem;
             text-align: center;
             font-size: 0.875rem;
-        } grid {
+        }
+
+        .footer-content {
+            display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
@@ -777,7 +762,7 @@
             }
 
             .hero {
-                padding: 120px 0 80px 0;
+                padding: 80px 0 80px 0;
             }
 
             .hero-container {
@@ -862,154 +847,59 @@
     <section class="hero" id="home">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="hero-badge">🚫 No affiliate BS, no influencer nonsense</div>
-                <h1>Credit Cards for People Who Hate Credit Card BS</h1>
-                <p class="hero-subtitle">Tired of reading 47 Reddit threads where every "expert" contradicts each other? Sick of influencers telling you to get cards you'll never use? We cut through the marketing fluff and give you straight answers about what actually makes sense for normal people.</p>
+                <h1>Credit Cards That Actually Make Sense</h1>
+                <p class="hero-subtitle">Most credit card advice assumes you want to become a points optimization expert. We don't. We'll teach you everything you need to know about credit cards, then help you decide what's practical for your actual life.</p>
                 <div class="hero-cta">
                     <a href="learning.html" class="btn btn-primary">
-                        Stop the Madness
+                        Start Your Learning
                         <span>→</span>
                     </a>
-                    <a href="#features" class="btn btn-secondary">
-                        See How We're Different
+                    <a href="cards.html" class="btn btn-secondary">
+                        Find Your Card
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Problem Statement Section -->
-    <section class="problem-section">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-badge">The Problem</div>
-                <h2 class="section-title">Credit Card Advice is a Complete Mess</h2>
-                <p class="section-subtitle">Every website assumes you want to become a points hacker managing 17 different cards. News flash: you probably don't. You just want a straight answer without the marketing fluff.</p>
-            </div>
-            
-            <div class="problems-grid">
-                <div class="problem-card">
-                    <span class="problem-icon">🤯</span>
-                    <h3>Information Overload (AKA Analysis Paralysis)</h3>
-                    <p>You've read 47 Reddit threads, watched 20 YouTube videos, and you still have no idea which card to get. Every "expert" says something completely different, and half of them are probably getting paid to push specific cards.</p>
-                </div>
-                
-                <div class="problem-card">
-                    <span class="problem-icon">💸</span>
-                    <h3>Affiliate Marketing Disguised as "Expert Advice"</h3>
-                    <p>Most sites push premium cards with high annual fees because they get paid more when you sign up. They're not giving you advice - they're giving you a sales pitch while pretending to be helpful.</p>
-                </div>
-                
-                <div class="problem-card">
-                    <span class="problem-icon">⏰</span>
-                    <h3>Complexity for Complexity's Sake</h3>
-                    <p>You just want a simple answer about which card to get, but everyone assumes you want to become a credit card optimization expert with spreadsheets and category tracking. Sometimes the boring option is the smart option.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Solution Section -->
-    <section class="solution-section">
-        <div class="container">
-            <div class="solution-content">
-                <div class="solution-text">
-                    <h2>We Give You Practical Answers (Not Marketing Fluff)</h2>
-                    <p>No 20-paragraph blog posts about the history of credit cards. No affiliate marketing disguised as "expert recommendations." No influencer BS about "maximum value." Just clear, practical guidance to help you make a decision without losing your mind.</p>
-                    
-                    <ul class="solution-features">
-                        <li>Get practical answers in plain English (no finance jargon)</li>
-                        <li>Honest about when simple beats "optimal" (spoiler: usually)</li>
-                        <li>Zero sales pitch, zero affiliate links, zero BS</li>
-                        <li>Focus on real-world usage, not theoretical optimization</li>
-                    </ul>
-                    
-                    <a href="learning.html" class="btn btn-primary">Start Learning (Finally)</a>
-                </div>
-                
-                <div class="solution-visual">
-                    <h3>How It Actually Works (For Real)</h3>
-                    <div class="process-steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <div class="step-text">Tell us your situation (takes 2 minutes, not 2 hours)</div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <div class="step-text">We explain your options clearly (no marketing speak)</div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <div class="step-text">Get your answer and understand why (finally)</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
+
 
     <!-- Features Section -->
     <section class="features-section" id="features">
         <div class="container">
             <div class="section-header">
-                <div class="section-badge">Why Choose Us</div>
-                <h2 class="section-title">Built for Normal People (Not Credit Card Nerds)</h2>
-                <p class="section-subtitle">We're not trying to turn you into a credit card expert. We just want to help you make a good choice without losing your sanity in the process.</p>
+
+                <h2 class="section-title">Honest Education, Not Sales Pitches</h2>
+                <p class="section-subtitle">We believe you should understand how credit cards work before deciding which one to get. No hidden agendas, no assumptions about what you want.</p>
             </div>
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <span class="feature-icon">🎯</span>
-                    <h3>Direct Answers (No BS)</h3>
-                    <p>Want the quick answer? We'll give it to you. Want to understand why? We'll explain it like you're a normal person, not a finance professor writing a thesis on credit card optimization.</p>
+                    <h3>We Explain the Real Math</h3>
+                    <p>Points aren't always worth what they claim. We'll show you the actual value you'll get based on how you'll realistically use them, not theoretical maximums that require hours of optimization.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <span class="feature-icon">🛡️</span>
-                    <h3>No Hidden Agenda (Seriously)</h3>
-                    <p>We don't get paid by credit card companies. We don't have affiliate links. Our recommendations are based on what actually makes sense for your situation, not what makes us the most money.</p>
+                    <h3>Honest About Annual Fees</h3>
+                    <p>We'll break down exactly when a $500 annual fee makes sense and when it doesn't. Most people don't travel enough to justify premium cards, and that's perfectly fine.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <span class="feature-icon">⚡</span>
-                    <h3>Skip the Research (You're Welcome)</h3>
-                    <p>No more endless forum threads where every answer contradicts the last one. No more conflicting advice from people who probably don't know what they're talking about. Get clear guidance that cuts through the noise.</p>
+                    <h3>Simple vs. Complex Strategies</h3>
+                    <p>We'll show you both approaches: using one good card for everything, or optimizing across multiple cards. You decide what level of complexity makes sense for your lifestyle.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <span class="feature-icon">🧠</span>
-                    <h3>Honest About Complexity (Rare, We Know)</h3>
-                    <p>We'll tell you when simple beats optimal, and when the mental overhead of managing multiple cards isn't worth the extra rewards. Sometimes the boring option is the smart option.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <span class="feature-icon">📊</span>
-                    <h3>Real Math, Not Marketing Math</h3>
-                    <p>We calculate break-even points, factor in annual fees, and show you the actual dollar impact of different strategies. No theoretical "maximum value" nonsense - just real numbers that matter.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <span class="feature-icon">🤝</span>
-                    <h3>Built for Your Actual Life</h3>
-                    <p>Recommendations based on how you actually spend money, not theoretical optimization scenarios that assume you're willing to become a credit card management expert in your spare time.</p>
+                    <h3>No Assumptions About What You Want</h3>
+                    <p>We don't assume you want to become a points optimization expert. We'll teach you what you need to know, then let you decide if the complexity is worth the extra rewards.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Stop Overthinking This?</h2>
-                <p>Stop reading conflicting advice from people who probably don't know what they're talking about. Get clear, honest guidance that actually helps you make a decision without losing your mind.</p>
-                <div class="hero-cta">
-                    <a href="learning.html" class="btn btn-primary">Stop the Madness</a>
-                    <a href="cards.html" class="btn btn-secondary">Browse Credit Cards</a>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Footer placeholder -->
     <div id="footer-placeholder">
