@@ -147,16 +147,18 @@
             <div class="section-container">
                 <div class="calculator-header" id="calculator-header" role="button" tabindex="0" aria-expanded="false" aria-controls="calculator-content" onclick="toggleCalculatorSection()" onkeydown="handleKeyToggle(event)">
                     <div class="section-header-content">
-                        <h2>Effective Annual Fee Calculator</h2>
+                        <h2>Calculate YOUR Annual Fee</h2>
                         <p>When a card says it offers "$2,000+ in value," they're talking about these credits. But those credits are built into the annual fee—you're basically prepaying for them.</p>
                         <p>If your normal spending uses those credits, the card's perks and protections can outweigh the fee. If not, you're just paying for benefits you won't use. Every card's credits are different, so the right card for you may not be the right card for someone else. That's why there's no single "best card."</p>
                         <p>Open this up to calculate what your effective annual fee will be after credits. You can edit the dollar amounts if you value a credit as less than full value but above $0.</p>
-
-                    </div>
-                    <div class="section-toggle-icon" aria-hidden="true">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <div class="calculator-toggle-container">
+                            <div class="section-toggle-icon" aria-hidden="true">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="toggle-tip">Click Here to see YOUR Fee</div>
+                        </div>
                     </div>
                 </div>
             
@@ -214,12 +216,16 @@
 
                 <div class="calculator-results">
                     <div class="result-row">
+                        <span class="result-label">Annual Fee:</span>
+                        <span class="result-value">$XXX</span>
+                    </div>
+                    <div class="result-row">
                         <span class="result-label">Total Credits:</span>
                         <span class="result-value">$<span id="total-credits">0</span></span>
                     </div>
                     <div class="result-row">
-                        <span class="result-label">Effective Annual Fee:</span>
-                        <span class="result-value" id="effective-fee">$XXX</span>
+                        <span class="result-label">YOUR Annual Fee:</span>
+                        <span class="result-value negative" id="effective-fee">$XXX</span>
                     </div>
                     <div class="result-explanation">
                         <p>This is effectively what you are paying for this card. It is now up to you if the perks, protections, and earning rates are worth this fee to you over other cards.</p>
