@@ -831,10 +831,14 @@ input:checked + .toggle-slider:before {
 }
 
 .calculator-header p {
-    margin: 0;
+    margin: 0 0 1rem 0;
     color: #475569;
     font-size: 1rem;
     line-height: 1.5;
+}
+
+.calculator-header p:last-child {
+    margin-bottom: 0;
 }
 
 .calculator-content {
