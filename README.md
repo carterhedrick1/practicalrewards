@@ -1,4 +1,4 @@
-# Cards for Normals - Credit Card Management System
+# Practical Rewards - Credit Card Management System
 
 ## Overview
 

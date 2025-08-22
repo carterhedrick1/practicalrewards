@@ -91,7 +91,7 @@ Average per page:     26KB    (Just HTML content)
 ### **4. SEO Optimization**
 ```html
 <meta name="description" content="CARD NAME credit card review...">
-<meta property="og:title" content="CARD NAME - Cards for Normals">
+<meta property="og:title" content="CARD NAME - Practical Rewards">
 <script type="application/ld+json">...</script>
 ```
 - **Better search rankings**: Structured data for search engines

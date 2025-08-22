@@ -95,7 +95,7 @@ function getFallbackContent(filename) {
             <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
                 <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
                     <div style="text-align: center;">
-                        <p>&copy; 2025 Cards for Normals. All rights reserved.</p>
+                        <p>&copy; 2025 Practical Rewards. All rights reserved.</p>
                         <p style="margin-top: 1rem;">
                             <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
                             <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
