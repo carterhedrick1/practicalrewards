@@ -841,6 +841,33 @@ input:checked + .toggle-slider:before {
     margin-bottom: 0;
 }
 
+/* Remove spinner arrows from number inputs */
+.calculator-section input[type="number"]::-webkit-outer-spin-button,
+.calculator-section input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.calculator-section input[type="number"] {
+    -moz-appearance: textfield;
+    text-align: center;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+    background: white;
+    width: 90px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.calculator-section input[type="number"]:focus {
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
 .calculator-content {
     padding: 2rem;
 }
@@ -1375,17 +1402,16 @@ input:checked + .toggle-slider:before {
     width: 90px;
     padding: 0.875rem 1rem;
     border: 2px solid #e2e8f0;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 1rem;
     font-weight: 600;
     color: #1e293b;
     text-align: center;
-    background: linear-gradient(145deg, #ffffff, #f8fafc);
-    box-shadow: 
-        0 2px 4px rgba(0,0,0,0.05),
-        inset 0 1px 0 rgba(255,255,255,0.8);
+    background: white;
+    box-shadow: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
+    outline: none;
 }
 
 .value-input input:hover {
@@ -1408,23 +1434,13 @@ input:checked + .toggle-slider:before {
 
 .value-input input::-webkit-inner-spin-button,
 .value-input input::-webkit-outer-spin-button {
-    opacity: 1;
-    height: 20px;
-    width: 20px;
-    margin-right: 4px;
-    background: #f1f5f9;
-    border-radius: 6px;
-    border: 1px solid #d1d5db;
+    -webkit-appearance: none;
+    margin: 0;
+    display: none;
 }
 
-.value-input input::-webkit-inner-spin-button:hover,
-.value-input input::-webkit-outer-spin-button:hover {
-    background: #e2e8f0;
-}
-
-.value-input input::-webkit-inner-spin-button:active,
-.value-input input::-webkit-outer-spin-button:active {
-    background: #cbd5e1;
+.value-input input {
+    -moz-appearance: textfield;
 }
 
 .value-input .currency {
