@@ -478,7 +478,7 @@ function updateCalculation() {
 
     if (effectiveFee > 0) {
         feeElement.textContent = '$' + effectiveFee;
-        feeElement.className = 'effective-fee positive';
+        feeElement.className = 'effective-fee';
         // Update explanation for positive fee
         const explanationElement = document.querySelector('.result-explanation p');
         if (explanationElement) {
@@ -494,7 +494,10 @@ function updateCalculation() {
         }
     } else {
         feeElement.textContent = '+$' + Math.abs(effectiveFee);
-        feeElement.className = 'effective-fee negative';
+        feeElement.className = 'effective-fee positive';
+        console.log('Applied positive class, element:', feeElement);
+        console.log('Element classes:', feeElement.className);
+        console.log('Element computed style:', window.getComputedStyle(feeElement).color);
         // Update explanation for negative fee (credits exceed annual fee)
         const explanationElement = document.querySelector('.result-explanation p');
         if (explanationElement) {

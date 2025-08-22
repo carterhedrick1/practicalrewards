@@ -1617,24 +1617,16 @@ input:checked + .toggle-slider:before {
 }
 
 #effective-fee.positive {
-    background: transparent;
-    border: none;
-    color: #1e293b;
-    box-shadow: none;
+    background: transparent !important;
+    border: none !important;
+    color: #059669 !important;
+    box-shadow: none !important;
 }
 
-#effective-fee.negative {
-    background: transparent;
-    border: none;
-    color: #059669;
-    box-shadow: none;
-}
-
-#effective-fee.positive {
-    background: transparent;
-    border: none;
-    color: #1e293b;
-    box-shadow: none;
+/* Additional selector to ensure green color is applied */
+.result-value.positive,
+span.positive {
+    color: #059669 !important;
 }
 
 /* Hide mobile controls table on desktop */
@@ -2987,7 +2979,7 @@ input:checked + .toggle-slider:before {
     #effective-fee.positive {
         background: transparent !important;
         border: none !important;
-        color: #0f172a !important;
+        color: #059669 !important;
         box-shadow: none !important;
     }
     
