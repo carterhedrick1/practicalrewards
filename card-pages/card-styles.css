@@ -265,6 +265,12 @@
     font-weight: 800;
     color: white;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    word-break: keep-all;
+    hyphens: none;
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    overflow-wrap: break-word;
 }
 
 .hero-text .hero-subtitle {
