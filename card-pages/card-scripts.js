@@ -63,10 +63,10 @@ function loadComponent(filename, placeholderId, fallbackId) {
         })
         .catch(error => {
             console.warn(`Could not load ${filename}:`, error);
-            console.log('Loading fallback content instead');
-            placeholder.innerHTML = getFallbackContent(filename);
-            // Also try to initialize for fallback content
-            if (filename.includes('header.html')) {
+            // Do not render a fallback header on card pages; only fallback non-header components
+            if (!filename.includes('header.html')) {
+                console.log('Loading fallback content instead');
+                placeholder.innerHTML = getFallbackContent(filename);
                 initializeLoadedContent();
             }
         });
@@ -74,135 +74,8 @@ function loadComponent(filename, placeholderId, fallbackId) {
 
 function getFallbackContent(filename) {
     if (filename.includes('header.html')) {
-        return `
-            <style>
-                .mobile-menu-toggle { display: none; width: 44px; height: 44px; background: transparent; border: none; cursor: pointer; border-radius: 8px; position: relative; }
-                .hamburger { width: 20px; height: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-                .hamburger span { width: 20px; height: 3px; background: #059669; border-radius: 2px; position: absolute; left: 0; transition: all 0.3s ease; }
-                .hamburger span:nth-child(1) { top: 1px; }
-                .hamburger span:nth-child(2) { top: 6px; }
-                .hamburger span:nth-child(3) { top: 11px; }
-                .mobile-menu { position: fixed; top: 70px; right: -320px; width: 320px; height: calc(100vh - 70px); background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%); z-index: 99999; box-shadow: -4px 0 20px rgba(5, 150, 105, 0.15); transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); overflow-y: auto; border-left: 2px solid #10b981; }
-                .mobile-menu.active { right: 0; }
-                .mobile-menu-overlay { position: fixed; top: 70px; left: 0; width: 100%; height: calc(100vh - 70px); background: rgba(4, 120, 87, 0.15); backdrop-filter: blur(4px); z-index: 99998; opacity: 0; visibility: hidden; transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-                .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
-                .mobile-nav-links { list-style: none; padding: 1rem 0 1rem 0; margin: 0; }
-                .mobile-nav-links li { margin: 0.5rem 1rem; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; }
-                .mobile-nav-links a { display: block; padding: 1rem 1.5rem; color: #57534e; text-decoration: none; font-weight: 600; font-size: 1.1rem; transition: all 0.3s ease; position: relative; border-radius: 12px; }
-                @media (max-width: 768px) { .mobile-menu-toggle { display: flex; } .nav-links { display: none; } nav { padding: 0 1rem; height: 70px; } }
-            </style>
-            <header style="background: rgba(250, 250, 249, 0.95); backdrop-filter: blur(12px); box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); position: sticky; top: 0; z-index: 1000; width: 100%; border-bottom: 1px solid #e7e5e4;">
-                <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 80px;">
-                    <a href="../index.html" class="logo" style="font-size: 1.5rem; font-weight: 700; color: #059669; text-decoration: none;">Practical Rewards</a>
-                    
-                    <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
-                    
-                    <ul class="nav-links" style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
-                        <li><a href="../index.html" style="color: #57534e; text-decoration: none; font-weight: 500;">Home</a></li>
-                        <li><a href="../learning.html" style="color: #57534e; text-decoration: none; font-weight: 500;">Learning</a></li>
-                        <li><a href="../cards.html" style="color: #57534e; text-decoration: none; font-weight: 500;">Cards</a></li>
-                        <li><a href="../about.html" style="color: #57534e; text-decoration: none; font-weight: 500;">About</a></li>
-                        <li><a href="../contact.html" style="color: #57534e; text-decoration: none; font-weight: 500; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 0.5rem 1rem; border-radius: 25px;">Contact</a></li>
-                    </ul>
-                </nav>
-            </header>
-            
-            <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
-            <div class="mobile-menu" id="mobile-menu">
-                <ul class="mobile-nav-links">
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../learning.html">Learning</a></li>
-                    <li><a href="../cards.html">Cards</a></li>
-                    <li><a href="../about.html">About</a></li>
-                    <li><a href="../contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <script>
-            // Setup mobile menu for fallback header
-            function setupFallbackMobileMenu() {
-                const toggle = document.getElementById('mobile-menu-toggle');
-                const menu = document.getElementById('mobile-menu');
-                const overlay = document.getElementById('mobile-menu-overlay');
-                
-                if (!toggle || !menu || !overlay) return;
-                
-                function openMenu() {
-                    overlay.classList.add('active');
-                    menu.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
-                
-                function closeMenu() {
-                    overlay.classList.remove('active');
-                    menu.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-                
-                toggle.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (menu.classList.contains('active')) {
-                        closeMenu();
-                    } else {
-                        openMenu();
-                    }
-                };
-                
-                overlay.onclick = function(e) {
-                    if (e.target === overlay) {
-                        closeMenu();
-                    }
-                };
-                
-                document.onkeydown = function(e) {
-                    if (e.key === 'Escape') {
-                        closeMenu();
-                    }
-                };
-            }
-            
-            // Setup mobile menu immediately for fallback
-            setupFallbackMobileMenu();
-            window.setupMobileMenu = setupFallbackMobileMenu;
-            
-            // Simple absolute path navigation that works from anywhere
-            (function() {
-                function updateNavigationPaths() {
-                    // Get the current domain and protocol
-                    const protocol = window.location.protocol;
-                    const host = window.location.host;
-                    const baseUrl = protocol + '//' + host;
-                    
-                    // Update all navigation links to use absolute paths from root
-                    const navLinks = document.querySelectorAll('a[href="#"]');
-                    
-                    navLinks.forEach((link, index) => {
-                        const pages = ['index.html', 'learning.html', 'eaacalc.html', 'about.html'];
-                        if (index < pages.length) {
-                            // Create absolute URL from root - this will work from any page depth
-                            link.href = baseUrl + '/' + pages[index];
-                        }
-                    });
-                }
-                
-                // Run immediately and also when DOM is ready
-                updateNavigationPaths();
-                
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', updateNavigationPaths);
-                }
-                
-                // Also run after a short delay to catch any late-loading elements
-                setTimeout(updateNavigationPaths, 50);
-            })();
-            </script>
-        `;
+        // No fallback header for card pages
+        return '';
     } else if (filename.includes('footer.html')) {
         return `
             <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
@@ -223,17 +96,8 @@ function getFallbackContent(filename) {
 }
 
 function initializeLoadedContent() {
-    const header = document.querySelector('header');
-    if (header) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(250, 250, 249, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(250, 250, 249, 0.95)';
-                header.style.boxShadow = 'none';
-            }
-        });
+    if (typeof window.attachHeaderScrollBehavior === 'function') {
+        window.attachHeaderScrollBehavior();
     }
     
     // Initialize mobile menu after header loads

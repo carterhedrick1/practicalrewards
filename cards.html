@@ -120,31 +120,7 @@
             background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
         }
 
-        /* Mobile Menu Toggle (Hidden on Desktop) */
-        .mobile-menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: #57534e;
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 3px;
-        }
+        /* Header toggle and hamburger styles come from header.html to ensure consistency */
 
         /* Footer */
         footer {
@@ -1345,7 +1321,9 @@
                     }
                     
                     // Initialize any JavaScript functionality in the loaded content
-                    initializeLoadedContent();
+                    if (typeof window.attachHeaderScrollBehavior === 'function') {
+                        window.attachHeaderScrollBehavior();
+                    }
                 })
                 .catch(error => {
                     console.warn(`Could not load ${filename}:`, error);
@@ -1357,19 +1335,7 @@
 
         function getFallbackContent(filename) {
             if (filename === 'header.html') {
-                return `
-                    <header style="background: #059669; color: white; padding: 1rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
-                        <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
-                            <a href="index.html" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.5rem;">Practical Rewards</a>
-                            <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
-                                <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-                                <li><a href="learning.html" style="color: white; text-decoration: none;">Learning</a></li>
-                                <li><a href="cards.html" style="color: white; text-decoration: none;">Cards</a></li>
-                                <li><a href="about.html" style="color: white; text-decoration: none;">About</a></li>
-                            </ul>
-                        </nav>
-                    </header>
-                `;
+                return '';
             } else if (filename === 'footer.html') {
                 return `
                     <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">

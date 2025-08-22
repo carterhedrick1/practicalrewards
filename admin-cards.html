@@ -685,7 +685,9 @@
                     }
                     
                     // Initialize any JavaScript functionality in the loaded content
-                    initializeLoadedContent();
+                    if (typeof window.attachHeaderScrollBehavior === 'function') {
+                        window.attachHeaderScrollBehavior();
+                    }
                 })
                 .catch(error => {
                     console.warn(`Could not load ${filename}:`, error);
@@ -697,19 +699,7 @@
 
         function getFallbackContent(filename) {
             if (filename === 'header.html') {
-                return `
-                    <header style="background: #059669; color: white; padding: 1rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
-                        <nav style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
-                            <a href="index.html" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.5rem;">Practical Rewards</a>
-                            <ul style="display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0;">
-                                <li><a href="index.html" style="color: white; text-decoration: none;">Home</a></li>
-                                <li><a href="learning.html" style="color: white; text-decoration: none;">Learning</a></li>
-                                <li><a href="cards.html" style="color: white; text-decoration: none;">Cards</a></li>
-                                <li><a href="about.html" style="color: white; text-decoration: none;">About</a></li>
-                            </ul>
-                        </nav>
-                    </header>
-                `;
+                return '';
             } else if (filename === 'footer.html') {
                 return `
                     <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
