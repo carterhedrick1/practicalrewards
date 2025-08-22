@@ -13,6 +13,30 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem 0 2rem 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Button container styles */
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .card-container {
+        padding: 1rem 0 1rem 0;
+    }
+    
+    .button-container {
+        flex-direction: column-reverse;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+    }
 }
 
 /* Header styles removed - now using dynamically loaded header from header.html */
@@ -31,7 +55,7 @@
     padding: 3rem 2rem;
     background: linear-gradient(135deg, #047857 0%, #059669 100%);
     color: white;
-    margin: -1rem -2rem 3rem -2rem;
+    margin: -1rem -2rem 1.5rem -2rem;
     overflow: hidden;
     width: 100vw;
     position: relative;
@@ -43,14 +67,14 @@
 
 /* FEATURES SECTION STYLES */
 .features-section {
-    margin: 2rem 0;
+    margin: 1.5rem 0;
     padding: 0 1rem;
 }
 
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    gap: 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -181,13 +205,13 @@
 /* RESPONSIVE DESIGN FOR FEATURES */
 @media (max-width: 768px) {
     .features-section {
-        margin: 1.5rem 0;
+        margin: 1rem 0;
         padding: 0 0.5rem;
     }
     
     .features-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
     }
     
     .feature-card {
@@ -911,7 +935,7 @@ input:checked + .toggle-slider:before {
 
 /* Modern Collapsible Section Design */
 .collapsible-section {
-    margin: 2rem 0;
+    margin: 1rem 0;
     border-radius: 16px;
     background: #ffffff;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -937,6 +961,7 @@ input:checked + .toggle-slider:before {
     border: none;
     width: 100%;
     text-align: left;
+    padding: 1.5rem;
 }
 
 .calculator-header:focus {
@@ -944,21 +969,52 @@ input:checked + .toggle-slider:before {
 }
 
 .section-header-content {
-    flex: 1;
-    padding-right: 3rem;
+    padding-right: 0;
+}
+
+.section-header-content h2 {
+    margin-bottom: 1rem;
+    padding-right: 4rem;
+}
+
+.section-header-content p {
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+    color: #4b5563;
+    padding-right: 0;
 }
 
 .section-toggle-icon {
     position: absolute;
-    top: 2rem;
-    right: 2rem;
-    color: #6b7280;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: #059669;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
+    width: 32px;
+    height: 32px;
+    background: #f0fdf4;
+    border: 2px solid #059669;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+    flex-shrink: 0;
+}
+
+.section-toggle-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
 }
 
 .calculator-header[aria-expanded="false"] .section-toggle-icon {
-    transform: rotate(-90deg);
+    transform: rotate(90deg);
+}
+
+.calculator-header[aria-expanded="true"] .section-toggle-icon {
+    transform: rotate(0deg);
 }
 
 .calculator-content {
@@ -994,6 +1050,57 @@ input:checked + .toggle-slider:before {
     .section-toggle-icon {
         top: 1.5rem;
         right: 1.5rem;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .section-toggle-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .calculator-header {
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin: 0 0.5rem;
+    }
+    
+    .calculator-header:hover {
+        transform: none;
+        box-shadow: none;
+        background: transparent;
+    }
+    
+    .calculator-header:hover .section-toggle-icon {
+        background: #f0fdf4;
+        color: #059669;
+        transform: none;
+        box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+    }
+    
+    .calculator-header[aria-expanded="false"]:hover .section-toggle-icon {
+        transform: rotate(90deg);
+    }
+    
+    .calculator-header[aria-expanded="true"]:hover .section-toggle-icon {
+        transform: rotate(0deg);
+    }
+    
+    .calculator-header:active {
+        transform: none;
+        transition: none;
+    }
+    
+    .section-header-content br {
+        display: none;
+    }
+    
+    .section-header-content p {
+        margin-bottom: 0.75rem;
+    }
+    
+    .section-header-content p:last-child {
+        margin-bottom: 0;
     }
 }
 
@@ -1012,9 +1119,16 @@ input:checked + .toggle-slider:before {
     outline: none;
 }
 
+/* Enhanced clickability and visual feedback */
+.calculator-header {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
 /* Practical Recommendation Section */
 .recommendation-section {
-    margin: 2rem 0;
+    margin: 1rem 0;
     padding: 0;
 }
 
@@ -1030,7 +1144,7 @@ input:checked + .toggle-slider:before {
 
 .recommendation-content {
     background: #ffffff;
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 16px;
     border: 1px solid #e5e7eb;
     border-top: none;
@@ -1080,8 +1194,8 @@ input:checked + .toggle-slider:before {
 .perks-protections-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin: 2rem 0;
+    gap: 1rem;
+    margin: 1rem 0;
     align-items: stretch; /* Ensures equal height */
 }
 
@@ -1103,8 +1217,8 @@ input:checked + .toggle-slider:before {
 @media (max-width: 768px) {
     .perks-protections-wrapper {
         grid-template-columns: 1fr;
-        gap: 1rem;
-        margin: 0 0 1rem 0;
+        gap: 0.5rem;
+        margin: 0 0 0.5rem 0;
         align-items: stretch; /* Maintain equal height behavior */
     }
     .recommendation-section {
@@ -1112,6 +1226,11 @@ input:checked + .toggle-slider:before {
         padding: 0;
         height: auto; /* Allow natural height on mobile */
         display: block; /* Reset flex behavior on mobile */
+    }
+    
+    .perks-protections-wrapper .recommendation-section {
+        margin: 0;
+        padding: 0;
     }
     
     .perks-protections-wrapper .recommendation-content {
@@ -1124,7 +1243,7 @@ input:checked + .toggle-slider:before {
     .recommendation-content {
         padding: 1rem !important;
         border-radius: 12px !important;
-        margin: 1rem 0.35% 0 0.35% !important;
+        margin: 0.5rem 0.35% 1rem 0.35% !important;
         width: 99.3% !important;
         max-width: 99.3% !important;
         box-sizing: border-box;
@@ -1143,6 +1262,11 @@ input:checked + .toggle-slider:before {
         padding: 0.5rem 0;
         padding-left: 1.5rem;
         font-size: 0.9rem;
+    }
+    
+    .recommendation-list li::before {
+        top: 0.5rem;
+        font-size: 1rem;
     }
     
     .recommendation-highlight {
@@ -1443,6 +1567,19 @@ input:checked + .toggle-slider:before {
     font-size: 1.1rem;
 }
 
+.result-explanation {
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+}
+
+.result-explanation p {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+}
+
 #effective-fee {
     color: #1e293b;
     font-weight: 700;
@@ -1467,6 +1604,13 @@ input:checked + .toggle-slider:before {
 }
 
 #effective-fee.negative {
+    background: transparent;
+    border: none;
+    color: #059669;
+    box-shadow: none;
+}
+
+#effective-fee.positive {
     background: transparent;
     border: none;
     color: #1e293b;
@@ -1519,7 +1663,7 @@ input:checked + .toggle-slider:before {
     /* COMPLETE MOBILE REDESIGN - Simple Two Column Layout */
     .table-row {
         display: block !important;
-        padding: 1.5rem 0;
+        padding: 1.5rem;
         text-align: left;
         border-bottom: none;
         max-width: 100% !important;
@@ -1528,7 +1672,9 @@ input:checked + .toggle-slider:before {
         background: transparent;
         border-left: none;
         border-right: none;
-        margin: 0;
+        margin: 0 0 1rem 0;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
     
     .credit-info {
@@ -1884,7 +2030,7 @@ input:checked + .toggle-slider:before {
         text-align: left;
         border: none;
         margin: 0;
-        background: #fefdfb !important; /* keep light tan */
+        background: #f0ede8 !important; /* darker tan for better separation */
         position: relative;
         border-radius: 0;
         box-shadow: none !important;
@@ -1896,7 +2042,7 @@ input:checked + .toggle-slider:before {
     }
     
     .table-row:hover {
-        background: #fefdfb !important;
+        background: #f0ede8 !important;
         transform: none !important;
         box-shadow: none !important;
     }
@@ -2396,9 +2542,9 @@ input:checked + .toggle-slider:before {
         position: static;
     }
     
-    /* Light tan background for individual credit cards on mobile */
+    /* Darker tan background for individual credit cards on mobile */
     .table-row {
-        background: #fefdfb !important;
+        background: #f0ede8 !important;
         border-radius: 8px !important;
         margin-bottom: 0.75rem !important;
         padding: 1rem !important;

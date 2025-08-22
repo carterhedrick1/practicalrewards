@@ -1,5 +1,16 @@
 // Shared Card Page Scripts - Update this file to change all card pages
 
+// Immediate initialization to fix arrow state
+if (document.readyState === 'loading') {
+    // DOM is still loading, wait for it
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(initializeCalculatorSection, 0);
+    });
+} else {
+    // DOM is already loaded, run immediately
+    setTimeout(initializeCalculatorSection, 0);
+}
+
 // Load header and footer
 document.addEventListener('DOMContentLoaded', function() {
     const headerPath = getRootPath('header.html');
@@ -9,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize calculator placeholders when page loads
     initializeCalculatorPlaceholders();
+    
+    // Initialize calculator section state
+    initializeCalculatorSection();
 });
 
 // Build a relative path that works from the card-pages subdirectory
@@ -465,12 +479,27 @@ function updateCalculation() {
     if (effectiveFee > 0) {
         feeElement.textContent = '$' + effectiveFee;
         feeElement.className = 'effective-fee positive';
+        // Update explanation for positive fee
+        const explanationElement = document.querySelector('.result-explanation p');
+        if (explanationElement) {
+            explanationElement.textContent = 'This is effectively what you are paying for this card. It is now up to you if the perks, protections, and earning rates are worth this fee to you over other cards.';
+        }
     } else if (effectiveFee === 0) {
         feeElement.textContent = '$0';
         feeElement.className = 'effective-fee';
+        // Update explanation for zero fee
+        const explanationElement = document.querySelector('.result-explanation p');
+        if (explanationElement) {
+            explanationElement.textContent = 'Your credits fully offset the annual fee. Any perks, protections, or earning rates you use are essentially free value on top.';
+        }
     } else {
         feeElement.textContent = '+$' + Math.abs(effectiveFee);
         feeElement.className = 'effective-fee negative';
+        // Update explanation for negative fee (credits exceed annual fee)
+        const explanationElement = document.querySelector('.result-explanation p');
+        if (explanationElement) {
+            explanationElement.textContent = 'Your credits exceed the annual fee! You\'re getting paid to have this card. Any perks, protections, or earning rates are pure bonus value.';
+        }
     }
 }
 
@@ -500,16 +529,16 @@ function handleKeyToggle(event) {
 
 // Initialize section state on page load
 function initializeCalculatorSection() {
-    const savedState = localStorage.getItem('calculatorExpanded');
     const header = document.querySelector('.calculator-header');
     const content = document.querySelector('.calculator-content');
     
-    if (savedState !== null) {
-        const isExpanded = savedState === 'true';
-        header.setAttribute('aria-expanded', isExpanded);
-        
-        if (!isExpanded) {
-            content.classList.add('collapsed');
-        }
-    }
+    // Always start collapsed on page refresh
+    header.setAttribute('aria-expanded', 'false');
+    content.classList.add('collapsed');
+    
+    // Clear any saved state to ensure fresh start
+    localStorage.removeItem('calculatorExpanded');
+    
+    // Force a reflow to ensure CSS is applied
+    header.offsetHeight;
 } 
