@@ -180,7 +180,7 @@ nav {
 .hero-content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem 2rem 6rem 2rem;
+    padding: 1rem 2rem 8rem 2rem;
     text-align: center;
 }
 
@@ -239,7 +239,6 @@ nav {
     right: 0;
     display: flex;
     justify-content: space-between;
-    padding: 0 8px;
 }
 
 .progress-step {
@@ -253,6 +252,7 @@ nav {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    transform: translateY(4px);
 }
 
 .progress-step:hover {
@@ -295,8 +295,6 @@ nav {
     cursor: not-allowed;
 }
 
-
-
 .step-icon {
     font-size: 0.9rem;
 }
@@ -313,7 +311,7 @@ nav {
 .cards-section {
     position: relative;
     z-index: 10;
-    margin-top: -3rem;
+    margin-top: -5rem;
     margin-bottom: 2rem;
 }
 
@@ -323,66 +321,99 @@ nav {
     padding: 0 2rem;
 }
 
+/* Cards Grid - Updated to match cards.html styling */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
 
-
-/* Clean, Simple Card Design - Matching the index page */
-.card {
+.card-item {
     background: white;
-    padding: 2.5rem;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e7e5e4;
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #e5e7eb;
     position: relative;
     overflow: hidden;
-    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #059669, #10b981);
+.card-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #059669;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(5, 150, 105, 0.15);
-    border-color: #d6d3d1;
+.card-item h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
 }
 
-.card-icon {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    display: block;
+.card-item p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
 }
 
-.card h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #292524;
-    margin-bottom: 1rem;
-}
-
-.card p {
-    color: #57534e;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
-
-.card p:last-child {
+.card-item p:last-child {
     margin-bottom: 0;
 }
 
-.card p strong {
-    color: #292524;
+.card-item p strong {
+    color: #374151;
     font-weight: 600;
 }
 
+.card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+    color: #059669;
+}
 
+/* Practical Advice Section - Matching cards.html styling */
+.card-advice {
+    background: #f8fafc;
+    border-left: 3px solid #059669;
+    padding: 1rem;
+    margin-top: 0.75rem;
+    border-radius: 0 8px 8px 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.card-advice-label {
+    font-weight: 600;
+    color: #059669;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.card-advice-text {
+    color: #475569;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    font-style: italic;
+    text-align: center;
+    max-width: 100%;
+}
 
 /* Content Sections */
 .content-section {
@@ -586,13 +617,6 @@ nav {
     display: block;
 }
 
-/* Simple Grid System - All cards use the same styling */
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
 /* Footer */
 footer {
     background: linear-gradient(135deg, #047857 0%, #059669 100%);
@@ -666,6 +690,22 @@ footer {
                 font-size: 1.125rem;
                 margin-bottom: 2rem;
             }
+            .hero-content ol {
+                text-align: left;
+                margin: 1rem auto !important;
+                padding-left: 1rem !important;
+                list-style: none !important;
+                max-width: 600px;
+            }
+            .hero-content ol li {
+                margin: 0.5rem 0 !important;
+                line-height: 1.4;
+                padding-left: 0;
+            }
+            .hero-content ol li strong {
+                display: inline-block;
+                min-width: 60px;
+            }
             .progress-bar {
                 margin: 1.5rem 0.5rem 0 0.5rem;
                 padding: 1.5rem 1.5rem;
@@ -681,7 +721,7 @@ footer {
                 height: 6px;
             }
             .cards-section {
-                margin-top: -2rem;
+                margin-top: -5rem;
             }
             .cards-container {
                 padding: 0 1rem;
@@ -690,18 +730,18 @@ footer {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
-            .card {
-                padding: 2rem 1.5rem;
-                border-radius: 16px;
+            .card-item {
+                padding: 1.5rem;
+                border-radius: 12px;
             }
             .card-icon {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
-            .card h3 {
+            .card-item h3 {
                 font-size: 1.25rem;
             }
-            .card p {
-                font-size: 0.95rem;
+            .card-item p {
+                font-size: 0.9rem;
             }
             .content-section {
                 padding: 1.5rem;
@@ -761,8 +801,8 @@ footer {
         gap: 2rem;
     }
 
-    .card {
-        padding: 2.5rem 2rem;
+    .card-item {
+        padding: 1.5rem;
     }
     .nav-btn {
         width: auto;
@@ -782,13 +822,13 @@ footer {
         font-size: 1.2rem;
     }
     .cards-section {
-        margin-top: -4rem;
+        margin-top: -6rem;
     }
     .cards-grid {
-        gap: 4rem;
+        gap: 2rem;
     }
-    .card {
-        padding: 3.5rem 3rem;
+    .card-item {
+        padding: 2rem;
         min-height: 200px;
     }
 }
@@ -803,27 +843,32 @@ footer {
     <div class="content-layer active" id="layer-home">
         <section class="hero-wrapper">
             <div class="hero-content">
-                <h1>Clarity Over Clickbait</h1>
-                <p>Banks pitch perks. Influencers pitch FOMO. We translate the fine print so you can decide what's actually worth your time and money.</p>
-                <p>Pick Cash Back or Points and learn as much—or as little—as you want. No pressure to become a credit card nerd.</p>
+                <h1>Credit Cards Made Clear</h1>
+                <p style="margin-bottom: 0.75rem;">Banks love their fine print. Influencers love their photo ops in business class. We'll keep it practical and show you what actually matters for your wallet.</p>
+                <ol style="margin: 0.75rem auto; padding-left: 0; list-style: none; max-width: 600px;">
+                    <li style="margin: 0.25rem 0;"><strong>Level 1:</strong> Cash Back vs Points — start with the basics.</li>
+                    <li style="margin: 0.25rem 0;"><strong>Level 2:</strong> A clear view of what each card type includes.</li>
+                    <li style="margin: 0.25rem 0;"><strong>Level 3:</strong> The full breakdown in plain English.</li>
+                </ol>
+                <p>Learn as much—or as little—as you want. No need to turn into a credit card expert overnight.</p>
                 
                 <div class="progress-bar">
                     <div class="progress-track">
                         <div class="progress-fill" id="progressFill" style="width: 33%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step active" onclick="goToLayer('home')" data-step="1">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step disabled" onclick="goBack()" data-step="2">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step disabled" onclick="goBack()" data-step="3">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text" id="progressText">
-                        🏠 Level 1 - Two Types of Cards
+                        Level 1 - Two Types of Cards
                     </div>
                 </div>
             </div>
@@ -832,31 +877,37 @@ footer {
         <section class="cards-section">
             <div class="cards-container">
                 <div class="cards-grid">
-                    <div class="card" onclick="goToLayer('cashback-main')">
-                        <span class="card-icon">💰</span>
+                    <div class="card-item" onclick="goToLayer('cashback-main')">
+                        <span class="card-icon">$</span>
                         <h3>Cash Back Cards</h3>
-                        <p><strong>What it is:</strong> You get actual money back (usually 1-6%) that you can use for anything. No made-up currency, no complex redemption math.</p>
-                        <p><strong>Why choose this:</strong> Simple, predictable, and works for everyone. You spend $1,000, you get $20 back. End of story. No complexity, no restrictions, no influencer BS about "maximum value."</p>
-                        <p><strong>Best for:</strong> Normal people who want predictable rewards without becoming credit card nerds.</p>
+                        <p>Cash back cards are the simplest way to get rewarded for spending. Instead of earning points with made-up names, you just get a percentage of your money back. One dollar spent = a few cents returned. Pretty straightforward.</p>
+                        <p>At the highest level, cash back cards are most often free and can give you 2% back on everything Some cards also offer higher rewards in specific categories, along with practical protections like extended warranties, cell phone protection, or purchase protection. Nothing flashy like airport lounges, but genuinely useful in everyday life.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">At the bare minimum, use a cash back card instead of a debit card—2% back is free money. Simple and reliable, but don't expect travel perks. If you want guaranteed rewards with zero effort, this is the way to go.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('travel-main')">
-                        <span class="card-icon">✈️</span>
+                    <div class="card-item" onclick="goToLayer('travel-main')">
+                        <span class="card-icon">✈</span>
                         <h3>Travel Cards</h3>
-                        <p><strong>What it is:</strong> You earn "points" or "miles" that can be worth anywhere from 0.5 cents to 10+ cents each. The value depends entirely on how you use them.</p>
-                        <p><strong>Why choose this:</strong> Potentially higher reward values and access to perks, but requires significant knowledge and time investment. This is where the complexity starts.</p>
-                        <p><strong>Best for:</strong> People who travel frequently and enjoy optimizing complex systems. Not for the faint of heart.</p>
+                        <p>Travel cards are different from cash back cards because they earn points instead of cash back. The catch? Every bank, airline, or hotel insists on calling their points something different. You'll hear "miles," "rewards," "points," "stars," and probably "magical fairy dust" someday — but in the end, they're all just points.</p>
+                        <p>Travel cards also usually come with extra perks that can make travel (or just your lifestyle) feel a bit fancier: airport lounges, no foreign transaction fees, priority boarding, and so on.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Travel cards can give you more value, but they're complicated. If you don't like juggling rules, stick with cash back. Cash back is straightforward; points are… intentionally confusing.</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="callout-container">
-            <div class="callout-box">
-                <h4>💡 The Complexity Reality Check</h4>
-                <p>Cash back cards are straightforward - you spend money, you get money back. Travel cards are substantially more confusing to extract value from. You need to be a certain type of person who enjoys learning complex systems, researching transfer partners, and optimizing every redemption. If that sounds like work rather than fun, cash back might be your speed.</p>
+
+                </div>
             </div>
         </section>
+
+
     </div>
 
     <div class="content-layer" id="layer-cashback-main">
@@ -870,18 +921,18 @@ footer {
                         <div class="progress-fill" style="width: 66%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step disabled">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🗺️ Level 2 - Exploring Cash Back Cards
+                        Level 2 - Exploring Cash Back Cards
                     </div>
                 </div>
             </div>
@@ -890,39 +941,50 @@ footer {
         <section class="cards-section">
             <div class="cards-container">
                 <div class="cards-grid">
-                    <div class="card" onclick="goToLayer('cashback-types')">
+                    <div class="card-item" onclick="goToLayer('cashback-types')">
                         <span class="card-icon">📊</span>
                         <h3>Types of Cash Back</h3>
                         <p>Learn the pros and cons of Flat Rate, Category, and Rotating cash back cards.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Start here to understand the three main strategies. This foundation will help you choose the right approach for your spending.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('cashback-spending')">
+                    <div class="card-item" onclick="goToLayer('cashback-spending')">
                         <span class="card-icon">🛒</span>
                         <h3>Analyze Spending</h3>
                         <p>Find out where your money goes to pick the right card type for you.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Most people guess wrong about their spending. Check your actual patterns before choosing a strategy.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('cashback-math')">
+                    <div class="card-item" onclick="goToLayer('cashback-math')">
                         <span class="card-icon">🧮</span>
                         <h3>The Real Math</h3>
                         <p>Calculate break-even points and true effective reward rates.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Learn to calculate when annual fees are worth it and how to compare different card strategies.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('cashback-recommendations')">
+                    <div class="card-item" onclick="goToLayer('cashback-recommendations')">
                         <span class="card-icon">📋</span>
                         <h3>Card Recommendations</h3>
                         <p>See honest reviews of the best cards that actually exist in each category.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Real card reviews based on actual benefits, not marketing hype. See what's actually available.</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="callout-container">
-            <div class="callout-box">
-                <h4>💡 Learning Path Recommendation</h4>
-                <p>Start with "Types of Cash Back" to understand the fundamentals, then move to "Analyze Your Spending" to see what fits your life. The math and card recommendations will make much more sense after that foundation.</p>
-            </div>
-        </section>
+
     </div>
 
     <div class="content-layer" id="layer-travel-main">
@@ -936,18 +998,18 @@ footer {
                         <div class="progress-fill" style="width: 66%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step disabled">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🗺️ Level 2 - Here's What Exists in Travel Cards
+                        Level 2 - Here's What Exists in Travel Cards
                     </div>
                 </div>
             </div>
@@ -956,71 +1018,98 @@ footer {
         <section class="cards-section">
             <div class="cards-container">
                 <div class="cards-grid">
-                    <div class="card" onclick="goToLayer('travel-points')">
-                        <span class="card-icon">❓</span>
+                    <div class="card-item" onclick="goToLayer('travel-points')">
+                        <span class="card-icon">?</span>
                         <h3>Points (The Made-Up Currency)</h3>
                         <p><strong>What it is:</strong> Travel cards earn points instead of cash back. Points are a made-up value that can be worth anywhere from 0.5 cents to 10+ cents depending on how you use them.</p>
                         <p><strong>Why it matters:</strong> This is where the complexity starts. Fixed value points are simple, transferable points can be valuable, and airline/hotel points are a gamble.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Points are confusing by design. Start with fixed-value points if you want simplicity, transferable points if you're willing to learn.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('travel-fees')">
-                        <span class="card-icon">💰</span>
+                    <div class="card-item" onclick="goToLayer('travel-fees')">
+                        <span class="card-icon">$</span>
                         <h3>Effective Annual Fees</h3>
                         <p><strong>What it is:</strong> Travel cards typically have annual fees that get "offset" with credits. The key question: are you using these credits for things you'd buy anyway?</p>
                         <p><strong>Why it matters:</strong> If you're paying for things you wouldn't naturally buy, you're not offsetting the fee - you're just paying more for your card.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Only count credits you'd actually use. Don't buy things you don't want just to "use your credits."</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('travel-earning')">
-                        <span class="card-icon">📈</span>
+                    <div class="card-item" onclick="goToLayer('travel-earning')">
+                        <span class="card-icon">↑</span>
                         <h3>Earning Rates</h3>
                         <p><strong>What it is:</strong> How many points you earn in each spending category. Your earning rate combined with your redemption rate is what unlocks real value.</p>
                         <p><strong>Why it matters:</strong> This is why travel nerds want multiple cards - to earn better rates in different categories.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Higher earning rates only matter if you can redeem points for good value. Don't chase earning rates alone.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('travel-redemption')">
-                        <span class="card-icon">🎯</span>
+                    <div class="card-item" onclick="goToLayer('travel-redemption')">
+                        <span class="card-icon">→</span>
                         <h3>Redemption Rates</h3>
                         <p><strong>What it is:</strong> What you can actually get for your points. You can redeem through portals, transfers, or direct bookings.</p>
                         <p><strong>Why it matters:</strong> This is where most people get screwed. A point is only worth what you can actually redeem it for.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">A point is worth exactly what you can get for it. Don't believe theoretical values from influencers.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('travel-lounges')">
-                        <span class="card-icon">🛂</span>
+                    <div class="card-item" onclick="goToLayer('travel-lounges')">
+                        <span class="card-icon">✈</span>
                         <h3>Airport Lounges</h3>
                         <p><strong>What it is:</strong> Lounges are sick sometimes. They come with top-tier cards and there are 3 main types: airline lounges, Priority Pass, and bank lounges.</p>
                         <p><strong>Why it matters:</strong> If you care about this, check what lounges exist at your home airport and where you frequently travel.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Check what lounges exist at your home airport before paying for lounge access. Not all airports have good options.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('travel-transfers')">
-                        <span class="card-icon">🔄</span>
+                    <div class="card-item" onclick="goToLayer('travel-transfers')">
+                        <span class="card-icon">↔</span>
                         <h3>Transfer Partners</h3>
                         <p><strong>What it is:</strong> This is why most websites value points higher. Points are made-up currency and their value changes depending on where you use them.</p>
                         <p><strong>Why it matters:</strong> This shit gets complicated. But it's where you can get the most value if you're willing to learn the systems.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">This is where the complexity really starts. Only dive in if you enjoy learning complex systems and optimizing.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('travel-portals')">
+                    <div class="card-item" onclick="goToLayer('travel-portals')">
                         <span class="card-icon">🌐</span>
                         <h3>Travel Portals</h3>
                         <p><strong>What it is:</strong> Each credit card issuer has a travel portal where you can redeem points. It's basically like using a travel agent.</p>
                         <p><strong>Why it matters:</strong> Travel nerds always recommend against this, but practically portals are really cool ways to use travel cards without dealing with nonsense.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Portals are underrated. They offer simplicity and flexibility that transfer partners can't match for most people.</div>
+                        </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('travel-bonuses')">
-                        <span class="card-icon">🎁</span>
+                    <div class="card-item" onclick="goToLayer('travel-bonuses')">
+                        <span class="card-icon">+</span>
                         <h3>Sign-Up Bonuses & Perks</h3>
                         <p><strong>What it is:</strong> Sign-up bonuses are one of the prime areas of travel cards. They typically offer way bigger rewards than cash back cards.</p>
                         <p><strong>Why it matters:</strong> Plus perks like cell phone protection, TSA PreCheck, and other benefits that might actually be useful.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Sign-up bonuses are often the best value from travel cards. But don't get cards just for bonuses you can't use.</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="callout-container">
-            <div class="callout-box">
-                <h4>💡 The Nerd vs Normal Approach</h4>
-                <p>If you're normal, understanding these concepts at a high level is enough. You know they exist, you know what they are, and you can make informed decisions. If you're a nerd, click any topic to dive deep and become an expert. There's no shame in either approach.</p>
-            </div>
-        </section>
+
     </div>
 
     <div class="content-layer" id="layer-cashback-types">
@@ -1034,18 +1123,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Cash Back Cards
+                        Level 3 - Deep Dive on Cash Back Cards
                     </div>
                 </div>
             </div>
@@ -1054,39 +1143,36 @@ footer {
         <section class="cards-section">
             <div class="cards-container">
                 <div class="cards-grid">
-                    <div class="card" onclick="goToLayer('cashback-flat')">
-                        <div class="card-content">
-                            <span class="card-icon">📈</span>
-                            <h3>Flat Rate Cards</h3>
-                            <p><strong>What they are:</strong> Get 1.5-2% back on everything, always.</p>
-                            <p><strong>Best for:</strong> People who want to set it and forget it.</p>
-                        </div>
-                        <div class="card-preview">
-                            <strong>You'll learn:</strong> Best flat rate cards → When to use → Pros and cons
-                        </div>
-                    </div>
-
-                    <div class="card" onclick="goToLayer('cashback-categories')">
-                        <div class="card-content">
-                            <span class="card-icon">🏪</span>
-                            <h3>Category Cards</h3>
-                            <p><strong>What they are:</strong> Get 3-6% on specific categories, 1% on everything else.</p>
-                            <p><strong>Best for:</strong> Heavy spenders in specific categories.</p>
-                        </div>
-                        <div class="card-preview">
-                            <strong>You'll learn:</strong> Top category cards → Spending analysis → Value calculation
+                    <div class="card-item" onclick="goToLayer('cashback-flat')">
+                        <span class="card-icon">↑</span>
+                        <h3>Flat Rate Cards</h3>
+                        <p><strong>What they are:</strong> Get 1.5-2% back on everything, always.</p>
+                        <p><strong>Best for:</strong> People who want to set it and forget it.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">The simplest option. No categories to track, no quarterly activations, just consistent rewards.</div>
                         </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('cashback-rotating')">
-                        <div class="card-content">
-                            <span class="card-icon">🔄</span>
-                            <h3>Rotating Categories</h3>
-                            <p><strong>What they are:</strong> Get 5% on categories that change quarterly.</p>
-                            <p><strong>Best for:</strong> Organized people who don't mind complexity.</p>
+                    <div class="card-item" onclick="goToLayer('cashback-categories')">
+                        <span class="card-icon">🏪</span>
+                        <h3>Category Cards</h3>
+                        <p><strong>What they are:</strong> Get 3-6% on specific categories, 1% on everything else.</p>
+                        <p><strong>Best for:</strong> Heavy spenders in specific categories.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Higher rewards but requires remembering which card to use when. Only worth it for heavy category spenders.</div>
                         </div>
-                        <div class="card-preview">
-                            <strong>You'll learn:</strong> Rotating card options → Activation requirements → Worth the effort?
+                    </div>
+
+                    <div class="card-item" onclick="goToLayer('cashback-rotating')">
+                        <span class="card-icon">↻</span>
+                        <h3>Rotating Categories</h3>
+                        <p><strong>What they are:</strong> Get 5% on categories that change quarterly.</p>
+                        <p><strong>Best for:</strong> Organized people who don't mind complexity.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Highest potential rewards but requires tracking quarterly changes and activating bonuses. High maintenance.</div>
                         </div>
                     </div>
                 </div>
@@ -1098,10 +1184,7 @@ footer {
                 <h2>Why This Matters</h2>
                 <p>The type of card you choose fundamentally changes how you need to think about spending. A flat rate card means you never think about categories. A category card means you need to remember which card to use when. A rotating card means you need to track quarterly changes and activate bonuses.</p>
 
-                <div class="callout-box">
-                    <h4>💡 The Mental Overhead Reality</h4>
-                    <p>Most people underestimate the mental energy required to optimize category cards. If you forget to use the right card 20% of the time, that 6% grocery card effectively becomes a 4.8% card (6% × 80% correct usage). Sometimes simple is better.</p>
-                </div>
+
             </div>
         </section>
     </div>
@@ -1117,18 +1200,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Flat Rate Cards
+                        Level 3 - Deep Dive on Flat Rate Cards
                     </div>
                 </div>
             </div>
@@ -1137,25 +1220,41 @@ footer {
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid four-columns">
-                     <div class="card">
-                         <span class="card-icon">1️⃣</span>
+                     <div class="card-item">
+                         <span class="card-icon">1</span>
                          <h3>Citi Double Cash</h3>
                          <p>The original 2% card (1% on purchase, 1% on payment). No annual fee.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">The most popular 2% card. Requires good credit but offers solid value with no annual fee.</div>
+                         </div>
                      </div>
-                     <div class="card">
-                         <span class="card-icon">2️⃣</span>
+                     <div class="card-item">
+                         <span class="card-icon">2</span>
                          <h3>Fidelity Rewards Visa</h3>
                          <p>A true 2% back on everything, deposited into a Fidelity investment account.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Great if you want to automatically invest your rewards. Requires a Fidelity account.</div>
+                         </div>
                      </div>
-                     <div class="card">
-                         <span class="card-icon">3️⃣</span>
+                     <div class="card-item">
+                         <span class="card-icon">3</span>
                          <h3>Capital One Quicksilver</h3>
                          <p>A simple 1.5% back on everything. Easier approval than 2% cards.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Good starter card with easier approval. Lower rewards but more accessible.</div>
+                         </div>
                      </div>
-                     <div class="card">
-                         <span class="card-icon">4️⃣</span>
+                     <div class="card-item">
+                         <span class="card-icon">4</span>
                          <h3>Alliant Cashback Visa</h3>
                          <p>A premium 2.5% back, but requires joining the credit union and meeting criteria.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Highest flat rate but requires credit union membership and meeting spending requirements.</div>
+                         </div>
                      </div>
                  </div>
             </div>
@@ -1180,18 +1279,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Category Cards
+                        Level 3 - Deep Dive on Category Cards
                     </div>
                 </div>
             </div>
@@ -1200,35 +1299,48 @@ footer {
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid four-columns">
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🛒</span>
                          <h3>Blue Cash Preferred (Amex)</h3>
                          <p>6% groceries (up to $6k/year), 6% streaming, 3% gas/transit. $95 annual fee.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Best for heavy grocery spenders. Calculate if the $95 fee is worth it for your spending level.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🛍️</span>
                          <h3>Blue Cash Everyday (Amex)</h3>
                          <p>3% groceries (up to $6k/year), 2% gas/department stores. No annual fee.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Good no-fee option for moderate grocery spending. Lower rewards but no annual fee.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🍽️</span>
                          <h3>Chase Freedom Unlimited</h3>
                          <p>3% dining, 3% drugstores, and an excellent 1.5% on everything else.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Excellent for dining and drugstore spending. The 1.5% base rate makes it versatile.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🎯</span>
                          <h3>Citi Custom Cash</h3>
                          <p>5% on your top spending category each month (up to $500). 1% everything else.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Automatically optimizes for your highest spending category. Great for variable spending patterns.</div>
+                         </div>
                      </div>
                  </div>
             </div>
         </section>
         
         <section class="container">
-             <div class="callout-box">
-                <h4>💡 The Trade-off</h4>
-                <p>Higher rewards on categories you use, but you have to remember which card to use when. Only worth it if you spend enough in the bonus categories.</p>
-            </div>
+
             <div class="navigation-buttons">
                 <button class="nav-btn secondary" onclick="goToLayer('cashback-types')">← Back to Types</button>
                 <button class="nav-btn primary" onclick="goToLayer('cashback-rotating')">Rotating Cards →</button>
@@ -1247,18 +1359,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Rotating Cards
+                        Level 3 - Deep Dive on Rotating Cards
                     </div>
                 </div>
             </div>
@@ -1267,35 +1379,48 @@ footer {
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid four-columns">
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🔥</span>
                          <h3>Chase Freedom Flex</h3>
                          <p>5% rotating categories (up to $1,500/quarter), 3% dining/drugstores. No annual fee.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Part of Chase ecosystem. Good for building points if you have other Chase cards.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">💡</span>
                          <h3>Discover it Cash Back</h3>
                          <p>5% rotating categories (up to $1,500/quarter). Matches all cash back earned in the first year.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">First year bonus makes this very valuable. Requires quarterly activation.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🏛️</span>
                          <h3>Chase Freedom (Original)</h3>
                          <p>The classic 5% rotating card. No longer available to new applicants, but many still use it.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Grandfathered card. If you have it, keep it. If not, get the Flex instead.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">⏳</span>
                          <h3>Citi Dividend</h3>
                          <p>A once-popular rotating card, now discontinued. Shows how these can change.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Discontinued card. Shows how rotating categories can change over time.</div>
+                         </div>
                      </div>
                  </div>
             </div>
         </section>
 
         <section class="container">
-             <div class="callout-box">
-                <h4>💡 The Mental Overhead</h4>
-                <p>You need to track quarterly calendars, activate bonuses, and remember which card to use. Great rewards if you're organized, frustrating if you forget.</p>
-            </div>
+
             <div class="navigation-buttons">
                 <button class="nav-btn secondary" onclick="goToLayer('cashback-types')">← Back to Types</button>
                 <button class="nav-btn primary" onclick="goToLayer('cashback-main')">Other Topics →</button>
@@ -1314,18 +1439,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Cash Back Cards
+                        Level 3 - Deep Dive on Cash Back Cards
                     </div>
                 </div>
             </div>
@@ -1334,39 +1459,36 @@ footer {
         <section class="cards-section">
             <div class="cards-container">
                 <div class="cards-grid">
-                    <div class="card" onclick="goToLayer('spending-grocery')">
-                        <div class="card-content">
-                            <span class="card-icon">🛒</span>
-                            <h3>Grocery-Heavy Spender</h3>
-                            <p><strong>Your Profile:</strong> You spend $300+ per month on groceries and household items at supermarkets.</p>
-                            <p><strong>Your Goal:</strong> Find a card that gives a high return on this large, consistent spending category.</p>
-                        </div>
-                        <div class="card-preview">
-                            <strong>You'll learn:</strong> Best grocery cards → Spending caps → Store coding rules
-                        </div>
-                    </div>
-
-                    <div class="card" onclick="goToLayer('spending-dining')">
-                        <div class="card-content">
-                            <span class="card-icon">🍽️</span>
-                            <h3>Dining-Heavy Spender</h3>
-                            <p><strong>Your Profile:</strong> You eat out frequently, order delivery often, or spend a lot at bars and coffee shops.</p>
-                            <p><strong>Your Goal:</strong> Earn bonus rewards on your social and convenience spending.</p>
-                        </div>
-                        <div class="card-preview">
-                            <strong>You'll learn:</strong> Top dining cards → Delivery coding → Bar/coffee rewards
+                    <div class="card-item" onclick="goToLayer('spending-grocery')">
+                        <span class="card-icon">🛒</span>
+                        <h3>Grocery-Heavy Spender</h3>
+                        <p><strong>Your Profile:</strong> You spend $300+ per month on groceries and household items at supermarkets.</p>
+                        <p><strong>Your Goal:</strong> Find a card that gives a high return on this large, consistent spending category.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Grocery cards can be very valuable. Check if stores like Walmart and Target code as groceries.</div>
                         </div>
                     </div>
 
-                    <div class="card" onclick="goToLayer('spending-mixed')">
-                        <div class="card-content">
-                            <span class="card-icon">📊</span>
-                            <h3>Mixed Spender</h3>
-                            <p><strong>Your Profile:</strong> No single category dominates your budget; it's spread out across many areas.</p>
-                            <p><strong>Your Goal:</strong> Find a simple solution that provides good value everywhere without complexity.</p>
+                    <div class="card-item" onclick="goToLayer('spending-dining')">
+                        <span class="card-icon">🍽️</span>
+                        <h3>Dining-Heavy Spender</h3>
+                        <p><strong>Your Profile:</strong> You eat out frequently, order delivery often, or spend a lot at bars and coffee shops.</p>
+                        <p><strong>Your Goal:</strong> Earn bonus rewards on your social and convenience spending.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Dining includes delivery, coffee shops, and bars. Check your last 3 months of spending.</div>
                         </div>
-                        <div class="card-preview">
-                            <strong>You'll learn:</strong> Flat rate strategies → Simple solutions → When to avoid complexity
+                    </div>
+
+                    <div class="card-item" onclick="goToLayer('spending-mixed')">
+                        <span class="card-icon">📊</span>
+                        <h3>Mixed Spender</h3>
+                        <p><strong>Your Profile:</strong> No single category dominates your budget; it's spread out across many areas.</p>
+                        <p><strong>Your Goal:</strong> Find a simple solution that provides good value everywhere without complexity.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Flat rate cards often work best for mixed spenders. Don't overcomplicate your strategy.</div>
                         </div>
                     </div>
                 </div>
@@ -1385,18 +1507,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Grocery Strategy
+                        Level 3 - Deep Dive on Grocery Strategy
                     </div>
                 </div>
             </div>
@@ -1405,35 +1527,48 @@ footer {
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid four-columns">
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🏆</span>
                          <h3>Blue Cash Preferred (Amex)</h3>
                          <p>6% groceries up to $6,000/year. The undisputed king for pure cash back on groceries.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Best for heavy grocery spenders. Calculate if the $95 fee is worth it for your spending level.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">💰</span>
                          <h3>Blue Cash Everyday (Amex)</h3>
                          <p>3% groceries up to $6,000/year. A great no-annual-fee alternative.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Good no-fee option for moderate grocery spending. Lower rewards but no annual fee.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">✈️</span>
                          <h3>Gold Card (Amex)</h3>
                          <p>4X points on groceries (up to $25k/yr). Best if you prefer travel points over cash.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Good for earning travel points from groceries. Higher annual fee but more earning potential.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🎯</span>
                          <h3>Citi Custom Cash</h3>
                          <p>5% on top category (up to $500/mo). Excellent if groceries is consistently your highest spend.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Automatically gives 5% on your highest spending category. Great for variable spending patterns.</div>
+                         </div>
                      </div>
                  </div>
             </div>
         </section>
         
         <section class="container">
-             <div class="callout-box">
-                <h4>💡 Things to Consider</h4>
-                <p>Many grocery cards have spending caps (like $6,000/year). After you hit the cap, you only earn 1%. Also, stores like Walmart and Target often don't code as "groceries."</p>
-            </div>
+
             <div class="navigation-buttons">
                 <button class="nav-btn secondary" onclick="goToLayer('cashback-spending')">← Back to Spending Analysis</button>
                 <button class="nav-btn primary" onclick="goToLayer('spending-dining')">Dining Strategy →</button>
@@ -1452,18 +1587,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Dining Strategy
+                        Level 3 - Deep Dive on Dining Strategy
                     </div>
                 </div>
             </div>
@@ -1472,35 +1607,48 @@ footer {
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid four-columns">
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">💎</span>
                          <h3>Chase Sapphire Preferred</h3>
                          <p>3x points on dining, which can be worth ~4.5% or more when transferred to travel partners.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Good for earning travel points from dining. Requires learning transfer partners for best value.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">✈️</span>
                          <h3>Gold Card (Amex)</h3>
                          <p>4x points on dining. A powerhouse for earning travel rewards from your food budget.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Highest earning rate for dining. Higher annual fee but excellent for travel rewards.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">💰</span>
                          <h3>Chase Freedom Unlimited</h3>
                          <p>A simple and effective 3% cash back on all dining with no annual fee.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Simple and effective. No annual fee and good 1.5% base rate on everything else.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🎤</span>
                          <h3>Capital One Savor</h3>
                          <p>4% cash back on dining and entertainment, making it great for nights out.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Great for dining and entertainment. Higher annual fee but excellent rewards for social spending.</div>
+                         </div>
                      </div>
                  </div>
             </div>
         </section>
 
         <section class="container">
-            <div class="callout-box">
-                <h4>💡 Hidden Dining Spending</h4>
-                <p>Don't forget: Coffee shops, food trucks, workplace cafeterias, airport food, hotel restaurants, and delivery fees all count as dining for most cards.</p>
-            </div>
+
             <div class="navigation-buttons">
                 <button class="nav-btn secondary" onclick="goToLayer('cashback-spending')">← Back to Spending Analysis</button>
                 <button class="nav-btn primary" onclick="goToLayer('spending-mixed')">Mixed Strategy →</button>
@@ -1519,18 +1667,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Mixed Spending Strategy
+                        Level 3 - Deep Dive on Mixed Spending Strategy
                     </div>
                 </div>
             </div>
@@ -1539,35 +1687,48 @@ footer {
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid four-columns">
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">👯</span>
                          <h3>Two-Card Strategy</h3>
                          <p>Use one flat rate card (2%) for most things, plus one category card for your biggest spend.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Good balance of simplicity and optimization. Use category card for your biggest spending area.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">☝️</span>
                          <h3>Single Flat Rate Card</h3>
                          <p>Just use a 2% card for everything. Lowest complexity, consistent rewards, no mental overhead.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Simplest option. Never think about which card to use. Often beats complex strategies.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🎯</span>
                          <h3>Citi Custom Cash Strategy</h3>
                          <p>Get 5% on your top category each month automatically. A good compromise solution.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Automatically optimizes for your highest spending category. Good compromise between simplicity and value.</div>
+                         </div>
                      </div>
-                     <div class="card">
+                     <div class="card-item">
                          <span class="card-icon">🤯</span>
                          <h3>Multiple Category Cards</h3>
                          <p>Advanced strategy with multiple cards for different categories. High maintenance but highest rewards.</p>
+                         <div class="card-advice">
+                             <div class="card-advice-label">Practical Advice</div>
+                             <div class="card-advice-text">Highest potential rewards but requires significant mental overhead. Only for organized people.</div>
+                         </div>
                      </div>
                  </div>
             </div>
         </section>
 
         <section class="container">
-            <div class="callout-box">
-                <h4>💡 The Simplicity Factor</h4>
-                <p>A 2% flat rate card used consistently often beats a mix of category cards used inconsistently. Don't underestimate the value of never having to think about which card to use.</p>
-            </div>
+
             <div class="navigation-buttons">
                 <button class="nav-btn secondary" onclick="goToLayer('cashback-spending')">← Back to Spending Analysis</button>
                 <button class="nav-btn primary" onclick="goToLayer('cashback-math')">Learn the Real Math →</button>
@@ -1586,18 +1747,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Cash Back Cards
+                        Level 3 - Deep Dive on Cash Back Cards
                     </div>
                 </div>
             </div>
@@ -1611,10 +1772,7 @@ footer {
                 <p>$$ \text{Break-Even Spending} = \frac{\text{Annual Fee}}{\text{Bonus Reward Rate}} = \frac{\$95}{0.04} = \$2,375 $$</p>
                 <p>You need to spend $2,375 per year (or about $198 per month) on groceries just to break even with a simple, no-fee 2% card. If you spend more than that, the fee card is better. If you spend less, the no-fee card wins.</p>
 
-                <div class="callout-box">
-                    <h4>💡 What Most People Miss</h4>
-                    <p>This calculation only works for the bonus category. You also have to factor in spending caps and the lower 1% reward rate on all non-bonus spending, which acts as an opportunity cost compared to a flat 2% card.</p>
-                </div>
+
             </div>
         </section>
 
@@ -1637,18 +1795,18 @@ footer {
                         <div class="progress-fill" style="width: 100%;"></div>
                         <div class="progress-steps">
                             <div class="progress-step completed" onclick="goToLayer('home')">
-                                <span class="step-icon">🏠</span>
+                                <span class="step-icon">1</span>
                             </div>
                             <div class="progress-step completed" onclick="goToLayer('cashback-main')">
-                                <span class="step-icon">🗺️</span>
+                                <span class="step-icon">2</span>
                             </div>
                             <div class="progress-step active">
-                                <span class="step-icon">🔍</span>
+                                <span class="step-icon">3</span>
                             </div>
                         </div>
                     </div>
                     <div class="progress-text">
-                        🔍 Level 3 - Deep Dive on Cash Back Cards
+                        Level 3 - Deep Dive on Cash Back Cards
                     </div>
                 </div>
             </div>
@@ -1663,25 +1821,41 @@ footer {
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid four-columns">
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">🏦</span>
                         <h3>Citi Double Cash</h3>
                         <p>2% total (1% buy, 1% pay). No annual fee. Most popular flat rate card. Requires good credit.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">The most popular 2% card. Requires good credit but offers solid value with no annual fee.</div>
+                        </div>
                     </div>
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">📈</span>
                         <h3>Fidelity Rewards Visa</h3>
                         <p>2% on everything into Fidelity account. No annual fee. Good if you want to invest rewards automatically.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Great if you want to automatically invest your rewards. Requires a Fidelity account.</div>
+                        </div>
                     </div>
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">🚀</span>
                         <h3>Capital One Quicksilver</h3>
                         <p>1.5% on everything. No annual fee. Easier approval than 2% cards. Good starter card.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Good starter card with easier approval. Lower rewards but more accessible.</div>
+                        </div>
                     </div>
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">🌊</span>
                         <h3>Wells Fargo Active Cash</h3>
                         <p>2% on everything. No annual fee. A direct and strong competitor to the Double Cash.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Strong competitor to Double Cash. Good option if you prefer Wells Fargo.</div>
+                        </div>
                     </div>
                  </div>
             </div>
@@ -1695,25 +1869,41 @@ footer {
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid four-columns">
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">🛒</span>
                         <h3>Blue Cash Preferred (Amex)</h3>
                         <p>6% groceries, 6% streaming, 3% gas. $95 fee. Best for heavy grocery spenders.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Best for heavy grocery spenders. Calculate if the $95 fee is worth it for your spending level.</div>
+                        </div>
                     </div>
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">🛍️</span>
                         <h3>Blue Cash Everyday (Amex)</h3>
                         <p>3% groceries, 3% gas, 3% online retail. No fee. Good entry-level category card.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Good no-fee option for moderate grocery spending. Lower rewards but no annual fee.</div>
+                        </div>
                     </div>
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">💊</span>
                         <h3>Chase Freedom Unlimited</h3>
                         <p>3% dining, 3% drugstores, 1.5% everything. No fee. Can convert to Chase points.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Excellent for dining and drugstore spending. The 1.5% base rate makes it versatile.</div>
+                        </div>
                     </div>
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">🎯</span>
                         <h3>Citi Custom Cash</h3>
                         <p>5% on top category each month (up to $500). Automatically optimizes for you.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Automatically optimizes for your highest spending category. Great for variable spending patterns.</div>
+                        </div>
                     </div>
                  </div>
             </div>
@@ -1722,24 +1912,29 @@ footer {
         <section class="container">
              <div class="content-section">
                 <h2>Popular Rotating Cards</h2>
-                 <div class="callout-box">
-                    <h4>💡 How to Think About This List</h4>
-                    <p>Don't get overwhelmed by all theoptions. Most people do well with either a simple 2% flat rate card or one category card for their biggest spending area. You don't need to optimize every category.</p>
-                </div>
+
             </div>
         </section>
         <section class="cards-section">
              <div class="cards-container">
                  <div class="cards-grid">
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">🔥</span>
                         <h3>Chase Freedom Flex</h3>
                         <p>5% rotating quarterly, 3% dining/drugstores. No fee. Part of Chase ecosystem.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">Part of Chase ecosystem. Good for building points if you have other Chase cards.</div>
+                        </div>
                     </div>
-                    <div class="card">
+                    <div class="card-item">
                         <span class="card-icon">💡</span>
                         <h3>Discover it Cash Back</h3>
                         <p>5% rotating quarterly, 1% everything. No fee. Matches cash back first year.</p>
+                        <div class="card-advice">
+                            <div class="card-advice-label">Practical Advice</div>
+                            <div class="card-advice-text">First year bonus makes this very valuable. Requires quarterly activation.</div>
+                        </div>
                     </div>
                  </div>
             </div>
