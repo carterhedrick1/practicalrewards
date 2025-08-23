@@ -1129,90 +1129,255 @@ footer {
             <div class="cards-container">
                 <div class="cards-grid">
                     <div class="card-item" onclick="goToLayer('travel-points')">
-                        <span class="card-icon">?</span>
-                        <h3>Points (The Made-Up Currency)</h3>
-                        <p><strong>What it is:</strong> Travel cards earn points instead of cash back. Points are a made-up value that can be worth anywhere from 0.5 cents to 10+ cents depending on how you use them.</p>
-                        <p><strong>Why it matters:</strong> This is where the complexity starts. Fixed value points are simple, transferable points can be valuable, and airline/hotel points are a gamble.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">Points are confusing by design. Start with fixed-value points if you want simplicity, transferable points if you're willing to learn.</div>
+                        <div class="card-content">
+                            <span class="card-icon">?</span>
+                            <h3>Points (The Made-Up Currency)</h3>
+                            <p><strong>What it is:</strong> Travel cards earn points instead of cash back. Each bank, airline, or hotel calls them something different, but they're all just points. They can be worth as little as half a cent or 10x more, depending on how you use them.</p>
+                            <p><strong>Why it matters:</strong> Unlike cash back, points don't have a fixed value. That means your rewards can be really good—or really disappointing—depending on how you redeem them. Knowing this is step one.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Points are confusing on purpose. Start with fixed-value points for simplicity, move to transferable points if you want to learn the game.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-points')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Points</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-item" onclick="goToLayer('travel-fees')">
-                        <span class="card-icon">$</span>
-                        <h3>Effective Annual Fees</h3>
-                        <p><strong>What it is:</strong> Travel cards typically have annual fees that get "offset" with credits. The key question: are you using these credits for things you'd buy anyway?</p>
-                        <p><strong>Why it matters:</strong> If you're paying for things you wouldn't naturally buy, you're not offsetting the fee - you're just paying more for your card.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">Only count credits you'd actually use. Don't buy things you don't want just to "use your credits."</div>
+                        <div class="card-content">
+                            <span class="card-icon">$</span>
+                            <h3>Effective Annual Fees</h3>
+                            <p><strong>What it is:</strong> Most travel cards charge an annual fee but promise to "offset" it with credits (like travel, food, or streaming).</p>
+                            <p><strong>Why it matters:</strong> The key is organic spend—using credits on things you'd buy anyway. If you're stretching to buy stuff just to "use your credits," you're not saving money—you're overspending to justify your card.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Only count credits you'd naturally use. If you wouldn't pay for it without the card, it's not really offsetting the fee.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-fees')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Annual Fees</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-item" onclick="goToLayer('travel-earning')">
-                        <span class="card-icon">↑</span>
-                        <h3>Earning Rates</h3>
-                        <p><strong>What it is:</strong> How many points you earn in each spending category. Your earning rate combined with your redemption rate is what unlocks real value.</p>
-                        <p><strong>Why it matters:</strong> This is why travel nerds want multiple cards - to earn better rates in different categories.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">Higher earning rates only matter if you can redeem points for good value. Don't chase earning rates alone.</div>
+                        <div class="card-content">
+                            <span class="card-icon">↑</span>
+                            <h3>Earning Rates</h3>
+                            <p><strong>What it is:</strong> How many points you earn in each spending category—dining, groceries, gas, etc.</p>
+                            <p><strong>Why it matters:</strong> Using multiple cards can boost rewards, but it also adds complexity. Know your personality—some people love juggling categories, others just want one card. Flat-rate cards that earn the same everywhere keep things simple.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Don't overcomplicate things. Pick a flat-rate card for simplicity or multiple cards if you actually enjoy tracking categories.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-earning')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Earning Rates</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-item" onclick="goToLayer('travel-redemption')">
-                        <span class="card-icon">→</span>
-                        <h3>Redemption Rates</h3>
-                        <p><strong>What it is:</strong> What you can actually get for your points. You can redeem through portals, transfers, or direct bookings.</p>
-                        <p><strong>Why it matters:</strong> This is where most people get screwed. A point is only worth what you can actually redeem it for.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">A point is worth exactly what you can get for it. Don't believe theoretical values from influencers.</div>
+                        <div class="card-content">
+                            <span class="card-icon">→</span>
+                            <h3>Redemption Rates</h3>
+                            <p><strong>What it is:</strong> How much your points are worth when you cash them in. This is what people mean when they talk about "cents per point."</p>
+                            <p><strong>Why it matters:</strong> It's confusing because point values change. A cash back card is always the same (2% back is 2%), but travel points might be worth 0.5 cents one day and 5 cents the next.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Think of redemption rates as the swing factor. Cash back = steady and predictable. Points = can be great, but only if you use them well.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-redemption')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Redemption Rates</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-item" onclick="goToLayer('travel-lounges')">
-                        <span class="card-icon">✈</span>
-                        <h3>Airport Lounges</h3>
-                        <p><strong>What it is:</strong> Lounges are sick sometimes. They come with top-tier cards and there are 3 main types: airline lounges, Priority Pass, and bank lounges.</p>
-                        <p><strong>Why it matters:</strong> If you care about this, check what lounges exist at your home airport and where you frequently travel.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">Check what lounges exist at your home airport before paying for lounge access. Not all airports have good options.</div>
+                        <div class="card-content">
+                            <span class="card-icon">✈</span>
+                            <h3>Airport Lounges</h3>
+                            <p><strong>What it is:</strong> Airport lounges offer food, drinks, and a quieter place to sit. Access comes with premium travel cards, but not all lounge access works the same way.</p>
+                            <p><strong>Why it matters:</strong> Lounge access is confusing—guest rules vary by card, every lounge is different, and some airports barely have them at all.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Before paying extra for lounge perks, check the details for your card and your home airport. Lounge access is not created equally.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-lounges')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Airport Lounges</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-item" onclick="goToLayer('travel-transfers')">
-                        <span class="card-icon">↔</span>
-                        <h3>Transfer Partners</h3>
-                        <p><strong>What it is:</strong> This is why most websites value points higher. Points are made-up currency and their value changes depending on where you use them.</p>
-                        <p><strong>Why it matters:</strong> This shit gets complicated. But it's where you can get the most value if you're willing to learn the systems.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">This is where the complexity really starts. Only dive in if you enjoy learning complex systems and optimizing.</div>
+                        <div class="card-content">
+                            <span class="card-icon">↔</span>
+                            <h3>Transfer Partners</h3>
+                            <p><strong>What it is:</strong> The secret sauce of travel cards. You can move points to airline or hotel partners where they might be worth more.</p>
+                            <p><strong>Why it matters:</strong> This is where the biggest value is hiding—but also the most complexity. Transfers can feel like a part-time job to figure out.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">This is the most complicated part of travel cards. Know what type of person you are—if you don't enjoy learning systems, this won't be for you.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-transfers')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Transfer Partners</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-item" onclick="goToLayer('travel-portals')">
-                        <span class="card-icon">🌐</span>
-                        <h3>Travel Portals</h3>
-                        <p><strong>What it is:</strong> Each credit card issuer has a travel portal where you can redeem points. It's basically like using a travel agent.</p>
-                        <p><strong>Why it matters:</strong> Travel nerds always recommend against this, but practically portals are really cool ways to use travel cards without dealing with nonsense.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">Portals are underrated. They offer simplicity and flexibility that transfer partners can't match for most people.</div>
+                        <div class="card-content">
+                            <span class="card-icon">⌖</span>
+                            <h3>Travel Portals</h3>
+                            <p><strong>What it is:</strong> Each card issuer has a travel portal where you can redeem points—basically like booking through Expedia.</p>
+                            <p><strong>Why it matters:</strong> Portals set the floor for redemption value. You'll always get at least this much, but you might get more with transfer partners if you're willing to be flexible and learn.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Portals are underrated. They're not always the "best" value, but they're the simplest way to use points.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-portals')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Travel Portals</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-item" onclick="goToLayer('travel-bonuses')">
-                        <span class="card-icon">+</span>
-                        <h3>Sign-Up Bonuses & Perks</h3>
-                        <p><strong>What it is:</strong> Sign-up bonuses are one of the prime areas of travel cards. They typically offer way bigger rewards than cash back cards.</p>
-                        <p><strong>Why it matters:</strong> Plus perks like cell phone protection, TSA PreCheck, and other benefits that might actually be useful.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">Sign-up bonuses are often the best value from travel cards. But don't get cards just for bonuses you can't use.</div>
+                        <div class="card-content">
+                            <span class="card-icon">+</span>
+                            <h3>Sign-Up Bonuses</h3>
+                            <p><strong>What it is:</strong> When you open a new travel card, you can often earn a huge chunk of points (sometimes worth hundreds—or even over a thousand dollars) after hitting a minimum spend.</p>
+                            <p><strong>Why it matters:</strong> These bonuses are usually where travel cards give you the most value—way more than what you'll earn from regular spending.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">If you're planning a big trip, collecting sign-up bonuses is one of the fastest ways to make it happen.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-bonuses')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Sign-Up Bonuses</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-item" onclick="goToLayer('travel-churning')">
+                        <div class="card-content">
+                            <span class="card-icon">↻</span>
+                            <h3>Churning (Expert Level)</h3>
+                            <p><strong>What it is:</strong> Churning is the strategy of opening credit cards just for the sign-up bonuses, then canceling the card after the first year. You basically pay one year of an annual fee in exchange for a massive pile of points.</p>
+                            <p><strong>Why it matters:</strong> Done well, it can unlock incredible value—multiple free flights, hotel stays, even luxury trips. Done poorly, it can hurt your credit, waste money on fees, or get you flagged by banks.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">This is serious expert-level stuff. Don't even consider it until you've mastered the basics. For most people, a couple of well-timed sign-up bonuses is plenty. Churning is for the pros who treat credit cards like a part-time job.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-churning')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Churning</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-item" onclick="goToLayer('travel-protections')">
+                        <div class="card-content">
+                            <span class="card-icon">⛨</span>
+                            <h3>Protections</h3>
+                            <p><strong>What it is:</strong> Things like trip delay insurance, rental car coverage, purchase protection, and extended warranties.</p>
+                            <p><strong>Why it matters:</strong> People overlook these, but they can be worth hundreds if you actually use them.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Don't get a card just for protections—but know what your card covers before paying for extra insurance.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-protections')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: Protections</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-item" onclick="goToLayer('travel-foreign-fees')">
+                        <div class="card-content">
+                            <span class="card-icon">⛯</span>
+                            <h3>FTFs</h3>
+                            <p><strong>What it is:</strong> Some cards charge ~3% every time you use them abroad. Premium travel cards usually waive this.</p>
+                            <p><strong>Why it matters:</strong> If you travel internationally even once a year, this is a must-have feature.</p>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Never travel internationally with a card that charges foreign transaction fees. It's like paying a tax for no reason.</div>
+                            </div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-foreign-fees')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click to Dive Into: FTFs</div>
+                            </div>
                         </div>
                     </div>
                 </div>
