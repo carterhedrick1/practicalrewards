@@ -681,7 +681,7 @@ footer {
 /* Mobile Responsive */
         @media (max-width: 767px) {
             .hero-content {
-                padding: 5rem 1rem 4rem 1rem;
+                padding: 1.5rem 1rem 4rem 1rem;
             }
             .hero-content h1 {
                 font-size: 2rem;
@@ -701,6 +701,11 @@ footer {
                 margin: 0.5rem 0 !important;
                 line-height: 1.4;
                 padding-left: 0;
+                font-size: 0.75rem !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: left !important;
             }
             .hero-content ol li strong {
                 display: inline-block;
@@ -832,6 +837,76 @@ footer {
         min-height: 200px;
     }
 }
+
+/* Arrow Navigation Styles */
+.card-arrow-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.5rem auto 0 auto;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card-arrow-navigation:hover {
+    transform: translateY(-2px);
+}
+
+.card-arrow-icon {
+    position: relative;
+    color: #059669;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    width: 32px;
+    height: 32px;
+    background: #f0fdf4;
+    border: 2px solid #059669;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+    flex-shrink: 0;
+    transform: rotate(-90deg); /* Point to the left */
+}
+
+.card-arrow-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
+}
+
+.card-arrow-text {
+    font-size: 0.8rem;
+    color: #059669;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Mobile responsive for arrow navigation */
+@media (max-width: 768px) {
+    .card-arrow-navigation {
+        margin: 1rem auto 0 auto;
+    }
+    
+    .card-arrow-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .card-arrow-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .card-arrow-text {
+        font-size: 0.75rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -845,10 +920,10 @@ footer {
             <div class="hero-content">
                 <h1>Credit Cards Made Clear</h1>
                 <p style="margin-bottom: 0.75rem;">Banks love their fine print. Influencers love their photo ops in business class. We'll keep it practical and show you what actually matters for your wallet.</p>
-                <ol style="margin: 0.75rem auto; padding-left: 0; list-style: none; max-width: 600px;">
-                    <li style="margin: 0.25rem 0;"><strong>Level 1:</strong> Cash Back vs Points — start with the basics.</li>
-                    <li style="margin: 0.25rem 0;"><strong>Level 2:</strong> A clear view of what each card type includes.</li>
-                    <li style="margin: 0.25rem 0;"><strong>Level 3:</strong> The full breakdown in plain English.</li>
+                <ol style="margin: 0.75rem auto; padding-left: 0; list-style: none; max-width: 600px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.9); font-weight: 400; line-height: 1.4; text-align: center;">
+                    <li style="margin: 0.1rem 0; padding: 0.25rem 0; text-align: center;"><strong style="color: #fef3c7;">Level 1:</strong> Cash Back vs Points — start with the basics.</li>
+                    <li style="margin: 0.1rem 0; padding: 0.25rem 0; text-align: center;"><strong style="color: #fef3c7;">Level 2:</strong> A clear view of what each card type includes.</li>
+                    <li style="margin: 0.1rem 0; padding: 0.25rem 0; text-align: center;"><strong style="color: #fef3c7;">Level 3:</strong> The full breakdown in plain English.</li>
                 </ol>
                 <p>Learn as much—or as little—as you want. No need to turn into a credit card expert overnight.</p>
                 
@@ -881,10 +956,18 @@ footer {
                         <span class="card-icon">$</span>
                         <h3>Cash Back Cards</h3>
                         <p>Cash back cards are the simplest way to get rewarded for spending. Instead of earning points with made-up names, you just get a percentage of your money back. One dollar spent = a few cents returned. Pretty straightforward.</p>
-                        <p>At the highest level, cash back cards are most often free and can give you 2% back on everything Some cards also offer higher rewards in specific categories, along with practical protections like extended warranties, cell phone protection, or purchase protection. Nothing flashy like airport lounges, but genuinely useful in everyday life.</p>
+                        <p>At the highest level, cash back cards are most often free and can give you 2% back on everything. Some cards also offer higher rewards in specific categories, along with practical protections like extended warranties, cell phone protection, or purchase protection. Nothing flashy like airport lounges, but genuinely useful in everyday life.</p>
                         <div class="card-advice">
                             <div class="card-advice-label">Practical Advice</div>
                             <div class="card-advice-text">At the bare minimum, use a cash back card instead of a debit card—2% back is free money. Simple and reliable, but don't expect travel perks. If you want guaranteed rewards with zero effort, this is the way to go.</div>
+                        </div>
+                        <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('cashback-main')">
+                            <div class="card-arrow-icon" aria-hidden="true">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="card-arrow-text">Click For Level 2 on Cash Back</div>
                         </div>
                     </div>
 
@@ -897,7 +980,15 @@ footer {
                             <div class="card-advice-label">Practical Advice</div>
                             <div class="card-advice-text">Travel cards can give you more value, but they're complicated. If you don't like juggling rules, stick with cash back. Cash back is straightforward; points are… intentionally confusing.</div>
                         </div>
-                    </div>
+                        <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-main')">
+                            <div class="card-arrow-icon" aria-hidden="true">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="card-arrow-text">Click For Level 2 on Travel Cards</div>
+                        </div>
+                        </div>
                 </div>
             </div>
         </section>
