@@ -344,6 +344,7 @@ nav {
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .card-item:hover {
@@ -374,6 +375,16 @@ nav {
 .card-item p strong {
     color: #374151;
     font-weight: 600;
+}
+
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-bottom {
+    margin-top: auto;
 }
 
 .card-icon {
@@ -953,42 +964,50 @@ footer {
             <div class="cards-container">
                 <div class="cards-grid">
                     <div class="card-item" onclick="goToLayer('cashback-main')">
-                        <span class="card-icon">$</span>
-                        <h3>Cash Back Cards</h3>
-                        <p>Cash back cards are the simplest way to get rewarded for spending. Instead of earning points with made-up names, you just get a percentage of your money back. One dollar spent = a few cents returned. Pretty straightforward.</p>
-                        <p>At the highest level, cash back cards are most often free and can give you 2% back on everything. Some cards also offer higher rewards in specific categories, along with practical protections like extended warranties, cell phone protection, or purchase protection. Nothing flashy like airport lounges, but genuinely useful in everyday life.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">At the bare minimum, use a cash back card instead of a debit card—2% back is free money. Simple and reliable, but don't expect travel perks. If you want guaranteed rewards with zero effort, this is the way to go.</div>
+                        <div class="card-content">
+                            <span class="card-icon">$</span>
+                            <h3>Cash Back Cards</h3>
+                            <p><strong>What This Is:</strong> Cash back cards reward you with real money back on your spending. One dollar spent = a few cents returned. Simple, automatic, and no made-up point systems to figure out.</p>
+                            <p><strong>Why This Matters:</strong> Cash back has a set value—you always know what you're getting. A flat 2% back on everything is like an instant discount on every purchase, and some cards even give extra back on things like groceries, gas, or entertainment.</p>
                         </div>
-                        <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('cashback-main')">
-                            <div class="card-arrow-icon" aria-hidden="true">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">At the bare minimum, use a cash back card instead of a debit card—2% back is free money. If you want guaranteed rewards with zero effort, this is the way to go.</div>
                             </div>
-                            <div class="card-arrow-text">Click For Level 2 on Cash Back</div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('cashback-main')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click For Level 2 on Cash Back</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-item" onclick="goToLayer('travel-main')">
-                        <span class="card-icon">✈</span>
-                        <h3>Travel Cards</h3>
-                        <p>Travel cards are different from cash back cards because they earn points instead of cash back. The catch? Every bank, airline, or hotel insists on calling their points something different. You'll hear "miles," "rewards," "points," "stars," and probably "magical fairy dust" someday — but in the end, they're all just points.</p>
-                        <p>Travel cards also usually come with extra perks that can make travel (or just your lifestyle) feel a bit fancier: airport lounges, no foreign transaction fees, priority boarding, and so on.</p>
-                        <div class="card-advice">
-                            <div class="card-advice-label">Practical Advice</div>
-                            <div class="card-advice-text">Travel cards can give you more value, but they're complicated. If you don't like juggling rules, stick with cash back. Cash back is straightforward; points are… intentionally confusing.</div>
+                        <div class="card-content">
+                            <span class="card-icon">✈</span>
+                            <h3>Travel Cards</h3>
+                            <p><strong>What This Is:</strong> Travel cards earn points instead of cash back. Every bank, airline, and hotel has their own name for them—"miles," "rewards," "stars"—but they all work the same way: they're points.</p>
+                            <p><strong>Why This Matters:</strong> Unlike cash back, points don't have a set value. Sometimes they can be worth much more if you redeem them the right way, but that takes extra work, planning, and keeping track of rules. The upside: more potential value. The downside: more effort.</p>
                         </div>
-                        <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-main')">
-                            <div class="card-arrow-icon" aria-hidden="true">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
+                        <div class="card-bottom">
+                            <div class="card-advice">
+                                <div class="card-advice-label">Practical Advice</div>
+                                <div class="card-advice-text">Travel cards can give you outsized rewards, but only if you're willing to play the game. If you'd rather keep it simple, stick with cash back.</div>
                             </div>
-                            <div class="card-arrow-text">Click For Level 2 on Travel Cards</div>
+                            <div class="card-arrow-navigation" onclick="event.stopPropagation(); goToLayer('travel-main')">
+                                <div class="card-arrow-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="card-arrow-text">Click For Level 2 on Travel Cards</div>
+                            </div>
                         </div>
-                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -3047,7 +3066,14 @@ footer {
                 
                 // Update path and scroll
                 updatePath(layerId);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Scroll to top but account for fixed header and any other fixed elements
+                setTimeout(() => {
+                    const header = document.querySelector('header');
+                    const headerHeight = header ? header.offsetHeight : 80;
+                    const scrollPadding = parseInt(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+                    const targetScroll = Math.max(headerHeight, scrollPadding);
+                    window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                }, 100);
                 
                 // Add to browser history if requested
                 if (addToHistory) {
