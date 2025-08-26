@@ -872,14 +872,14 @@ footer {
 }
 
 /* Lounge Types Styles */
-.lounge-types {
+.priority-pass-details {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin: 1.5rem 0;
 }
 
-.lounge-type {
+.detail-item {
     background: #f8fafc;
     border-left: 3px solid #059669;
     padding: 1rem 1.25rem;
@@ -889,7 +889,7 @@ footer {
     color: #374151;
 }
 
-.lounge-type.warning {
+.detail-item.warning {
     background: #fef3c7;
     border-left: 3px solid #f59e0b;
     color: #92400e;
@@ -980,23 +980,7 @@ footer {
     }
 }
 
-/* Priority Pass Details Styles */
-.priority-pass-details {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin: 1.5rem 0;
-}
-
-.detail-item {
-    background: #f8fafc;
-    border-left: 3px solid #059669;
-    padding: 1rem 1.25rem;
-    border-radius: 0 8px 8px 0;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: #374151;
-}
+/* Priority Pass Details Styles - Moved to external CSS file */
 
 /* Mobile Responsive */
 @media (max-width: 767px) {
@@ -1139,40 +1123,12 @@ footer {
             }
             
             /* Mobile styles for lounge types */
-            .lounge-types {
+            .priority-pass-details {
                 gap: 0.75rem;
                 margin: 1.25rem 0;
             }
             
-            .lounge-type {
-                padding: 0.875rem 1rem;
-                font-size: 0.9rem;
-                background: transparent !important;
-                border-left: none !important;
-                border-radius: 0 !important;
-                padding: 0.5rem 0 !important;
-                position: relative;
-            }
-            
-            .lounge-type::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 100%;
-                height: 4px;
-                background: linear-gradient(90deg, #059669, #10b981);
-                border-radius: 2px;
-                z-index: -1;
-            }
-            
-            .lounge-type strong {
-                background: white;
-                padding: 0.25rem 0.5rem;
-                border-radius: 4px;
-                margin-right: 0.5rem;
-            }
+            /* REMOVED BROKEN CSS - Using correct detail-item CSS below */
             
             /* Mobile styles for horizontal chart */
             .horizontal-chart {
@@ -1221,8 +1177,26 @@ footer {
             }
             
             .detail-item {
-                padding: 0.875rem 1rem;
-                font-size: 0.9rem;
+                background: #f8fafc !important;
+                border-left: 3px solid #059669 !important;
+                padding: 0.875rem 1rem !important;
+                border-radius: 0 8px 8px 0 !important;
+                font-size: 0.9rem !important;
+                line-height: 1.4 !important;
+                color: #374151 !important;
+                margin-bottom: 0.75rem !important;
+                display: block !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            
+            .detail-item:last-child {
+                margin-bottom: 0;
+            }
+            
+            .detail-item strong {
+                color: #059669 !important;
+                font-weight: 600 !important;
             }
         }
 
@@ -3112,14 +3086,14 @@ footer {
                         <h2>Practical Explanation</h2>
                         <p>Points are the "currency" of travel credit cards. But unlike cash back, they don't come with a neat little price tag. That's the trick: banks and airlines get to decide what your points are worth, and the value changes depending on how you use them.</p>
                         <p>Here's what that looks like in real life:</p>
-                        <div class="lounge-types">
-                            <div class="lounge-type">
+                        <div class="priority-pass-details">
+                            <div class="detail-item">
                                 <strong>Standard Value:</strong> A $500 flight costs <strong>50,000 points</strong> (1 cent per point - this is normal)
                             </div>
-                            <div class="lounge-type">
+                            <div class="detail-item">
                                 <strong>Good Value:</strong> The same flight might cost <strong>25,000 points</strong> (2 cents per point - much better)
                             </div>
-                            <div class="lounge-type">
+                            <div class="detail-item">
                                 <strong>Great Value:</strong> Or it might only cost <strong>12,500 points</strong> (4 cents per point - now you're getting somewhere)
                             </div>
                         </div>
@@ -3155,12 +3129,9 @@ footer {
                             <div class="recommendation-content">
                                 <h3>What is CPP?</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
-                                            <strong>What is CPP?</strong> CPP stands for "cents per point" - it's how much each point is worth in dollars. This is the standard way to measure point value.
-                                        </div>
-                                        <div class="lounge-type">
-                                            <strong>Simple Math:</strong> If you have 1,000 points worth 1 CPP, they're worth $10. If you have 50,000 points worth 1 CPP, they're worth $500.
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
+                                            <strong>What is CPP?</strong> CPP stands for "cents per point" - it's how much each point is worth in dollars. This is the standard way to measure point value. If you have 1,000 points worth 1 CPP, they're worth $10. If you have 50,000 points worth 1 CPP, they're worth $500.
                                         </div>
                                     </div>
                                 </div>
@@ -3226,11 +3197,7 @@ footer {
                                             <div class="dollar-label">$600</div>
                                         </div>
                                     </div>
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
-                                            <strong>The Difference:</strong> Same 50,000 points, but Delta's 1.2 CPP makes them worth $100 more than the baseline 1.0 CPP.
-                                        </div>
-                                    </div>
+                                    <p><strong>The Difference:</strong> Same 50,000 points, but Delta's 1.2 CPP makes them worth $100 more than the baseline 1.0 CPP.</p>
                                 </div>
                                 
                                 <h3>The Bottom Line</h3>
@@ -3434,25 +3401,19 @@ footer {
                                 <h3>Why They Matter: A Real Example</h3>
                                 <div class="recommendation-text">
                                     <p>Let's say you want to book a $500 Southwest flight. Here's what happens:</p>
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
-                                            <strong>Through Chase Travel Portal:</strong> You'd pay 50,000 Chase points (1 cent per point). The portal treats your points like cash - $500 = 50,000 points.
-                                        </div>
-                                        <div class="lounge-type">
-                                            <strong>Transfer to Southwest:</strong> You transfer 35,000 Chase points to Southwest Rapid Rewards, then book the same flight for 35,000 Southwest points. Southwest might price this flight cheaper in points than the cash price.
-                                        </div>
-                                        <div class="lounge-type">
-                                            <strong>The Result:</strong> You saved 15,000 points! That's like getting $150 in extra value just by knowing how to transfer points instead of using the portal.
-                                        </div>
-                                    </div>
+                                    <ul>
+                                        <li><strong>Through Chase Travel Portal:</strong> You'd pay 50,000 Chase points (1 cent per point). The portal treats your points like cash - $500 = 50,000 points.</li>
+                                        <li><strong>Transfer to Southwest:</strong> You transfer 35,000 Chase points to Southwest Rapid Rewards, then book the same flight for 35,000 Southwest points. Southwest might price this flight cheaper in points than the cash price.</li>
+                                        <li><strong>The Result:</strong> You saved 15,000 points! That's like getting $150 in extra value just by knowing how to transfer points instead of using the portal.</li>
+                                    </ul>
                                     <p>This is where people unlock those "$5,000 flight for 50,000 points" stories. Instead of being stuck at the 1 cent per point floor of a portal, you can sometimes get 3–5x the value (or more) by moving your points into the right airline or hotel program.</p>
                                 </div>
                                 
-                                <div class="lounge-types">
-                                    <div class="lounge-type">
+                                <div class="priority-pass-details">
+                                    <div class="detail-item">
                                         <strong>The Bottom Line:</strong> Transferable points are the crown jewel if you're willing to put in the time. If you're not, they're just another way to get confused.
                                     </div>
-                                    <div class="lounge-type warning">
+                                    <div class="detail-item warning">
                                         <strong>⚠️ The Catch & Warning:</strong> Flexibility comes at a cost: complexity. Award charts, transfer ratios, blackout dates… it's a puzzle. Getting outsized value can feel like a full-time job of research. This is only for people who enjoy optimizing systems, have time to research, and travel frequently enough to make the effort worthwhile. If that sentence already made you tired, stick with portal points.
                                     </div>
                                 </div>
@@ -3876,8 +3837,8 @@ footer {
                             <div class="recommendation-content">
                                 <h3>The Organic Spend Test</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Ask Yourself:</strong> "Would I buy this without the card?" If yes, count it. If no, don't.
                                         </div>
                                     </div>
@@ -3885,14 +3846,14 @@ footer {
                                 
                                 <h3>Good Examples (Count These)</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Food Delivery:</strong> You already spend $20/month on DoorDash. Card offers $10/month credit = $120/year saved
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Airline Fee Credit:</strong> You fly 3x/year and always check bags. $200 credit covers your $35 bag fees = $105 saved
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Dining Credit:</strong> You eat out 2x/month at restaurants. $25/month credit = $300/year saved
                                         </div>
                                     </div>
@@ -3900,14 +3861,14 @@ footer {
                                 
                                 <h3>Bad Examples (Don't Count These)</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type warning">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item warning">
                                             <strong>Luxury Hotel Credit:</strong> You normally stay at $150/night hotels. $200 credit only works at $500+ hotels = $0 saved
                                         </div>
-                                        <div class="lounge-type warning">
+                                        <div class="detail-item warning">
                                             <strong>Rideshare Credit:</strong> You never use Uber/Lyft. $15/month credit = $0 saved (you're not suddenly going to start)
                                         </div>
-                                        <div class="lounge-type warning">
+                                        <div class="detail-item warning">
                                             <strong>Airport Lounge Credit:</strong> You fly once a year. $50 lounge credit = $0 saved (you'd never pay for a lounge)
                                         </div>
                                     </div>
@@ -3941,14 +3902,14 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Easy Credits (Green Flags)</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Annual/Semi-Annual Credits:</strong> Credits that reset once or twice a year—because remembering to use something every single month is basically a part-time job
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Auto-Apply Credits:</strong> Credits that magically appear without you having to remember to activate them (the bank actually doing something helpful for once)
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Wide Acceptance:</strong> Credits that work at places you already use, not just that one weird restaurant downtown that's "totally worth it"
                                         </div>
                                     </div>
@@ -3956,14 +3917,14 @@ footer {
                                 
                                 <h3>Tricky Credits (Yellow/Red Flags)</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type warning">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item warning">
                                             <strong>Monthly Reset Credits:</strong> Credits that expire every 30 days—because apparently banks think you have nothing better to do than track their arbitrary deadlines
                                         </div>
-                                        <div class="lounge-type warning">
+                                        <div class="detail-item warning">
                                             <strong>Portal Requirements:</strong> Credits that require booking through a "special" portal that somehow always has different prices than everywhere else
                                         </div>
-                                        <div class="lounge-type warning">
+                                        <div class="detail-item warning">
                                             <strong>Brand Restrictions:</strong> Credits that only work at one specific chain—because variety is overrated and you should definitely change your entire lifestyle for a $25 credit
                                         </div>
                                     </div>
@@ -3997,14 +3958,14 @@ footer {
                             <div class="recommendation-content">
                                 <h3>What to Check Before You Count It</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Location Check:</strong> Are the eligible hotels in cities you actually visit?
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Price Check:</strong> Are prices reasonable for your trips (not just aspirational)?
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Booking Check:</strong> Do booking rules require prepaying or using a special portal that raises prices?
                                         </div>
                                     </div>
@@ -4012,11 +3973,11 @@ footer {
                                 
                                 <h3>How to Value It (Realistically)</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Full Value:</strong> If you'd book those hotels anyway, count the credit at or near full value
                                         </div>
-                                        <div class="lounge-type warning">
+                                        <div class="detail-item warning">
                                             <strong>Nice-to-Have:</strong> If you're stretching just to fit the rules, treat it as a bonus—not part of your core math
                                         </div>
                                     </div>
@@ -4050,14 +4011,14 @@ footer {
                             <div class="recommendation-content">
                                 <h3>What It Does</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Credit-by-Credit Guide:</strong> Walks you through each credit in plain English
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Honest Toggles:</strong> Let you choose "I'd use this / I wouldn't" for accurate math
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Real-World Total:</strong> Shows your actual effective annual fee based on your habits
                                         </div>
                                     </div>
@@ -4065,11 +4026,11 @@ footer {
                                 
                                 <h3>Why It Helps</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Personalized Value:</strong> "$X in credits" isn't your number until it matches your habits
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>No Guesswork:</strong> No spreadsheet, no "trust me bro" - just honest math
                                         </div>
                                     </div>
@@ -4124,9 +4085,11 @@ footer {
                         <h2>Practical Explanation</h2>
                         <p>If a flight is $500, expect about <strong>50,000 points</strong> in a portal. That's your <strong>floor</strong>. Below 1¢ per point? Nope—book cash or use a cash-back card.</p>
                         <p>Portals tie points to cash prices, so there's no award-chart Sudoku. The tradeoff:</p>
-                        <p>- Sometimes prices don't match the airline/hotel site.</p>
-                        <p>- Third-party bookings can mean <strong>limited elite benefits</strong>.</p>
-                        <p>- If your flight gets delayed/canceled, you often deal with the <strong>portal's</strong> customer service first. (Yes, hold music was harmed in the making of this perk.)</p>
+                        <ul>
+                            <li>Sometimes prices don't match the airline/hotel site.</li>
+                            <li>Third-party bookings can mean <strong>limited elite benefits</strong>.</li>
+                            <li>If your flight gets delayed/canceled, you often deal with the <strong>portal's</strong> customer service first. (Yes, hold music was harmed in the making of this perk.)</li>
+                        </ul>
                         <p><strong>Upside:</strong> banks usually <strong>reward extra points</strong> when you book <strong>through their portal</strong>—think 5x–10x on certain travel. More on that below.</p>
                     </div>
                 </div>
@@ -4203,8 +4166,10 @@ footer {
                                 
                                 <h3>Earning Boost</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Sapphire Reserve:</strong> typically <strong>10x</strong> hotels/cars and <strong>5x</strong> flights <strong>in the portal</strong>.</p>
-                                    <p>- <strong>Sapphire Preferred:</strong> typically <strong>5x</strong> on travel <strong>in the portal</strong>.</p>
+                                    <ul>
+                                        <li><strong>Sapphire Reserve:</strong> typically <strong>10x</strong> hotels/cars and <strong>5x</strong> flights <strong>in the portal</strong>.</li>
+                                        <li><strong>Sapphire Preferred:</strong> typically <strong>5x</strong> on travel <strong>in the portal</strong>.</li>
+                                    </ul>
                                 </div>
                                 
                                 <h3>The Fun Bit</h3>
@@ -4327,10 +4292,12 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Portal Breakdown</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Capital One</strong> feels the most <strong>consumer-friendly on flights</strong> thanks to <strong>price-drop protection</strong> and <strong>24-hour price match</strong>; even when prices are similar, those features are a nice safety net.</p>
-                                    <p>- <strong>Chase</strong> can deliver the <strong>best point value</strong> when a <strong>Points Boost</strong> appears on the thing you actually want. If it doesn't, you're back to the ~1cpp baseline.</p>
-                                    <p>- <strong>Amex</strong> is great for <strong>flights at 1cpp</strong>; hotel redemptions are usually <strong>poor value</strong> unless you specifically want <strong>FHR perks</strong>.</p>
-                                    <p>- <strong>Citi</strong> is <strong>fine at 1cpp</strong> and very convenient—just don't assume it's the cheapest.</p>
+                                    <ul>
+                                        <li><strong>Capital One</strong> feels the most <strong>consumer-friendly on flights</strong> thanks to <strong>price-drop protection</strong> and <strong>24-hour price match</strong>; even when prices are similar, those features are a nice safety net.</li>
+                                        <li><strong>Chase</strong> can deliver the <strong>best point value</strong> when a <strong>Points Boost</strong> appears on the thing you actually want. If it doesn't, you're back to the ~1cpp baseline.</li>
+                                        <li><strong>Amex</strong> is great for <strong>flights at 1cpp</strong>; hotel redemptions are usually <strong>poor value</strong> unless you specifically want <strong>FHR perks</strong>.</li>
+                                        <li><strong>Citi</strong> is <strong>fine at 1cpp</strong> and very convenient—just don't assume it's the cheapest.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -4392,10 +4359,12 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Typical Patterns</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Capital One Venture X:</strong> <strong>10x</strong> hotels/cars, <strong>5x</strong> flights <strong>in-portal</strong>.</p>
-                                    <p>- <strong>Chase Sapphire Reserve:</strong> <strong>10x</strong> hotels/cars, <strong>5x</strong> flights <strong>in-portal</strong>; <strong>Sapphire Preferred:</strong> <strong>5x</strong> travel <strong>in-portal</strong>.</p>
-                                    <p>- <strong>Amex Platinum:</strong> <strong>5x</strong> on flights via Amex Travel (or direct with airlines) and <strong>5x</strong> on <strong>prepaid</strong> hotels via Amex Travel.</p>
-                                    <p>- <strong>Citi Premier:</strong> generally <strong>3x</strong> on air travel/hotels (portal or direct), with occasional portal promos.</p>
+                                    <ul>
+                                        <li><strong>Capital One Venture X:</strong> <strong>10x</strong> hotels/cars, <strong>5x</strong> flights <strong>in-portal</strong>.</li>
+                                        <li><strong>Chase Sapphire Reserve:</strong> <strong>10x</strong> hotels/cars, <strong>5x</strong> flights <strong>in-portal</strong>; <strong>Sapphire Preferred:</strong> <strong>5x</strong> travel <strong>in-portal</strong>.</li>
+                                        <li><strong>Amex Platinum:</strong> <strong>5x</strong> on flights via Amex Travel (or direct with airlines) and <strong>5x</strong> on <strong>prepaid</strong> hotels via Amex Travel.</li>
+                                        <li><strong>Citi Premier:</strong> generally <strong>3x</strong> on air travel/hotels (portal or direct), with occasional portal promos.</li>
+                                    </ul>
                                 </div>
                                 
                                 <h3>Bottom Line</h3>
@@ -4523,11 +4492,11 @@ footer {
                                 <h3>Real-World Example</h3>
                                 <div class="recommendation-text">
                                     <p>Take the Amex Gold card:</p>
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Bonus Categories (4x points):</strong> Dining and groceries
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Everything Else (1x points):</strong> Gas, shopping, bills, etc.
                                         </div>
                                     </div>
@@ -4536,14 +4505,14 @@ footer {
                                 
                                 <h3>When Category Cards Make Sense</h3>
                                 <div class="recommendation-text">
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>You have category-heavy spending:</strong> One or two categories dominate your budget (dining, travel, groceries)
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>You're willing to track:</strong> You don't mind remembering which card to use where
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>You want higher potential:</strong> You're okay with complexity for better rewards
                                         </div>
                                     </div>
@@ -4552,11 +4521,11 @@ footer {
                                 <h3>Pairing with Flat-Rate Cards</h3>
                                 <div class="recommendation-text">
                                     <p>The most common strategy? Use your category card for bonus categories and pair it with a flat-rate card for everything else. This way you're never stuck earning just 1x points.</p>
-                                    <div class="lounge-types">
-                                        <div class="lounge-type">
+                                    <div class="priority-pass-details">
+                                        <div class="detail-item">
                                             <strong>Category Card:</strong> Use for dining, travel, groceries (earn 3x-5x points)
                                         </div>
-                                        <div class="lounge-type">
+                                        <div class="detail-item">
                                             <strong>Flat-Rate Card:</strong> Use for gas, shopping, bills (earn 1.5x-2x points instead of 1x)
                                         </div>
                                     </div>
@@ -4747,9 +4716,11 @@ footer {
                     <div class="section-header-content">
                         <h2>Practical Explanation</h2>
                         <p>Redemption rates measure how much value you're actually getting when you use your points. It's simple math:</p>
-                        <p>- A $500 flight for 50,000 points = <strong>1 cpp</strong> (the baseline).</p>
-                        <p>- A $500 flight for 25,000 points = <strong>2 cpp</strong> (nice win).</p>
-                        <p>- A $500 flight for 12,500 points = <strong>4 cpp</strong> (now you're showing off).</p>
+                        <ul>
+                            <li>A $500 flight for 50,000 points = <strong>1 cpp</strong> (the baseline).</li>
+                            <li>A $500 flight for 25,000 points = <strong>2 cpp</strong> (nice win).</li>
+                            <li>A $500 flight for 12,500 points = <strong>4 cpp</strong> (now you're showing off).</li>
+                        </ul>
                         <p>The key is this: <strong>1 cpp is always available through portals.</strong> If you redeem for less—like cashing out at 0.6¢ for a gift card —you're throwing value away. At that point, a no-fee 2% cash back card would have been the smarter choice.</p>
                     </div>
                 </div>
@@ -4781,8 +4752,10 @@ footer {
                                 <h3>Why That's a Bad Idea</h3>
                                 <div class="recommendation-text">
                                     <p>You can always get at least 1 cpp in a portal. So if you settle for less, you're literally giving up money.</p>
-                                    <p>- Want $500 guaranteed value? Just use a 2% cash back card and skip the drama.</p>
-                                    <p>- Want points? At least redeem them for travel at 1 cpp or better.</p>
+                                    <ul>
+                                        <li>Want $500 guaranteed value? Just use a 2% cash back card and skip the drama.</li>
+                                        <li>Want points? At least redeem them for travel at 1 cpp or better.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -4818,17 +4791,108 @@ footer {
                                 </div>
                                 
                                 <h3>Portal Breakdown</h3>
-                                <div class="recommendation-text">
-                                    <p>- <strong>Capital One Travel:</strong> Honestly the best of the bunch. Competitive prices, automatic price-drop protection, and super clean redemptions. It's the one portal where I don't roll my eyes.</p>
-                                    <p>- <strong>Chase Travel:</strong> Solid overall, but ever since they outsourced it to Expedia, prices sometimes don't match the airline's own site. A quick sanity check can save you from overpaying.</p>
-                                    <p>- <strong>Amex Travel for Hotels:</strong> Most redemptions clock in at <strong>0.7 cpp</strong>—which is banker-speak for "your 50,000 points are now worth $350." Unless you're using their luxury Fine Hotels & Resorts collection (which can be great), hotel bookings here are usually a bad deal.</p>
-                                    <p>- <strong>Citi Travel:</strong> The portal looks like it hasn't had coffee yet. Redemption rates depend on which card you have.</p>
+                                <div class="cards-grid three-columns">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>Capital One Travel</h4>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Overall Rating:</span>
+                                                <span class="value">Honestly the best of the bunch</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Pricing:</span>
+                                                <span class="value">Competitive prices, matches airline sites</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Best Feature:</span>
+                                                <span class="value">Automatic price-drop protection</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Redemption:</span>
+                                                <span class="value">Super clean redemptions, no gotchas</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>Chase Travel</h4>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Overall Rating:</span>
+                                                <span class="value">Solid overall, but has issues</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Main Problem:</span>
+                                                <span class="value">Outsourced to Expedia, prices sometimes inflated</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Example:</span>
+                                                <span class="value">$480 flight becomes $520 in portal</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Solution:</span>
+                                                <span class="value">Always check airline prices first</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>Amex Travel</h4>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Flights:</span>
+                                                <span class="value">1 cpp - good for flights</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Hotels:</span>
+                                                <span class="value">0.7 cpp - major value trap</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Hotel Example:</span>
+                                                <span class="value">50,000 points = $350 instead of $500</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Exception:</span>
+                                                <span class="value">Fine Hotels & Resorts can be great</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>Citi Travel</h4>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Overall Rating:</span>
+                                                <span class="value">Portal looks like it hasn't had coffee yet</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Redemption Rates:</span>
+                                                <span class="value">Completely depend on which card you have</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Premier Card:</span>
+                                                <span class="value">1 cpp on all travel</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Lower Tier:</span>
+                                                <span class="value">Can drop to 0.8 cpp - always check first</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <h3>Why It Matters</h3>
                                 <div class="recommendation-text">
                                     <p>Portals are your "floor." If you're tired of playing the transfer-partner puzzle, you can always fall back on 1 cpp through the portal. Just don't blindly assume it's a perfect deal—because sometimes it isn't.</p>
-                                    <p><strong>Rule of thumb:</strong> if the portal is showing higher prices than the airline, don't use it. And if you're ever tempted to redeem below 1 cpp? Put the mouse down. That's the point where you'd have been better off with a cash back card.</p>
+                                    <p><strong>Rule of thumb:</strong> if the portal is showing higher prices than the airline, don't use it. And if you're ever tempted to redeem below 1 cpp? Put down the phone. That's the point where you'd have been better off with a cash back card.</p>S
                                 </div>
                             </div>
                         </div>
@@ -4857,25 +4921,86 @@ footer {
                     <div class="calculator-content collapsed" id="guarantee-1-cpp-content" role="region" aria-labelledby="guarantee-1-cpp-header">
                         <div class="recommendation-section">
                             <div class="recommendation-content">
-                                <h3>Capital One (Miles)</h3>
-                                <div class="recommendation-text">
-                                    <p>Capital One keeps it refreshingly simple. Their <strong>Purchase Eraser</strong> lets you redeem miles directly against any travel charge on your statement at a clean 1 cpp. No hoops, no fine print. Their travel portal also gives you 1 cpp (sometimes more if there's a promo running). Honestly, this is the one ecosystem where it's hard to mess up.</p>
+                                <div class="cards-grid three-columns">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>Capital One</h4>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label"><strong>Guaranteed 1 cpp:</strong></span>
+                                                <span class="value"><strong>Purchase Eraser (any travel charge)</strong></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Portal Rate:</span>
+                                                <span class="value">1 cpp (sometimes more with promos)</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Avoid:</span>
+                                                <span class="value">Gift cards (0.5-0.8 cpp)</span>
+                                            </div>
+                                        </div>
                                 </div>
                                 
-                                <h3>Chase (Ultimate Rewards)</h3>
-                                <div class="recommendation-text">
-                                    <p>Chase is pretty safe: the Chase Travel portal always gives you 1 cpp. If you've got the Sapphire Preferred or Reserve, they'll juice it to 1.25–1.5 cpp—but usually only if you book pricier flights or premium cabins. Translation: you'll get the bonus for business class, not your $99 hop to Dallas. And for the love of points, don't redeem through Amazon—you'll get less than 1 cpp and a lifetime of regret.</p>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>Chase</h4>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label"><strong>Guaranteed 1 cpp:</strong></span>
+                                                <span class="value"><strong>Chase Travel portal</strong></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Bonus Rate:</span>
+                                                <span class="value">1.25-1.5 cpp with Sapphire cards</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Avoid:</span>
+                                                <span class="value">Amazon, gift cards (0.6-0.8 cpp)</span>
+                                            </div>
+                                        </div>
                                 </div>
                                 
-                                <h3>Amex (Membership Rewards)</h3>
-                                <div class="recommendation-text">
-                                    <p>With Amex, stick to <strong>flights</strong> through Amex Travel and you'll always get 1 cpp. Easy. Hotels, on the other hand, are a trap: most redemptions drop to ~0.7 cpp, which means your "$500 worth of points" suddenly becomes $350. Unless you're booking through their luxury Fine Hotels & Resorts collection, don't bother.</p>
-                                    <p>Fine Hotels & Resorts is Amex's luxury hotel collection (think Four Seasons, Ritz, Waldorf). You'll get perks like free breakfast, late checkout, and a $100 credit—but the hotels themselves are typically pricey.</p>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>American Express</h4>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label"><strong>Guaranteed 1 cpp:</strong></span>
+                                                <span class="value"><strong>Flights via Amex Travel</strong></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Statement Credit:</span>
+                                                <span class="value">0.6 cpp (avoid this)</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Avoid:</span>
+                                                <span class="value">Hotel bookings (0.7 cpp), statement credits</span>
+                                            </div>
+                                        </div>
                                 </div>
                                 
-                                <h3>Citi (ThankYou Points)</h3>
-                                <div class="recommendation-text">
-                                    <p>Citi is a mixed bag. If you've got the Premier card, you're golden: 1 cpp on all travel, nice and clean. But if you're rocking a lower-tier Citi card, redemptions can sink to ~0.8 cpp. That's like ordering a Coke and getting a flat RC Cola instead. Always check your rate before you click "redeem."</p>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>Citi</h4>
+                                </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label"><strong>Guaranteed 1 cpp:</strong></span>
+                                                <span class="value"><strong>Premier card travel portal</strong></span>
+                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Lower Tier Cards:</span>
+                                                <span class="value">0.8 cpp (check before redeeming)</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Avoid:</span>
+                                                <span class="value">Gift cards, non-Premier redemptions</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4921,9 +5046,11 @@ footer {
                                 
                                 <h3>The Bottom Line on Transfers</h3>
                                 <div class="recommendation-text">
-                                    <p>- If you want <strong>the best possible seat for the same price as economy</strong>, transfers can be amazing.</p>
-                                    <p>- If you're chasing <strong>cash-like value for domestic flights</strong>, portals are often just as good.</p>
-                                    <p>- Either way, don't believe the hype that your points are "worth 10¢ each." That's marketing spin. Be realistic about how you'll actually use them.</p>
+                                    <ul>
+                                        <li>If you want <strong>the best possible seat for the same price as economy</strong>, transfers can be amazing.</li>
+                                        <li>If you're chasing <strong>cash-like value for domestic flights</strong>, portals are often just as good.</li>
+                                        <li>Either way, don't believe the hype that your points are "worth 10¢ each." That's marketing spin. Be realistic about how you'll actually use them.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -4976,14 +5103,14 @@ footer {
                         <p>Airport lounges are private spaces where you escape the chaos of the gate: free food, drinks, Wi-Fi, comfy seating, and sometimes even showers. They're basically a quiet, comfortable oasis in the middle of airport chaos.</p>
                         <p>But here's the catch: <strong>not all lounges are created equal, and the rules for getting in can be surprisingly complicated.</strong></p>
                         <p>There are three main types of lounge access:</p>
-                        <div class="lounge-types">
-                            <div class="lounge-type">
+                        <div class="priority-pass-details">
+                            <div class="detail-item">
                                 <strong>Bank Lounges</strong> (Amex Centurion, Capital One, Chase Sapphire) – the newest and nicest, but require premium credit cards
                             </div>
-                            <div class="lounge-type">
+                            <div class="detail-item">
                                 <strong>Airline Lounges</strong> (Delta Sky Club, United Club, etc.) – solid quality, but you usually need to be flying that specific airline
                             </div>
-                            <div class="lounge-type">
+                            <div class="detail-item">
                                 <strong>Priority Pass</strong> – a massive network of lounges worldwide, but quality varies dramatically
                             </div>
                         </div>
@@ -5330,9 +5457,11 @@ footer {
                         <h2>Practical Explanation</h2>
                         <p>Transfer partners let you move points from a bank (Amex, Chase, Citi, Capital One) to an airline or hotel. This is how you unlock "outsized value" compared to just using points in a portal.</p>
                         <p>The problem is threefold:</p>
-                        <p>- <strong>Alliances make it confusing.</strong> You transfer to one airline, then book a completely different one because they're in the same alliance.</p>
-                        <p>- <strong>Banks shuffle partners.</strong> One year American's a partner, the next year they vanish.</p>
-                        <p>- <strong>Finding flights is a pain.</strong> Award seats are scarce, so you'll spend more time refreshing search tools than you care to admit (depending on the airline).</p>
+                        <ul>
+                            <li><strong>Alliances make it confusing.</strong> You transfer to one airline, then book a completely different one because they're in the same alliance.</li>
+                            <li><strong>Banks shuffle partners.</strong> One year American's a partner, the next year they vanish.</li>
+                            <li><strong>Finding flights is a pain.</strong> Award seats are scarce, so you'll spend more time refreshing search tools than you care to admit (depending on the airline).</li>
+                        </ul>
                         <p>Think of transfers as a puzzle. The pieces can create amazing value, but only if you're the type who actually enjoys puzzles.</p>
                     </div>
                 </div>
@@ -5363,9 +5492,11 @@ footer {
                             <div class="recommendation-content">
                                 <h3>The Three Big Ones</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Star Alliance</strong> – United, Air Canada, Lufthansa, ANA, Singapore, Turkish. Huge in Europe and Asia.</p>
-                                    <p>- <strong>SkyTeam</strong> – Delta, Air France/KLM, Korean Air, Aeromexico. Solid for Europe, weaker inside the U.S.</p>
-                                    <p>- <strong>oneworld</strong> – American, Alaska, British Airways, Qatar, Cathay Pacific. Great for domestic flights and Asia/Middle East.</p>
+                                    <ul>
+                                        <li><strong>Star Alliance</strong> – United, Air Canada, Lufthansa, ANA, Singapore, Turkish. Huge in Europe and Asia.</li>
+                                        <li><strong>SkyTeam</strong> – Delta, Air France/KLM, Korean Air, Aeromexico. Solid for Europe, weaker inside the U.S.</li>
+                                        <li><strong>oneworld</strong> – American, Alaska, British Airways, Qatar, Cathay Pacific. Great for domestic flights and Asia/Middle East.</li>
+                                    </ul>
                                 </div>
                                 
                                 <h3>How It Works</h3>
@@ -5401,9 +5532,11 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Partners</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Domestic airlines:</strong> <strong>Delta SkyMiles</strong>, <strong>JetBlue</strong> (but at 250:200—don't bother).</p>
-                                    <p>- <strong>Hotels:</strong> <strong>Hilton Honors</strong>, <strong>Marriott Bonvoy</strong>, <strong>Choice Privileges</strong>.</p>
-                                    <p>- <strong>International airlines:</strong> Air France/KLM, ANA, Singapore Airlines, Virgin Atlantic, Cathay Pacific, Avianca.</p>
+                                    <ul>
+                                        <li><strong>Domestic airlines:</strong> <strong>Delta SkyMiles</strong>, <strong>JetBlue</strong> (but at 250:200—don't bother).</li>
+                                        <li><strong>Hotels:</strong> <strong>Hilton Honors</strong>, <strong>Marriott Bonvoy</strong>, <strong>Choice Privileges</strong>.</li>
+                                        <li><strong>International airlines:</strong> Air France/KLM, ANA, Singapore Airlines, Virgin Atlantic, Cathay Pacific, Avianca.</li>
+                                    </ul>
                                 </div>
                                 
                                 <h3>Notes</h3>
@@ -5439,9 +5572,11 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Partners</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Domestic airlines:</strong> <strong>United</strong>, <strong>Southwest</strong>, <strong>JetBlue</strong>.</p>
-                                    <p>- <strong>Hotels:</strong> <strong>Hyatt</strong>, <strong>Marriott Bonvoy</strong>, <strong>IHG</strong>.</p>
-                                    <p>- <strong>International airlines:</strong> Air Canada Aeroplan, British Airways Avios, Virgin Atlantic, Iberia, Emirates.</p>
+                                    <ul>
+                                        <li><strong>Domestic airlines:</strong> <strong>United</strong>, <strong>Southwest</strong>, <strong>JetBlue</strong>.</li>
+                                        <li><strong>Hotels:</strong> <strong>Hyatt</strong>, <strong>Marriott Bonvoy</strong>, <strong>IHG</strong>.</li>
+                                        <li><strong>International airlines:</strong> Air Canada Aeroplan, British Airways Avios, Virgin Atlantic, Iberia, Emirates.</li>
+                                    </ul>
                                 </div>
                                 
                                 <h3>Notes</h3>
@@ -5477,9 +5612,11 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Partners</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Domestic airlines:</strong> <strong>American Airlines</strong>, <strong>JetBlue</strong>.</p>
-                                    <p>- <strong>Hotels:</strong> <strong>Choice Privileges</strong>, <strong>Wyndham Rewards</strong>.</p>
-                                    <p>- <strong>International airlines:</strong> Turkish, Qatar, Avianca, Etihad, Cathay Pacific.</p>
+                                    <ul>
+                                        <li><strong>Domestic airlines:</strong> <strong>American Airlines</strong>, <strong>JetBlue</strong>.</li>
+                                        <li><strong>Hotels:</strong> <strong>Choice Privileges</strong>, <strong>Wyndham Rewards</strong>.</li>
+                                        <li><strong>International airlines:</strong> Turkish, Qatar, Avianca, Etihad, Cathay Pacific.</li>
+                                    </ul>
                                 </div>
                                 
                                 <h3>Notes</h3>
@@ -5515,9 +5652,11 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Partners</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Domestic airlines:</strong> <strong>JetBlue</strong> (but again, terrible ratio—not worth it).</p>
-                                    <p>- <strong>Hotels:</strong> <strong>Choice Privileges</strong>, <strong>Wyndham Rewards</strong>.</p>
-                                    <p>- <strong>International airlines (most useful → niche):</strong> Air Canada Aeroplan, British Airways Avios, Turkish, Virgin Atlantic, EVA Air.</p>
+                                    <ul>
+                                        <li><strong>Domestic airlines:</strong> <strong>JetBlue</strong> (but again, terrible ratio—not worth it).</li>
+                                        <li><strong>Hotels:</strong> <strong>Choice Privileges</strong>, <strong>Wyndham Rewards</strong>.</li>
+                                        <li><strong>International airlines (most useful → niche):</strong> Air Canada Aeroplan, British Airways Avios, Turkish, Virgin Atlantic, EVA Air.</li>
+                                    </ul>
                                 </div>
                                 
                                 <h3>Notes</h3>
@@ -5553,9 +5692,11 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Search Tools</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Seats.aero</strong> – Free, fast, and shows availability at a glance.</p>
-                                    <p>- <strong>Points.me</strong> – Paid, but excellent for searching across tons of airlines.</p>
-                                    <p>- <strong>AwardHacker</strong> – Simple way to compare how many points different programs charge for the same route.</p>
+                                    <ul>
+                                        <li><strong>Seats.aero</strong> – Free, fast, and shows availability at a glance.</li>
+                                        <li><strong>Points.me</strong> – Paid, but excellent for searching across tons of airlines.</li>
+                                        <li><strong>AwardHacker</strong> – Simple way to compare how many points different programs charge for the same route.</li>
+                                    </ul>
                                 </div>
                                 
                                 <h3>Reality Check</h3>
@@ -5672,10 +5813,12 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Important Details</h3>
                                 <div class="recommendation-text">
-                                    <p>- Don't cut it razor-thin: <strong>refunds/returns</strong> can drop you under.</p>
-                                    <p>- <strong>Cash-like purchases</strong> (gift cards, money orders, person-to-person) may not count.</p>
-                                    <p>- If you're at $3,997 on day 89 of 90, buy groceries—not a gift card you'll lose.</p>
-                                    <p>- Expect <strong>1–2 statements</strong> for points to post. Plan apps so the bonus lands <strong>before</strong> you need to book.</p>
+                                    <ul>
+                                        <li>Don't cut it razor-thin: <strong>refunds/returns</strong> can drop you under.</li>
+                                        <li><strong>Cash-like purchases</strong> (gift cards, money orders, person-to-person) may not count.</li>
+                                        <li>If you're at $3,997 on day 89 of 90, buy groceries—not a gift card you'll lose.</li>
+                                        <li>Expect <strong>1–2 statements</strong> for points to post. Plan apps so the bonus lands <strong>before</strong> you need to book.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -5706,10 +5849,12 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Bank-Specific Rules</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Chase:</strong> The well-known <strong>5/24</strong> pace limit + product family cooldowns (e.g., Sapphire).</p>
-                                    <p>- <strong>Amex:</strong> Usually <strong>"once per lifetime"</strong> per product; app may warn you mid-apply if ineligible.</p>
-                                    <p>- <strong>Citi:</strong> Uses <strong>X-month cooldowns</strong> tied to opening/closing in a card family.</p>
-                                    <p>- <strong>Others (Capital One, Barclays, BoA):</strong> Their own pace rules and gotchas.</p>
+                                    <ul>
+                                        <li><strong>Chase:</strong> The well-known <strong>5/24</strong> pace limit + product family cooldowns (e.g., Sapphire).</li>
+                                        <li><strong>Amex:</strong> Usually <strong>"once per lifetime"</strong> per product; app may warn you mid-apply if ineligible.</li>
+                                        <li><strong>Citi:</strong> Uses <strong>X-month cooldowns</strong> tied to opening/closing in a card family.</li>
+                                        <li><strong>Others (Capital One, Barclays, BoA):</strong> Their own pace rules and gotchas.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -5740,9 +5885,11 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Realistic Value Expectations</h3>
                                 <div class="recommendation-text">
-                                    <p>- <strong>Domestic economy:</strong> ~1–1.5¢/pt without much effort → two round trips from one bonus if flexible.</p>
-                                    <p>- <strong>International economy:</strong> Two bonuses often cover two round trips to Europe at the floor.</p>
-                                    <p>- <strong>Premium cabins:</strong> 2–4¢+/pt is common on long-haul business—amazing comfort, but if you wouldn't pay cash, be honest that you <strong>upgraded</strong>, not "saved $4,000."</p>
+                                    <ul>
+                                        <li><strong>Domestic economy:</strong> ~1–1.5¢/pt without much effort → two round trips from one bonus if flexible.</li>
+                                        <li><strong>International economy:</strong> Two bonuses often cover two round trips to Europe at the floor.</li>
+                                        <li><strong>Premium cabins:</strong> 2–4¢+/pt is common on long-haul business—amazing comfort, but if you wouldn't pay cash, be honest that you <strong>upgraded</strong>, not "saved $4,000."</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -5773,10 +5920,12 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Smart Strategies</h3>
                                 <div class="recommendation-text">
-                                    <p>- Map 3 months of spend; slide big, needed purchases into the window.</p>
-                                    <p>- <strong>Prepay</strong> utilities/insurance where fee-free.</p>
-                                    <p>- Fees on <strong>rent/taxes</strong> (2–3%) can eat the bonus—do the math first.</p>
-                                    <p>- Keep utilization low: pay <strong>multiple times per month</strong> if needed.</p>
+                                    <ul>
+                                        <li>Map 3 months of spend; slide big, needed purchases into the window.</li>
+                                        <li><strong>Prepay</strong> utilities/insurance where fee-free.</li>
+                                        <li>Fees on <strong>rent/taxes</strong> (2–3%) can eat the bonus—do the math first.</li>
+                                        <li>Keep utilization low: pay <strong>multiple times per month</strong> if needed.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -6004,8 +6153,10 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Quick examples</h3>
                                 <div class="recommendation-text">
-                                    <p>- €40 dinner (~$44): 3% fee = <strong>$1.32</strong>. Your 2% reward is <strong>$0.88</strong> → net <strong>–$0.44</strong>.</p>
-                                    <p>- $600 rail passes: 3% fee = <strong>$18</strong>. Your 2% reward is <strong>$12</strong> → net <strong>–$6</strong>.</p>
+                                    <ul>
+                                        <li>€40 dinner (~$44): 3% fee = <strong>$1.32</strong>. Your 2% reward is <strong>$0.88</strong> → net <strong>–$0.44</strong>.</li>
+                                        <li>$600 rail passes: 3% fee = <strong>$18</strong>. Your 2% reward is <strong>$12</strong> → net <strong>–$6</strong>.</li>
+                                    </ul>
                                     <p>With a <strong>no-FTF</strong> 2% card, you just keep the <strong>$12</strong> and go on your way.</p>
                                 </div>
                             </div>
@@ -6099,9 +6250,11 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Before you go</h3>
                                 <div class="recommendation-text">
-                                    <p>- Add the cards to your wallet app; enable <strong>transaction alerts</strong>.</p>
-                                    <p>- Know your <strong>PIN</strong> for chip-and-PIN terminals (some kiosks demand it).</p>
-                                    <p>- Skim each card's travel benefits (rental CDW, trip delay) so you use the right one at the right time.</p>
+                                    <ul>
+                                        <li>Add the cards to your wallet app; enable <strong>transaction alerts</strong>.</li>
+                                        <li>Know your <strong>PIN</strong> for chip-and-PIN terminals (some kiosks demand it).</li>
+                                        <li>Skim each card's travel benefits (rental CDW, trip delay) so you use the right one at the right time.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

@@ -1028,3 +1028,68 @@ footer {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+/* ==========================================================================
+   DETAIL ITEM STYLING - For special formatted blocks (Priority Pass style)
+   ========================================================================== */
+
+.priority-pass-details {
+    margin: 1.5rem 0;
+}
+
+.detail-item {
+    background: #f8fafc;
+    border-left: 3px solid #059669;
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #374151;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.detail-item strong {
+    color: #059669;
+    font-weight: 600;
+}
+
+/* Mobile responsiveness for detail-item */
+@media (max-width: 768px) {
+    .priority-pass-details {
+        margin: 1rem 0 !important;
+        display: block !important;
+        flex-direction: unset !important;
+        gap: unset !important;
+    }
+    
+    .detail-item {
+        background: #f8fafc !important;
+        border-left: 3px solid #059669 !important;
+        padding: 0.875rem 1rem !important;
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
+        margin-bottom: 0.75rem !important;
+        border-radius: 0 6px 6px 0 !important;
+        color: #374151 !important;
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    .detail-item:last-child {
+        margin-bottom: 0 !important;
+    }
+    
+    .detail-item strong {
+        color: #059669 !important;
+        font-weight: 600 !important;
+    }
+}
