@@ -802,8 +802,204 @@ footer {
     margin-bottom: 1rem;
 }
 
+/* Card Grid Styles for Lounge Comparison */
+.cards-grid.three-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.lounge-logo {
+    max-height: 40px;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-row .label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #059669;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-row .value {
+    font-size: 0.9rem;
+    color: #374151;
+    line-height: 1.4;
+}
+
+/* Lounge Types Styles */
+.lounge-types {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.lounge-type {
+    background: #f8fafc;
+    border-left: 3px solid #059669;
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.lounge-type.warning {
+    background: #fef3c7;
+    border-left: 3px solid #f59e0b;
+    color: #92400e;
+}
+
+/* Point Value Breakdown Styles */
+.point-value-breakdown {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.horizontal-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chart-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.point-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    width: 120px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.chart-bar {
+    flex: 1;
+    height: 20px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #059669, #10b981);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.dollar-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #059669;
+    min-width: 60px;
+    text-align: left;
+}
+
+/* Mobile Responsive for Horizontal Chart */
+@media (max-width: 767px) {
+    .chart-item {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .point-label {
+        min-width: auto;
+        text-align: center;
+    }
+    
+    .dollar-label {
+        min-width: auto;
+        text-align: center;
+    }
+    
+    .chart-bar {
+        width: 100%;
+    }
+}
+
+/* Priority Pass Details Styles */
+.priority-pass-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.detail-item {
+    background: #f8fafc;
+    border-left: 3px solid #059669;
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #374151;
+}
+
 /* Mobile Responsive */
-        @media (max-width: 767px) {
+@media (max-width: 767px) {
             .hero-content {
                 padding: 1.5rem 1rem 4rem 1rem;
             }
@@ -908,6 +1104,125 @@ footer {
                 width: 100%;
                 margin: 0;
                 min-height: 52px;
+            }
+            
+            /* Mobile styles for lounge comparison cards */
+            .cards-grid.three-columns {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin: 1.5rem 0;
+            }
+            
+            .card {
+                padding: 1.25rem;
+            }
+            
+            .card-header {
+                margin-bottom: 1.25rem;
+                padding-bottom: 0.75rem;
+            }
+            
+            .card-header h4 {
+                font-size: 1rem;
+            }
+            
+            .lounge-logo {
+                max-height: 36px;
+            }
+            
+            .info-row .label {
+                font-size: 0.75rem;
+            }
+            
+            .info-row .value {
+                font-size: 0.85rem;
+            }
+            
+            /* Mobile styles for lounge types */
+            .lounge-types {
+                gap: 0.75rem;
+                margin: 1.25rem 0;
+            }
+            
+            .lounge-type {
+                padding: 0.875rem 1rem;
+                font-size: 0.9rem;
+                background: transparent !important;
+                border-left: none !important;
+                border-radius: 0 !important;
+                padding: 0.5rem 0 !important;
+                position: relative;
+            }
+            
+            .lounge-type::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 100%;
+                height: 4px;
+                background: linear-gradient(90deg, #059669, #10b981);
+                border-radius: 2px;
+                z-index: -1;
+            }
+            
+            .lounge-type strong {
+                background: white;
+                padding: 0.25rem 0.5rem;
+                border-radius: 4px;
+                margin-right: 0.5rem;
+            }
+            
+            /* Mobile styles for horizontal chart */
+            .horizontal-chart {
+                gap: 0.75rem;
+                margin: 1rem 0;
+            }
+            
+            .chart-item {
+                flex-direction: row;
+                gap: 0.75rem;
+                padding: 0.5rem;
+                background: transparent;
+                border-radius: 0;
+                border: none;
+                align-items: center;
+            }
+            
+            .point-label {
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: #374151;
+                text-align: left;
+                width: 120px;
+                flex-shrink: 0;
+            }
+            
+            .chart-bar {
+                flex: 1;
+                height: 16px;
+                min-width: 100px;
+                max-width: 150px;
+            }
+            
+            .dollar-label {
+                font-size: 0.85rem;
+                font-weight: 700;
+                text-align: right;
+                min-width: 50px;
+                flex-shrink: 0;
+            }
+            
+            /* Mobile styles for Priority Pass details */
+            .priority-pass-details {
+                gap: 0.75rem;
+                margin: 1.25rem 0;
+            }
+            
+            .detail-item {
+                padding: 0.875rem 1rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -2797,16 +3112,137 @@ footer {
                         <h2>Practical Explanation</h2>
                         <p>Points are the "currency" of travel credit cards. But unlike cash back, they don't come with a neat little price tag. That's the trick: banks and airlines get to decide what your points are worth, and the value changes depending on how you use them.</p>
                         <p>Here's what that looks like in real life:</p>
-                        <p>- A $500 flight might cost <strong>50,000 points</strong> (your points are basically pennies).</p>
-                        <p>- Or it might cost <strong>25,000 points</strong> (suddenly worth twice as much).</p>
-                        <p>- Or, if you know what you're doing, it might only cost <strong>12,500 points</strong> (now you're the genius who "flew for free").</p>
+                        <div class="lounge-types">
+                            <div class="lounge-type">
+                                <strong>Standard Value:</strong> A $500 flight costs <strong>50,000 points</strong> (1 cent per point - this is normal)
+                            </div>
+                            <div class="lounge-type">
+                                <strong>Good Value:</strong> The same flight might cost <strong>25,000 points</strong> (2 cents per point - much better)
+                            </div>
+                            <div class="lounge-type">
+                                <strong>Great Value:</strong> Or it might only cost <strong>12,500 points</strong> (4 cents per point - now you're getting somewhere)
+                            </div>
+                        </div>
                         <p>Same flight, three totally different outcomes. With cash back, $500 is always $500. With points, you're either winning big or wondering why you bothered.</p>
+                        
+
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="container">
+            <!-- UNDERSTANDING POINT VALUES SECTION -->
+            <div class="collapsible-section">
+                <div class="section-container">
+                    <div class="calculator-header" id="understanding-point-values-header" role="button" tabindex="0" aria-expanded="false" aria-controls="understanding-point-values-content" onclick="toggleSection('understanding-point-values')" onkeydown="handleKeyToggle(event)">
+                        <div class="section-header-content">
+                            <h2>Understanding Point Values</h2>
+                            <p>Points don't come with price tags. Banks and airlines decide what your points are worth, and that value changes depending on how you use them. Understanding this concept is key to getting the most from your rewards.</p>
+                            <div class="calculator-toggle-container">
+                                <div class="section-toggle-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="toggle-tip">Click to see point value chart</div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="calculator-content collapsed" id="understanding-point-values-content" role="region" aria-labelledby="understanding-point-values-header">
+                        <div class="recommendation-section">
+                            <div class="recommendation-content">
+                                <h3>What is CPP?</h3>
+                                <div class="recommendation-text">
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>What is CPP?</strong> CPP stands for "cents per point" - it's how much each point is worth in dollars. This is the standard way to measure point value.
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Simple Math:</strong> If you have 1,000 points worth 1 CPP, they're worth $10. If you have 50,000 points worth 1 CPP, they're worth $500.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3>Point-to-Dollar Conversion Chart</h3>
+                                <div class="recommendation-text">
+                                    <p>At 1 cent per point (a common baseline), here's what your points are worth:</p>
+                                    <div class="horizontal-chart">
+                                        <div class="chart-item">
+                                            <div class="point-label">10,000 points</div>
+                                            <div class="chart-bar">
+                                                <div class="bar-fill" style="width: 10%;"></div>
+                                            </div>
+                                            <div class="dollar-label">$100</div>
+                                        </div>
+                                        <div class="chart-item">
+                                            <div class="point-label">25,000 points</div>
+                                            <div class="chart-bar">
+                                                <div class="bar-fill" style="width: 25%;"></div>
+                                            </div>
+                                            <div class="dollar-label">$250</div>
+                                        </div>
+                                        <div class="chart-item">
+                                            <div class="point-label">50,000 points</div>
+                                            <div class="chart-bar">
+                                                <div class="bar-fill" style="width: 50%;"></div>
+                                            </div>
+                                            <div class="dollar-label">$500</div>
+                                        </div>
+                                        <div class="chart-item">
+                                            <div class="point-label">75,000 points</div>
+                                            <div class="chart-bar">
+                                                <div class="bar-fill" style="width: 75%;"></div>
+                                            </div>
+                                            <div class="dollar-label">$750</div>
+                                        </div>
+                                        <div class="chart-item">
+                                            <div class="point-label">100,000 points</div>
+                                            <div class="chart-bar">
+                                                <div class="bar-fill" style="width: 100%;"></div>
+                                            </div>
+                                            <div class="dollar-label">$1,000</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3>Comparing Different Point Values</h3>
+                                <div class="recommendation-text">
+                                    <p>Let's say you read that Delta SkyMiles are worth 1.2 CPP. Here's how that compares to the baseline:</p>
+                                    <div class="horizontal-chart">
+                                        <div class="chart-item">
+                                            <div class="point-label">50,000 points</div>
+                                            <div class="chart-bar">
+                                                <div class="bar-fill" style="width: 50%; background: linear-gradient(90deg, #6b7280, #9ca3af);"></div>
+                                            </div>
+                                            <div class="dollar-label">$500</div>
+                                        </div>
+                                        <div class="chart-item">
+                                            <div class="point-label">50,000 Delta points</div>
+                                            <div class="chart-bar">
+                                                <div class="bar-fill" style="width: 60%; background: linear-gradient(90deg, #059669, #10b981);"></div>
+                                            </div>
+                                            <div class="dollar-label">$600</div>
+                                        </div>
+                                    </div>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>The Difference:</strong> Same 50,000 points, but Delta's 1.2 CPP makes them worth $100 more than the baseline 1.0 CPP.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3>The Bottom Line</h3>
+                                <div class="recommendation-text">
+                                    <p>Understanding CPP helps you compare different point systems and know when you're getting good value. The goal is to get more than 1 cent per point when possible.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- PORTAL POINTS SECTION -->
             <div class="collapsible-section">
                 <div class="section-container">
@@ -2836,10 +3272,52 @@ footer {
                                 <h3>The Banks With Portals</h3>
                                 <div class="recommendation-text">
                                     <p>Most major banks offer their own travel portals:</p>
-                                    <p>- <strong>Chase Travel</strong> (Chase Ultimate Rewards)</p>
-                                    <p>- <strong>Amex Travel</strong> (Amex Membership Rewards)</p>
-                                    <p>- <strong>Citi Travel</strong> (ThankYou Points)</p>
-                                    <p>- <strong>Capital One Travel</strong> (Capital One Miles)</p>
+                                    <div class="cards-grid four-columns">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Chase Travel</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Program:</span>
+                                                    <span class="value">Chase Ultimate Rewards</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Amex Travel</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Program:</span>
+                                                    <span class="value">Amex Membership Rewards</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Citi Travel</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Program:</span>
+                                                    <span class="value">ThankYou Points</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Capital One Travel</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Program:</span>
+                                                    <span class="value">Capital One Miles</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <p>They all work the same way—you're basically shopping through Expedia with points.</p>
                                 </div>
                                 
@@ -2847,6 +3325,8 @@ footer {
                                 <div class="recommendation-text">
                                     <p>Portal points are simple and safe, but they cap your value. You'll never stretch them to book a $2,000 flight for cheap. Still, for many people, this is the easiest way to use points without feeling like you need a PhD in loyalty programs.</p>
                                 </div>
+                                
+
                             </div>
                         </div>
                     </div>
@@ -2882,8 +3362,30 @@ footer {
                                 <h3>The Big Players</h3>
                                 <div class="recommendation-text">
                                     <p>Here are some of the most common ones you'll see:</p>
-                                    <p>- <strong>Airlines:</strong> Delta SkyMiles, United MileagePlus, American AAdvantage, Southwest Rapid Rewards, JetBlue TrueBlue, Alaska Mileage Plan.</p>
-                                    <p>- <strong>Hotels:</strong> Marriott Bonvoy, Hilton Honors, World of Hyatt, IHG One Rewards.</p>
+                                    <div class="cards-grid two-columns">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Airlines</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Major Programs:</span>
+                                                    <span class="value">Delta SkyMiles, United MileagePlus, American AAdvantage, Southwest Rapid Rewards, JetBlue TrueBlue, Alaska Mileage Plan</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Hotels</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Major Programs:</span>
+                                                    <span class="value">Marriott Bonvoy, Hilton Honors, World of Hyatt, IHG One Rewards</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <h3>Why They Matter</h3>
@@ -2925,27 +3427,46 @@ footer {
                             <div class="recommendation-content">
                                 <h3>How They Work</h3>
                                 <div class="recommendation-text">
-                                    <p>Instead of being stuck with one airline or one hotel, you get to pick where to send your points. Chase, for example, has partners like United, Southwest, Hyatt, and Marriott. Amex partners with Delta, ANA, Hilton, and many more. Each bank has its own list of partners, and transfer ratios vary (usually 1:1, but not always).</p>
+                                    <p>Instead of being stuck with one airline or one hotel, you get to pick where to send your points. Think of it like having a gift card that works at multiple stores.</p>
+                                    <p>Chase, for example, has partners like United, Southwest, Hyatt, and Marriott. So if you have Chase points, you can send them to any of those programs. Amex partners with Delta, ANA, Hilton, and many more. Each bank has its own list of partners, and transfer ratios vary (usually 1:1, but not always).</p>
                                 </div>
                                 
-                                <h3>Why They Matter</h3>
+                                <h3>Why They Matter: A Real Example</h3>
                                 <div class="recommendation-text">
+                                    <p>Let's say you want to book a $500 Southwest flight. Here's what happens:</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>Through Chase Travel Portal:</strong> You'd pay 50,000 Chase points (1 cent per point). The portal treats your points like cash - $500 = 50,000 points.
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Transfer to Southwest:</strong> You transfer 35,000 Chase points to Southwest Rapid Rewards, then book the same flight for 35,000 Southwest points. Southwest might price this flight cheaper in points than the cash price.
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>The Result:</strong> You saved 15,000 points! That's like getting $150 in extra value just by knowing how to transfer points instead of using the portal.
+                                        </div>
+                                    </div>
                                     <p>This is where people unlock those "$5,000 flight for 50,000 points" stories. Instead of being stuck at the 1 cent per point floor of a portal, you can sometimes get 3–5x the value (or more) by moving your points into the right airline or hotel program.</p>
                                 </div>
                                 
-                                <h3>The Catch</h3>
-                                <div class="recommendation-text">
-                                    <p>Flexibility comes at a cost: complexity. Award charts, transfer ratios, blackout dates… it's a puzzle. If that sentence already made you tired, stick with portal points.</p>
-                                </div>
-                                
-                                <h3>The Bottom Line</h3>
-                                <div class="recommendation-text">
-                                    <p>Transferable points are the crown jewel if you're willing to put in the time. If you're not, they're just another way to get confused.</p>
+                                <div class="lounge-types">
+                                    <div class="lounge-type">
+                                        <strong>The Bottom Line:</strong> Transferable points are the crown jewel if you're willing to put in the time. If you're not, they're just another way to get confused.
+                                    </div>
+                                    <div class="lounge-type warning">
+                                        <strong>⚠️ The Catch & Warning:</strong> Flexibility comes at a cost: complexity. Award charts, transfer ratios, blackout dates… it's a puzzle. Getting outsized value can feel like a full-time job of research. This is only for people who enjoy optimizing systems, have time to research, and travel frequently enough to make the effort worthwhile. If that sentence already made you tired, stick with portal points.
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-fees')">Next: Effective Annual Fees →</button>
             </div>
         </section>
     </div>
@@ -3016,26 +3537,78 @@ footer {
                                 <div class="recommendation-text">
                  <div class="cards-grid four-columns">
                      <div class="card">
-                         <span class="card-icon">🚀</span>
-                         <h3>Capital One Venture</h3>
-                         <p>2x miles on everything, where 1 mile = 1 cent toward travel. Simple and effective.</p>
+                         <div class="card-header">
+                             <h4>Capital One Venture</h4>
+                         </div>
+                         <div class="card-content">
+                             <div class="info-row">
+                                 <span class="label">Earning Rate:</span>
+                                 <span class="value">2x miles on everything</span>
+                             </div>
+                             <div class="info-row">
+                                 <span class="label">Value:</span>
+                                 <span class="value">1 mile = 1 cent toward travel</span>
+                             </div>
+                             <div class="info-row">
+                                 <span class="label">Bottom Line:</span>
+                                 <span class="value">Simple and effective</span>
+                             </div>
+                         </div>
                      </div>
                      <div class="card">
-                         <span class="card-icon">🕊️</span>
-                         <h3>Capital One VentureOne</h3>
-                         <p>1.25x miles on everything with no annual fee. A solid starter travel card.</p>
+                         <div class="card-header">
+                             <h4>Capital One VentureOne</h4>
+                         </div>
+                         <div class="card-content">
+                             <div class="info-row">
+                                 <span class="label">Earning Rate:</span>
+                                 <span class="value">1.25x miles on everything</span>
+                             </div>
+                             <div class="info-row">
+                                 <span class="label">Annual Fee:</span>
+                                 <span class="value">$0</span>
+                             </div>
+                             <div class="info-row">
+                                 <span class="label">Bottom Line:</span>
+                                 <span class="value">Solid starter travel card</span>
+                             </div>
+                         </div>
                      </div>
                      <div class="card">
-                         <span class="card-icon">💡</span>
-                         <h3>Discover it Miles</h3>
-                         <p>1.5x miles on everything, where 1 mile = 1 cent. All miles matched in the first year.</p>
+                         <div class="card-header">
+                             <h4>Discover it Miles</h4>
+                         </div>
+                         <div class="card-content">
+                             <div class="info-row">
+                                 <span class="label">Earning Rate:</span>
+                                 <span class="value">1.5x miles on everything</span>
+                             </div>
+                             <div class="info-row">
+                                 <span class="label">Value:</span>
+                                 <span class="value">1 mile = 1 cent</span>
+                             </div>
+                             <div class="info-row">
+                                 <span class="label">First Year:</span>
+                                 <span class="value">All miles matched</span>
+                             </div>
+                         </div>
                      </div>
                      <div class="card">
-                         <span class="card-icon">🏦</span>
-                         <h3>Bank of America Travel Rewards</h3>
-                         <p>1.5x points on everything, with bonuses for BofA banking customers.</p>
-                                        </div>
-                                    </div>
+                         <div class="card-header">
+                             <h4>Bank of America Travel Rewards</h4>
+                         </div>
+                         <div class="card-content">
+                             <div class="info-row">
+                                 <span class="label">Earning Rate:</span>
+                                 <span class="value">1.5x points on everything</span>
+                             </div>
+                             <div class="info-row">
+                                 <span class="label">Bonus:</span>
+                                 <span class="value">Bonuses for BofA banking customers</span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
                                 </div>
                             </div>
                         </div>
@@ -3066,10 +3639,68 @@ footer {
                             <div class="recommendation-content">
                                 <h3>The Value of Simplicity</h3>
                                 <div class="recommendation-text">
-                                    <p><strong>Predictable value:</strong> You never have to worry about "wasting" points or getting bad redemption values. A point is always worth a fixed amount, making budgeting and planning much easier.</p>
-                                    <p><strong>No research required:</strong> Unlike transferable points that require understanding award charts and availability, fixed-value cards work like cash back but for travel.</p>
-                                    <p><strong>Flexible redemptions:</strong> Most fixed-value cards let you book travel however you want and then reimburse you with points. No restrictions on airlines or blackout dates.</p>
-                                    <p><strong>Perfect for occasional travelers:</strong> If you travel 1-3 times per year, the simplicity of fixed-value cards often outweighs the potential higher value of more complex systems.</p>
+                                    <div class="cards-grid two-columns">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Predictable Value</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Benefit:</span>
+                                                    <span class="value">You never have to worry about "wasting" points or getting bad redemption values</span>
+                                                </div>
+                                                <div class="info-row">
+                                                    <span class="label">Result:</span>
+                                                    <span class="value">A point is always worth a fixed amount, making budgeting and planning much easier</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>No Research Required</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Benefit:</span>
+                                                    <span class="value">Unlike transferable points that require understanding award charts and availability</span>
+                                                </div>
+                                                <div class="info-row">
+                                                    <span class="label">Result:</span>
+                                                    <span class="value">Fixed-value cards work like cash back but for travel</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Flexible Redemptions</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Benefit:</span>
+                                                    <span class="value">Most fixed-value cards let you book travel however you want and then reimburse you with points</span>
+                                                </div>
+                                                <div class="info-row">
+                                                    <span class="label">Result:</span>
+                                                    <span class="value">No restrictions on airlines or blackout dates</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Perfect for Occasional Travelers</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="info-row">
+                                                    <span class="label">Benefit:</span>
+                                                    <span class="value">If you travel 1-3 times per year</span>
+                                                </div>
+                                                <div class="info-row">
+                                                    <span class="label">Result:</span>
+                                                    <span class="value">The simplicity of fixed-value cards often outweighs the potential higher value of more complex systems</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3188,6 +3819,33 @@ footer {
                         <h2>Practical Explanation</h2>
                         <p>Annual fees aren't the villain—paying for perks you'll never use is. Travel cards often bundle credits (travel, dining, rideshares, hotel nights) that can cancel out the fee <em>if those credits match your real life</em>. If you'd spend that money anyway, the card's fee can make sense. If you wouldn't, it won't. Simple.</p>
                         <p>Think of it this way: a $250 fee with $200 in credits you'll actually use means the card effectively costs $50. A $695 fee with only $100 of credits you'll use effectively costs $595. The math is boring; the result is not.</p>
+                        
+
+                        
+                        <div class="horizontal-chart">
+                            <div class="chart-item">
+                                <div class="point-label">$250 Annual Fee</div>
+                                <div class="chart-bar">
+                                    <div class="bar-fill" style="width: 100%; background: linear-gradient(90deg, #ef4444, #f87171);"></div>
+                                </div>
+                                <div class="dollar-label" style="color: #ef4444;">-$250</div>
+                            </div>
+                            <div class="chart-item">
+                                <div class="point-label">+ $200 Credits Used</div>
+                                <div class="chart-bar">
+                                    <div class="bar-fill" style="width: 80%; background: linear-gradient(90deg, #059669, #10b981);"></div>
+                                </div>
+                                <div class="dollar-label" style="color: #059669;">+$200</div>
+                            </div>
+                            <div class="chart-item">
+                                <div class="point-label">= Your Annual Fee</div>
+                                <div class="chart-bar">
+                                    <div class="bar-fill" style="width: 20%; background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+                                </div>
+                                <div class="dollar-label" style="color: #f59e0b;">-$50</div>
+                            </div>
+                        </div>
+                        
                         <p>Bottom line: match the credits to <em>your</em> habits, not to the marketing page.</p>
                     </div>
                 </div>
@@ -3216,14 +3874,43 @@ footer {
                     <div class="calculator-content collapsed" id="organic-spend-content" role="region" aria-labelledby="organic-spend-header">
                         <div class="recommendation-section">
                             <div class="recommendation-content">
-                                <h3>A Quick Gut Check</h3>
+                                <h3>The Organic Spend Test</h3>
                                 <div class="recommendation-text">
-                                    <p>Ask: "Would I buy this without the card?" If yes, great—count it. If no, don't.</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>Ask Yourself:</strong> "Would I buy this without the card?" If yes, count it. If no, don't.
+                                        </div>
+                                    </div>
                                 </div>
                                 
-                                <h3>A Simple Example</h3>
+                                <h3>Good Examples (Count These)</h3>
                                 <div class="recommendation-text">
-                                    <p>You spend ~$20/month on food delivery anyway. A card offers $10/month in delivery credits. You'll reliably use $120/year—go ahead and subtract that from the fee. If you <em>never</em> order delivery, that same credit is worth $0 to you (no matter how shiny it looks on the features list).</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>Food Delivery:</strong> You already spend $20/month on DoorDash. Card offers $10/month credit = $120/year saved
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Airline Fee Credit:</strong> You fly 3x/year and always check bags. $200 credit covers your $35 bag fees = $105 saved
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Dining Credit:</strong> You eat out 2x/month at restaurants. $25/month credit = $300/year saved
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3>Bad Examples (Don't Count These)</h3>
+                                <div class="recommendation-text">
+                                    <div class="lounge-types">
+                                        <div class="lounge-type warning">
+                                            <strong>Luxury Hotel Credit:</strong> You normally stay at $150/night hotels. $200 credit only works at $500+ hotels = $0 saved
+                                        </div>
+                                        <div class="lounge-type warning">
+                                            <strong>Rideshare Credit:</strong> You never use Uber/Lyft. $15/month credit = $0 saved (you're not suddenly going to start)
+                                        </div>
+                                        <div class="lounge-type warning">
+                                            <strong>Airport Lounge Credit:</strong> You fly once a year. $50 lounge credit = $0 saved (you'd never pay for a lounge)
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3254,12 +3941,32 @@ footer {
                             <div class="recommendation-content">
                                 <h3>Easy Credits (Green Flags)</h3>
                                 <div class="recommendation-text">
-                                    <p>Credits that auto-apply, work at places you already use, or reset monthly with no hoops. These are basically cash back in disguise.</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>Annual/Semi-Annual Credits:</strong> Credits that reset once or twice a year—because remembering to use something every single month is basically a part-time job
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Auto-Apply Credits:</strong> Credits that magically appear without you having to remember to activate them (the bank actually doing something helpful for once)
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Wide Acceptance:</strong> Credits that work at places you already use, not just that one weird restaurant downtown that's "totally worth it"
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <h3>Tricky Credits (Yellow/Red Flags)</h3>
                                 <div class="recommendation-text">
-                                    <p>Credits that require pre-booking through a special portal, only work with a single brand, or expire if you blink. If you need a reminder, a spreadsheet, and good luck—value it lower (or at zero).</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type warning">
+                                            <strong>Monthly Reset Credits:</strong> Credits that expire every 30 days—because apparently banks think you have nothing better to do than track their arbitrary deadlines
+                                        </div>
+                                        <div class="lounge-type warning">
+                                            <strong>Portal Requirements:</strong> Credits that require booking through a "special" portal that somehow always has different prices than everywhere else
+                                        </div>
+                                        <div class="lounge-type warning">
+                                            <strong>Brand Restrictions:</strong> Credits that only work at one specific chain—because variety is overrated and you should definitely change your entire lifestyle for a $25 credit
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3290,14 +3997,29 @@ footer {
                             <div class="recommendation-content">
                                 <h3>What to Check Before You Count It</h3>
                                 <div class="recommendation-text">
-                                    <p>- Are the eligible hotels in cities you actually visit?</p>
-                                    <p>- Are prices reasonable for your trips (not just aspirational)?</p>
-                                    <p>- Do booking rules require prepaying or using a special portal that raises prices?</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>Location Check:</strong> Are the eligible hotels in cities you actually visit?
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Price Check:</strong> Are prices reasonable for your trips (not just aspirational)?
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Booking Check:</strong> Do booking rules require prepaying or using a special portal that raises prices?
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <h3>How to Value It (Realistically)</h3>
                                 <div class="recommendation-text">
-                                    <p>If you'd book those hotels anyway, count the credit at or near full value. If you're stretching just to fit the rules, treat it as a nice-to-have—not part of your core math.</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>Full Value:</strong> If you'd book those hotels anyway, count the credit at or near full value
+                                        </div>
+                                        <div class="lounge-type warning">
+                                            <strong>Nice-to-Have:</strong> If you're stretching just to fit the rules, treat it as a bonus—not part of your core math
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3328,19 +4050,41 @@ footer {
                             <div class="recommendation-content">
                                 <h3>What It Does</h3>
                                 <div class="recommendation-text">
-                                    <p>- Guides you credit-by-credit in plain-English.</p>
-                                    <p>- Lets you toggle "I'd use this / I wouldn't" for honest math.</p>
-                                    <p>- Totals everything so you see your real-world effective annual fee.</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>Credit-by-Credit Guide:</strong> Walks you through each credit in plain English
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Honest Toggles:</strong> Let you choose "I'd use this / I wouldn't" for accurate math
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>Real-World Total:</strong> Shows your actual effective annual fee based on your habits
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <h3>Why It Helps</h3>
                                 <div class="recommendation-text">
-                                    <p>Because "$X in credits" isn't <em>your</em> number until it matches <em>your</em> habits. The calculator makes that obvious—no spreadsheet, no guesswork, no "trust me bro."</p>
+                                    <div class="lounge-types">
+                                        <div class="lounge-type">
+                                            <strong>Personalized Value:</strong> "$X in credits" isn't your number until it matches your habits
+                                        </div>
+                                        <div class="lounge-type">
+                                            <strong>No Guesswork:</strong> No spreadsheet, no "trust me bro" - just honest math
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-earning')">Next: Earning Rates →</button>
             </div>
         </section>
     </div>
@@ -3664,6 +4408,13 @@ footer {
                 </div>
             </div>
         </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-bonuses')">Next: Sign-Up Bonuses →</button>
+            </div>
+        </section>
     </div>
 
     <div class="content-layer" id="layer-travel-earning">
@@ -3851,6 +4602,13 @@ footer {
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-redemption')">Next: Redemption Rates →</button>
             </div>
         </section>
     </div>
@@ -4073,6 +4831,13 @@ footer {
                 </div>
             </div>
         </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-lounges')">Next: Airport Lounges →</button>
+            </div>
+        </section>
     </div>
 
     <div class="content-layer" id="layer-travel-lounges">
@@ -4108,12 +4873,21 @@ footer {
                 <div class="section-container">
                     <div class="section-header-content">
                         <h2>Practical Explanation</h2>
-                        <p>Airport lounges are private spaces where you escape the chaos of the gate: free food, drinks, Wi-Fi, comfy seating. Sometimes showers. The catch? <strong>Not all lounges (or lounge access) are created equal.</strong></p>
-                        <p>There are three big categories:</p>
-                        <p>- <strong>Bank Lounges</strong> (Amex, Capital One, Chase) – flashy, new, usually the nicest.</p>
-                        <p>- <strong>Airline Lounges</strong> (Delta, United, American, Alaska) – solid, but tied to the airline you're flying that day.</p>
-                        <p>- <strong>Priority Pass</strong> – a huge grab-bag network with lounges worldwide.</p>
-                        <p><strong>Most important rule:</strong> Before you value lounge access, look at your <strong>home airport</strong> and the places you travel most often. If the lounges you want aren't there, the perk is basically useless no matter how good it sounds.</p>
+                        <p>Airport lounges are private spaces where you escape the chaos of the gate: free food, drinks, Wi-Fi, comfy seating, and sometimes even showers. They're basically a quiet, comfortable oasis in the middle of airport chaos.</p>
+                        <p>But here's the catch: <strong>not all lounges are created equal, and the rules for getting in can be surprisingly complicated.</strong></p>
+                        <p>There are three main types of lounge access:</p>
+                        <div class="lounge-types">
+                            <div class="lounge-type">
+                                <strong>Bank Lounges</strong> (Amex Centurion, Capital One, Chase Sapphire) – the newest and nicest, but require premium credit cards
+                            </div>
+                            <div class="lounge-type">
+                                <strong>Airline Lounges</strong> (Delta Sky Club, United Club, etc.) – solid quality, but you usually need to be flying that specific airline
+                            </div>
+                            <div class="lounge-type">
+                                <strong>Priority Pass</strong> – a massive network of lounges worldwide, but quality varies dramatically
+                            </div>
+                        </div>
+                        <p><strong>Key insight:</strong> Before you pay extra for lounge access, check what's actually available at your home airport and the places you travel most. A $695 annual fee for lounge access doesn't make sense if there's only one mediocre lounge at your airport.</p>
                     </div>
                 </div>
             </div>
@@ -4126,7 +4900,7 @@ footer {
                     <div class="calculator-header" id="bank-lounges-header" role="button" tabindex="0" aria-expanded="false" aria-controls="bank-lounges-content" onclick="toggleSection('bank-lounges')" onkeydown="handleKeyToggle(event)">
                         <div class="section-header-content">
                             <h2>Bank Lounges</h2>
-                            <p>Amex, Capital One, and Chase built their own lounges to compete with airlines. They're usually the nicest spaces, but you need each bank's top-tier card—and the guest and AU rules can get pricey.</p>
+                            <p>Amex, Capital One, and Chase built their own lounges to compete with airlines. They're usually the nicest spaces, but you need each bank's top-tier card. The rules for bringing guests and adding authorized users (people you give cards to, like family members) can get expensive quickly.</p>
                             <div class="calculator-toggle-container">
                                 <div class="section-toggle-icon" aria-hidden="true">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4141,28 +4915,78 @@ footer {
                     <div class="calculator-content collapsed" id="bank-lounges-content" role="region" aria-labelledby="bank-lounges-header">
                         <div class="recommendation-section">
                             <div class="recommendation-content">
-                                <h3>Amex Centurion Lounges</h3>
-                                <div class="recommendation-text">
-                                    <p>- <strong>Cards that work:</strong> Amex Platinum, Amex Business Platinum, Amex Centurion.</p>
-                                    <p>- <strong>Guest rules:</strong> No free guests anymore. Adults are $50, kids $30, unless you spend $75k+ per year on your Platinum.</p>
-                                    <p>- <strong>AU access:</strong> Authorized users need their own Platinum card. Each AU Platinum costs <strong>$175 (for up to 3 AUs)</strong>. They get the same access as you, but no free guests.</p>
-                                    <p>- <strong>The vibe:</strong> Great food, craft cocktails, showers… and often overcrowded. You might wait in line for your luxury experience.</p>
-                                </div>
-                                
-                                <h3>Capital One Lounges</h3>
-                                <div class="recommendation-text">
-                                    <p>- <strong>Cards that work:</strong> Capital One Venture X (personal or business).</p>
-                                    <p>- <strong>Guest rules:</strong> 2 free guests now, but in <strong>February 2025 it changes</strong> → no free guests. Extra guests will cost $45 each.</p>
-                                    <p>- <strong>AU access:</strong> Authorized users are free on Venture X, and each AU gets their own full lounge access + guest allowance. This changes in February of 2025, it will cost authorized users $125 to get guest access.</p>
-                                    <p>- <strong>The vibe:</strong> Modern, clean, great food, grab-and-go snacks, even showers. Fewer locations, but quality is very high.</p>
-                                </div>
-                                
-                                <h3>Chase Sapphire Lounges</h3>
-                                <div class="recommendation-text">
-                                    <p>- <strong>Cards that work:</strong> Chase Sapphire Reserve.</p>
-                                    <p>- <strong>Guest rules:</strong> You + 2 free guests with Priority Pass; extra guests are $27 each.</p>
-                                    <p>- <strong>AU access:</strong> Authorized users are <strong>$75 each</strong>, and they get full lounge privileges.</p>
-                                    <p>- <strong>The vibe:</strong> Still rolling out, but reviews say they're right up there with Amex and Capital One. Bonus trick: if you have Priority Pass from Amex Plat or Venture X, you can usually get into a Chase lounge <strong>once per year</strong> without a Reserve.</p>
+                                <div class="cards-grid three-columns">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <img src="images/amex-centurion-logo.png" alt="Amex Centurion Lounges" class="lounge-logo">
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Cards:</span>
+                                                <span class="value">Amex Platinum, Business Platinum, Centurion</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Guest Rules:</span>
+                                                <span class="value">$50 adults, $30 kids (free if spending $75k+/year)</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Authorized Users:</span>
+                                                <span class="value">$175 for up to 3 additional cards (each needs own Platinum)</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Vibe:</span>
+                                                <span class="value">Luxury food & cocktails, often overcrowded</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <img src="images/capital-one-logo.png" alt="Capital One Lounges" class="lounge-logo">
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Cards:</span>
+                                                <span class="value">Venture X (personal or business)</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Guest Rules:</span>
+                                                <span class="value">2 free guests now, $45 each after Feb 2025</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Authorized Users:</span>
+                                                <span class="value">Free now, $125 for guest access after Feb 2025</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Vibe:</span>
+                                                <span class="value">Modern & clean, great food, fewer locations</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <img src="images/chase-sapphire-logo.png" alt="Chase Sapphire Lounges" class="lounge-logo">
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Cards:</span>
+                                                <span class="value">Sapphire Reserve</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Guest Rules:</span>
+                                                <span class="value">You + 2 free guests, $27 each extra</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Authorized Users:</span>
+                                                <span class="value">$75 each, full lounge privileges</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Vibe:</span>
+                                                <span class="value">Still rolling out, quality matches competitors</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4191,47 +5015,127 @@ footer {
                     <div class="calculator-content collapsed" id="airline-lounges-content" role="region" aria-labelledby="airline-lounges-header">
                         <div class="recommendation-section">
                             <div class="recommendation-content">
-                                <h3>Delta Sky Club</h3>
-                                <div class="recommendation-text">
-                                    <p>- <strong>Cards that work:</strong> Amex Platinum (Personal/Business), Delta Reserve (Personal/Business).</p>
-                                    <p>- <strong>Rules:</strong> You must be flying Delta that day.</p>
-                                    <p>- <strong>Guests:</strong> $50 each, no free guests. Delta Reserve sometimes allows 2 free guests, but only if the AU also has a Reserve.</p>
-                                    <p>- <strong>AU access:</strong></p>
-                                    <p>  - <strong>Amex Platinum AUs</strong> cost $175 (for up to 3). Each AU gets Sky Club access when flying Delta, but no free guests.</p>
-                                    <p>  - <strong>Delta Reserve AUs</strong> cost $175 each. They get their own Sky Club access with the same rules.</p>
-                                    <p>- <strong>The vibe:</strong> At big hubs, Sky Clubs can be excellent—bars, hot food, showers. At smaller airports? Think Wi-Fi, snacks, and a crowded bar.</p>
+                                <div class="cards-grid three-columns">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <img src="images/delta-skyclub-logo.png" alt="Delta Sky Club" class="lounge-logo">
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Cards:</span>
+                                                <span class="value">Amex Platinum, Delta Reserve (Personal/Business)</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Rules:</span>
+                                                <span class="value">Must be flying Delta that day</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Guest Rules:</span>
+                                                <span class="value">$50 each, no free guests (except Delta Reserve AUs)</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Authorized Users:</span>
+                                                <span class="value">$175 for up to 3 AUs, $175 each for Delta Reserve AUs</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Vibe:</span>
+                                                <span class="value">Excellent at hubs, basic at smaller airports</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <img src="images/united-club-logo.png" alt="United Club" class="lounge-logo">
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Cards:</span>
+                                                <span class="value">United Club Infinite Card</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Rules:</span>
+                                                <span class="value">Must be flying United that day</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Guest Rules:</span>
+                                                <span class="value">2 guests or immediate family included free</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Authorized Users:</span>
+                                                <span class="value">Free to add, but no lounge access for AUs</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Vibe:</span>
+                                                <span class="value">Solid drinks & snacks, good work space</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <img src="images/american-admirals-logo.png" alt="American Admirals Club" class="lounge-logo">
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Cards:</span>
+                                                <span class="value">Citi AAdvantage Executive World Elite</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Rules:</span>
+                                                <span class="value">Must be flying American that day</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Guest Rules:</span>
+                                                <span class="value">Immediate family or 2 guests included free</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Authorized Users:</span>
+                                                <span class="value">$175 each, full membership with guest privileges</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Vibe:</span>
+                                                <span class="value">Big step up from gate, not luxury level</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <img src="images/alaska-lounges-logo.png" alt="Alaska Lounges" class="lounge-logo">
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="info-row">
+                                                <span class="label">Cards:</span>
+                                                <span class="value">Alaska Visa Infinite, Priority Pass memberships</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Rules:</span>
+                                                <span class="value">Must be flying Alaska that day</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Guest Rules:</span>
+                                                <span class="value">2 guests typically, $30-50 per guest at some locations</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Authorized Users:</span>
+                                                <span class="value">No lounge access unless separate membership</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Vibe:</span>
+                                                <span class="value">West Coast focused, decent quality, smaller network</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 
-                                <h3>United Club</h3>
-                                <div class="recommendation-text">
-                                    <p>- <strong>Cards that work:</strong> United Club Infinite Card.</p>
-                                    <p>- <strong>Rules:</strong> You must be flying United that day.</p>
-                                    <p>- <strong>Guests:</strong> 2 guests or immediate family are included for free.</p>
-                                    <p>- <strong>AU access:</strong> Adding an AU card is free, but AUs don't get club access. Only the primary cardholder gets the perk.</p>
-                                    <p>- <strong>The vibe:</strong> Solid for drinks and snacks, reliable for work space, but usually not as "premium" as Amex or Capital One lounges.</p>
-                                </div>
-                                
-                                <h3>American Admirals Club</h3>
-                                <div class="recommendation-text">
-                                    <p>- <strong>Cards that work:</strong> Citi / AAdvantage Executive World Elite Mastercard.</p>
-                                    <p>- <strong>Rules:</strong> You must be flying American that day.</p>
-                                    <p>- <strong>Guests:</strong> Immediate family or up to 2 guests included for free.</p>
-                                    <p>- <strong>AU access:</strong> This is the sweet spot. AUs cost $175 each and get full Admirals Club membership on their own card—including their own guest privileges.</p>
-                                    <p>- <strong>The vibe:</strong> A big step up from the gate area, but not quite champagne-and-caviar luxury.</p>
-                                </div>
-                                
-                                <h3>Alaska Lounges</h3>
-                                <div class="recommendation-text">
-                                    <p>- <strong>Cards that work:</strong> Alaska Visa Infinite (limited access), or via certain Priority Pass memberships.</p>
-                                    <p>- <strong>Rules:</strong> Must be flying Alaska that day.</p>
-                                    <p>- <strong>Guests:</strong> Typically 2 guests, sometimes $30–$50 per guest depending on location.</p>
-                                    <p>- <strong>AU access:</strong> AU cardholders don't get lounge access unless they buy a separate Alaska Lounge membership.</p>
-                                    <p>- <strong>The vibe:</strong> Smaller footprint, mostly West Coast. Decent quality, but not a big nationwide network.</p>
-                                </div>
-                                
-                                <h3>Takeaway</h3>
-                                <div class="recommendation-text">
-                                    <p>Airline lounges are perfect if you're loyal to one carrier. If you bounce around, they lose value fast—because you need both the right card <em>and</em> a same-day ticket on that airline. Add in guest fees and AU costs, and the math can get complicated. Still, if you're a frequent flyer on one airline, these can be worth their weight in free snacks.</p>
+                                <div class="recommendation-section">
+                                    <div class="recommendation-content">
+                                        <h3>Key Takeaway</h3>
+                                        <div class="recommendation-text">
+                                            <p>Airline lounges are perfect if you're loyal to one carrier. If you bounce around, they lose value fast—because you need both the right card <em>and</em> a same-day ticket on that airline. Add in guest fees and authorized user costs, and the math can get complicated. Still, if you're a frequent flyer on one airline, these can be worth their weight in free snacks.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4260,11 +5164,16 @@ footer {
                     <div class="calculator-content collapsed" id="priority-pass-content" role="region" aria-labelledby="priority-pass-header">
                         <div class="recommendation-section">
                             <div class="recommendation-content">
-                                <h3>Details</h3>
-                                <div class="recommendation-text">
-                                    <p>- Internationally, Priority Pass can be fantastic—buffets, cocktails, quiet spaces.</p>
-                                    <p>- In the U.S., it's mixed. Some lounges are genuinely awesome, others are "just okay."</p>
-                                    <p>- The smart move: <strong>download the Priority Pass app</strong> and check your home airport (and places you fly often) before valuing this perk. It shows reviews, photos, and what's actually available.</p>
+                                <div class="priority-pass-details">
+                                    <div class="detail-item">
+                                        <strong>International Lounges</strong> – Fantastic buffets, cocktails, quiet spaces
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>U.S. Lounges</strong> – Mixed quality, some awesome, others just okay
+                                    </div>
+                                    <div class="detail-item">
+                                        <strong>Smart Move</strong> – Download the Priority Pass app to check your home airport before valuing this perk
+                                    </div>
                                 </div>
                                 
                                 <h3>Guest Rules</h3>
@@ -4275,6 +5184,13 @@ footer {
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-transfers')">Next: Transfer Partners →</button>
             </div>
         </section>
     </div>
@@ -4584,6 +5500,13 @@ footer {
                 </div>
             </div>
         </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-portals')">Next: Travel Portals →</button>
+            </div>
+        </section>
     </div>
 
     <div class="content-layer" id="layer-travel-bonuses">
@@ -4790,6 +5713,13 @@ footer {
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-churning')">Next: Churning (Expert Level) →</button>
             </div>
         </section>
     </div>
@@ -5108,6 +6038,13 @@ footer {
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-main')">Back To Travel Topics →</button>
             </div>
         </section>
     </div>
@@ -5479,6 +6416,13 @@ footer {
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-protections')">Next: Protections →</button>
             </div>
         </section>
     </div>
@@ -5858,6 +6802,13 @@ footer {
                 </div>
             </div>
         </section>
+
+        <section class="container">
+            <div class="navigation-buttons">
+                <button class="nav-btn secondary" onclick="goToLayer('travel-main')">← Back To Travel Topics</button>
+                <button class="nav-btn primary" onclick="goToLayer('travel-foreign-fees')">Next: Foreign Transaction Fees →</button>
+            </div>
+        </section>
     </div>
 
     <!-- Footer placeholder -->
@@ -6079,6 +7030,47 @@ footer {
                 var parentTopic = layerId.startsWith('cashback-') ? 'cashback-main' : 'travel-main';
                 window.currentPath = ['home', parentTopic, layerId];
             }
+        }
+
+        // Function to get the next section in the travel topics sequence
+        function getNextTravelSection(currentSection) {
+            const travelSections = [
+                'travel-points',
+                'travel-fees', 
+                'travel-earning',
+                'travel-redemption',
+                'travel-lounges',
+                'travel-transfers',
+                'travel-portals',
+                'travel-bonuses',
+                'travel-churning',
+                'travel-protections',
+                'travel-foreign-fees'
+            ];
+            
+            const currentIndex = travelSections.indexOf(currentSection);
+            if (currentIndex === -1 || currentIndex === travelSections.length - 1) {
+                return 'travel-main'; // Return to main if not found or is last
+            }
+            return travelSections[currentIndex + 1];
+        }
+
+        // Function to get the display name for the next section
+        function getNextSectionDisplayName(nextSection) {
+            const displayNames = {
+                'travel-points': 'Points (The Made-Up Currency)',
+                'travel-fees': 'Effective Annual Fees',
+                'travel-earning': 'Earning Rates',
+                'travel-redemption': 'Redemption Rates',
+                'travel-lounges': 'Airport Lounges',
+                'travel-transfers': 'Transfer Partners',
+                'travel-portals': 'Travel Portals',
+                'travel-bonuses': 'Sign-Up Bonuses',
+                'travel-churning': 'Churning (Expert Level)',
+                'travel-protections': 'Protections',
+                'travel-foreign-fees': 'Foreign Transaction Fees'
+            };
+            return displayNames[nextSection] || 'Travel Topics';
         }
     </script>
     <script>
