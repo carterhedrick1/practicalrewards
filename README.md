@@ -1,91 +1,47 @@
-# Practical Rewards - Credit Card Management System
+# Cards for Normals - Practical Rewards
 
-## Overview
+Credit card guidance for normals. No complexity, just practical advice.
 
-This project has been transformed from an Annual Fee Calculator to a comprehensive Credit Cards product grid system with admin management capabilities.
+## 📁 Project Structure
 
-## New Structure
+This repository contains the main Practical Rewards website.
 
-### Main Pages
-- **`cards.html`** - The main Cards page (formerly `eaacalc.html`)
-- **`admin-cards.html`** - Admin interface for managing credit cards
+```
+cardsfornormals/
+├── index.html                     # Main website
+├── cards.html                     # Card comparison pages
+├── learning.html                  # Educational content
+├── card-pages/                    # Individual card pages
+├── css/                           # Main site styles
+├── js/                            # Main site scripts
+└── images/                        # Main site assets
+```
 
-### Key Features
+## 🚀 Quick Start
 
-#### Cards Page (`cards.html`)
-- **Product Grid**: Displays credit cards in an e-commerce style layout
-- **Advanced Filtering**: Filter by card type, annual fee, credit score, and rewards
-- **Sorting**: Sort by name, fee, or featured order
-- **Responsive Design**: Works on desktop and mobile devices
-- **Dynamic Loading**: Cards are loaded from the admin system
+The main website is a collection of static HTML pages that can be opened directly in a browser or served with any web server.
 
-#### Admin Page (`admin-cards.html`)
-- **Card Management**: Add, edit, and delete credit cards
-- **Data Export/Import**: JSON export/import functionality
-- **Status Management**: Set cards as active, draft, or inactive
-- **Rich Form Fields**: Comprehensive card information including features, tags, and URLs
+## ✨ Features
 
-## How to Use
+### Main Website
+- 💳 **Card Comparisons**: Detailed credit card analysis
+- 📚 **Educational Content**: Practical rewards guidance
+- 🎯 **Beginner-Friendly**: No complexity, just practical advice
 
-### For Users
-1. Visit `cards.html` to browse credit cards
-2. Use the filter buttons to narrow down your search
-3. Click on any card to view details or visit the card's page
-4. Use the sort dropdown to organize cards by different criteria
+## 🛠️ Development
 
-### For Administrators
-1. Visit `admin-cards.html` to manage the card database
-2. Click "Add New Card" to create new entries
-3. Use the table to view, edit, or delete existing cards
-4. Export data for backup or import from other sources
-5. Set card status to control visibility on the main page
+The main site can be developed by editing HTML/CSS/JS files directly.
 
-## Technical Details
+## 📖 Documentation
 
-### Data Storage
-- Cards are stored in browser localStorage for persistence
-- Admin changes are immediately reflected on the cards page
-- Fallback data is provided if no admin data exists
+See existing documentation for the static site.
 
-### Card Data Structure
-Each card includes:
-- Basic info (name, type, annual fee, bank type)
-- Rewards type (points, miles, cashback, hybrid)
-- Features list
-- Feature categories (lounge access, TSA PreCheck, travel insurance, etc.)
-- Image URL and card page URL
-- Status (active/draft/inactive)
 
-### Integration
-- The cards page automatically loads data from the admin system
-- Changes made in admin are visible after refreshing the cards page
-- All existing card pages (venture-x.html, sapphire-reserve.html, etc.) remain functional
 
-## Navigation Updates
+## 📱 URLs
 
-All navigation throughout the site has been updated:
-- Header navigation now shows "Cards" instead of "Calculator"
-- Footer links updated accordingly
-- Card page back buttons now link to "Cards" instead of "Card Selection"
-- All internal references updated to use `cards.html`
+- **Main Website**: Open `index.html` in browser or serve locally
 
-## Getting Started
+## 🤝 Contributing
 
-1. **View Cards**: Navigate to `cards.html`
-2. **Manage Cards**: Navigate to `admin-cards.html`
-3. **Add Sample Data**: Use the admin page to add your first cards
-4. **Customize**: Modify the filter categories and card fields as needed
-
-## Browser Compatibility
-
-- Modern browsers with localStorage support
-- Responsive design for mobile and desktop
-- No external dependencies required
-
-## Future Enhancements
-
-- Backend database integration
-- User accounts and favorites
-- Advanced analytics and reporting
-- API endpoints for external integrations
-- Enhanced search and recommendation algorithms 
+Contributions are welcome! Please feel free to submit a Pull Request.
