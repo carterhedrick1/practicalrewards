@@ -155,12 +155,24 @@
                 </div>
                 <div class="form-group">
                     <label>Type:</label>
-                    <select id="cardType" required>
-                        <option value="travel">Travel</option>
-                        <option value="cashback">Cashback</option>
-                        <option value="hybrid">Hybrid</option>
-                        <option value="business">Business</option>
-                    </select>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;">
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="cardTypes" value="travel" style="width: auto; margin-right: 8px;">
+                            Travel
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="cardTypes" value="cashback" style="width: auto; margin-right: 8px;">
+                            Cashback
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="cardTypes" value="hybrid" style="width: auto; margin-right: 8px;">
+                            Hybrid
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="cardTypes" value="business" style="width: auto; margin-right: 8px;">
+                            Business
+                        </label>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Annual Fee ($):</label>
@@ -181,12 +193,24 @@
                 </div>
                 <div class="form-group">
                     <label>Rewards Type:</label>
-                    <select id="rewardsType" required>
-                        <option value="points">Points</option>
-                        <option value="miles">Miles</option>
-                        <option value="cashback">Cashback</option>
-                        <option value="hybrid">Hybrid</option>
-                    </select>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;">
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="rewardsTypes" value="points" style="width: auto; margin-right: 8px;">
+                            Points
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="rewardsTypes" value="miles" style="width: auto; margin-right: 8px;">
+                            Miles
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="rewardsTypes" value="cashback" style="width: auto; margin-right: 8px;">
+                            Cashback
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="rewardsTypes" value="hybrid" style="width: auto; margin-right: 8px;">
+                            Hybrid
+                        </label>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Image URL:</label>
@@ -545,10 +569,10 @@
                         </div>
                     </div>
                     <div class="card-details">
-                        <p><strong>Type:</strong> ${card.type}</p>
+                        <p><strong>Type:</strong> ${Array.isArray(card.type) ? card.type.join(', ') : card.type}</p>
                         <p><strong>Annual Fee:</strong> $${card.annualFee}</p>
                         <p><strong>Bank:</strong> ${card.bankType}</p>
-                        <p><strong>Rewards:</strong> ${card.rewards}</p>
+                        <p><strong>Rewards:</strong> ${Array.isArray(card.rewards) ? card.rewards.join(', ') : card.rewards}</p>
                         <p><strong>Earning Rate:</strong> ${card.features ? card.features.slice(0, 2).join(', ') + (card.features.length > 2 ? '...' : '') : 'None'}</p>
                     </div>
                     <div style="margin-top: 15px;">
@@ -569,6 +593,8 @@
             // Clear all checkboxes
             document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
             document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="rewardsTypes"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="cardTypes"]').forEach(checkbox => checkbox.checked = false);
             
             // Clear new fields
             document.getElementById('welcomeBonus').value = '';
@@ -588,10 +614,40 @@
             editingCardId = cardId;
             document.getElementById('modalTitle').textContent = 'Edit Card in Database';
             document.getElementById('cardName').value = card.name;
-            document.getElementById('cardType').value = card.type;
+            // Clear card type checkboxes first
+            document.querySelectorAll('input[name="cardTypes"]').forEach(checkbox => checkbox.checked = false);
+            
+            // Populate card types (handle both single string and array)
+            if (card.type) {
+                if (Array.isArray(card.type)) {
+                    card.type.forEach(typeValue => {
+                        const checkbox = document.querySelector(`input[name="cardTypes"][value="${typeValue}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                } else {
+                    // Handle single string value
+                    const checkbox = document.querySelector(`input[name="cardTypes"][value="${card.type}"]`);
+                    if (checkbox) checkbox.checked = true;
+                }
+            }
             document.getElementById('annualFee').value = card.annualFee;
             document.getElementById('bankType').value = card.bankType;
-            document.getElementById('rewardsType').value = card.rewards;
+            // Clear rewards type checkboxes first
+            document.querySelectorAll('input[name="rewardsTypes"]').forEach(checkbox => checkbox.checked = false);
+            
+            // Populate rewards types (handle both single string and array)
+            if (card.rewards) {
+                if (Array.isArray(card.rewards)) {
+                    card.rewards.forEach(rewardType => {
+                        const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${rewardType}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                } else {
+                    // Handle single string value
+                    const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${card.rewards}"]`);
+                    if (checkbox) checkbox.checked = true;
+                }
+            }
             document.getElementById('imageUrl').value = card.image || '';
             document.getElementById('features').value = Array.isArray(card.features) ? card.features.join('\n') : '';
             document.getElementById('welcomeBonus').value = card.welcome_bonus || card.welcomeBonus || '';
@@ -658,12 +714,26 @@
         document.getElementById('cardForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            // Validate that at least one card type is selected
+            const selectedCardTypes = document.querySelectorAll('input[name="cardTypes"]:checked');
+            if (selectedCardTypes.length === 0) {
+                alert('Please select at least one card type.');
+                return;
+            }
+            
+            // Validate that at least one rewards type is selected
+            const selectedRewardsTypes = document.querySelectorAll('input[name="rewardsTypes"]:checked');
+            if (selectedRewardsTypes.length === 0) {
+                alert('Please select at least one rewards type.');
+                return;
+            }
+            
             const cardData = {
                 name: document.getElementById('cardName').value,
-                type: document.getElementById('cardType').value,
+                type: Array.from(document.querySelectorAll('input[name="cardTypes"]:checked')).map(cb => cb.value),
                 annual_fee: parseInt(document.getElementById('annualFee').value),
                 bank_type: document.getElementById('bankType').value,
-                rewards_type: document.getElementById('rewardsType').value,
+                rewards_type: Array.from(document.querySelectorAll('input[name="rewardsTypes"]:checked')).map(cb => cb.value),
                 image_url: document.getElementById('imageUrl').value || '',
                 features: document.getElementById('features').value.split('\n').filter(f => f.trim()),
                 welcome_bonus: document.getElementById('welcomeBonus').value || '',

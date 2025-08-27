@@ -1786,7 +1786,11 @@
 
         function applyNewFilters() {
             // Apply the new filter system
+            console.log('🔍 Starting filter process with activeFilters:', activeFilters);
+            console.log('🔍 Available cards:', allCards.map(c => ({ name: c.name, type: c.type })));
+            
             filteredCards = allCards.filter(card => {
+                console.log(`🔍 Checking card: ${card.name} (type: ${card.type})`);
                 for (const [filterType, filterValues] of Object.entries(activeFilters)) {
                     if (filterType === 'fee') {
                         if (filterValues.includes('0-100') && (card.annualFee < 0 || card.annualFee > 100)) return false;
@@ -1794,7 +1798,34 @@
                         if (filterValues.includes('300-500') && (card.annualFee < 300 || card.annualFee > 500)) return false;
                         if (filterValues.includes('500+') && card.annualFee < 500) return false;
                     } else if (filterType === 'type' || filterType === 'rewards') {
-                        if (!filterValues.includes(card[filterType])) return false;
+                        // Handle both single string and array values for type/rewards
+                        let cardValue = card[filterType];
+                        console.log(`🔍 Filtering ${filterType}: card value =`, cardValue, 'filter values =', filterValues);
+                        console.log(`🔍 cardValue type:`, typeof cardValue);
+                        console.log(`🔍 Array.isArray(cardValue):`, Array.isArray(cardValue));
+                        console.log(`🔍 cardValue constructor:`, cardValue.constructor);
+                        
+                        // Check if cardValue is a string representation of an array and parse it
+                        if (typeof cardValue === 'string' && cardValue.startsWith('[') && cardValue.endsWith(']')) {
+                            try {
+                                cardValue = JSON.parse(cardValue);
+                                console.log(`🔍 Parsed string to array:`, cardValue);
+                            } catch (e) {
+                                console.log(`🔍 Failed to parse string as array:`, e);
+                            }
+                        }
+                        
+                        if (Array.isArray(cardValue)) {
+                            // If card has multiple types/rewards, check if any match the filter
+                            const hasMatch = filterValues.some(filterValue => cardValue.includes(filterValue));
+                            console.log(`🔍 Array check: hasMatch = ${hasMatch}`);
+                            if (!hasMatch) return false;
+                        } else {
+                            // Handle single string value (backward compatibility)
+                            const hasMatch = filterValues.includes(cardValue);
+                            console.log(`🔍 String check: hasMatch = ${hasMatch}`);
+                            if (!hasMatch) return false;
+                        }
                     } else if (filterType === 'issuer') {
                         // Map card issuer/bankType to filter values
                         const cardIssuer = getCardIssuerCategory(card);
