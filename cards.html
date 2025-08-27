@@ -271,7 +271,8 @@
             border: 2px solid #e2e8f0;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            min-width: 250px;
+            min-width: max-content;
+            max-width: 90vw;
             z-index: 1000;
             display: none;
             margin-top: 0.5rem;
@@ -295,6 +296,7 @@
             cursor: pointer;
             font-size: 0.9rem;
             color: #374151;
+            white-space: nowrap;
         }
 
         .dropdown-content input[type="radio"],
@@ -953,7 +955,8 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 90%;
-                max-width: 300px;
+                max-width: 90vw;
+                min-width: 280px;
                 max-height: 80vh;
             }
 
@@ -1060,10 +1063,10 @@
                     </button>
                     <div class="pill-dropdown" id="fee-dropdown">
                         <div class="dropdown-content">
-                            <label><input type="checkbox" name="fee" value="no-fee" onchange="autoApplyFilters()"> No Annual Fee</label>
-                            <label><input type="checkbox" name="fee" value="low" onchange="autoApplyFilters()"> $0-$95</label>
-                            <label><input type="checkbox" name="fee" value="medium" onchange="autoApplyFilters()"> $95-$250</label>
-                            <label><input type="checkbox" name="fee" value="high" onchange="autoApplyFilters()"> $250+</label>
+                            <label><input type="checkbox" name="fee" value="0-100" onchange="autoApplyFilters()"> $0-$100</label>
+                            <label><input type="checkbox" name="fee" value="100-300" onchange="autoApplyFilters()"> $100-$300</label>
+                            <label><input type="checkbox" name="fee" value="300-500" onchange="autoApplyFilters()"> $300-$500</label>
+                            <label><input type="checkbox" name="fee" value="500+" onchange="autoApplyFilters()"> $500+</label>
                         </div>
                         <div class="dropdown-footer">
                             <button class="reset-btn" onclick="resetFilter('fee')">Reset</button>
@@ -1097,14 +1100,12 @@
                     </button>
                     <div class="pill-dropdown" id="protections-dropdown">
                         <div class="dropdown-content">
+                            <label><input type="checkbox" name="protections" value="trip-delay-cancellation" onchange="autoApplyFilters()"> Trip Delay & Cancellation Insurance</label>
+                            <label><input type="checkbox" name="protections" value="lost-delayed-baggage" onchange="autoApplyFilters()"> Lost/Delayed Baggage Insurance</label>
+                            <label><input type="checkbox" name="protections" value="rental-car-insurance" onchange="autoApplyFilters()"> Rental Car Collision Damage Waiver</label>
                             <label><input type="checkbox" name="protections" value="cell-phone-protection" onchange="autoApplyFilters()"> Cell Phone Protection</label>
-                            <label><input type="checkbox" name="protections" value="no-foreign-transaction-fees" onchange="autoApplyFilters()"> No Foreign Transaction Fees</label>
-                            <label><input type="checkbox" name="protections" value="primary-rental-car-cdw" onchange="autoApplyFilters()"> Primary Rental Car CDW</label>
-                            <label><input type="checkbox" name="protections" value="trip-delay-cancellation" onchange="autoApplyFilters()"> Trip Delay / Cancellation / Interruption</label>
-                            <label><input type="checkbox" name="protections" value="baggage-delay-lost" onchange="autoApplyFilters()"> Baggage Delay / Lost Baggage</label>
-                            <label><input type="checkbox" name="protections" value="purchase-protection" onchange="autoApplyFilters()"> Purchase Protection / Extended Warranty / Return</label>
-                            <label><input type="checkbox" name="protections" value="coverage-rules" onchange="autoApplyFilters()"> Coverage Rules</label>
-                            <label><input type="checkbox" name="protections" value="au-coverage" onchange="autoApplyFilters()"> AU Coverage</label>
+                            <label><input type="checkbox" name="protections" value="purchase-protection" onchange="autoApplyFilters()"> Purchase Protection</label>
+                            <label><input type="checkbox" name="protections" value="extended-warranty" onchange="autoApplyFilters()"> Extended Warranty</label>
                         </div>
                         <div class="dropdown-footer">
                             <button class="reset-btn" onclick="resetFilter('protections')">Reset</button>
@@ -1140,7 +1141,6 @@
                     </div>
                 </div>
                 <button class="clear-all-btn" onclick="resetAllFilters()">CLEAR ALL</button>
-                <button class="clear-all-btn" onclick="reloadCardsData()" style="margin-left: 10px;">RELOAD DATA</button>
             </div>
         </div>
 
@@ -1206,10 +1206,10 @@
                             <span class="mobile-arrow">▼</span>
                         </div>
                         <div class="mobile-filter-options" id="mobile-fee-options">
-                            <label><input type="checkbox" name="mobile-fee" value="no-fee" onchange="autoApplyMobileFilters()"> No Annual Fee</label>
-                            <label><input type="checkbox" name="mobile-fee" value="low" onchange="autoApplyMobileFilters()"> $0-$95</label>
-                            <label><input type="checkbox" name="mobile-fee" value="medium" onchange="autoApplyMobileFilters()"> $95-$250</label>
-                            <label><input type="checkbox" name="mobile-fee" value="high" onchange="autoApplyMobileFilters()"> $250+</label>
+                            <label><input type="checkbox" name="mobile-fee" value="0-100" onchange="autoApplyMobileFilters()"> $0-$100</label>
+                            <label><input type="checkbox" name="mobile-fee" value="100-300" onchange="autoApplyMobileFilters()"> $100-$300</label>
+                            <label><input type="checkbox" name="mobile-fee" value="300-500" onchange="autoApplyMobileFilters()"> $300-$500</label>
+                            <label><input type="checkbox" name="mobile-fee" value="500+" onchange="autoApplyMobileFilters()"> $500+</label>
                         </div>
                     </div>
 
@@ -1235,14 +1235,12 @@
                             <span class="mobile-arrow">▼</span>
                         </div>
                         <div class="mobile-filter-options" id="mobile-protections-options">
+                            <label><input type="checkbox" name="mobile-protections" value="trip-delay-cancellation" onchange="autoApplyMobileFilters()"> Trip Delay & Cancellation Insurance</label>
+                            <label><input type="checkbox" name="mobile-protections" value="lost-delayed-baggage" onchange="autoApplyMobileFilters()"> Lost/Delayed Baggage Insurance</label>
+                            <label><input type="checkbox" name="mobile-protections" value="rental-car-insurance" onchange="autoApplyMobileFilters()"> Rental Car Collision Damage Waiver</label>
                             <label><input type="checkbox" name="mobile-protections" value="cell-phone-protection" onchange="autoApplyMobileFilters()"> Cell Phone Protection</label>
-                            <label><input type="checkbox" name="mobile-protections" value="no-foreign-transaction-fees" onchange="autoApplyMobileFilters()"> No Foreign Transaction Fees</label>
-                            <label><input type="checkbox" name="mobile-protections" value="primary-rental-car-cdw" onchange="autoApplyMobileFilters()"> Primary Rental Car CDW</label>
-                            <label><input type="checkbox" name="mobile-protections" value="trip-delay-cancellation" onchange="autoApplyMobileFilters()"> Trip Delay / Cancellation / Interruption</label>
-                            <label><input type="checkbox" name="mobile-protections" value="baggage-delay-lost" onchange="autoApplyMobileFilters()"> Baggage Delay / Lost Baggage</label>
-                            <label><input type="checkbox" name="mobile-protections" value="purchase-protection" onchange="autoApplyMobileFilters()"> Purchase Protection / Extended Warranty / Return</label>
-                            <label><input type="checkbox" name="mobile-protections" value="coverage-rules" onchange="autoApplyMobileFilters()"> Coverage Rules</label>
-                            <label><input type="checkbox" name="mobile-protections" value="au-coverage" onchange="autoApplyMobileFilters()"> AU Coverage</label>
+                            <label><input type="checkbox" name="mobile-protections" value="purchase-protection" onchange="autoApplyMobileFilters()"> Purchase Protection</label>
+                            <label><input type="checkbox" name="mobile-protections" value="extended-warranty" onchange="autoApplyMobileFilters()"> Extended Warranty</label>
                         </div>
                     </div>
 
@@ -1488,7 +1486,7 @@
                         protections: ["Rental car CDW", "Trip delay"],
                         featureCategories: ["lounge-access", "tsa-precheck", "global-entry"],
                         perkCategories: ["lounge-access", "tsa-precheck", "no-foreign-fees"],
-                        protectionCategories: ["primary-rental-car-cdw", "trip-delay-cancellation"],
+                        protectionCategories: ["rental-car-insurance", "trip-delay-cancellation"],
                         url: "card-pages/venture-x.html"
                     },
                     {
@@ -1506,7 +1504,7 @@
                         protections: ["Rental car CDW", "Trip delay", "Baggage delay"],
                         featureCategories: ["lounge-access", "travel-insurance"],
                         perkCategories: ["lounge-access", "tsa-precheck"],
-                        protectionCategories: ["primary-rental-car-cdw", "trip-delay-cancellation", "baggage-delay-lost"],
+                        protectionCategories: ["rental-car-insurance", "trip-delay-cancellation", "lost-delayed-baggage"],
                         url: "card-pages/sapphire-reserve.html"
                     },
                     {
@@ -1524,7 +1522,7 @@
                         protections: ["Rental car CDW", "Trip delay", "Purchase protection"],
                         featureCategories: ["lounge-access", "travel-insurance", "rental-car-insurance"],
                         perkCategories: ["lounge-access", "clear", "metal-card"],
-                        protectionCategories: ["primary-rental-car-cdw", "trip-delay-cancellation", "purchase-protection"],
+                        protectionCategories: ["rental-car-insurance", "trip-delay-cancellation", "purchase-protection"],
                         url: "card-pages/amex-platinum.html"
                     }
                 ];
@@ -1791,10 +1789,10 @@
             filteredCards = allCards.filter(card => {
                 for (const [filterType, filterValues] of Object.entries(activeFilters)) {
                     if (filterType === 'fee') {
-                        if (filterValues.includes('no-fee') && card.annualFee !== 0) return false;
-                        if (filterValues.includes('low') && (card.annualFee < 0 || card.annualFee > 95)) return false;
-                        if (filterValues.includes('medium') && (card.annualFee < 95 || card.annualFee > 250)) return false;
-                        if (filterValues.includes('high') && card.annualFee < 250) return false;
+                        if (filterValues.includes('0-100') && (card.annualFee < 0 || card.annualFee > 100)) return false;
+                        if (filterValues.includes('100-300') && (card.annualFee < 100 || card.annualFee > 300)) return false;
+                        if (filterValues.includes('300-500') && (card.annualFee < 300 || card.annualFee > 500)) return false;
+                        if (filterValues.includes('500+') && card.annualFee < 500) return false;
                     } else if (filterType === 'type' || filterType === 'rewards') {
                         if (!filterValues.includes(card[filterType])) return false;
                     } else if (filterType === 'issuer') {
@@ -1867,10 +1865,10 @@
                     'hotels': 'Hotels'
                 },
                 'fee': {
-                    'no-fee': 'No Annual Fee',
-                    'low': '$0-$95',
-                    'medium': '$95-$250',
-                    'high': '$250+'
+                    '0-100': '$0-$100',
+                    '100-300': '$100-$300',
+                    '300-500': '$300-$500',
+                    '500+': '$500+'
                 },
                 'perks': {
                     'lounge-access': 'Lounge Access',
@@ -1879,14 +1877,12 @@
                     'no-foreign-fees': 'No Foreign Transaction Fees'
                 },
                 'protections': {
+                    'trip-delay-cancellation': 'Trip Delay & Cancellation Insurance',
+                    'lost-delayed-baggage': 'Lost/Delayed Baggage Insurance',
+                    'rental-car-insurance': 'Rental Car Collision Damage Waiver',
                     'cell-phone-protection': 'Cell Phone Protection',
-                    'no-foreign-transaction-fees': 'No Foreign Transaction Fees',
-                    'primary-rental-car-cdw': 'Primary Rental Car CDW',
-                    'trip-delay-cancellation': 'Trip Delay/Cancellation/Interruption',
-                    'baggage-delay-lost': 'Baggage Delay/Lost Baggage',
-                    'purchase-protection': 'Purchase Protection/Extended Warranty/Return',
-                    'coverage-rules': 'Coverage Rules',
-                    'au-coverage': 'AU Coverage'
+                    'purchase-protection': 'Purchase Protection',
+                    'extended-warranty': 'Extended Warranty'
                 }
             };
             

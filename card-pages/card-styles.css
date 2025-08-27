@@ -3204,3 +3204,63 @@ span.positive {
     box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
     flex-shrink: 0;
 }
+
+/* Apply Button Styles */
+.apply-section {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 2px solid #059669;
+    border-radius: 16px;
+    margin-top: 2rem;
+}
+
+.apply-button-container {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.apply-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    color: white;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.apply-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+}
+
+.apply-button:active {
+    transform: translateY(0);
+}
+
+.apply-disclaimer {
+    font-size: 0.9rem;
+    color: #6b7280;
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+/* Mobile responsive apply button */
+@media (max-width: 768px) {
+    .apply-button {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .apply-button-container {
+        margin: 1.5rem 0;
+    }
+}

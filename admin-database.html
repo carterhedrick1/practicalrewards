@@ -135,6 +135,7 @@
             <button class="btn" onclick="importData()">📤 Import Data</button>
             <button class="btn" onclick="setupDatabase()">🔧 Setup Database</button>
             <button class="btn" onclick="addWellsFargoActiveCash()" style="background: #ff6b35;">🔧 Add Wells Fargo Card</button>
+            <button class="btn" onclick="addCitiDoubleCash()" style="background: #059669;">🔧 Add Citi Double Cash</button>
         </div>
 
         <div id="cards-container">
@@ -306,6 +307,13 @@
                     setTimeout(() => {
                         window.addWellsFargoActiveCash();
                     }, 1000);
+                }
+                
+                // Try to add Citi Double Cash card after successful connection
+                if (typeof window.addCitiDoubleCash === 'function') {
+                    setTimeout(() => {
+                        window.addCitiDoubleCash();
+                    }, 1500);
                 }
                 
                 updateStatus('✅ Connected to Supabase database successfully!', 'success');
@@ -824,15 +832,64 @@
             }
         }
 
+        // Auto-add Citi Double Cash card
+        async function addCitiDoubleCash() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi Double Cash® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi Double Cash® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi Double Cash® Card",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "citi",
+                    rewards_type: "cashback",
+                    image_url: "images/citi-double-cash.png",
+                    features: ["2% back on everything (1% buy + 1% pay)", "5% total on hotels, car rentals & attractions via Citi Travel"],
+                    welcome_bonus: "$200 after $1,500 spend in 6 months",
+                    practical_advice: "Best for a simple $0-fee 2% card. Set it as your default for everyday spend; you can earn 5% total on hotels, car rentals & attractions only when booked through Citi Travel. Not ideal for international use due to a 3% foreign transaction fee.",
+                    card_url: "card-pages/citi-double-cash.html",
+                    status: "active",
+                    perk_categories: [],
+                    protection_categories: ["purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi Double Cash® Card:', error);
+                } else {
+                    console.log('✅ Citi Double Cash® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiDoubleCash:', error);
+            }
+        }
+
         // Call this function after database is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Add a delay to ensure database is fully loaded
             setTimeout(addWellsFargoActiveCash, 2000);
+            setTimeout(addCitiDoubleCash, 2500);
         });
 
         // Also try to add the card when database connection is successful
         // This will be called from checkDatabaseAndLoadCards
         window.addWellsFargoActiveCash = addWellsFargoActiveCash;
+        window.addCitiDoubleCash = addCitiDoubleCash;
     </script>
 </body>
 </html> 
