@@ -134,6 +134,7 @@
             <button class="btn" onclick="exportData()">📥 Export Data</button>
             <button class="btn" onclick="importData()">📤 Import Data</button>
             <button class="btn" onclick="setupDatabase()">🔧 Setup Database</button>
+            <button class="btn" onclick="addWellsFargoActiveCash()" style="background: #ff6b35;">🔧 Add Wells Fargo Card</button>
         </div>
 
         <div id="cards-container">
@@ -172,6 +173,7 @@
                         <option value="capital-one">Capital One</option>
                         <option value="citi">Citi</option>
                         <option value="bilt">Bilt</option>
+                        <option value="wells-fargo">Wells Fargo</option>
                         <option value="airlines">Airlines</option>
                         <option value="hotels">Hotels</option>
                     </select>
@@ -198,6 +200,10 @@
                     <input type="text" id="welcomeBonus" placeholder="80k points, 75k miles, etc.">
                 </div>
                 <div class="form-group">
+                    <label>Practical Advice:</label>
+                    <textarea id="practicalAdvice" rows="3" placeholder="Practical advice about when this card makes sense..."></textarea>
+                </div>
+                <div class="form-group">
                     <label>Card Page URL:</label>
                     <input type="text" id="cardUrl" placeholder="card-pages/card-name.html">
                 </div>
@@ -209,10 +215,7 @@
                         <option value="coming-soon">Coming Soon</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Practical Advice:</label>
-                    <textarea id="practicalAdvice" rows="3" placeholder="Practical advice about when this card makes sense..."></textarea>
-                </div>
+
                 
                 <!-- Perk Categories (exactly matching your filters) -->
                 <div class="form-group">
@@ -298,6 +301,13 @@
                 await setupDatabase();
                 await loadCardsFromDatabase();
                 
+                // Try to add Wells Fargo Active Cash card after successful connection
+                if (typeof window.addWellsFargoActiveCash === 'function') {
+                    setTimeout(() => {
+                        window.addWellsFargoActiveCash();
+                    }, 1000);
+                }
+                
                 updateStatus('✅ Connected to Supabase database successfully!', 'success');
                 updateDbStatus('Connected');
                 
@@ -372,12 +382,13 @@
                 console.log('Loading cards from database...');
                 updateStatus('Loading cards from database...', 'info');
                 
-                const { data, error } = await supabase.from('cards').select('*').order('name', { ascending: true });
+                const { data, error } = await supabase.from('cards').select('id, name, type, annual_fee, bank_type, rewards_type, image_url, features, card_url, status, welcome_bonus, practical_advice, perk_categories, protection_categories').order('name', { ascending: true });
 
                 if (error) {
                     throw new Error(`Database error: ${error.message}`);
                 } else {
                     console.log('Cards loaded from database:', data);
+                    console.log('🔍 First card raw data:', data[0]);
                     
                     // Map database fields to our expected format
                     cards = data.map(card => ({
@@ -391,6 +402,8 @@
                         features: card.features || [],
                         url: card.card_url || '',
                         status: card.status || 'active',
+                        welcome_bonus: card.welcome_bonus || '',
+                        practical_advice: card.practical_advice || '',
                         perk_categories: card.perk_categories || [],
                         protection_categories: card.protection_categories || []
                     }));
@@ -467,10 +480,8 @@
             try {
                 console.log('Saving card to database:', cardData);
                 
-                // Keep perk and protection categories, remove other new fields if they don't exist
+                // Use all the card data including welcome_bonus and practical_advice
                 const safeCardData = { ...cardData };
-                delete safeCardData.welcome_bonus;
-                delete safeCardData.practical_advice;
                 
                 let response;
                 if (editingCardId) {
@@ -562,6 +573,10 @@
             const card = cards.find(c => c.id === cardId);
             if (!card) return;
             
+            console.log('🔍 Editing card:', card);
+            console.log('🔍 Card welcome_bonus:', card.welcome_bonus);
+            console.log('🔍 Card practical_advice:', card.practical_advice);
+            
             editingCardId = cardId;
             document.getElementById('modalTitle').textContent = 'Edit Card in Database';
             document.getElementById('cardName').value = card.name;
@@ -572,9 +587,10 @@
             document.getElementById('imageUrl').value = card.image || '';
             document.getElementById('features').value = Array.isArray(card.features) ? card.features.join('\n') : '';
             document.getElementById('welcomeBonus').value = card.welcome_bonus || card.welcomeBonus || '';
+            document.getElementById('practicalAdvice').value = card.practical_advice || card.practicalAdvice || '';
             document.getElementById('cardUrl').value = card.url || '';
             document.getElementById('cardStatus').value = card.status || 'active';
-            document.getElementById('practicalAdvice').value = card.practical_advice || card.practicalAdvice || '';
+
             
             // Clear all checkboxes first
             document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
@@ -643,9 +659,10 @@
                 image_url: document.getElementById('imageUrl').value || '',
                 features: document.getElementById('features').value.split('\n').filter(f => f.trim()),
                 welcome_bonus: document.getElementById('welcomeBonus').value || '',
+                practical_advice: document.getElementById('practicalAdvice').value || '',
                 card_url: document.getElementById('cardUrl').value || '',
                 status: document.getElementById('cardStatus').value,
-                practical_advice: document.getElementById('practicalAdvice').value || '',
+
                 perk_categories: Array.from(document.querySelectorAll('input[name="perkCategories"]:checked')).map(cb => cb.value),
                 protection_categories: Array.from(document.querySelectorAll('input[name="protectionCategories"]:checked')).map(cb => cb.value)
             };
@@ -654,11 +671,14 @@
                 cardData.id = editingCardId;
             }
 
+            console.log('📝 Form data being submitted:', cardData);
             const saved = await saveCardToDatabase(cardData);
             if (saved) {
                 // Reload cards from database to get updated data
                 await loadCardsFromDatabase();
                 closeModal();
+            } else {
+                console.error('❌ Failed to save card');
             }
         });
 
@@ -757,6 +777,62 @@
                 closeModal();
             }
         }
+
+        // Auto-add Wells Fargo Active Cash card
+        async function addWellsFargoActiveCash() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Wells Fargo Active Cash®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Wells Fargo Active Cash already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Wells Fargo Active Cash®",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "wells-fargo",
+                    rewards_type: "cashback",
+                    image_url: "images/active-cash.png",
+                    features: ["Unlimited 2% cash rewards on purchases (no categories or caps)"],
+                    welcome_bonus: "$200 cash rewards after $500 spend in the first 3 months",
+                    card_url: "card-pages/wells-fargo-active-cash.html",
+                    status: "active",
+                    perk_categories: [],
+                    protection_categories: ["rental-car-insurance", "cell-phone-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Wells Fargo Active Cash:', error);
+                } else {
+                    console.log('✅ Wells Fargo Active Cash added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addWellsFargoActiveCash:', error);
+            }
+        }
+
+        // Call this function after database is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add a delay to ensure database is fully loaded
+            setTimeout(addWellsFargoActiveCash, 2000);
+        });
+
+        // Also try to add the card when database connection is successful
+        // This will be called from checkDatabaseAndLoadCards
+        window.addWellsFargoActiveCash = addWellsFargoActiveCash;
     </script>
 </body>
 </html> 
