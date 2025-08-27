@@ -390,7 +390,9 @@
                         image: card.image_url || '',
                         features: card.features || [],
                         url: card.card_url || '',
-                        status: card.status || 'active'
+                        status: card.status || 'active',
+                        perk_categories: card.perk_categories || [],
+                        protection_categories: card.protection_categories || []
                     }));
                     
                     renderCards();
@@ -465,7 +467,7 @@
             try {
                 console.log('Saving card to database:', cardData);
                 
-                // Remove new fields if they don't exist in table yet
+                // Keep perk and protection categories, remove other new fields if they don't exist
                 const safeCardData = { ...cardData };
                 delete safeCardData.welcome_bonus;
                 delete safeCardData.practical_advice;
