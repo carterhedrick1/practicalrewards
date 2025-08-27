@@ -970,7 +970,8 @@
 
 
         .card-item.fade-out {
-            /* We'll handle this with JavaScript animations */
+            opacity: 0;
+            transform: scale(0.95);
         }
 
         .card-item.fade-in {
@@ -1139,6 +1140,7 @@
                     </div>
                 </div>
                 <button class="clear-all-btn" onclick="resetAllFilters()">CLEAR ALL</button>
+                <button class="clear-all-btn" onclick="reloadCardsData()" style="margin-left: 10px;">RELOAD DATA</button>
             </div>
         </div>
 
@@ -1271,8 +1273,12 @@
             loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
 
             // Initialize cards and filters
-            initializeCards();
-            initializeFilters();
+            initializeCards().then(() => {
+                initializeFilters();
+            }).catch(error => {
+                console.error('Failed to initialize cards:', error);
+                initializeFilters(); // Still initialize filters even if cards fail
+            });
         });
 
         function loadComponent(filename, placeholderId, fallbackId) {
@@ -1384,20 +1390,50 @@
         let allCards = [];
         let filteredCards = [];
 
-        function initializeCards() {
-            // Load cards from admin system (localStorage)
-            const storedCards = localStorage.getItem('adminCards');
-            if (storedCards) {
-                allCards = JSON.parse(storedCards).filter(card => card.status === 'active');
-            } else {
-                // Fallback to sample cards if no admin data exists
+        async function initializeCards() {
+            try {
+                const response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?status=eq.active', {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE'
+                    }
+                });
+                
+                if (response.ok) {
+                    const databaseCards = await response.json();
+                    
+                    // Convert database format to match your existing code
+                    allCards = databaseCards.map(card => ({
+                        id: card.id,
+                        name: card.name,
+                        type: card.type,
+                        annualFee: card.annual_fee,
+                        bankType: card.bank_type,
+                        rewards: card.rewards_type,
+                        image: card.image_url,
+                        welcomeBonus: card.welcome_bonus || card.welcomeBonus || 'None',
+                        features: card.features || [],
+                        perks: [], // We'll derive this from perk_categories
+                        protections: [], // We'll derive this from protection_categories
+                        featureCategories: card.feature_categories || [],
+                        perkCategories: card.perk_categories || [],
+                        protectionCategories: card.protection_categories || [],
+                        url: card.card_url
+                    }));
+                } else {
+                    throw new Error(`Failed to load cards: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Error loading cards from database:', error);
+                
+                // Fallback to sample cards if database fails
                 allCards = [
                     {
                         id: 1,
                         name: "Capital One Venture X",
                         type: "travel",
                         annualFee: 395,
-                        bankType: "bank",
+                        bankType: "capital-one",
                         rewards: "miles",
                         image: "images/venture-x.png",
                         welcomeBonus: "75k miles",
@@ -1405,6 +1441,8 @@
                         perks: ["Lounge Access", "TSA Pre/Global Entry"],
                         protections: ["Rental car CDW", "Trip delay"],
                         featureCategories: ["lounge-access", "tsa-precheck", "global-entry"],
+                        perkCategories: ["lounge-access", "tsa-precheck", "no-foreign-fees"],
+                        protectionCategories: ["primary-rental-car-cdw", "trip-delay-cancellation"],
                         url: "card-pages/venture-x.html"
                     },
                     {
@@ -1412,7 +1450,7 @@
                         name: "Chase Sapphire Reserve",
                         type: "travel",
                         annualFee: 795,
-                        bankType: "bank",
+                        bankType: "chase",
                         rewards: "points",
                         image: "images/sapphire-reserve.jpg",
                         welcomeBonus: "60k points",
@@ -1420,6 +1458,8 @@
                         perks: ["Lounge Access", "TSA Pre/Global Entry"],
                         protections: ["Rental car CDW", "Trip delay", "Baggage delay"],
                         featureCategories: ["lounge-access", "travel-insurance"],
+                        perkCategories: ["lounge-access", "tsa-precheck"],
+                        protectionCategories: ["primary-rental-car-cdw", "trip-delay-cancellation", "baggage-delay-lost"],
                         url: "card-pages/sapphire-reserve.html"
                     },
                     {
@@ -1427,7 +1467,7 @@
                         name: "American Express Platinum",
                         type: "travel",
                         annualFee: 695,
-                        bankType: "bank",
+                        bankType: "amex",
                         rewards: "points",
                         image: "images/amex-platinum.jpg",
                         welcomeBonus: "80k points",
@@ -1435,6 +1475,8 @@
                         perks: ["Lounge Access", "CLEAR"],
                         protections: ["Rental car CDW", "Trip delay", "Purchase protection"],
                         featureCategories: ["lounge-access", "travel-insurance", "rental-car-insurance"],
+                        perkCategories: ["lounge-access", "clear", "metal-card"],
+                        protectionCategories: ["primary-rental-car-cdw", "trip-delay-cancellation", "purchase-protection"],
                         url: "card-pages/amex-platinum.html"
                     }
                 ];
@@ -1516,6 +1558,11 @@
         }
 
         function generatePracticalAdvice(card) {
+            // Use database practical advice if available, otherwise generate it
+            if (card.practical_advice || card.practicalAdvice) {
+                return card.practical_advice || card.practicalAdvice;
+            }
+            
             // Generate practical advice based on card characteristics
             if (card.annualFee === 0) {
                 if (card.type === 'cashback') {
@@ -1560,7 +1607,7 @@
             const welcomeBonus = card.welcomeBonus || 'None';
 
             // Format earning rates (condensed)
-            const earningRates = card.features ? card.features.slice(0, 2).join(' • ') : '';
+            const earningRates = card.features ? card.features.slice(0, 3).join(' • ') : '';
 
             // Format perks using dedicated perks array
             const perks = card.perks ? card.perks.join(' • ') : '';
@@ -1584,7 +1631,9 @@
                     <span class="meta-chip">Welcome: ${welcomeBonus}</span>
                 </div>
                 
-                <div class="card-earning-rates">${earningRates || '1x on everything'}</div>
+                <div class="card-earning-rates">
+                    <strong>Earning:</strong> ${earningRates || '1x on everything'}
+                </div>
                 
                 ${perks ? `<div class="card-perks">${perks}</div>` : ''}
                 
@@ -1647,22 +1696,12 @@
         function applyFilter(filterType) {
             const dropdown = document.getElementById(`${filterType}-dropdown`);
             
-            if (filterType === 'features') {
-                // Handle checkbox features
-                const selectedFeatures = Array.from(document.querySelectorAll(`input[name="${filterType}"]:checked`)).map(cb => cb.value);
-                if (selectedFeatures.length > 0) {
-                    activeFilters[filterType] = selectedFeatures;
-                } else {
-                    delete activeFilters[filterType];
-                }
+            // Handle radio buttons
+            const selectedValue = document.querySelector(`input[name="${filterType}"]:checked`).value;
+            if (selectedValue !== 'all') {
+                activeFilters[filterType] = [selectedValue];
             } else {
-                // Handle radio buttons
-                const selectedValue = document.querySelector(`input[name="${filterType}"]:checked`).value;
-                if (selectedValue !== 'all') {
-                    activeFilters[filterType] = [selectedValue];
-                } else {
-                    delete activeFilters[filterType];
-                }
+                delete activeFilters[filterType];
             }
             
             // Close dropdown
@@ -1674,6 +1713,30 @@
             updateActiveFilterCount();
         }
 
+        function getCardIssuerCategory(card) {
+            // Map card bankType/issuer to filter categories
+            const bankType = card.bankType || card.issuer || '';
+            const name = card.name.toLowerCase();
+            
+            // Check by bankType first
+            if (bankType === 'amex' || bankType === 'american-express') return 'amex';
+            if (bankType === 'chase') return 'chase';
+            if (bankType === 'capital-one') return 'capital-one';
+            if (bankType === 'citi') return 'citi';
+            if (bankType === 'bilt') return 'bilt';
+            
+            // Check by card name if bankType doesn't match
+            if (name.includes('amex') || name.includes('american express')) return 'amex';
+            if (name.includes('chase')) return 'chase';
+            if (name.includes('capital one') || name.includes('venture')) return 'capital-one';
+            if (name.includes('citi')) return 'citi';
+            if (name.includes('bilt')) return 'bilt';
+            if (name.includes('airline') || name.includes('delta') || name.includes('united') || name.includes('american airlines')) return 'airlines';
+            if (name.includes('hotel') || name.includes('marriott') || name.includes('hilton') || name.includes('hyatt')) return 'hotels';
+            
+            return 'other';
+        }
+
         function applyNewFilters() {
             // Apply the new filter system
             filteredCards = allCards.filter(card => {
@@ -1683,13 +1746,23 @@
                         if (filterValues.includes('low') && (card.annualFee < 0 || card.annualFee > 95)) return false;
                         if (filterValues.includes('medium') && (card.annualFee < 95 || card.annualFee > 250)) return false;
                         if (filterValues.includes('high') && card.annualFee < 250) return false;
-                    } else if (filterType === 'type' || filterType === 'bankType' || filterType === 'rewards') {
+                    } else if (filterType === 'type' || filterType === 'rewards') {
                         if (!filterValues.includes(card[filterType])) return false;
-                    } else if (filterType === 'features') {
-                        // Check if card has any of the selected features
-                        const cardFeatures = card.featureCategories || [];
-                        const hasFeature = filterValues.some(feature => cardFeatures.includes(feature));
-                        if (!hasFeature) return false;
+                    } else if (filterType === 'issuer') {
+                        // Map card issuer/bankType to filter values
+                        const cardIssuer = getCardIssuerCategory(card);
+                        if (!filterValues.includes(cardIssuer)) return false;
+                    } else if (filterType === 'perks') {
+                        // Check if card has any of the selected perks
+                        const cardPerks = card.perkCategories || [];
+                        const hasPerk = filterValues.some(perk => cardPerks.includes(perk));
+                        if (!hasPerk) return false;
+                    } else if (filterType === 'protections') {
+                        // Check if card has any of the selected protections
+                        const cardProtections = card.protectionCategories || [];
+                        const hasProtection = filterValues.some(protection => cardProtections.includes(protection));
+                        if (!hasProtection) return false;
+                                    
                     }
                 }
                 return true;
@@ -1955,6 +2028,13 @@
             closeMobileFilters();
         }
 
+        function reloadCardsData() {
+            console.log('Manually reloading cards data...');
+            initializeCards();
+            resetAllFilters();
+            console.log('Cards reloaded:', allCards.length, 'cards');
+        }
+
         function resetAllFilters() {
             console.log('resetAllFilters called - clearing all filters');
             
@@ -2089,12 +2169,6 @@
                 newFilters.issuer = Array.from(issuerCheckboxes).map(cb => cb.value);
             }
             
-            // Collect fee filters
-            const feeCheckboxes = document.querySelectorAll('input[name="mobile-fee"]:checked');
-            if (feeCheckboxes.length > 0) {
-                newFilters.fee = Array.from(feeCheckboxes).map(cb => cb.value);
-            }
-            
             // Collect perks filters
             const perksCheckboxes = document.querySelectorAll('input[name="mobile-perks"]:checked');
             if (perksCheckboxes.length > 0) {
@@ -2105,6 +2179,12 @@
             const protectionsCheckboxes = document.querySelectorAll('input[name="mobile-protections"]:checked');
             if (protectionsCheckboxes.length > 0) {
                 newFilters.protections = Array.from(protectionsCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect fee filters
+            const feeCheckboxes = document.querySelectorAll('input[name="mobile-fee"]:checked');
+            if (feeCheckboxes.length > 0) {
+                newFilters.fee = Array.from(feeCheckboxes).map(cb => cb.value);
             }
             
             // Update active filters

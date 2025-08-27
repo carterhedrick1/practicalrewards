@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Admin - Credit Cards</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-bar {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        .status-bar.success { background: #e8f5e8; border-left-color: #4caf50; }
+        .status-bar.error { background: #ffebee; border-left-color: #f44336; }
+        .card-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 20px; 
+        }
+        .card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            border: 1px solid #e0e0e0;
+        }
+        .card h3 { margin-top: 0; color: #333; }
+        .card img { max-width: 80px; height: auto; border-radius: 4px; }
+        .card-details { margin: 10px 0; }
+        .card-details p { margin: 5px 0; font-size: 14px; }
+        .btn { 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin: 3px; 
+            font-size: 14px;
+        }
+        .btn:hover { background: #0056b3; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            font-size: 14px;
+        }
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.5); 
+            z-index: 1000;
+        }
+        .modal-content { 
+            background: white; 
+            margin: 5% auto; 
+            padding: 25px; 
+            width: 90%; 
+            max-width: 700px; 
+            border-radius: 8px; 
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .close { 
+            float: right; 
+            font-size: 28px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: #999;
+        }
+        .close:hover { color: #333; }
+        .loading { text-align: center; padding: 40px; color: #666; }
+        .error { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 4px; margin: 10px 0; }
+        .success { color: #28a745; background: #d4edda; padding: 10px; border-radius: 4px; margin: 10px 0; }
+        .database-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .database-info h4 { margin-top: 0; color: #495057; }
+        .database-info p { margin: 5px 0; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Database Admin - Credit Cards</h1>
+            <p>Direct connection to your Supabase database - Real-time data management</p>
+        </div>
+
+        <div id="statusBar" class="status-bar">
+            <strong>Status:</strong> <span id="statusText">Initializing...</span>
+        </div>
+
+        <div class="database-info">
+            <h4>📊 Database Connection</h4>
+            <p><strong>URL:</strong> https://zgfglwdjmpawuoxtbwcf.supabase.com</p>
+            <p><strong>Table:</strong> cards</p>
+            <p><strong>Status:</strong> <span id="dbStatus">Checking...</span></p>
+        </div>
+
+        <div class="header">
+            <button class="btn btn-success" onclick="openAddModal()">➕ Add New Card</button>
+            <button class="btn" onclick="refreshData()">🔄 Refresh Data</button>
+            <button class="btn" onclick="exportData()">📥 Export Data</button>
+            <button class="btn" onclick="importData()">📤 Import Data</button>
+            <button class="btn" onclick="setupDatabase()">🔧 Setup Database</button>
+        </div>
+
+        <div id="cards-container">
+            <div class="loading">Loading cards from database...</div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Add New Card</h2>
+            <form id="cardForm">
+                <div class="form-group">
+                    <label>Card Name:</label>
+                    <input type="text" id="cardName" required>
+                </div>
+                <div class="form-group">
+                    <label>Type:</label>
+                    <select id="cardType" required>
+                        <option value="travel">Travel</option>
+                        <option value="cashback">Cashback</option>
+                        <option value="hybrid">Hybrid</option>
+                        <option value="business">Business</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Annual Fee ($):</label>
+                    <input type="number" id="annualFee" required>
+                </div>
+                <div class="form-group">
+                    <label>Bank Type:</label>
+                    <select id="bankType" required>
+                        <option value="amex">American Express</option>
+                        <option value="chase">Chase</option>
+                        <option value="capital-one">Capital One</option>
+                        <option value="citi">Citi</option>
+                        <option value="bilt">Bilt</option>
+                        <option value="airlines">Airlines</option>
+                        <option value="hotels">Hotels</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Rewards Type:</label>
+                    <select id="rewardsType" required>
+                        <option value="points">Points</option>
+                        <option value="miles">Miles</option>
+                        <option value="cashback">Cashback</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Image URL:</label>
+                    <input type="text" id="imageUrl" placeholder="images/card-name.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Earning Rate (one per line):</label>
+                    <textarea id="features" rows="4" required placeholder="5x flights & hotels&#10;3x dining&#10;1x everything else"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Welcome Bonus:</label>
+                    <input type="text" id="welcomeBonus" placeholder="80k points, 75k miles, etc.">
+                </div>
+                <div class="form-group">
+                    <label>Card Page URL:</label>
+                    <input type="text" id="cardUrl" placeholder="card-pages/card-name.html">
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <select id="cardStatus" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="coming-soon">Coming Soon</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Practical Advice:</label>
+                    <textarea id="practicalAdvice" rows="3" placeholder="Practical advice about when this card makes sense..."></textarea>
+                </div>
+                
+                <!-- Perk Categories (exactly matching your filters) -->
+                <div class="form-group">
+                    <label>Perk Categories:</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;">
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="perkCategories" value="lounge-access" style="width: auto; margin-right: 8px;">
+                            Lounge Access
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="perkCategories" value="tsa-precheck" style="width: auto; margin-right: 8px;">
+                            TSA Pre/Global Entry
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="perkCategories" value="clear" style="width: auto; margin-right: 8px;">
+                            CLEAR
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="perkCategories" value="no-foreign-fees" style="width: auto; margin-right: 8px;">
+                            No Foreign Transaction Fees
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="perkCategories" value="metal-card" style="width: auto; margin-right: 8px;">
+                            Metal Card
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Protection Categories (exactly as you specified) -->
+                <div class="form-group">
+                    <label>Protection Categories:</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;">
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="protectionCategories" value="trip-delay-cancellation" style="width: auto; margin-right: 8px;">
+                            Trip Delay & Cancellation
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="protectionCategories" value="lost-delayed-baggage" style="width: auto; margin-right: 8px;">
+                            Lost or Delayed Baggage
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="protectionCategories" value="rental-car-insurance" style="width: auto; margin-right: 8px;">
+                            Rental Car Insurance
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="protectionCategories" value="cell-phone-protection" style="width: auto; margin-right: 8px;">
+                            Cell Phone Protection
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="checkbox" name="protectionCategories" value="purchase-protection" style="width: auto; margin-right: 8px;">
+                            Purchase Protection
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">💾 Save to Database</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Database configuration
+        const SUPABASE_URL = 'https://zgfglwdjmpawuoxtbwcf.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        let cards = [];
+        let editingCardId = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin page loaded, checking database...');
+            checkDatabaseAndLoadCards();
+        });
+
+        async function checkDatabaseAndLoadCards() {
+            try {
+                updateStatus('Connecting to Supabase database...', 'info');
+                
+                // Force database connection - no fallback
+                await setupDatabase();
+                await loadCardsFromDatabase();
+                
+                updateStatus('✅ Connected to Supabase database successfully!', 'success');
+                updateDbStatus('Connected');
+                
+            } catch (error) {
+                console.error('Database connection failed:', error);
+                updateStatus('❌ Database connection failed: ' + error.message, 'error');
+                updateDbStatus('Connection Failed');
+                
+                // Show error details instead of fallback
+                document.getElementById('cards-container').innerHTML = `
+                    <div class="error" style="padding: 20px; text-align: center;">
+                        <h3>Database Connection Failed</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p>This admin page requires a working database connection.</p>
+                        <button class="btn" onclick="checkDatabaseAndLoadCards()">🔄 Retry Connection</button>
+                    </div>
+                `;
+            }
+        }
+
+        async function setupDatabase() {
+            try {
+                console.log('Setting up database table...');
+                
+                // First, try to access the cards table to see if it exists
+                const testResponse = await supabase.from('cards').select('id').limit(1);
+
+                if (testResponse.data && testResponse.data.length > 0) {
+                    console.log('✅ Cards table exists');
+                    return true;
+                } else {
+                    console.log('❌ Cards table does not exist - creating it...');
+                    
+                    // Create the table by inserting a test record
+                    const { data, error } = await supabase.from('cards').insert([{
+                        name: "Test Card",
+                        type: "travel",
+                        annual_fee: 0,
+                        bank_type: "test",
+                        rewards_type: "points",
+                        image_url: "",
+                        features: ["test"],
+                        card_url: "",
+                        status: "inactive"
+                    }]);
+
+                    if (error) {
+                        throw new Error(`Failed to create table: ${error.message}`);
+                    } else {
+                        console.log('✅ Table created successfully');
+                        
+                        // Delete the test card
+                        const { data: deletedData, error: deleteError } = await supabase.from('cards').delete().eq('id', data[0].id);
+                        if (deleteError) {
+                            console.error('Error deleting test card:', deleteError);
+                        } else {
+                            console.log('✅ Test card deleted successfully');
+                        }
+                        
+                        return true;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error setting up database:', error);
+                throw new Error(`Database setup failed: ${error.message}`);
+            }
+        }
+
+        async function loadCardsFromDatabase() {
+            try {
+                console.log('Loading cards from database...');
+                updateStatus('Loading cards from database...', 'info');
+                
+                const { data, error } = await supabase.from('cards').select('*').order('name', { ascending: true });
+
+                if (error) {
+                    throw new Error(`Database error: ${error.message}`);
+                } else {
+                    console.log('Cards loaded from database:', data);
+                    
+                    // Map database fields to our expected format
+                    cards = data.map(card => ({
+                        id: card.id,
+                        name: card.name,
+                        type: card.type,
+                        annualFee: card.annual_fee || 0,
+                        bankType: card.bank_type,
+                        rewards: card.rewards_type,
+                        image: card.image_url || '',
+                        features: card.features || [],
+                        url: card.card_url || '',
+                        status: card.status || 'active'
+                    }));
+                    
+                    renderCards();
+                    updateStatus(`Loaded ${cards.length} cards from database`, 'success');
+                    
+                    // If no cards, add some default ones
+                    if (cards.length === 0) {
+                        await addDefaultCards();
+                    }
+                    
+                }
+                
+            } catch (error) {
+                console.error('Error loading from database:', error);
+                throw error;
+            }
+        }
+
+        async function addDefaultCards() {
+            try {
+                console.log('Adding default cards to database...');
+                updateStatus('Adding default cards to database...', 'info');
+                
+                const defaultCards = [
+                    {
+                        name: "Capital One Venture X",
+                        type: "travel",
+                        annual_fee: 395,
+                        bank_type: "capital-one",
+                        rewards_type: "miles",
+                        image_url: "images/venture-x.png",
+                        features: ["2x miles on everything", "Priority Pass lounges", "TSA PreCheck credit"],
+                        welcome_bonus: "75k miles",
+                        card_url: "card-pages/venture-x.html",
+                        status: "active",
+                        practical_advice: "High annual fee card. Carefully calculate if the benefits outweigh the cost for your specific spending patterns.",
+                        perk_categories: ["lounge-access", "tsa-precheck"],
+                        protection_categories: ["trip-delay-cancellation", "rental-car-insurance"]
+                    },
+                    {
+                        name: "Chase Sapphire Reserve",
+                        type: "travel",
+                        annual_fee: 795,
+                        bank_type: "chase",
+                        rewards_type: "points",
+                        image_url: "images/sapphire-reserve.jpg",
+                        features: ["3x points on travel & dining", "Priority Pass lounges", "TSA PreCheck credit"],
+                        welcome_bonus: "60k points",
+                        card_url: "card-pages/sapphire-reserve.html",
+                        status: "active",
+                        practical_advice: "At $795/year, this is Chase's premium offering. The $300 travel credit helps, but you need to travel frequently to justify this cost.",
+                        perk_categories: ["lounge-access", "tsa-precheck"],
+                        protection_categories: ["trip-delay-cancellation", "rental-car-insurance"]
+                    }
+                ];
+
+                for (const card of defaultCards) {
+                    await saveCardToDatabase(card);
+                }
+                
+                // Reload cards after adding defaults
+                await loadCardsFromDatabase();
+                updateStatus('Default cards added successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error adding default cards:', error);
+                updateStatus('Error adding default cards: ' + error.message, 'error');
+            }
+        }
+
+        async function saveCardToDatabase(cardData) {
+            try {
+                console.log('Saving card to database:', cardData);
+                
+                // Remove new fields if they don't exist in table yet
+                const safeCardData = { ...cardData };
+                delete safeCardData.welcome_bonus;
+                delete safeCardData.practical_advice;
+                
+                let response;
+                if (editingCardId) {
+                    // Update existing card
+                    const { data, error } = await supabase.from('cards').update(safeCardData).eq('id', editingCardId);
+                    if (error) {
+                        throw new Error(`Database error: ${error.message}`);
+                    } else {
+                        console.log('Card updated to database successfully!', data);
+                        updateStatus('Card updated to database successfully!', 'success');
+                        return true;
+                    }
+                } else {
+                    // Add new card
+                    const { data, error } = await supabase.from('cards').insert([safeCardData]);
+                    if (error) {
+                        throw new Error(`Database error: ${error.message}`);
+                    } else {
+                        console.log('Card saved to database successfully!', data);
+                        updateStatus('Card saved to database successfully!', 'success');
+                        return true;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error saving to database:', error);
+                updateStatus('Error saving to database: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+
+
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            
+            if (cards.length === 0) {
+                container.innerHTML = '<div class="loading">No cards found in database</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            cards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.innerHTML = `
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="${card.image || 'images/venture-x.png'}" alt="${card.name}" onerror="this.src='images/venture-x.png'" style="margin-right: 15px;">
+                        <div>
+                            <h3>${card.name}</h3>
+                            <span class="btn" style="background: ${card.status === 'active' ? '#28a745' : '#6c757d'}; font-size: 12px;">${card.status}</span>
+                        </div>
+                    </div>
+                    <div class="card-details">
+                        <p><strong>Type:</strong> ${card.type}</p>
+                        <p><strong>Annual Fee:</strong> $${card.annualFee}</p>
+                        <p><strong>Bank:</strong> ${card.bankType}</p>
+                        <p><strong>Rewards:</strong> ${card.rewards}</p>
+                        <p><strong>Earning Rate:</strong> ${card.features ? card.features.slice(0, 2).join(', ') + (card.features.length > 2 ? '...' : '') : 'None'}</p>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn" onclick="editCard(${card.id})">✏️ Edit</button>
+                        <button class="btn btn-danger" onclick="deleteCard(${card.id})">🗑️ Delete</button>
+                        <button class="btn" onclick="viewCard(${card.id})">👁️ View</button>
+                    </div>
+                `;
+                container.appendChild(cardDiv);
+            });
+        }
+
+        function openAddModal() {
+            editingCardId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Card to Database';
+            document.getElementById('cardForm').reset();
+            
+            // Clear all checkboxes
+            document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
+            
+            // Clear new fields
+            document.getElementById('welcomeBonus').value = '';
+            document.getElementById('practicalAdvice').value = '';
+            
+            document.getElementById('cardModal').style.display = 'block';
+        }
+
+        function editCard(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+            
+            editingCardId = cardId;
+            document.getElementById('modalTitle').textContent = 'Edit Card in Database';
+            document.getElementById('cardName').value = card.name;
+            document.getElementById('cardType').value = card.type;
+            document.getElementById('annualFee').value = card.annualFee;
+            document.getElementById('bankType').value = card.bankType;
+            document.getElementById('rewardsType').value = card.rewards;
+            document.getElementById('imageUrl').value = card.image || '';
+            document.getElementById('features').value = Array.isArray(card.features) ? card.features.join('\n') : '';
+            document.getElementById('welcomeBonus').value = card.welcome_bonus || card.welcomeBonus || '';
+            document.getElementById('cardUrl').value = card.url || '';
+            document.getElementById('cardStatus').value = card.status || 'active';
+            document.getElementById('practicalAdvice').value = card.practical_advice || card.practicalAdvice || '';
+            
+            // Clear all checkboxes first
+            document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
+            
+            // Populate perk categories
+            if (card.perk_categories) {
+                card.perk_categories.forEach(category => {
+                    const checkbox = document.querySelector(`input[name="perkCategories"][value="${category}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+            
+            // Populate protection categories
+            if (card.protection_categories) {
+                card.protection_categories.forEach(category => {
+                    const checkbox = document.querySelector(`input[name="protectionCategories"][value="${category}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+            
+            document.getElementById('cardModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('cardModal').style.display = 'none';
+            editingCardId = null;
+        }
+
+        async function deleteCard(cardId) {
+            if (confirm('Are you sure you want to delete this card from the database?')) {
+                try {
+                    const { error } = await supabase.from('cards').delete().eq('id', cardId);
+
+                    if (error) {
+                        throw new Error(`Delete failed: ${error.message}`);
+                    } else {
+                        cards = cards.filter(c => c.id !== cardId);
+                        renderCards();
+                        updateStatus('Card deleted from database successfully!', 'success');
+                    }
+                } catch (error) {
+                    console.error('Error deleting card:', error);
+                    updateStatus('Error deleting card: ' + error.message, 'error');
+                }
+            }
+        }
+
+        function viewCard(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            alert(`Card: ${card.name}\nType: ${card.type}\nAnnual Fee: $${card.annualFee}\nBank: ${card.bankType}\nRewards: ${card.rewards}\nFeatures: ${Array.isArray(card.features) ? card.features.join(', ') : 'None'}`);
+        }
+
+        // Form submission
+        document.getElementById('cardForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const cardData = {
+                name: document.getElementById('cardName').value,
+                type: document.getElementById('cardType').value,
+                annual_fee: parseInt(document.getElementById('annualFee').value),
+                bank_type: document.getElementById('bankType').value,
+                rewards_type: document.getElementById('rewardsType').value,
+                image_url: document.getElementById('imageUrl').value || '',
+                features: document.getElementById('features').value.split('\n').filter(f => f.trim()),
+                welcome_bonus: document.getElementById('welcomeBonus').value || '',
+                card_url: document.getElementById('cardUrl').value || '',
+                status: document.getElementById('cardStatus').value,
+                practical_advice: document.getElementById('practicalAdvice').value || '',
+                perk_categories: Array.from(document.querySelectorAll('input[name="perkCategories"]:checked')).map(cb => cb.value),
+                protection_categories: Array.from(document.querySelectorAll('input[name="protectionCategories"]:checked')).map(cb => cb.value)
+            };
+
+            if (editingCardId) {
+                cardData.id = editingCardId;
+            }
+
+            const saved = await saveCardToDatabase(cardData);
+            if (saved) {
+                // Reload cards from database to get updated data
+                await loadCardsFromDatabase();
+                closeModal();
+            }
+        });
+
+        function refreshData() {
+            checkDatabaseAndLoadCards();
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(cards, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'cards-database-export.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedCards = JSON.parse(e.target.result);
+                            if (Array.isArray(importedCards)) {
+                                // Import directly to database - no localStorage
+                                importCardsToDatabase(importedCards);
+                            } else {
+                                alert('Invalid file format. Please select a valid JSON file.');
+                            }
+                        } catch (error) {
+                            alert('Error parsing file. Please check the file format.');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        async function importCardsToDatabase(cardsToImport) {
+            try {
+                updateStatus('Importing cards to database...', 'info');
+                let successCount = 0;
+                
+                for (const card of cardsToImport) {
+                    // Map the imported data to database format
+                    const dbCard = {
+                        name: card.name,
+                        type: card.type,
+                        annual_fee: card.annualFee || card.annual_fee || 0,
+                        bank_type: card.bankType || card.bank_type,
+                        rewards_type: card.rewards || card.rewards_type,
+                        image_url: card.image || card.image_url || '',
+                        features: card.features || [],
+                        card_url: card.url || card.card_url || '',
+                        status: card.status || 'active'
+                    };
+                    
+                    const saved = await saveCardToDatabase(dbCard);
+                    if (saved) successCount++;
+                }
+                
+                updateStatus(`Successfully imported ${successCount} cards to database!`, 'success');
+                await loadCardsFromDatabase(); // Reload to show imported cards
+                
+            } catch (error) {
+                console.error('Error importing cards:', error);
+                updateStatus('Error importing cards: ' + error.message, 'error');
+            }
+        }
+
+        function updateStatus(message, type) {
+            const statusBar = document.getElementById('statusBar');
+            const statusText = document.getElementById('statusText');
+            
+            statusText.textContent = message;
+            statusBar.className = `status-bar ${type}`;
+            
+            console.log(`Status: ${message}`);
+        }
+
+        function updateDbStatus(status) {
+            document.getElementById('dbStatus').textContent = status;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cardModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html> 
