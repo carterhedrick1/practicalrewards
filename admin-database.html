@@ -621,12 +621,15 @@
             if (card.type) {
                 if (Array.isArray(card.type)) {
                     card.type.forEach(typeValue => {
-                        const checkbox = document.querySelector(`input[name="cardTypes"][value="${typeValue}"]`);
+                        // Remove brackets and quotes from array values
+                        const cleanValue = typeValue.replace(/[\[\]"]/g, '');
+                        const checkbox = document.querySelector(`input[name="cardTypes"][value="${cleanValue}"]`);
                         if (checkbox) checkbox.checked = true;
                     });
                 } else {
                     // Handle single string value
-                    const checkbox = document.querySelector(`input[name="cardTypes"][value="${card.type}"]`);
+                    const cleanValue = card.type.replace(/[\[\]"]/g, '');
+                    const checkbox = document.querySelector(`input[name="cardTypes"][value="${cleanValue}"]`);
                     if (checkbox) checkbox.checked = true;
                 }
             }
@@ -639,12 +642,15 @@
             if (card.rewards) {
                 if (Array.isArray(card.rewards)) {
                     card.rewards.forEach(rewardType => {
-                        const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${rewardType}"]`);
+                        // Remove brackets and quotes from array values
+                        const cleanValue = rewardType.replace(/[\[\]"]/g, '');
+                        const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${cleanValue}"]`);
                         if (checkbox) checkbox.checked = true;
                     });
                 } else {
                     // Handle single string value
-                    const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${card.rewards}"]`);
+                    const cleanValue = card.rewards.replace(/[\[\]"]/g, '');
+                    const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${cleanValue}"]`);
                     if (checkbox) checkbox.checked = true;
                 }
             }
@@ -663,7 +669,9 @@
             // Populate perk categories
             if (card.perk_categories) {
                 card.perk_categories.forEach(category => {
-                    const checkbox = document.querySelector(`input[name="perkCategories"][value="${category}"]`);
+                    // Remove brackets and quotes from array values
+                    const cleanValue = category.replace(/[\[\]"]/g, '');
+                    const checkbox = document.querySelector(`input[name="perkCategories"][value="${cleanValue}"]`);
                     if (checkbox) checkbox.checked = true;
                 });
             }
@@ -671,7 +679,9 @@
             // Populate protection categories
             if (card.protection_categories) {
                 card.protection_categories.forEach(category => {
-                    const checkbox = document.querySelector(`input[name="protectionCategories"][value="${category}"]`);
+                    // Remove brackets and quotes from array values
+                    const cleanValue = category.replace(/[\[\]"]/g, '');
+                    const checkbox = document.querySelector(`input[name="protectionCategories"][value="${cleanValue}"]`);
                     if (checkbox) checkbox.checked = true;
                 });
             }
