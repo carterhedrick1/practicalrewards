@@ -158,6 +158,42 @@ html {
     color: var(--white);
 }
 
+/* Hero CTA styling */
+.hero-cta {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.hero-cta .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+/* Force the exact styling from index page for hero CTA buttons */
+.hero-cta .btn-primary {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+    color: #047857 !important;
+    box-shadow: 0 8px 25px rgba(254, 243, 199, 0.3) !important;
+    font-weight: 600 !important;
+    border: none !important;
+    padding: 0.75rem 1.5rem !important;
+    font-size: 1rem !important;
+}
+
+.hero-cta .btn-primary:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 35px rgba(254, 243, 199, 0.5) !important;
+    color: #047857 !important;
+    background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%) !important;
+}
+
 /* Update card hovers */
 .option-card:hover, .feature-card:hover, .card-option:hover {
     transform: translateY(-6px);
@@ -1091,5 +1127,202 @@ footer {
     .detail-item strong {
         color: #059669 !important;
         font-weight: 600 !important;
+    }
+}
+
+/* ==========================================================================
+   CREDIT TABLE RESPONSIVE STYLING
+   ========================================================================== */
+
+/* Perks and Protections description styling */
+.recommendation-list li strong {
+    color: #1e293b; /* Black for bold benefit names */
+    font-weight: 600;
+}
+
+.recommendation-list li {
+    color: #64748b; /* Lighter grey for descriptions */
+    font-size: 0.9rem; /* Smaller font size */
+    line-height: 1.5;
+}
+
+.recommendation-list li a {
+    color: #059669; /* Green color for links */
+    text-decoration: none;
+}
+
+.recommendation-list li a:hover {
+    text-decoration: underline;
+}
+
+/* AGGRESSIVE OVERRIDE - Force light grey background everywhere */
+.calculator-table,
+.calculator-table .table-row,
+.table-row,
+.table-row .credit-info,
+.table-row .credit-info .credit-description,
+.credit-info,
+.credit-description {
+    background: #f8fafc !important; /* Force light grey background matching Practical Advice */
+    background-color: #f8fafc !important; /* Double override */
+}
+
+/* Credit section background styling to match page background */
+.table-row {
+    background: #f8fafc !important; /* Light grey background matching Practical Advice */
+    border-radius: 0 !important; /* Remove rounded corners for straight separator lines */
+    margin: 0.5rem 0 !important;
+    padding: 1rem !important;
+    border-bottom: 2px solid #059669 !important; /* Dark green border between credit sections */
+}
+
+/* Remove border from the last credit section */
+.table-row:last-child {
+    border-bottom: none !important;
+}
+
+/* Credit table background styling to match page background */
+.credit-description {
+    background: transparent !important; /* Transparent background since parent has the grey */
+    border-left: none !important; /* Remove the green left border */
+    padding: 0 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
+
+/* More specific selector to override card-styles.css */
+.table-row .credit-info .credit-description {
+    background: transparent !important;
+    border-left: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
+
+/* Mobile-first responsive design for credit tables */
+@media (max-width: 768px) {
+    /* SUPER AGGRESSIVE MOBILE OVERRIDE */
+    .calculator-table,
+    .calculator-table *,
+    .table-row,
+    .table-row *,
+    .credit-info,
+    .credit-info *,
+    .credit-description,
+    .credit-description * {
+        background: #f8fafc !important;
+        background-color: #f8fafc !important;
+    }
+    
+    /* Override tan background on mobile for entire credit sections */
+    .table-row {
+        background: #f8fafc !important; /* Light grey background matching Practical Advice */
+        border-radius: 0 !important; /* Remove rounded corners for straight separator lines */
+        margin: 0.5rem 0 !important;
+        padding: 1rem !important;
+        display: block !important;
+        width: 100% !important;
+        border-bottom: 2px solid #059669 !important; /* Dark green border between credit sections */
+    }
+    
+    /* Remove border from the last credit section on mobile */
+    .table-row:last-child {
+        border-bottom: none !important;
+    }
+    
+    /* Ensure credit info container also has light grey background */
+    .credit-info {
+        background: #f8fafc !important;
+        width: 100% !important;
+    }
+    
+    /* Override any existing background colors */
+    .credit-description {
+        background: transparent !important;
+        border-left: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .credit-breakdown {
+        display: block !important;
+        width: 100% !important;
+        background: transparent !important;
+    }
+    
+    .credit-breakdown .credit-row {
+        display: block !important;
+        margin-bottom: 1rem !important;
+        border-bottom: 1px solid rgba(5, 150, 105, 0.2) !important; /* Light green separator lines with 80% transparency */
+        padding-bottom: 1rem !important;
+        background: transparent !important;
+    }
+    
+    .credit-breakdown .credit-row:last-child {
+        border-bottom: none !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
+    .credit-breakdown .credit-label {
+        display: block !important;
+        width: 100% !important;
+        font-weight: bold !important;
+        font-size: 0.9em !important;
+        color: inherit !important;
+        padding: 0 0 0.5rem 0 !important;
+        margin: 0 !important;
+        border-bottom: none !important;
+        vertical-align: top !important;
+        background: transparent !important;
+    }
+    
+    .credit-breakdown .credit-detail {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border-bottom: none !important;
+        vertical-align: top !important;
+        line-height: 1.4 !important;
+        background: transparent !important;
+    }
+}
+
+/* Tablet and larger screens - keep table layout */
+@media (min-width: 769px) {
+    .credit-breakdown {
+        display: table !important;
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+    
+    .credit-breakdown .credit-row {
+        display: table-row !important;
+    }
+    
+    .credit-breakdown .credit-label {
+        display: table-cell !important;
+        width: 120px !important;
+        vertical-align: middle !important;
+        padding: 2px 8px 2px 0 !important;
+        font-weight: bold !important;
+        font-size: 0.9em !important;
+        color: inherit !important;
+        border-bottom: 1px solid rgba(5, 150, 105, 0.2) !important; /* Light green separator lines with 80% transparency */
+    }
+    
+    .credit-breakdown .credit-detail {
+        display: table-cell !important;
+        vertical-align: middle !important;
+        padding: 2px 0 !important;
+        color: inherit !important;
+        border-bottom: 1px solid rgba(5, 150, 105, 0.2) !important; /* Light green separator lines with 80% transparency */
+    }
+    
+    /* Remove border from last row */
+    .credit-breakdown .credit-row:last-child .credit-label,
+    .credit-breakdown .credit-row:last-child .credit-detail {
+        border-bottom: none !important;
     }
 }
