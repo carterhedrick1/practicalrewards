@@ -507,7 +507,12 @@ function updateCalculation() {
 }
 
 // Modern Collapsible Section Functionality
-function toggleCalculatorSection() {
+function toggleCalculatorSection(event) {
+    // Don't toggle if clicking on a link or button
+    if (event && (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.closest('a') || event.target.closest('button'))) {
+        return;
+    }
+    
     const header = document.querySelector('.calculator-header');
     const content = document.querySelector('.calculator-content');
     const isExpanded = header.getAttribute('aria-expanded') === 'true';
