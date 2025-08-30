@@ -622,6 +622,8 @@
             if (!card) return;
             
             console.log('🔍 Editing card:', card);
+            console.log('🔍 Card type:', card.type);
+            console.log('🔍 Card rewards:', card.rewards);
             console.log('🔍 Card welcome_bonus:', card.welcome_bonus);
             console.log('🔍 Card practical_advice:', card.practical_advice);
             
@@ -633,18 +635,43 @@
             
             // Populate card types (handle both single string and array)
             if (card.type) {
-                if (Array.isArray(card.type)) {
-                    card.type.forEach(typeValue => {
-                        // Remove brackets and quotes from array values
-                        const cleanValue = typeValue.replace(/[\[\]"]/g, '');
+                console.log('🔍 Processing card types:', card.type);
+                let typesToProcess = card.type;
+                
+                // If it's a string that looks like an array, try to parse it
+                if (typeof card.type === 'string' && card.type.includes('[') && card.type.includes(']')) {
+                    try {
+                        typesToProcess = JSON.parse(card.type);
+                        console.log('🔍 Parsed string array to:', typesToProcess);
+                    } catch (e) {
+                        console.log('🔍 Failed to parse as JSON, treating as comma-separated string');
+                        typesToProcess = card.type.replace(/[\[\]"]/g, '').split(',').map(s => s.trim());
+                    }
+                }
+                
+                if (Array.isArray(typesToProcess)) {
+                    typesToProcess.forEach(typeValue => {
+                        const cleanValue = typeValue.toString().trim();
+                        console.log('🔍 Looking for checkbox with value:', cleanValue);
                         const checkbox = document.querySelector(`input[name="cardTypes"][value="${cleanValue}"]`);
-                        if (checkbox) checkbox.checked = true;
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            console.log('✅ Found and checked checkbox for:', cleanValue);
+                        } else {
+                            console.log('❌ No checkbox found for value:', cleanValue);
+                        }
                     });
                 } else {
                     // Handle single string value
-                    const cleanValue = card.type.replace(/[\[\]"]/g, '');
+                    const cleanValue = typesToProcess.toString().trim();
+                    console.log('🔍 Looking for single type checkbox with value:', cleanValue);
                     const checkbox = document.querySelector(`input[name="cardTypes"][value="${cleanValue}"]`);
-                    if (checkbox) checkbox.checked = true;
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        console.log('✅ Found and checked single type checkbox for:', cleanValue);
+                    } else {
+                        console.log('❌ No checkbox found for single type value:', cleanValue);
+                    }
                 }
             }
             document.getElementById('annualFee').value = card.annualFee;
@@ -654,16 +681,36 @@
             
             // Populate rewards types (handle both single string and array)
             if (card.rewards) {
-                if (Array.isArray(card.rewards)) {
-                    card.rewards.forEach(rewardType => {
-                        // Remove brackets and quotes from array values
-                        const cleanValue = rewardType.replace(/[\[\]"]/g, '');
+                console.log('🔍 Processing card rewards:', card.rewards);
+                let rewardsToProcess = card.rewards;
+                
+                // If it's a string that looks like an array, try to parse it
+                if (typeof card.rewards === 'string' && card.rewards.includes('[') && card.rewards.includes(']')) {
+                    try {
+                        rewardsToProcess = JSON.parse(card.rewards);
+                        console.log('🔍 Parsed rewards string array to:', rewardsToProcess);
+                    } catch (e) {
+                        console.log('🔍 Failed to parse rewards as JSON, treating as comma-separated string');
+                        rewardsToProcess = card.rewards.replace(/[\[\]"]/g, '').split(',').map(s => s.trim());
+                    }
+                }
+                
+                if (Array.isArray(rewardsToProcess)) {
+                    rewardsToProcess.forEach(rewardType => {
+                        const cleanValue = rewardType.toString().trim();
+                        console.log('🔍 Looking for rewards checkbox with value:', cleanValue);
                         const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${cleanValue}"]`);
-                        if (checkbox) checkbox.checked = true;
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            console.log('✅ Found and checked rewards checkbox for:', cleanValue);
+                        } else {
+                            console.log('❌ No rewards checkbox found for value:', cleanValue);
+                        }
                     });
                 } else {
                     // Handle single string value
-                    const cleanValue = card.rewards.replace(/[\[\]"]/g, '');
+                    const cleanValue = rewardsToProcess.toString().trim();
+                    console.log('🔍 Looking for single rewards checkbox with value:', cleanValue);
                     const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${cleanValue}"]`);
                     if (checkbox) checkbox.checked = true;
                 }
@@ -1037,10 +1084,10 @@
                 // Add the card
                 const cardData = {
                     name: "Capital One Savor",
-                    type: "cashback",
+                    type: ["cashback", "hybrid"],
                     annual_fee: 0,
                     bank_type: "capital-one",
-                    rewards_type: "cashback",
+                    rewards_type: ["cashback", "hybrid"],
                     image_url: "images/savor.png",
                     features: ["3% back on dining, entertainment, grocery stores, and streaming", "5% back on hotels and rental cars through Capital One Travel", "1% back on everything else"],
                     welcome_bonus: "None currently",
