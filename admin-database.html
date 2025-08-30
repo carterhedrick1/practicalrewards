@@ -1161,6 +1161,100 @@
             }
         }
 
+        // Auto-add Chase Freedom Unlimited card
+        async function addChaseFreedomUnlimited() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Chase Freedom Unlimited®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Chase Freedom Unlimited® already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Chase Freedom Unlimited®",
+                    type: ["cashback", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "chase",
+                    rewards_type: ["cashback", "hybrid"],
+                    image_url: "images/freedom_unlimited.png",
+                    features: ["5x travel via Chase Travel", "3x dining (including takeout and eligible delivery)", "3x drugstore purchases", "1.5x all other purchases", "+2% on paid Lyft rides through 9/30/2027"],
+                    welcome_bonus: "$200 bonus after $500 spend in 3 months",
+                    practical_advice: "Great $0-fee starter: 5x travel, 3x dining/drugstores, 1.5x elsewhere; pair with a Sapphire for better travel value.",
+                    card_url: "card-pages/chase-freedom-unlimited.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee"],
+                    protection_categories: ["purchase-protection", "extended-warranty", "trip-cancellation-interruption", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Chase Freedom Unlimited®:', error);
+                } else {
+                    console.log('✅ Chase Freedom Unlimited® added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addChaseFreedomUnlimited:', error);
+            }
+        }
+
+        // Auto-add Wells Fargo Autograph Journey card
+        async function addWellsFargoAutographJourney() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Wells Fargo Autograph Journey®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Wells Fargo Autograph Journey® already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Wells Fargo Autograph Journey®",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "wells-fargo",
+                    rewards_type: ["points"],
+                    image_url: "images/autograph-journey.png",
+                    features: ["5x points on hotels", "4x points on airlines", "3x points on dining and other travel", "1x points on everything else"],
+                    welcome_bonus: "60,000 points after $4,000 spend in 3 months",
+                    practical_advice: "Great mid-tier travel card—$50 annual airline credit helps offset the $95 fee if you book at least one flight a year.",
+                    card_url: "card-pages/wells-fargo-autograph-journey.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "airline-hotel-transfers"],
+                    protection_categories: ["trip-cancellation-interruption", "trip-delay", "lost-damaged-luggage", "rental-car-insurance", "cell-phone-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Wells Fargo Autograph Journey®:', error);
+                } else {
+                    console.log('✅ Wells Fargo Autograph Journey® added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addWellsFargoAutographJourney:', error);
+            }
+        }
+
         // Call this function after database is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Add a delay to ensure database is fully loaded
@@ -1169,6 +1263,8 @@
             setTimeout(addAmexGold, 3000);
             setTimeout(addCapitalOneSavor, 3500);
             setTimeout(addChaseSapphirePreferred, 4000);
+            setTimeout(addChaseFreedomUnlimited, 4500);
+            setTimeout(addWellsFargoAutographJourney, 5000);
         });
 
         // Also try to add the card when database connection is successful
@@ -1178,6 +1274,8 @@
         window.addAmexGold = addAmexGold;
         window.addCapitalOneSavor = addCapitalOneSavor;
         window.addChaseSapphirePreferred = addChaseSapphirePreferred;
+        window.addChaseFreedomUnlimited = addChaseFreedomUnlimited;
+        window.addWellsFargoAutographJourney = addWellsFargoAutographJourney;
     </script>
 </body>
 </html> 
