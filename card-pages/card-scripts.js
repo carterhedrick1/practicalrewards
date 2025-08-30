@@ -365,25 +365,27 @@ function toggleCredit(checkbox) {
     });
     
     if (checkbox.checked) {
-                // Toggle ON - show input field, hide placeholder for ALL controls
+        // Toggle ON - show input field, hide placeholder for ALL controls
         allInputFields.forEach(inputField => {
             inputField.value = maxValue;
         });
         allValueInputs.forEach(valueInput => {
-            valueInput.style.setProperty('display', 'flex', 'important');
+            // Remove the inline style that forces display: none
+            valueInput.removeAttribute('style');
+            valueInput.style.display = 'flex';
             // Force light grey background on the parent table-row immediately
             const tableRow = valueInput.closest('.table-row');
             if (tableRow) {
                 tableRow.style.setProperty('background', '#f8fafc', 'important');
                 tableRow.style.setProperty('background-color', '#f8fafc', 'important');
             }
-            // Add active class for animation after a short delay
-            setTimeout(() => {
-                valueInput.classList.add('active');
-            }, 10);
+            // Add active class immediately to prevent flashing
+            valueInput.classList.add('active');
         });
         allPlaceholders.forEach(placeholder => {
-            placeholder.style.setProperty('display', 'none', 'important');
+            // Remove the inline style that forces display: block
+            placeholder.removeAttribute('style');
+            placeholder.style.display = 'none';
         });
         console.log('Turned ON - showing inputs, hiding placeholders');
     } else {
@@ -393,20 +395,19 @@ function toggleCredit(checkbox) {
         });
         allValueInputs.forEach(valueInput => {
             valueInput.classList.remove('active');
-            // Hide after animation completes
-            setTimeout(() => {
-                valueInput.style.setProperty('display', 'none', 'important');
-            }, 300);
+            // Hide immediately to prevent flashing
+            valueInput.style.display = 'none';
         });
         allPlaceholders.forEach(placeholder => {
-            placeholder.style.setProperty('display', 'block', 'important');
+            // Show immediately to prevent flashing
+            placeholder.style.display = 'block';
             placeholder.textContent = '$0';
             // Ensure mobile placeholders have consistent styling
             if (placeholder.closest('.mobile-controls-table')) {
-                placeholder.style.setProperty('color', '#9ca3af', 'important');
-                placeholder.style.setProperty('background', 'transparent', 'important');
-                placeholder.style.setProperty('border', 'none', 'important');
-                placeholder.style.setProperty('box-shadow', 'none', 'important');
+                placeholder.style.color = '#9ca3af';
+                placeholder.style.background = 'transparent';
+                placeholder.style.border = 'none';
+                placeholder.style.boxShadow = 'none';
             }
         });
         console.log('Turned OFF - hiding inputs, showing placeholders');
