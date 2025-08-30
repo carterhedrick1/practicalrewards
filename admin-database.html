@@ -1114,13 +1114,61 @@
             }
         }
 
+        // Auto-add Chase Sapphire Preferred card
+        async function addChaseSapphirePreferred() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Chase Sapphire Preferred');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Chase Sapphire Preferred already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Chase Sapphire Preferred",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "chase",
+                    rewards_type: ["points"],
+                    image_url: "images/sapphire_preferred_card.png",
+                    features: ["3x points on dining worldwide", "2x points on travel", "1x points on everything else", "5x on travel purchased through Chase Travel", "3x on online grocery purchases", "3x on select streaming services"],
+                    welcome_bonus: "60,000 points after you spend $4,000 on purchases in the first 3 months from account opening",
+                    practical_advice: "Best starter travel card: $95 fee, 3x dining and easy partner transfers; worth it if you'll use the $50 hotel credit and book travel yearly.",
+                    card_url: "card-pages/chase-sapphire-preferred.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "lounge-access"],
+                    protection_categories: ["trip-cancellation-interruption", "trip-delay", "baggage-delay", "lost-damaged-luggage", "rental-car-insurance", "travel-accident-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Chase Sapphire Preferred:', error);
+                } else {
+                    console.log('✅ Chase Sapphire Preferred added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addChaseSapphirePreferred:', error);
+            }
+        }
+
         // Call this function after database is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Add a delay to ensure database is fully loaded
             setTimeout(addWellsFargoActiveCash, 2000);
             setTimeout(addCitiDoubleCash, 2500);
             setTimeout(addAmexGold, 3000);
-            setTimeout(addCapitalOneSavor, 3500); // Added this line
+            setTimeout(addCapitalOneSavor, 3500);
+            setTimeout(addChaseSapphirePreferred, 4000);
         });
 
         // Also try to add the card when database connection is successful
@@ -1128,7 +1176,8 @@
         window.addWellsFargoActiveCash = addWellsFargoActiveCash;
         window.addCitiDoubleCash = addCitiDoubleCash;
         window.addAmexGold = addAmexGold;
-        window.addCapitalOneSavor = addCapitalOneSavor; // Added this line
+        window.addCapitalOneSavor = addCapitalOneSavor;
+        window.addChaseSapphirePreferred = addChaseSapphirePreferred;
     </script>
 </body>
 </html> 
