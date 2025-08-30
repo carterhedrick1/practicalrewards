@@ -365,12 +365,18 @@ function toggleCredit(checkbox) {
     });
     
     if (checkbox.checked) {
-        // Toggle ON - show input field, hide placeholder for ALL controls
+                // Toggle ON - show input field, hide placeholder for ALL controls
         allInputFields.forEach(inputField => {
             inputField.value = maxValue;
         });
         allValueInputs.forEach(valueInput => {
             valueInput.style.setProperty('display', 'flex', 'important');
+            // Force light grey background on the parent table-row immediately
+            const tableRow = valueInput.closest('.table-row');
+            if (tableRow) {
+                tableRow.style.setProperty('background', '#f8fafc', 'important');
+                tableRow.style.setProperty('background-color', '#f8fafc', 'important');
+            }
             // Add active class for animation after a short delay
             setTimeout(() => {
                 valueInput.classList.add('active');

@@ -1167,6 +1167,83 @@ footer {
     background-color: #f8fafc !important; /* Double override */
 }
 
+/* SUPER AGGRESSIVE OVERRIDE for table-row specifically */
+.table-row,
+.table-row:hover,
+.table-row[aria-expanded="true"],
+.table-row[aria-expanded="false"],
+.table-row.active,
+.table-row .active {
+    background: #f8fafc !important;
+    background-color: #f8fafc !important;
+}
+
+/* Override any expanded or active states */
+.calculator-table .table-row[aria-expanded="true"],
+.calculator-table .table-row[aria-expanded="false"],
+.calculator-table .table-row.active,
+.calculator-table .table-row .active,
+.calculator-table .table-row .value-input.active {
+    background: #f8fafc !important;
+    background-color: #f8fafc !important;
+}
+
+/* Target specific elements that need light grey background instead of wildcard */
+.calculator-table .table-row,
+.calculator-table .credit-info,
+.calculator-table .credit-description,
+.calculator-table .credit-breakdown {
+    background: #f8fafc !important;
+    background-color: #f8fafc !important;
+}
+
+/* Completely exclude toggle elements from our overrides */
+.calculator-table .toggle-container,
+.calculator-table .credit-toggle,
+.calculator-table .toggle-slider,
+.calculator-table .toggle-slider::before {
+    background: unset !important;
+    background-color: unset !important;
+}
+
+/* Restore default toggle styling */
+.calculator-table .toggle-slider {
+    background-color: #cbd5e1 !important;
+}
+
+.calculator-table input:checked + .toggle-slider {
+    background-color: #059669 !important;
+}
+
+.calculator-table .toggle-slider::before {
+    background-color: white !important;
+}
+
+/* Force override for any dynamically added classes or states */
+.calculator-table .table-row[class*="active"],
+.calculator-table .table-row[class*="expanded"],
+.calculator-table .table-row[class*="toggled"],
+.calculator-table .table-row[class*="on"] {
+    background: #f8fafc !important;
+    background-color: #f8fafc !important;
+}
+
+/* SUPER SPECIFIC OVERRIDE - Target table-row when it contains active elements */
+.calculator-table .table-row:has(.value-input.active),
+.calculator-table .table-row:has(.active),
+.calculator-table .table-row:has([class*="active"]) {
+    background: #f8fafc !important;
+    background-color: #f8fafc !important;
+}
+
+/* Alternative approach - Target table-row when any child is active */
+.calculator-table .table-row .value-input.active ~ *,
+.calculator-table .table-row .value-input.active + *,
+.calculator-table .table-row .value-input.active {
+    background: #f8fafc !important;
+    background-color: #f8fafc !important;
+}
+
 /* Credit section background styling to match page background */
 .table-row {
     background: #f8fafc !important; /* Light grey background matching Practical Advice */
@@ -1210,6 +1287,59 @@ footer {
     .credit-info *,
     .credit-description,
     .credit-description * {
+        background: #f8fafc !important;
+        background-color: #f8fafc !important;
+    }
+    
+    /* Target specific elements that need light grey background on mobile */
+    .calculator-table .table-row,
+    .calculator-table .credit-info,
+    .calculator-table .credit-description,
+    .calculator-table .credit-breakdown {
+        background: #f8fafc !important;
+        background-color: #f8fafc !important;
+    }
+    
+    /* Completely exclude toggle elements from our overrides on mobile */
+    .calculator-table .toggle-container,
+    .calculator-table .credit-toggle,
+    .calculator-table .toggle-slider,
+    .calculator-table .toggle-slider::before {
+        background: unset !important;
+        background-color: unset !important;
+    }
+    
+    /* Restore default toggle styling on mobile */
+    .calculator-table .toggle-slider {
+        background-color: #cbd5e1 !important;
+    }
+    
+    .calculator-table input:checked + .toggle-slider {
+        background-color: #059669 !important;
+    }
+    
+    .calculator-table .toggle-slider::before {
+        background-color: white !important;
+    }
+    
+    /* Force override for any dynamically added classes or states on mobile */
+    .calculator-table .table-row[class*="active"],
+    .calculator-table .table-row[class*="expanded"],
+    .calculator-table .table-row[class*="toggled"],
+    .calculator-table .table-row[class*="on"] {
+        background: #f8fafc !important;
+        background-color: #f8fafc !important;
+    }
+    
+    /* Force override for table-row hover states on mobile */
+    .table-row:hover,
+    .table-row:focus,
+    .table-row:active,
+    .table-row[aria-expanded="true"],
+    .table-row[aria-expanded="false"],
+    .table-row.active,
+    .table-row .active,
+    .table-row .value-input.active {
         background: #f8fafc !important;
         background-color: #f8fafc !important;
     }
