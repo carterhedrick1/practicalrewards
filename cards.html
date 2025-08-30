@@ -1043,12 +1043,13 @@
                     <div class="pill-dropdown" id="issuer-dropdown">
                         <div class="dropdown-content">
                             <label><input type="checkbox" name="issuer" value="amex" onchange="autoApplyFilters()"> American Express</label>
-                            <label><input type="checkbox" name="issuer" value="chase" onchange="autoApplyFilters()"> Chase</label>
-                            <label><input type="checkbox" name="issuer" value="capital-one" onchange="autoApplyFilters()"> Capital One</label>
-                            <label><input type="checkbox" name="issuer" value="citi" onchange="autoApplyFilters()"> Citi</label>
-                            <label><input type="checkbox" name="issuer" value="bilt" onchange="autoApplyFilters()"> Bilt</label>
-                            <label><input type="checkbox" name="issuer" value="airlines" onchange="autoApplyFilters()"> Airlines</label>
-                            <label><input type="checkbox" name="issuer" value="hotels" onchange="autoApplyFilters()"> Hotels</label>
+                                                    <label><input type="checkbox" name="issuer" value="chase" onchange="autoApplyFilters()"> Chase</label>
+                        <label><input type="checkbox" name="issuer" value="capital-one" onchange="autoApplyFilters()"> Capital One</label>
+                        <label><input type="checkbox" name="issuer" value="wells-fargo" onchange="autoApplyFilters()"> Wells Fargo</label>
+                        <label><input type="checkbox" name="issuer" value="citi" onchange="autoApplyFilters()"> Citi</label>
+                        <label><input type="checkbox" name="issuer" value="bilt" onchange="autoApplyFilters()"> Bilt</label>
+                        <label><input type="checkbox" name="issuer" value="airlines" onchange="autoApplyFilters()"> Airlines</label>
+                        <label><input type="checkbox" name="issuer" value="hotels" onchange="autoApplyFilters()"> Hotels</label>
                         </div>
                         <div class="dropdown-footer">
                             <button class="reset-btn" onclick="resetFilter('issuer')">Reset</button>
@@ -1190,12 +1191,13 @@
                         </div>
                         <div class="mobile-filter-options" id="mobile-issuer-options">
                             <label><input type="checkbox" name="mobile-issuer" value="amex" onchange="autoApplyMobileFilters()"> American Express</label>
-                            <label><input type="checkbox" name="mobile-issuer" value="chase" onchange="autoApplyMobileFilters()"> Chase</label>
-                            <label><input type="checkbox" name="mobile-issuer" value="capital-one" onchange="autoApplyMobileFilters()"> Capital One</label>
-                            <label><input type="checkbox" name="mobile-issuer" value="citi" onchange="autoApplyMobileFilters()"> Citi</label>
-                            <label><input type="checkbox" name="mobile-issuer" value="bilt" onchange="autoApplyMobileFilters()"> Bilt</label>
-                            <label><input type="checkbox" name="mobile-issuer" value="airlines" onchange="autoApplyMobileFilters()"> Airlines</label>
-                            <label><input type="checkbox" name="mobile-issuer" value="hotels" onchange="autoApplyMobileFilters()"> Hotels</label>
+                                                    <label><input type="checkbox" name="mobile-issuer" value="chase" onchange="autoApplyMobileFilters()"> Chase</label>
+                        <label><input type="checkbox" name="mobile-issuer" value="capital-one" onchange="autoApplyMobileFilters()"> Capital One</label>
+                        <label><input type="checkbox" name="mobile-issuer" value="wells-fargo" onchange="autoApplyMobileFilters()"> Wells Fargo</label>
+                        <label><input type="checkbox" name="mobile-issuer" value="citi" onchange="autoApplyMobileFilters()"> Citi</label>
+                        <label><input type="checkbox" name="mobile-issuer" value="bilt" onchange="autoApplyMobileFilters()"> Bilt</label>
+                        <label><input type="checkbox" name="mobile-issuer" value="airlines" onchange="autoApplyMobileFilters()"> Airlines</label>
+                        <label><input type="checkbox" name="mobile-issuer" value="hotels" onchange="autoApplyMobileFilters()"> Hotels</label>
                         </div>
                     </div>
 
@@ -1771,6 +1773,7 @@
             if (bankType === 'capital-one') return 'capital-one';
             if (bankType === 'citi') return 'citi';
             if (bankType === 'bilt') return 'bilt';
+            if (bankType === 'wells-fargo') return 'wells-fargo';
             
             // Check by card name if bankType doesn't match
             if (name.includes('amex') || name.includes('american express')) return 'amex';
@@ -1778,6 +1781,7 @@
             if (name.includes('capital one') || name.includes('venture')) return 'capital-one';
             if (name.includes('citi')) return 'citi';
             if (name.includes('bilt')) return 'bilt';
+            if (name.includes('wells fargo')) return 'wells-fargo';
             if (name.includes('airline') || name.includes('delta') || name.includes('united') || name.includes('american airlines')) return 'airlines';
             if (name.includes('hotel') || name.includes('marriott') || name.includes('hilton') || name.includes('hyatt')) return 'hotels';
             
@@ -1890,6 +1894,7 @@
                     'amex': 'American Express',
                     'chase': 'Chase',
                     'capital-one': 'Capital One',
+                    'wells-fargo': 'Wells Fargo',
                     'citi': 'Citi',
                     'bilt': 'Bilt',
                     'airlines': 'Airlines',
