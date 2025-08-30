@@ -340,6 +340,20 @@
                     }, 1500);
                 }
                 
+                // Try to add American Express Gold card after successful connection
+                if (typeof window.addAmexGold === 'function') {
+                    setTimeout(() => {
+                        window.addAmexGold();
+                    }, 2000);
+                }
+                
+                // Try to add Capital One Savor card after successful connection
+                if (typeof window.addCapitalOneSavor === 'function') {
+                    setTimeout(() => {
+                        window.addCapitalOneSavor();
+                    }, 2500);
+                }
+                
                 updateStatus('✅ Connected to Supabase database successfully!', 'success');
                 updateDbStatus('Connected');
                 
@@ -959,17 +973,115 @@
             }
         }
 
+        // Auto-add American Express Gold Card
+        async function addAmexGold() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'American Express® Gold Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('American Express® Gold Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "American Express® Gold Card",
+                    type: "travel",
+                    annual_fee: 325,
+                    bank_type: "amex",
+                    rewards_type: "points",
+                    image_url: "images/amex-gold.png",
+                    features: ["4x points at restaurants worldwide", "4x points at U.S. supermarkets (up to $25k/year)", "3x points on flights booked directly with airlines", "1x points on everything else"],
+                    welcome_bonus: "60,000 Membership Rewards® Points after you spend $6,000 on eligible purchases with your Card within the first 6 months of Card Membership",
+                    practical_advice: "The Gold Card makes sense if you spend real money on food—think groceries at U.S. supermarkets and eating out—and you don't mind juggling a few monthly dining credits. The annual fee is on the higher side, so you want to actually use the credits and the strong earning rates to come out ahead.",
+                    card_url: "card-pages/amex-gold.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "metal-card"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding American Express® Gold Card:', error);
+                } else {
+                    console.log('✅ American Express® Gold Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAmexGold:', error);
+            }
+        }
+
+        // Auto-add Capital One Savor card
+        async function addCapitalOneSavor() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Capital One Savor');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Capital One Savor already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Capital One Savor",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "capital-one",
+                    rewards_type: "cashback",
+                    image_url: "images/savor.png",
+                    features: ["3% back on dining, entertainment, grocery stores, and streaming", "5% back on hotels and rental cars through Capital One Travel", "1% back on everything else"],
+                    welcome_bonus: "None currently",
+                    practical_advice: "If your spending leans heavily toward groceries, dining out, concerts, movies, and streaming, the Capital One Savor is a delightfully low-effort way to stop earning nothing with a debit card and start getting solid cash back—without an annual fee and no foreign transaction fees.",
+                    card_url: "card-pages/capital-one-savor.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    protection_categories: ["rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Capital One Savor:', error);
+                } else {
+                    console.log('✅ Capital One Savor added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCapitalOneSavor:', error);
+            }
+        }
+
         // Call this function after database is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Add a delay to ensure database is fully loaded
             setTimeout(addWellsFargoActiveCash, 2000);
             setTimeout(addCitiDoubleCash, 2500);
+            setTimeout(addAmexGold, 3000);
+            setTimeout(addCapitalOneSavor, 3500); // Added this line
         });
 
         // Also try to add the card when database connection is successful
         // This will be called from checkDatabaseAndLoadCards
         window.addWellsFargoActiveCash = addWellsFargoActiveCash;
         window.addCitiDoubleCash = addCitiDoubleCash;
+        window.addAmexGold = addAmexGold;
+        window.addCapitalOneSavor = addCapitalOneSavor; // Added this line
     </script>
 </body>
 </html> 
