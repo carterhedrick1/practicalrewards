@@ -1047,6 +1047,7 @@
                         <label><input type="checkbox" name="issuer" value="capital-one" onchange="autoApplyFilters()"> Capital One</label>
                         <label><input type="checkbox" name="issuer" value="wells-fargo" onchange="autoApplyFilters()"> Wells Fargo</label>
                         <label><input type="checkbox" name="issuer" value="citi" onchange="autoApplyFilters()"> Citi</label>
+                        <label><input type="checkbox" name="issuer" value="discover" onchange="autoApplyFilters()"> Discover</label>
                         <label><input type="checkbox" name="issuer" value="bilt" onchange="autoApplyFilters()"> Bilt</label>
                         <label><input type="checkbox" name="issuer" value="airlines" onchange="autoApplyFilters()"> Airlines</label>
                         <label><input type="checkbox" name="issuer" value="hotels" onchange="autoApplyFilters()"> Hotels</label>
@@ -1195,6 +1196,7 @@
                         <label><input type="checkbox" name="mobile-issuer" value="capital-one" onchange="autoApplyMobileFilters()"> Capital One</label>
                         <label><input type="checkbox" name="mobile-issuer" value="wells-fargo" onchange="autoApplyMobileFilters()"> Wells Fargo</label>
                         <label><input type="checkbox" name="mobile-issuer" value="citi" onchange="autoApplyMobileFilters()"> Citi</label>
+                        <label><input type="checkbox" name="mobile-issuer" value="discover" onchange="autoApplyMobileFilters()"> Discover</label>
                         <label><input type="checkbox" name="mobile-issuer" value="bilt" onchange="autoApplyMobileFilters()"> Bilt</label>
                         <label><input type="checkbox" name="mobile-issuer" value="airlines" onchange="autoApplyMobileFilters()"> Airlines</label>
                         <label><input type="checkbox" name="mobile-issuer" value="hotels" onchange="autoApplyMobileFilters()"> Hotels</label>
@@ -1772,6 +1774,7 @@
             if (bankType === 'chase') return 'chase';
             if (bankType === 'capital-one') return 'capital-one';
             if (bankType === 'citi') return 'citi';
+            if (bankType === 'discover') return 'discover';
             if (bankType === 'bilt') return 'bilt';
             if (bankType === 'wells-fargo') return 'wells-fargo';
             
@@ -1780,6 +1783,7 @@
             if (name.includes('chase')) return 'chase';
             if (name.includes('capital one') || name.includes('venture')) return 'capital-one';
             if (name.includes('citi')) return 'citi';
+            if (name.includes('discover')) return 'discover';
             if (name.includes('bilt')) return 'bilt';
             if (name.includes('wells fargo')) return 'wells-fargo';
             if (name.includes('airline') || name.includes('delta') || name.includes('united') || name.includes('american airlines')) return 'airlines';
@@ -1896,6 +1900,7 @@
                     'capital-one': 'Capital One',
                     'wells-fargo': 'Wells Fargo',
                     'citi': 'Citi',
+                    'discover': 'Discover',
                     'bilt': 'Bilt',
                     'airlines': 'Airlines',
                     'hotels': 'Hotels'

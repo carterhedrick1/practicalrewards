@@ -185,6 +185,7 @@
                         <option value="chase">Chase</option>
                         <option value="capital-one">Capital One</option>
                         <option value="citi">Citi</option>
+                        <option value="discover">Discover</option>
                         <option value="bilt">Bilt</option>
                         <option value="wells-fargo">Wells Fargo</option>
                         <option value="airlines">Airlines</option>
@@ -1255,6 +1256,194 @@
             }
         }
 
+        // Auto-add American Express Blue Business Plus card
+        async function addAmexBlueBusinessPlus() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'American Express Blue Business® Plus (BBP)');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('American Express Blue Business® Plus (BBP) already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "American Express Blue Business® Plus (BBP)",
+                    type: ["business", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "amex",
+                    rewards_type: ["points"],
+                    image_url: "images/blue-business-plus.png",
+                    features: ["2x points on everything (up to $50,000 per calendar year)", "1x points on everything after that", "0% intro APR on purchases for 12 months"],
+                    welcome_bonus: "15,000 points after $3,000 spend in 3 months",
+                    practical_advice: "Use this for all non-bonus spend up to $50k a year; skip abroad (2.7% fee). Great pairing with other AMEX cards.",
+                    card_url: "card-pages/amex-blue-business-plus.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "amex-offers"],
+                    protection_categories: ["purchase-protection", "extended-warranty", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding American Express Blue Business® Plus (BBP):', error);
+                } else {
+                    console.log('✅ American Express Blue Business® Plus (BBP) added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAmexBlueBusinessPlus:', error);
+            }
+        }
+
+        // Auto-add Bilt Mastercard
+        async function addBiltMastercard() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Bilt Mastercard');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Bilt Mastercard already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Bilt Mastercard",
+                    type: ["travel", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "bilt",
+                    rewards_type: ["points"],
+                    image_url: "images/bilt-mastercard.png",
+                    features: ["3x points on dining", "2x points on travel", "1x points on rent via Bilt app", "Rent Day: 6x dining, 4x travel, 2x other on 1st of month"],
+                    welcome_bonus: "None",
+                    practical_advice: "This is the only card that earns points of rent. It's somewhat confusing to setup, but if you are okay with figuring it out it's awesome to earn points on rent!",
+                    card_url: "card-pages/bilt-mastercard.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "no-foreign-fees", "point-transfers"],
+                    protection_categories: ["cell-phone-protection", "trip-cancellation-interruption", "trip-delay", "rental-car-insurance", "purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Bilt Mastercard:', error);
+                } else {
+                    console.log('✅ Bilt Mastercard added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addBiltMastercard:', error);
+            }
+        }
+
+        // Auto-add Citi Custom Cash
+        async function addCitiCustomCash() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi Custom Cash® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi Custom Cash® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi Custom Cash® Card",
+                    type: ["cashback", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "citi",
+                    rewards_type: ["cashback", "points"],
+                    image_url: "images/citi-custom-cash.png",
+                    features: ["5x in your top eligible category each billing cycle (to $500; then 1x)", "1x all other purchases", "+4% additional cash back on hotels, car rentals, and attractions via Citi Travel"],
+                    welcome_bonus: "20k Points",
+                    practical_advice: "Set it and forget it—5x the first $500 each cycle, then switch cards; pair with Citi Strata Premier if you want point transfers.",
+                    card_url: "card-pages/citi-custom-cash.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "citi-entertainment"],
+                    protection_categories: ["purchase-protection", "extended-warranty", "id-theft-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi Custom Cash® Card:', error);
+                } else {
+                    console.log('✅ Citi Custom Cash® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiCustomCash:', error);
+            }
+        }
+
+        // Auto-add Discover it Cash Back
+        async function addDiscoverItCashBack() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Discover it® Cash Back');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Discover it® Cash Back already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Discover it® Cash Back",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "discover",
+                    rewards_type: ["cashback"],
+                    image_url: "images/discover-it.png",
+                    features: ["5% rotating categories", "1% everything else"],
+                    welcome_bonus: "Cashback Match",
+                    practical_advice: "Activate 5% each quarter, cap $1,500; year-one Match doubles earnings if you actually use it.",
+                    card_url: "card-pages/discover-it-cash-back.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "no-foreign-fees"],
+                    protection_categories: ["fraud-liability"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Discover it® Cash Back:', error);
+                } else {
+                    console.log('✅ Discover it® Cash Back added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addDiscoverItCashBack:', error);
+            }
+        }
+
         // Call this function after database is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Add a delay to ensure database is fully loaded
@@ -1265,6 +1454,10 @@
             setTimeout(addChaseSapphirePreferred, 4000);
             setTimeout(addChaseFreedomUnlimited, 4500);
             setTimeout(addWellsFargoAutographJourney, 5000);
+            setTimeout(addAmexBlueBusinessPlus, 5500);
+            setTimeout(addBiltMastercard, 6000);
+            setTimeout(addCitiCustomCash, 6500);
+            setTimeout(addDiscoverItCashBack, 7000);
         });
 
         // Also try to add the card when database connection is successful
@@ -1276,6 +1469,10 @@
         window.addChaseSapphirePreferred = addChaseSapphirePreferred;
         window.addChaseFreedomUnlimited = addChaseFreedomUnlimited;
         window.addWellsFargoAutographJourney = addWellsFargoAutographJourney;
+        window.addAmexBlueBusinessPlus = addAmexBlueBusinessPlus;
+        window.addBiltMastercard = addBiltMastercard;
+        window.addCitiCustomCash = addCitiCustomCash;
+        window.addDiscoverItCashBack = addDiscoverItCashBack;
     </script>
 </body>
 </html> 
