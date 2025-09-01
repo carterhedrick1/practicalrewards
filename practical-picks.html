@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical Picks - Practical Rewards</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            line-height: 1.6; color: #292524; background: #fafaf9; overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header { position: fixed; top: 0; left: 0; right: 0; background: rgba(250,250,249,0.95);
+            backdrop-filter: blur(20px); border-bottom: 1px solid rgba(231,229,228,0.6); z-index: 1000; }
+
+        .coach-container { max-width: 1400px; margin: 0 auto; padding: 120px 2rem 2rem 2rem; }
+
+        .hero-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            color: white;
+            margin: 0 -2rem 3rem -2rem;
+            overflow: hidden;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            text-align: center;
+            margin-top: -130px;
+        }
+        .hero-section h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 800; }
+        .hero-section p { font-size: 1.1rem; opacity: .95; }
+
+        /* Layout */
+        .coach-layout { display: grid; grid-template-columns: 340px 1fr; gap: 2rem; align-items: start; }
+        @media (max-width: 1024px) { .coach-layout { grid-template-columns: 1fr; } }
+
+        /* Wizard */
+        .wizard { position: sticky; top: 100px; background: white; border: 1px solid #e5e7eb; border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 1rem; }
+        .wizard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; }
+        .wizard-title { font-size: 1.1rem; font-weight: 700; color: #047857; }
+        .progress { height: 6px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; margin: .5rem 0 1rem; }
+        .progress > span { display: block; height: 100%; width: 0; background: linear-gradient(135deg,#059669,#10b981); transition: width .3s ease; }
+        .step { padding: .75rem; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: .75rem; }
+        .step h3 { font-size: 1rem; color: #1e293b; margin-bottom: .5rem; }
+        .options { display: grid; grid-template-columns: 1fr; gap: .5rem; }
+        .option { border: 2px solid #e2e8f0; border-radius: 10px; padding: .75rem; background: white; cursor: pointer; display: flex; align-items: center; gap: .5rem; }
+        .option input { margin: 0; }
+        .option.active, .option:hover { border-color: #059669; background: #f0fdf4; }
+        .wizard-actions { display: flex; gap: .5rem; justify-content: space-between; margin-top: .5rem; }
+        .btn { padding: .6rem 1rem; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: #059669; color: white; }
+        .btn-secondary { background: white; color: #059669; border: 1px solid #059669; }
+
+        /* Context help box in wizard */
+        .help-box { margin-top: .75rem; background: #f8fafc; border: 1px solid #e5e7eb; border-left: 3px solid #059669; border-radius: 0 8px 8px 0; padding: .75rem .9rem; }
+        .help-title { font-weight: 700; color: #059669; font-size: .9rem; margin-bottom: .25rem; text-transform: uppercase; letter-spacing: .5px; }
+        .help-text { color: #475569; font-size: .9rem; line-height: 1.5; }
+
+        /* Content side */
+        .results-bar { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: .75rem 1rem; margin-bottom: 1rem; }
+        .tabs { display: flex; gap: .5rem; }
+        .tab { padding: .5rem .9rem; border-radius: 9999px; border: 1px solid #e5e7eb; background: white; cursor: pointer; }
+        .tab.active { background: #059669; color: white; border-color: #059669; }
+
+        /* Cards Grid & Card styles copied from cards.html for perfect parity */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            border: 1px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+            text-align: center;
+        }
+
+        .card-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .card-item:hover::before { left: 100%; }
+        .card-item:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); border-color: #059669; }
+
+        .card-image {
+            width: 100%;
+            max-width: 200px;
+            height: 140px;
+            object-fit: contain;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            box-shadow: none;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+
+        .card-item:hover .card-image { transform: scale(1.02); }
+
+        .card-image-fallback {
+            width: 100%;
+            max-width: 240px;
+            height: 140px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            box-shadow: none;
+            border: none;
+        }
+
+        .card-header { display: flex; justify-content: center; align-items: center; margin-bottom: 0.75rem; height: 40px; flex-shrink: 0; }
+        .card-title { font-size: 1.1rem; font-weight: 600; color: #1e293b; margin: 0; line-height: 1.3; text-align: center; }
+        .card-meta-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; justify-content: center; height: 32px; align-items: center; flex-shrink: 0; }
+        .meta-chip { background: #f1f5f9; color: #64748b; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 500; white-space: nowrap; }
+        .card-earning-rates { color: #374151; margin-bottom: 0.5rem; font-size: 0.8rem; line-height: 1.3; text-align: center; }
+        .card-perks { color: #6b7280; font-size: 0.75rem; line-height: 1.3; margin-bottom: 0.5rem; text-align: center; }
+        .card-advice { background: #f8fafc; border-left: 3px solid #059669; padding: 1rem; margin-top: 0.75rem; border-radius: 0 8px 8px 0; text-align: center; height: 100px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; }
+        .card-advice-label { font-weight: 600; color: #059669; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+        .card-advice-text { color: #475569; font-size: 0.75rem; line-height: 1.4; font-style: italic; text-align: center; max-width: 100%; }
+
+        /* Animations parity */
+        .card-item.fade-out { opacity: 0; transform: scale(0.95); }
+        .card-item.fade-in { animation: fadeInScale 0.3s ease-out forwards; }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* Mobile tweaks */
+        @media (max-width: 768px) {
+            /* Match header/hero behavior from cards page */
+            .mobile-menu-toggle { display: flex; }
+            .nav-links { display: none; }
+            nav { padding: 0 1rem; height: 70px; }
+
+            .coach-container { padding: 100px 1rem 1rem 1rem; }
+            .hero-section {
+                margin: -125px -1rem 3rem -1rem;
+                padding: 2rem 1rem;
+                width: 100vw;
+                position: relative;
+                left: 50%;
+                right: 50%;
+                margin-left: -50vw;
+                margin-right: -50vw;
+            }
+            .hero-section h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="coach-container">
+        <div class="hero-section">
+            <h1>Practical Picks</h1>
+            <p>Great cards, your way. You tell us what matters; we surface the matches—fast.</p>
+        </div>
+
+        <div class="coach-layout">
+            <!-- Wizard -->
+            <aside class="wizard" id="wizard">
+                <div class="wizard-header">
+                    <div class="wizard-title">Step-by-step</div>
+                </div>
+                <div class="progress"><span id="progress-bar"></span></div>
+
+                <div id="steps-container"></div>
+
+                <div class="wizard-actions">
+                    <button class="btn btn-secondary" id="back-btn">Back</button>
+                    <button class="btn btn-primary" id="next-btn">Next</button>
+                </div>
+
+                <div class="help-box" id="help-box" aria-live="polite">
+                    <div class="help-title">Need help?</div>
+                    <div class="help-text" id="help-content">Answer the question above to narrow your results. Tips for this step will appear here.</div>
+                </div>
+            </aside>
+
+            <!-- Results -->
+            <section>
+                <div class="results-bar">
+                    <div>
+                        <strong id="results-headline">Found <span id="results-display-count">0</span> cards</strong>
+                        <span style="color:#64748b;"> of <span id="results-display-total">0</span> total</span>
+                    </div>
+                    <div class="tabs" id="mode-tabs" style="display:none;">
+                        <button class="tab active" data-tab="cashback">Cash back (<span id="cashback-count">0</span>)</button>
+                        <button class="tab" data-tab="travel">Travel (<span id="travel-count">0</span>)</button>
+                    </div>
+                </div>
+
+                <div id="active-filters-line" class="results-bar" style="display:none;">
+                    <div style="display:flex;gap:.5rem;flex-wrap:wrap;" id="active-filters-chips"></div>
+                    <button class="btn btn-secondary" onclick="resetAllFilters()">Clear all</button>
+                </div>
+
+                <div class="cards-grid" id="cards-grid"></div>
+            </section>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+    // --- Header/Footer loader (copied from cards.html for consistency) ---
+    document.addEventListener('DOMContentLoaded', function() {
+        loadComponent('header.html', 'header-placeholder');
+        loadComponent('footer.html', 'footer-placeholder');
+        initializeCards().then(() => { initCoach(); });
+    });
+
+    function loadComponent(filename, placeholderId) {
+        const placeholder = document.getElementById(placeholderId);
+        fetch(filename).then(r => r.text()).then(html => {
+            if (filename === 'header.html') {
+                const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+                placeholder.innerHTML = cleanHtml;
+                const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
+                scripts.forEach(s => { try { eval(s); } catch(e) { console.error(e); } });
+            } else { placeholder.innerHTML = html; }
+        }).catch(() => { placeholder.innerHTML = ''; });
+    }
+
+    // --- Cards data, rendering, filters (trimmed/adapted from cards.html) ---
+    let allCards = [];
+    let filteredCards = [];
+
+    async function initializeCards() {
+        try {
+            let response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories&status=eq.active', {
+                headers: {
+                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
+                    'Content-Type': 'application/json', 'Prefer': 'return=representation'
+                }
+            });
+            if (!response.ok) throw new Error('db');
+            const databaseCards = await response.json();
+            const mapped = databaseCards.map(card => ({
+                id: card.id,
+                name: card.name,
+                type: card.type,
+                annualFee: card.annual_fee,
+                bankType: card.bank_type,
+                rewards: card.rewards_type,
+                image: card.image_url,
+                welcomeBonus: card.welcome_bonus || 'None',
+                practicalAdvice: card.practical_advice || '',
+                features: card.features || [],
+                perkCategories: card.perk_categories || [],
+                protectionCategories: card.protection_categories || [],
+                url: card.card_url,
+                status: card.status || 'active'
+            }));
+            allCards = mapped.filter(c => c.status === 'active');
+        } catch (e) {
+            // Fallback minimal sample
+            allCards = [
+                { id:1,name:'Capital One Venture X',type:'travel',annualFee:395,bankType:'capital-one',rewards:'miles',image:'images/venture-x.png',welcomeBonus:'75k miles',features:['2x miles','3x travel & dining'],perkCategories:['lounge-access','tsa-precheck','no-foreign-fees'],protectionCategories:['rental-car-insurance','trip-delay-cancellation'],url:'card-pages/venture-x.html',status:'active' },
+                { id:2,name:'Chase Sapphire Reserve',type:'travel',annualFee:795,bankType:'chase',rewards:'points',image:'images/sapphire-reserve.jpg',welcomeBonus:'60k points',features:['3x travel & dining'],perkCategories:['lounge-access','tsa-precheck'],protectionCategories:['rental-car-insurance','trip-delay-cancellation','lost-delayed-baggage'],url:'card-pages/sapphire-reserve.html',status:'active' },
+                { id:3,name:'Citi Double Cash',type:'cashback',annualFee:0,bankType:'citi',rewards:'cashback',image:'images/citi-double-cash.png',welcomeBonus:'',features:['2% on everything'],perkCategories:[],protectionCategories:['purchase-protection'],url:'card-pages/citi-double-cash.html',status:'active' }
+            ];
+        }
+        filteredCards = [...allCards];
+        renderCards(filteredCards);
+        updateResultsHeadline(filteredCards.length, allCards.length);
+    }
+
+    function generatePracticalAdvice(card) {
+        // Use database practical advice if available, otherwise generate it
+        if (card.practical_advice || card.practicalAdvice) {
+            return card.practical_advice || card.practicalAdvice;
+        }
+        // Generate practical advice based on card characteristics (same logic as cards.html)
+        if (card.annualFee === 0) {
+            if (card.type === 'cashback') {
+                return "Perfect starter card with no risk. Use for everyday spending and build credit history.";
+            } else if (card.type === 'hybrid') {
+                return "Great for renters! Pay rent with this card to earn points on your biggest monthly expense.";
+            } else {
+                return "No annual fee means this card pays for itself. Great for building credit and earning rewards.";
+            }
+        } else if (card.annualFee <= 95) {
+            if (card.type === 'travel') {
+                return "Low annual fee for solid travel benefits. Make sure you'll use the credits to offset the cost.";
+            } else {
+                return "Modest annual fee for enhanced rewards. Calculate if the extra earning rates justify the cost.";
+            }
+        } else if (card.annualFee <= 250) {
+            if (card.name.includes('Venture X')) {
+                return "At $395/year, this is premium travel at a discount. The $300 travel credit + 10k anniversary miles make it worth it if you travel 2+ times per year.";
+            } else {
+                return "Premium card with significant annual fee. Only worth it if you travel frequently and will use all the credits and benefits.";
+            }
+        } else {
+            if (card.name.includes('Platinum')) {
+                return "The $695 fee is steep, but the credits add up quickly. Only get this if you'll use airline credits, hotel credits, and lounge access regularly.";
+            } else if (card.name.includes('Reserve')) {
+                return "At $795/year, this is Chase's premium offering. The $300 travel credit helps, but you need to travel frequently to justify this cost.";
+            } else {
+                return "High annual fee card. Carefully calculate if the benefits outweigh the cost for your specific spending patterns.";
+            }
+        }
+    }
+
+    function createCardElement(card) {
+        const div = document.createElement('div');
+        div.className = 'card-item';
+        div.onclick = () => window.location.href = card.url;
+        const feeText = card.annualFee === 0 ? 'No AF' : `$${card.annualFee} AF`;
+        const welcomeBonus = card.welcomeBonus || 'None';
+        const earningRates = Array.isArray(card.features) ? card.features.slice(0,3).join(' • ') : '';
+        // Intentionally do not render filter tags on the card in Card Coach
+        const advice = generatePracticalAdvice(card);
+
+        div.innerHTML = `
+            <img src="${card.image}" alt="${card.name}" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="card-image-fallback" style="display: none;">${card.name}</div>
+            
+            <div class="card-header">
+                <h3 class="card-title">${card.name}</h3>
+            </div>
+            
+            <div class="card-meta-row">
+                <span class="meta-chip">${feeText}</span>
+                <span class="meta-chip">Welcome: ${welcomeBonus}</span>
+            </div>
+            
+            <div class="card-earning-rates">
+                <strong>Earning:</strong> ${earningRates || '1x on everything'}
+            </div>
+            
+            <div class="card-advice">
+                <div class="card-advice-label">Practical Advice</div>
+                <div class="card-advice-text">${advice}</div>
+            </div>
+        `;
+        return div;
+    }
+
+    function renderCards(cards) {
+        const grid = document.getElementById('cards-grid');
+        grid.innerHTML = '';
+        cards.forEach(c => grid.appendChild(createCardElement(c)));
+    }
+
+    function updateResultsHeadline(count, total) {
+        const c = document.getElementById('results-display-count');
+        const t = document.getElementById('results-display-total');
+        if (c) c.textContent = count; if (t) t.textContent = total;
+    }
+
+    // --- Filtering helpers (map to existing data fields) ---
+    function getIssuerCategory(card) {
+        const b = (card.bankType || '').toLowerCase();
+        const n = (card.name || '').toLowerCase();
+        if (b.includes('amex') || n.includes('american express')) return 'amex';
+        if (b.includes('chase') || n.includes('chase')) return 'chase';
+        if (b.includes('capital-one') || n.includes('capital one') || n.includes('venture')) return 'capital-one';
+        if (b.includes('citi') || n.includes('citi')) return 'citi';
+        if (b.includes('discover') || n.includes('discover')) return 'discover';
+        if (b.includes('wells') || n.includes('wells fargo')) return 'wells-fargo';
+        return 'other';
+    }
+
+    function applyFiltersTo(cards, filters) {
+        return cards.filter(card => {
+            for (const [k, values] of Object.entries(filters)) {
+                if (!values || values.length === 0) continue;
+                if (k === 'type') {
+                    // Handle arrays, single strings, and JSON-stringified arrays
+                    let cardType;
+                    if (Array.isArray(card.type)) {
+                        cardType = card.type;
+                    } else if (typeof card.type === 'string' && card.type.trim().startsWith('[') && card.type.trim().endsWith(']')) {
+                        try { cardType = JSON.parse(card.type); } catch(e) { cardType = [card.type]; }
+                    } else {
+                        cardType = [card.type];
+                    }
+                    if (!values.some(v => cardType.includes(v))) return false;
+                } else if (k === 'issuer') {
+                    if (!values.includes(getIssuerCategory(card))) return false;
+                } else if (k === 'perks') {
+                    const perks = card.perkCategories || [];
+                    if (!values.some(v => perks.includes(v))) return false;
+                } else if (k === 'protections') {
+                    const prots = card.protectionCategories || [];
+                    if (!values.some(v => prots.includes(v))) return false;
+                } else if (k === 'fee') {
+                    if (values.includes('0-100') && !(card.annualFee >= 0 && card.annualFee <= 100)) return false;
+                    if (values.includes('100-300') && !(card.annualFee >= 100 && card.annualFee <= 300)) return false;
+                    if (values.includes('300-500') && !(card.annualFee >= 300 && card.annualFee <= 500)) return false;
+                    if (values.includes('500+') && !(card.annualFee >= 500)) return false;
+                }
+            }
+            return true;
+        });
+    }
+
+    // --- Coach state & flow ---
+    const state = {
+        stepIndex: 0,
+        steps: [],
+        stage: null, // beginner | optimizer
+        mode: null,  // travel | cashback | either
+        baseFilters: {},
+        travelFilters: {},
+        cashbackFilters: {},
+        activeTab: 'cashback'
+    };
+
+    function initCoach() {
+        buildSteps();
+        bindWizardControls();
+        renderStep();
+        recomputeAndRender();
+    }
+
+    function buildSteps() {
+        state.steps = [
+            {
+                id: 'stage',
+                title: 'First rewards card or adding to your setup?',
+                type: 'radio',
+                options: [
+                    { label: 'Beginner – first rewards card', value: 'beginner' },
+                    { label: 'Optimizer – adding to a setup', value: 'optimizer' }
+                ],
+                help: 'If it’s your first card, we’ll keep it simple and fee-friendly. If you already have a couple, we’ll optimize around gaps.',
+                onAnswer: (val) => { state.stage = val; }
+            },
+            {
+                id: 'goal',
+                title: 'What’s your goal?',
+                type: 'radio',
+                options: [
+                    { label: 'Travel', value: 'travel' },
+                    { label: 'Cash back', value: 'cashback' },
+                    { label: 'Not sure / show both', value: 'either' }
+                ],
+                help: 'Travel cards earn bank points or airline/hotel miles; cash-back cards put money back on everyday purchases.',
+                onAnswer: (val) => { state.mode = val; configureModeTabs(); }
+            },
+            // Cashback branch
+            {
+                id: 'cb3', branch: 'cashback',
+                title: 'Must-have protection?',
+                type: 'radio',
+                options: [
+                    { label: 'Cell phone protection', value: 'cell-phone-protection' },
+                    { label: 'No preference', value: 'none' }
+                ],
+                help: 'Cell phone protection can reimburse repairs if you pay your monthly bill with the card.',
+                onAnswer: (val) => { state.cashbackFilters.protections = (val === 'none') ? [] : ['cell-phone-protection']; }
+            },
+            // Travel branch
+            {
+                id: 'tr1', branch: 'travel',
+                title: 'What do you want most right now?',
+                type: 'radio',
+                options: [
+                    { label: 'Flexible points', value: 'ecosystem' },
+                    { label: 'Airline perks', value: 'airline' },
+                    { label: 'Hotel perks', value: 'hotel' },
+                    { label: 'Not sure', value: 'none' }
+                ],
+                help: 'Flexible points (Amex/Chase/Cap1/Citi) can be transferred to many airlines/hotels. Co-brands focus on one airline or hotel.',
+                onAnswer: (val) => {
+                    delete state.travelFilters.issuer; delete state.travelFilters.type; delete state.travelFilters.perks;
+                    if (val === 'airline') { state.travelFilters.type = ['travel']; /* keep general */ }
+                    else if (val === 'hotel') { state.travelFilters.type = ['travel']; }
+                }
+            },
+            {
+                id: 'tr2', branch: 'travel',
+                title: 'International sometimes?',
+                type: 'radio',
+                options: [
+                    { label: 'Yes – no foreign transaction fees', value: 'no-foreign-fees' },
+                    { label: 'No / not sure', value: 'none' }
+                ],
+                help: 'No foreign transaction fees save 3% when abroad and often signal good global acceptance.',
+                onAnswer: (val) => { state.travelFilters.perks = (val === 'no-foreign-fees') ? ['no-foreign-fees'] : (state.travelFilters.perks || []).filter(p => p !== 'no-foreign-fees'); }
+            },
+            {
+                id: 'tr3', branch: 'travel',
+                title: 'Must-have perks (check any)',
+                type: 'checkbox',
+                options: [
+                    { label: 'Lounge access', value: 'lounge-access' },
+                    { label: 'TSA PreCheck / Global Entry', value: 'tsa-precheck' },
+                    { label: 'CLEAR', value: 'clear' }
+                ],
+                help: 'Perks like lounges or PreCheck reduce travel friction. Pick only what you’ll actually use this year.',
+                onAnswer: (vals) => { state.travelFilters.perks = vals; }
+            },
+            {
+                id: 'tr3b', branch: 'travel',
+                title: 'Strong trip/rental protections?',
+                type: 'checkbox',
+                options: [
+                    { label: 'Trip protections', value: 'trip-delay-cancellation' },
+                    { label: 'Rental car CDW', value: 'rental-car-insurance' }
+                ],
+                help: 'Good protections can be worth more than points in a bad day—useful for road trips and weather delays.',
+                onAnswer: (vals) => { state.travelFilters.protections = vals; }
+            },
+            {
+                id: 'tr4', branch: 'travel',
+                title: 'Ecosystem preference (optional)',
+                type: 'checkbox',
+                options: [
+                    { label: 'Amex', value: 'amex' },
+                    { label: 'Chase', value: 'chase' },
+                    { label: 'Capital One', value: 'capital-one' },
+                    { label: 'Citi', value: 'citi' }
+                ],
+                help: 'Picking one bank’s ecosystem keeps points together and unlocks stronger redemptions via transfers.',
+                onAnswer: (vals) => { state.travelFilters.issuer = vals; }
+            }
+        ];
+    }
+
+    function visibleSteps() {
+        return state.steps.filter(s => {
+            if (!s.branch) return true;
+            if (state.mode === 'travel') return s.branch === 'travel';
+            if (state.mode === 'cashback') return s.branch === 'cashback';
+            if (state.mode === 'either') return false; // no travel-only Qs in either mode
+            return false;
+        });
+    }
+
+    function bindWizardControls() {
+        document.getElementById('back-btn').addEventListener('click', () => {
+            if (state.stepIndex > 0) { state.stepIndex--; renderStep(); }
+        });
+        document.getElementById('next-btn').addEventListener('click', () => {
+            const steps = visibleSteps();
+            if (state.stepIndex < steps.length - 1) { state.stepIndex++; renderStep(); }
+        });
+        document.getElementById('mode-tabs').addEventListener('click', (e) => {
+            const btn = e.target.closest('.tab'); if (!btn) return;
+            document.querySelectorAll('#mode-tabs .tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            state.activeTab = btn.dataset.tab;
+            recomputeAndRender();
+        });
+    }
+
+    function renderStep() {
+        const steps = visibleSteps();
+        const total = Math.max(steps.length, 1);
+        const current = Math.min(state.stepIndex, total - 1);
+        state.stepIndex = current;
+        const step = steps[current];
+        const container = document.getElementById('steps-container');
+        const bar = document.getElementById('progress-bar');
+
+        if (!step) { container.innerHTML = '<div style="color:#64748b;">All set. Adjust answers on the left anytime.</div>'; bar.style.width = '100%'; updateHelp(null); return; }
+
+        const idx = current + 1; bar.style.width = ((idx / total) * 100) + '%';
+
+        // Build options UI
+        const selected = getCurrentAnswer(step.id);
+        let optionsHtml = '';
+        if (step.type === 'radio') {
+            optionsHtml = step.options.map(opt => {
+                const checked = selected === opt.value ? 'checked' : '';
+                return `<label class="option ${checked? 'active':''}"><input type="radio" name="${step.id}" value="${opt.value}" ${checked}/> ${opt.label}</label>`;
+            }).join('');
+        } else if (step.type === 'checkbox') {
+            const selectedArr = Array.isArray(selected) ? selected : [];
+            optionsHtml = step.options.map(opt => {
+                const checked = selectedArr.includes(opt.value) ? 'checked' : '';
+                return `<label class="option ${checked? 'active':''}"><input type="checkbox" name="${step.id}" value="${opt.value}" ${checked}/> ${opt.label}</label>`;
+            }).join('');
+        }
+
+        container.innerHTML = `<div class="step"><h3>${step.title}</h3><div class="options">${optionsHtml}</div></div>`;
+        updateHelp(step);
+
+        // Wire inputs
+        container.querySelectorAll('input').forEach(input => {
+            input.addEventListener('change', () => {
+                if (step.type === 'radio') { step.onAnswer(input.value); }
+                else if (step.type === 'checkbox') {
+                    const vals = Array.from(container.querySelectorAll('input:checked')).map(cb => cb.value);
+                    step.onAnswer(vals);
+                }
+                // Visual active state
+                container.querySelectorAll('.option').forEach(l => l.classList.remove('active'));
+                container.querySelectorAll('input:checked').forEach(cb => cb.closest('.option').classList.add('active'));
+                configureModeTabs();
+                recomputeAndRender();
+            });
+        });
+    }
+
+    function updateHelp(step) {
+        const helpEl = document.getElementById('help-content');
+        const box = document.getElementById('help-box');
+        if (!helpEl || !box) return;
+        if (!step || !step.help) {
+            helpEl.textContent = 'Answer the question above to narrow your results. Tips for this step will appear here.';
+            return;
+        }
+        helpEl.textContent = step.help;
+    }
+
+    function getCurrentAnswer(stepId) {
+        if (stepId === 'stage') return state.stage;
+        if (stepId === 'goal') return state.mode;
+        if (stepId.startsWith('tr')) return null; // derived from filters
+        if (stepId.startsWith('cb')) return null;
+        return null;
+    }
+
+    function configureModeTabs() {
+        const tabs = document.getElementById('mode-tabs');
+        if (state.mode === 'either') { tabs.style.display = 'flex'; }
+        else { tabs.style.display = 'none'; state.activeTab = state.mode || 'cashback'; document.querySelectorAll('#mode-tabs .tab').forEach((t,i)=> t.classList.toggle('active', i===0)); }
+    }
+
+    function recomputeAndRender() {
+        const total = allCards.length;
+        let showCards = [];
+
+        if (state.mode === 'either') {
+            // Render per tab
+            const cashFilters = mergeFilters({ type: ['cashback'] }, state.cashbackFilters);
+            const travFilters = mergeFilters({ type: ['travel'] }, state.travelFilters);
+            const cashCards = applyFiltersTo(allCards, cashFilters);
+            const travCards = applyFiltersTo(allCards, travFilters);
+            document.getElementById('cashback-count').textContent = cashCards.length;
+            document.getElementById('travel-count').textContent = travCards.length;
+            showCards = state.activeTab === 'cashback' ? cashCards : travCards;
+            updateActiveFilterChipsUI( state.activeTab === 'cashback' ? cashFilters : travFilters );
+            updateResultsHeadline(showCards.length, total);
+            renderCards(showCards);
+            return;
+        }
+
+        // Single mode
+        const base = {};
+        if (state.mode === 'cashback') base.type = ['cashback'];
+        if (state.mode === 'travel') base.type = ['travel'];
+        const merged = mergeFilters(base, state.mode === 'travel' ? state.travelFilters : state.cashbackFilters);
+        const cards = applyFiltersTo(allCards, merged);
+        updateActiveFilterChipsUI(merged);
+        updateResultsHeadline(cards.length, total);
+        renderCards(cards);
+    }
+
+    function mergeFilters(a, b) {
+        const out = JSON.parse(JSON.stringify(a || {}));
+        Object.entries(b || {}).forEach(([k,v]) => { if (v && v.length) out[k] = Array.isArray(v) ? [...v] : [v]; });
+        return out;
+    }
+
+    function updateActiveFilterChipsUI(filters) {
+        const container = document.getElementById('active-filters-chips');
+        const line = document.getElementById('active-filters-line');
+        container.innerHTML = '';
+        const entries = Object.entries(filters || {}).filter(([_,vals]) => vals && vals.length);
+        if (entries.length === 0) { line.style.display = 'none'; return; }
+        line.style.display = 'flex';
+        const nameMap = {
+            type:{travel:'Travel',cashback:'Cash back'},
+            issuer:{'amex':'American Express','chase':'Chase','capital-one':'Capital One','citi':'Citi','wells-fargo':'Wells Fargo','discover':'Discover'},
+            perks:{'lounge-access':'Lounge access','tsa-precheck':'TSA Pre/GE','clear':'CLEAR','no-foreign-fees':'No FTF'},
+            protections:{'trip-delay-cancellation':'Trip protections','rental-car-insurance':'Rental CDW','cell-phone-protection':'Cell phone protection'}
+        };
+        entries.forEach(([k,vals]) => {
+            vals.forEach(v => {
+                const chip = document.createElement('div');
+                chip.className = 'meta-chip';
+                chip.style.background = '#059669'; chip.style.color = 'white'; chip.style.borderRadius = '20px';
+                chip.style.display = 'inline-flex'; chip.style.alignItems = 'center'; chip.style.gap = '.4rem';
+                chip.innerHTML = `${(nameMap[k]&&nameMap[k][v])||v} <button style="all:unset; cursor:pointer; font-weight:700;">×</button>`;
+                chip.querySelector('button').addEventListener('click', ()=>{ removeFilter(k, v); });
+                container.appendChild(chip);
+            });
+        });
+    }
+
+    function removeFilter(key, value) {
+        const target = state.mode === 'travel' ? state.travelFilters : state.cashbackFilters;
+        if (!target[key]) return; target[key] = target[key].filter(v => v !== value); if (target[key].length === 0) delete target[key];
+        recomputeAndRender();
+    }
+
+    function resetAllFilters() {
+        state.travelFilters = {}; state.cashbackFilters = {}; recomputeAndRender();
+    }
+    </script>
+</body>
+</html>
+
