@@ -431,6 +431,11 @@
             <button class="btn" onclick="setupDatabase()">🔧 Setup Database</button>
             <button class="btn" onclick="addWellsFargoActiveCash()" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">🔧 Add Wells Fargo Card</button>
             <button class="btn" onclick="addCitiDoubleCash()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Citi Double Cash</button>
+            <button class="btn" onclick="addAmazonPrimeVisa()" style="background: linear-gradient(135deg, #ff9500 0%, #ff6b35 100%);">🔧 Add Amazon Prime Visa</button>
+            <button class="btn" onclick="addDeltaSkyMilesReserve()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Delta Reserve</button>
+            <button class="btn" onclick="addAmexGreen()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Amex Green</button>
+            <button class="btn" onclick="addBlueCashPreferred()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Blue Cash Preferred</button>
+            <button class="btn" onclick="addCapitalOneVenture()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Capital One Venture</button>
         </div>
 
         <div id="cards-container">
@@ -649,6 +654,14 @@
                             Travel
                         </label>
                         <label>
+                            <input type="checkbox" name="earningCategories" value="hotels">
+                            Hotels
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="flights">
+                            Flights
+                        </label>
+                        <label>
                             <input type="checkbox" name="earningCategories" value="transit">
                             Transit
                         </label>
@@ -768,6 +781,20 @@
                     setTimeout(() => {
                         window.addCapitalOneSavor();
                     }, 2500);
+                }
+                
+                // Try to add American Express Green card after successful connection
+                if (typeof window.addAmexGreen === 'function') {
+                    setTimeout(() => {
+                        window.addAmexGreen();
+                    }, 3000);
+                }
+                
+                // Try to add Wells Fargo Autograph card after successful connection
+                if (typeof window.addWellsFargoAutograph === 'function') {
+                    setTimeout(() => {
+                        window.addWellsFargoAutograph();
+                    }, 3500);
                 }
                 
                 updateStatus('✅ Connected to Supabase database successfully!', 'success');
@@ -1550,7 +1577,24 @@
                     .eq('name', 'American Express® Gold Card');
 
                 if (existingCards && existingCards.length > 0) {
-                    console.log('American Express® Gold Card already exists in database');
+                    console.log('American Express® Gold Card already exists, updating with correct data...');
+                    // Update the existing card to ensure it has the correct perk categories
+                    const updateData = {
+                        perk_categories: ["no-foreign-fees", "metal-card"],
+                        earning_categories: ["dining", "groceries", "travel"],
+                        protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                    };
+                    
+                    const { data: updateResult, error: updateError } = await supabase
+                        .from('cards')
+                        .update(updateData)
+                        .eq('name', 'American Express® Gold Card');
+                    
+                    if (updateError) {
+                        console.error('Error updating American Express® Gold Card:', updateError);
+                    } else {
+                        console.log('✅ American Express® Gold Card updated successfully - removed lounge access!');
+                    }
                     return;
                 }
 
@@ -1646,7 +1690,24 @@
                     .eq('name', 'Chase Sapphire Preferred');
 
                 if (existingCards && existingCards.length > 0) {
-                    console.log('Chase Sapphire Preferred already exists in database');
+                    console.log('Chase Sapphire Preferred already exists, updating with correct data...');
+                    // Update the existing card to ensure it has the correct perk categories (NO lounge access)
+                    const updateData = {
+                        perk_categories: ["no-foreign-fees"],
+                        earning_categories: ["dining", "travel", "groceries", "streaming"],
+                        protection_categories: ["trip-cancellation-interruption", "trip-delay", "baggage-delay", "lost-damaged-luggage", "rental-car-insurance", "travel-accident-insurance", "purchase-protection", "extended-warranty"]
+                    };
+                    
+                    const { data: updateResult, error: updateError } = await supabase
+                        .from('cards')
+                        .update(updateData)
+                        .eq('name', 'Chase Sapphire Preferred');
+                    
+                    if (updateError) {
+                        console.error('Error updating Chase Sapphire Preferred:', updateError);
+                    } else {
+                        console.log('✅ Chase Sapphire Preferred updated successfully - confirmed NO lounge access!');
+                    }
                     return;
                 }
 
@@ -1663,7 +1724,7 @@
                     practical_advice: "Best starter travel card: $95 fee, 3x dining and easy partner transfers; worth it if you'll use the $50 hotel credit and book travel yearly.",
                     card_url: "card-pages/chase-sapphire-preferred.html",
                     status: "active",
-                    perk_categories: ["no-foreign-fees", "lounge-access"],
+                    perk_categories: ["no-foreign-fees"],
                     earning_categories: ["dining", "travel", "groceries", "streaming"],
                     protection_categories: ["trip-cancellation-interruption", "trip-delay", "baggage-delay", "lost-damaged-luggage", "rental-car-insurance", "travel-accident-insurance", "purchase-protection", "extended-warranty"]
                 };
@@ -1777,6 +1838,54 @@
                 }
             } catch (error) {
                 console.error('Error in addWellsFargoAutographJourney:', error);
+            }
+        }
+
+        // Auto-add Wells Fargo Autograph card
+        async function addWellsFargoAutograph() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Wells Fargo Autograph®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Wells Fargo Autograph® already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Wells Fargo Autograph®",
+                    type: ["travel"],
+                    annual_fee: 0,
+                    bank_type: "wells-fargo",
+                    rewards_type: ["points"],
+                    image_url: "images/autograph.png",
+                    features: ["3x dining", "3x travel", "3x gas", "3x transit", "3x phone plans", "3x streaming", "1x everything else"],
+                    welcome_bonus: "20k Points",
+                    practical_advice: "Simple $0 travel card: 3x travel & dining, no credits to juggle. Upgrade to Autograph Journey if you'll use the $50 airline credit.",
+                    card_url: "card-pages/wells-fargo-autograph.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["dining", "travel", "gas", "transit", "streaming", "telecom"],
+                    protection_categories: ["cell-phone-protection", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Wells Fargo Autograph®:', error);
+                } else {
+                    console.log('✅ Wells Fargo Autograph® added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addWellsFargoAutograph:', error);
             }
         }
 
@@ -1972,6 +2081,394 @@
             }
         }
 
+        // Auto-add Delta SkyMiles Reserve American Express Card
+        async function addDeltaSkyMilesReserve() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Delta SkyMiles® Reserve American Express Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Delta SkyMiles® Reserve American Express Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Delta SkyMiles® Reserve American Express Card",
+                    type: ["travel"],
+                    annual_fee: 650,
+                    bank_type: "amex",
+                    rewards_type: ["miles"],
+                    image_url: "images/delta-reserve.avif",
+                    features: ["3x flights (Delta)", "1x everything else"],
+                    welcome_bonus: "70k Miles",
+                    practical_advice: "Great if you fly Delta often and will actually use the lounges, the companion ticket, and the monthly credits; otherwise the $650 hurts.",
+                    card_url: "card-pages/delta-reserve.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "free-checked-bags", "priority-boarding", "automatic-elite-status", "metal-card", "no-foreign-fees"],
+                    earning_categories: ["flights"],
+                    airline_hotels: ["delta"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "cell-phone-protection", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Delta SkyMiles® Reserve American Express Card:', error);
+                } else {
+                    console.log('✅ Delta SkyMiles® Reserve American Express Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addDeltaSkyMilesReserve:', error);
+            }
+        }
+
+        // Auto-add United Club Infinite Card
+        async function addUnitedClubInfinite() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'United Club℠ Infinite');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('United Club℠ Infinite already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "United Club℠ Infinite",
+                    type: ["travel"],
+                    annual_fee: 695,
+                    bank_type: "chase",
+                    rewards_type: ["miles"],
+                    image_url: "images/united_club_infinite_card.png",
+                    features: ["4x united purchases", "2x travel", "2x dining"],
+                    welcome_bonus: "80k Miles",
+                    practical_advice: "Fly United a lot? The lounge, 2 bags, Premier Access, and credits can offset $695; if you rarely use clubs, this will feel expensive.",
+                    card_url: "card-pages/united-club-infinite.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "free-checked-bags", "priority-boarding", "automatic-elite-status", "metal-card", "no-foreign-fees"],
+                    earning_categories: ["dining", "travel", "united-purchases"],
+                    airline_hotels: ["united"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding United Club℠ Infinite:', error);
+                } else {
+                    console.log('✅ United Club℠ Infinite added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUnitedClubInfinite:', error);
+            }
+        }
+
+        // Auto-add Citi AAdvantage Executive Card
+        async function addCitiAAdvantageExecutive() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi® / AAdvantage® Executive');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi® / AAdvantage® Executive already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi® / AAdvantage® Executive",
+                    type: ["travel"],
+                    annual_fee: 595,
+                    bank_type: "citi",
+                    rewards_type: ["miles"],
+                    image_url: "images/citi_aadavntage.png",
+                    features: ["4x american airlines", "10x hotels via aadvantagehotels.com", "10x car rentals via aadvantagecars.com"],
+                    welcome_bonus: "70k Miles",
+                    practical_advice: "If you'll visit Admirals Clubs several times a year, it's a win; if not, the fee and monthly credits will feel like homework.",
+                    card_url: "card-pages/citi-aadvantage-executive.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "free-checked-bags", "priority-boarding", "automatic-elite-status", "metal-card", "no-foreign-fees"],
+                    earning_categories: ["american-airlines", "hotels", "car-rentals"],
+                    airline_hotels: ["american-airlines"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi® / AAdvantage® Executive:', error);
+                } else {
+                    console.log('✅ Citi® / AAdvantage® Executive added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiAAdvantageExecutive:', error);
+            }
+        }
+
+        // Auto-add Capital One Venture Rewards Card
+        async function addCapitalOneVenture() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Capital One Venture Rewards');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Capital One Venture Rewards already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Capital One Venture Rewards",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "capital-one",
+                    rewards_type: ["miles"],
+                    image_url: "images/venture.png",
+                    features: ["2x miles on everything", "5x hotels (portal)", "5x rental cars (portal)"],
+                    welcome_bonus: "75k Miles",
+                    practical_advice: "Simple 2x + 5x portal; travel often? pick Venture X—the $300 credit + 10k miles usually wipe out its $395 fee.",
+                    card_url: "card-pages/capital-one-venture.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "tsa-precheck"],
+                    earning_categories: ["flat-rate", "travel"],
+                    protection_categories: ["trip-delay-cancellation", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Capital One Venture Rewards:', error);
+                } else {
+                    console.log('✅ Capital One Venture Rewards added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCapitalOneVenture:', error);
+            }
+        }
+
+        // Auto-add American Express Green Card
+        async function addAmexGreen() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'American Express® Green Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('American Express® Green Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "American Express® Green Card",
+                    type: ["travel"],
+                    annual_fee: 150,
+                    bank_type: "amex",
+                    rewards_type: ["points"],
+                    image_url: "images/amex-green.png",
+                    features: ["3x restaurants worldwide", "3x transit (U.S. rideshare, taxis, subways, buses, trains, tolls, parking)", "3x travel (flights, hotels, cruises, tours, car rentals)"],
+                    welcome_bonus: "40k Points",
+                    practical_advice: "Easy 3x on dining, travel, and transit; use the $209 Clear Plus credit or the $150 fee won't pencil out.",
+                    card_url: "card-pages/amex-green.html",
+                    status: "active",
+                    perk_categories: ["clear", "no-foreign-fees"],
+                    earning_categories: ["dining", "travel", "transit"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding American Express® Green Card:', error);
+                } else {
+                    console.log('✅ American Express® Green Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAmexGreen:', error);
+            }
+        }
+
+        // Auto-add Southwest Rapid Rewards Priority Credit Card
+        async function addSouthwestPriority() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Southwest Rapid Rewards Priority Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Southwest Rapid Rewards Priority Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Southwest Rapid Rewards Priority Credit Card",
+                    type: ["travel"],
+                    annual_fee: 229,
+                    bank_type: "chase",
+                    rewards_type: ["points"],
+                    image_url: "images/southwest-priority.png",
+                    features: ["4x southwest", "2x gas", "2x dining"],
+                    welcome_bonus: "100k Points",
+                    practical_advice: "Best for Southwest regulars who want bag + seat perks; if you rarely fly Southwest, the $229 annual fee will feel heavy.",
+                    card_url: "card-pages/southwest-priority.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees"],
+                    earning_categories: ["flights", "gas", "dining"],
+                    airline_hotels: ["southwest"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Southwest Rapid Rewards Priority Credit Card:', error);
+                } else {
+                    console.log('✅ Southwest Rapid Rewards Priority Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addSouthwestPriority:', error);
+            }
+        }
+
+        // Auto-add Amazon Prime Visa card
+        async function addAmazonPrimeVisa() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Amazon Prime Visa');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Amazon Prime Visa already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Amazon Prime Visa",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "chase",
+                    rewards_type: ["cashback"],
+                    image_url: "images/amazon.png",
+                    features: ["5x amazon.com, amazon fresh & whole foods", "5x chase travel", "2x gas, restaurants & U.S. transit/commuting", "1x everything else"],
+                    welcome_bonus: "$150 Amazon Gift Card",
+                    practical_advice: "If you already pay for Prime, this is easy 5% back on Amazon—no annual fee, no brain space required.",
+                    card_url: "card-pages/amazon-prime-visa.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["online", "groceries", "dining", "gas", "transit"],
+                    protection_categories: ["purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Amazon Prime Visa:', error);
+                } else {
+                    console.log('✅ Amazon Prime Visa added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAmazonPrimeVisa:', error);
+            }
+        }
+
+        // Auto-add Blue Cash Preferred Card from American Express
+        async function addBlueCashPreferred() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Blue Cash Preferred® Card from American Express');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Blue Cash Preferred® Card from American Express already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Blue Cash Preferred® Card from American Express",
+                    type: ["cashback"],
+                    annual_fee: 95,
+                    bank_type: "amex",
+                    rewards_type: ["cashback"],
+                    image_url: "images/blue-cash-preferred.png",
+                    features: ["6% U.S. supermarkets (up to $6,000/year, then 1%)", "6% select U.S. streaming services", "3% U.S. gas stations", "3% transit (rideshare, taxis, buses, trains, tolls, parking)", "1% everything else"],
+                    welcome_bonus: "$250 statement credit after $3,000 spend in 6 months",
+                    practical_advice: "Big on groceries and streaming? 6% cash back beats the $95 fee fast—just watch the $6,000 grocery cap.",
+                    card_url: "card-pages/amex-blue-cash-preferred.html",
+                    status: "active",
+                    perk_categories: ["amex-offers"],
+                    earning_categories: ["groceries", "streaming", "gas", "transit"],
+                    protection_categories: ["purchase-protection", "extended-warranty", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Blue Cash Preferred® Card from American Express:', error);
+                } else {
+                    console.log('✅ Blue Cash Preferred® Card from American Express added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addBlueCashPreferred:', error);
+            }
+        }
+
         // Call this function after database is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Add a delay to ensure database is fully loaded
@@ -1982,10 +2479,17 @@
             setTimeout(addChaseSapphirePreferred, 4000);
             setTimeout(addChaseFreedomUnlimited, 4500);
             setTimeout(addWellsFargoAutographJourney, 5000);
-            setTimeout(addAmexBlueBusinessPlus, 5500);
-            setTimeout(addBiltMastercard, 6000);
-            setTimeout(addCitiCustomCash, 6500);
-            setTimeout(addDiscoverItCashBack, 7000);
+            setTimeout(addWellsFargoAutograph, 5500);
+            setTimeout(addAmexBlueBusinessPlus, 6000);
+            setTimeout(addBiltMastercard, 6500);
+            setTimeout(addCitiCustomCash, 7000);
+            setTimeout(addDiscoverItCashBack, 7500);
+            setTimeout(addDeltaSkyMilesReserve, 8000);
+            setTimeout(addUnitedClubInfinite, 8500);
+            setTimeout(addCitiAAdvantageExecutive, 9000);
+            setTimeout(addSouthwestPriority, 9500);
+            setTimeout(addAmazonPrimeVisa, 10000);
+            setTimeout(addBlueCashPreferred, 10500);
         });
 
         // Also try to add the card when database connection is successful
@@ -1995,12 +2499,27 @@
         window.addAmexGold = addAmexGold;
         window.addCapitalOneSavor = addCapitalOneSavor;
         window.addChaseSapphirePreferred = addChaseSapphirePreferred;
+        
+        // Helper function to fix lounge access data
+        window.fixLoungeAccessData = async function() {
+            console.log('🔧 Fixing lounge access data...');
+            await addAmexGold(); // This will update Gold Card to remove lounge access
+            await addChaseSapphirePreferred(); // This will update Sapphire Preferred to remove lounge access
+            console.log('✅ Lounge access data fix completed!');
+        };
         window.addChaseFreedomUnlimited = addChaseFreedomUnlimited;
         window.addWellsFargoAutographJourney = addWellsFargoAutographJourney;
+        window.addWellsFargoAutograph = addWellsFargoAutograph;
         window.addAmexBlueBusinessPlus = addAmexBlueBusinessPlus;
         window.addBiltMastercard = addBiltMastercard;
         window.addCitiCustomCash = addCitiCustomCash;
         window.addDiscoverItCashBack = addDiscoverItCashBack;
+        window.addDeltaSkyMilesReserve = addDeltaSkyMilesReserve;
+        window.addUnitedClubInfinite = addUnitedClubInfinite;
+        window.addCitiAAdvantageExecutive = addCitiAAdvantageExecutive;
+        window.addSouthwestPriority = addSouthwestPriority;
+        window.addAmazonPrimeVisa = addAmazonPrimeVisa;
+        window.addBlueCashPreferred = addBlueCashPreferred;
     </script>
 </body>
 </html> 

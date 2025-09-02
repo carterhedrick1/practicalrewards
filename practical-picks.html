@@ -662,17 +662,13 @@
                     
                     console.log(`🔍 Filtering ${card.name} for earning_any:`, values, 'Card has earning categories:', earningCats);
                     
-                    // Check if card matches any selected earning category (OR logic)
+                    // Check if card matches ANY selected earning category (OR logic)
                     const hasAnyCategory = earningCats.some(cat => selected.has(cat));
                     
-                    // Special handling for "flat-rate" - only match cards that explicitly have flat-rate in earning_categories
-                    const wantsFlatRate = selected.has('flat-rate');
-                    const cardHasFlatRate = earningCats.includes('flat-rate');
+                    console.log(`🔍 ${card.name}: hasAnyCategory=${hasAnyCategory}`);
                     
-                    console.log(`🔍 ${card.name}: hasAnyCategory=${hasAnyCategory}, wantsFlatRate=${wantsFlatRate}, cardHasFlatRate=${cardHasFlatRate}`);
-                    
-                    if (!(hasAnyCategory || (wantsFlatRate && cardHasFlatRate))) {
-                        console.log(`❌ ${card.name} filtered out`);
+                    if (!hasAnyCategory) {
+                        console.log(`❌ ${card.name} filtered out - no matching earning categories`);
                         return false;
                     } else {
                         console.log(`✅ ${card.name} passed earning filter`);
@@ -771,6 +767,8 @@
                     { label: 'Gas', value: 'gas' },
                     { label: 'Transit', value: 'transit' },
                     { label: 'Travel', value: 'travel' },
+                    { label: 'Hotels', value: 'hotels' },
+                    { label: 'Flights', value: 'flights' },
                     { label: 'Drugstores', value: 'drugstores' },
                     { label: 'Online', value: 'online' },
                     { label: 'Streaming', value: 'streaming' },
@@ -779,11 +777,13 @@
                 ],
                 help: 'Pick 1–3. We’ll keep cards that bonus at least one of them. More boxes = fewer results.',
                 onAnswer: (vals) => {
-                    const current = new Set(state.cashbackFilters['earning_any'] || []);
-                    vals.forEach(v => current.add(v));
-                    state.cashbackFilters['earning_any'] = Array.from(current);
+                    // Replace the earning_any array with the new selections (allows deselection)
+                    state.cashbackFilters['earning_any'] = [...vals];
                     if (vals.length > 0) {
                         state.lastApplied = { key: 'earning_any', value: vals[vals.length - 1] };
+                    } else {
+                        // Clear lastApplied if no categories are selected
+                        state.lastApplied = null;
                     }
                 }
             },
@@ -884,6 +884,9 @@
                     { label: 'Groceries', value: 'groceries' },
                     { label: 'Gas', value: 'gas' },
                     { label: 'Transit', value: 'transit' },
+                    { label: 'Travel', value: 'travel' },
+                    { label: 'Hotels', value: 'hotels' },
+                    { label: 'Flights', value: 'flights' },
                     { label: 'Online', value: 'online' },
                     { label: 'Drugstores', value: 'drugstores' },
                     { label: 'Streaming', value: 'streaming' },
@@ -895,6 +898,9 @@
                     state.travelFilters['earning_any'] = vals; 
                     if (vals.length > 0) {
                         state.lastApplied = { key: 'earning_any', value: vals[vals.length - 1] };
+                    } else {
+                        // Clear lastApplied if no categories are selected
+                        state.lastApplied = null;
                     }
                 }
             },
@@ -909,15 +915,17 @@
                 ],
                 help: 'Make it Must-have only if you will fly a few times and actually use lounges—this narrows results fast.',
                 onAnswer: (val) => {
-                    const arr = new Set(state.travelFilters.perks || []);
                     if (val === 'must') { 
-                        arr.add('lounge-access'); 
+                        // When lounge access is Must-have, ONLY filter for lounge access
+                        state.travelFilters.perks = ['lounge-access'];
                         state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
                     } else { 
+                        // When not must-have, remove lounge-access but keep other perks
+                        const arr = new Set(state.travelFilters.perks || []);
                         arr.delete('lounge-access'); 
+                        state.travelFilters.perks = Array.from(arr);
                         state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
                     }
-                    state.travelFilters.perks = Array.from(arr);
                 }
             },
             {
@@ -1074,6 +1082,18 @@
         container.innerHTML = `<div class="step"><h3>${step.title}</h3><div class="${optionsClass}">${optionsHtml}</div></div>`;
         updateHelp(step);
 
+        // Show/hide Next button based on step type and position
+        const nextBtn = document.getElementById('next-btn');
+        const isLastStep = current >= steps.length - 1;
+        
+        if (step.type === 'checkbox' && !isLastStep) {
+            // Show Next button for checkbox steps (except the last one)
+            nextBtn.style.display = 'inline-block';
+        } else {
+            // Hide Next button for radio steps (they auto-advance) and last step
+            nextBtn.style.display = 'none';
+        }
+
         // Wire inputs and make entire options clickable
         container.querySelectorAll('.option').forEach(option => {
             const input = option.querySelector('input');
@@ -1141,7 +1161,16 @@
     function getCurrentAnswer(stepId) {
         if (stepId === 'stage') return state.stage;
         if (stepId === 'goal') return state.mode;
-        if (stepId.startsWith('tr')) return null; // derived from filters
+        
+        // Return current filter state for specific steps
+        if (stepId === 'cb2') return state.cashbackFilters['earning_any'] || [];
+        if (stepId === 'cb3') return state.cashbackFilters.protections || [];
+        if (stepId === 'tr1b') return state.travelFilters['airline-hotel'] || [];
+        if (stepId === 'tr3') return state.travelFilters['earning_any'] || [];
+        if (stepId === 'tr5') return state.travelFilters.protections || [];
+        
+        // For other travel/cashback steps, derive from filters or return null
+        if (stepId.startsWith('tr')) return null;
         if (stepId.startsWith('cb')) return null;
         return null;
     }
@@ -1241,7 +1270,7 @@
             perks:{'lounge-access':'Lounge access','tsa-precheck':'TSA PreCheck','clear':'CLEAR','no-foreign-fees':'No FTF','free-checked-bags':'Free checked bags','priority-boarding':'Priority boarding','annual-free-night':'Annual free night','automatic-elite-status':'Elite status','rotating':'Rotating','flat-rate':'Flat rate'},
             'airline-hotel':{'delta':'Delta','united':'United','american':'American','southwest':'Southwest','jetblue':'JetBlue','alaska':'Alaska','marriott':'Marriott','hilton':'Hilton','hyatt':'Hyatt','ihg':'IHG','wyndham':'Wyndham','choice':'Choice'},
             protections:{'trip-delay-cancellation':'Trip protections','rental-car-insurance':'Rental CDW','cell-phone-protection':'Cell phone protection','lost-delayed-baggage':'Lost/Delayed baggage'},
-            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment'}
+            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','hotels':'Hotels','flights':'Flights','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment'}
         };
         entries.forEach(([k,vals]) => {
             vals.forEach(v => {
@@ -1285,7 +1314,7 @@
             perks:{'lounge-access':'Lounge access','no-foreign-fees':'No FTF'},
             protections:{'trip-delay-cancellation':'Trip protections','rental-car-insurance':'Rental CDW','cell-phone-protection':'Cell phone protection','lost-delayed-baggage':'Lost/Delayed baggage'},
             'airline-hotel':{'delta':'Delta','united':'United','american':'American','southwest':'Southwest','jetblue':'JetBlue','alaska':'Alaska','marriott':'Marriott','hilton':'Hilton','hyatt':'Hyatt','ihg':'IHG','wyndham':'Wyndham','choice':'Choice'},
-            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment'}
+            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','hotels':'Hotels','flights':'Flights','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment'}
         };
         const last = state.lastApplied;
         const lastLabel = last && nameMap[last.key] ? (nameMap[last.key][last.value] || last.value) : 'last filter';

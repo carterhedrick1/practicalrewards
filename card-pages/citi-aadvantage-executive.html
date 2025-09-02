@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citi® / AAdvantage® Executive - Practical Rewards</title>
+    <link rel="stylesheet" href="../../css/styles.css?v=2.0">
+    <link rel="stylesheet" href="./card-styles.css?v=2.0">
+</head>
+<body>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
+
+    <div class="card-container">
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Citi® / AAdvantage® Executive</h1>
+                    <p class="hero-subtitle">American Airlines Premium Travel Card</p>
+                    <div class="hero-card-container">
+                        <div class="hero-card">
+                            <img src="../../images/citi_aadavntage.png" alt="Citi AAdvantage Executive" class="hero-card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hero-card-fallback" style="display: none;">
+                                <div class="card-preview">
+                                    <div class="card-chip"></div>
+                                    <div class="card-logo">Citi</div>
+                                    <div class="card-name">AAdvantage Executive</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-info">
+                    <div class="info-section">
+                        <div class="info-row">
+                            <span class="info-label">Annual Fee</span>
+                            <span class="info-value">$595</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Earning Rate</span>
+                            <span class="info-value">4x american airlines purchases • 10x hotels via aadvantagehotels.com • 10x car rentals via aadvantagecars.com • 1x other purchases</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Welcome Bonus</span>
+                            <span class="info-value">70,000 miles after $7,000 spend in 3 months</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Card Material</span>
+                            <span class="info-value">Metal card with matte finish • colors: Black</span>
+                        </div>
+                    </div>
+                    <div class="hero-cta">
+                        <a href="#" class="btn btn-primary">
+                            Apply for AAdvantage Executive
+                            <span>→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRACTICAL RECOMMENDATION SECTION -->
+        <div class="recommendation-section">
+            <div class="recommendation-content">
+                <h2>Practical Recommendation</h2>
+                <div class="recommendation-text">
+                    <p>If you regularly fly American Airlines and want a quiet place to work, eat, or recharge, this is the "buy the lounge, get a card attached" option. The lounge membership alone can justify the fee if you use it often and fly on American Airlines, oneworld, or Alaska Airlines.</p>
+                    <p>The add-on statement credits help, but they take a little effort (monthly rideshare and food delivery). If you hate tracking credits, focus on the lounge and the first checked bag, priority check-in, and boarding. Bottom line: frequent American Airlines flyers who value lounge time will get real, repeatable value here.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EAA CALCULATOR SECTION -->
+        <div class="calculator-section collapsible-section">
+            <div class="section-container">
+                <div class="calculator-header" id="calculator-header" role="button" tabindex="0" aria-expanded="false" aria-controls="calculator-content" onclick="toggleCalculatorSection(event)" onkeydown="handleKeyToggle(event)">
+                    <div class="section-header-content">
+                        <h2>Credits</h2>
+                        <div class="recommendation-text">
+                            <div class="tip-box">
+                                <h3>Practical Advice</h3>
+                                <p>This is what makes or breaks a card for you. If you can use these credits in your normal spend, the perks and protections are all bonus for you. We have a calculator at the bottom of this section to help you calculate that. Below we break down exactly what every credit is to show you if it's easy or if they're going to make you jump through 17 hoops to redeem it.</p>
+                            </div>
+                            <ul class="recommendation-list">
+                                <li><strong>Global Entry or Transportation Security Administration PreCheck fee credit</strong> – Reimburses up to $100 once every 5 years when you charge a Global Entry or Transportation Security Administration PreCheck application fee to the card. It posts as a statement credit; approval isn't required to get reimbursed. Good if you haven't renewed lately.</li>
+                                <li><strong>Avis & Budget prepaid car rentals</strong> – Up to $120 back per calendar year on eligible prepaid rentals booked directly with Avis or Budget. The credit is automatic after the charge posts. Practical if you rent cars a few times a year; $0 value if you never rent or you usually pay at pickup.</li>
+                                <li><strong>Lyft monthly credit</strong> – Up to $120 per year as $10 per month after you complete 3 rides in that month and pay with the card. Automatic statement credit. Easy if you use rideshare anyway; ignore if you don't hit 3 rides most months.</li>
+                                <li><strong>Grubhub monthly credit</strong> – Up to $120 per 12 billing statements as $10 per billing statement when you pay with the card. Order totals must cover taxes/fees/tips out of pocket. Worth it if you already order; skip the temptation buys.</li>
+                            </ul>
+                        </div>
+                        <div class="calculator-toggle-container">
+                            <div class="toggle-tip">Click Here to Calculate Your Annual Fee</div>
+                            <div class="section-toggle-icon" aria-hidden="true">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="calculator-content collapsed" id="calculator-content" role="region" aria-labelledby="calculator-header">
+                    <div class="calculator-table">
+                        <div class="table-header">
+                            <div class="header-credit">Credit</div>
+                            <div class="header-toggle">Include</div>
+                            <div class="header-value">Your Value</div>
+                        </div>
+                        
+                        <div class="calculator-note" style="margin: 1rem 2rem; padding: 0.75rem; background: #fefce8; border-left: 3px solid #eab308; border-radius: 0; font-size: 0.875rem; color: #1e293b; grid-column: 1 / -1; line-height: 1.5;">
+                            <style>
+                                @media (max-width: 768px) {
+                                    .calculator-note {
+                                        margin: 1rem 0 !important;
+                                        padding: 0.75rem !important;
+                                    }
+                                }
+                                
+                                .x-mark {
+                                    list-style: none !important;
+                                    position: relative;
+                                    padding-left: 0;
+                                }
+                                
+                                .x-mark::before {
+                                    content: "✗" !important;
+                                    color: #dc3545 !important;
+                                    font-weight: bold !important;
+                                    position: absolute !important;
+                                    left: 0 !important;
+                                    top: 0.75rem !important;
+                                    font-size: 1.1rem !important;
+                                }
+                            </style>
+                            <div style="font-weight: bold; color: #eab308; margin-bottom: 0.5rem; text-transform: uppercase; text-align: center;">Practical Tip</div>
+                            <div style="color: #475569; font-style: italic;">You can edit the amounts in the number fields if you value a credit at less than the full value. For example, if you only use a $10/month Lyft credit half the months, you might value it at $60 instead of $120.</div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="credit-info">
+                                <div class="credit-name">
+                                    TSA PreCheck / Global Entry Credit
+                                </div>
+                                <div class="credit-description">
+                                    <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Up to $100 credit for TSA PreCheck or Global Entry, once every 4 years.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Pay the application fee with your Venture X, and the charge gets wiped automatically.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">One credit per 4 years, so if you already have it, you'll need to gift it to a friend or family member. Doesn't stack with other cards offering the same perk.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Anyone without TSA PreCheck/Global Entry yet. Frequent travelers especially.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">Solid $100 saved every 4 years</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="25">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="25" onchange="syncInputValues(this)" data-max="25">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                            <div class="mobile-controls-table">
+                                <div class="mobile-label-include">Include:</div>
+                                <div class="mobile-label-value">Your Value:</div>
+                                <div class="toggle-container">
+                                    <label class="credit-toggle">
+                                        <input type="checkbox" onchange="toggleCredit(this)" data-max="25">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="value-column">
+                                    <div class="value-input" style="display: none !important;">
+                                        <span class="currency">$</span>
+                                        <input type="number" value="0" min="0" max="25" onchange="syncInputValues(this)" data-max="25">
+                                    </div>
+                                    <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="credit-info">
+                                <div class="credit-name">
+                                    Avis & Budget prepaid car rentals
+                                </div>
+                                <div class="credit-description">
+                                    <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">$120 back per calendar year on eligible prepaid Avis or Budget rentals booked direct.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Pay for an eligible prepaid booking at avis.com or budget.com with the card; credits apply automatically after the charge posts.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Prepaid only (pay-at-counter won't trigger); must book direct; taxes/fees count only if included in the prepaid charge. Prices can be higher than aggregator sites.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Anyone renting cars a couple of times a year who can book prepaid direct.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">Easy $120 if your plans fit prepaid direct bookings; $0 if you rarely rent.</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                            <div class="mobile-controls-table">
+                                <div class="mobile-label-include">Include:</div>
+                                <div class="mobile-label-value">Your Value:</div>
+                                <div class="toggle-container">
+                                    <label class="credit-toggle">
+                                        <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="value-column">
+                                    <div class="value-input" style="display: none !important;">
+                                        <span class="currency">$</span>
+                                        <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                    </div>
+                                    <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="credit-info">
+                                <div class="credit-name">
+                                    Lyft monthly credit
+                                </div>
+                                <div class="credit-description">
+                                    <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">$10 back each month (up to $120/year) after 3 rides in that month paid with the card.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Complete 3 rides in a calendar month; get a $10 statement credit automatically.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Requires 3 rides to unlock; unused months don't roll over.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Urban commuters and airport-ride folks who hit 3 rides most months.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">Worth $120/year if you're a regular rider; otherwise, don't chase it.</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                            <div class="mobile-controls-table">
+                                <div class="mobile-label-include">Include:</div>
+                                <div class="mobile-label-value">Your Value:</div>
+                                <div class="toggle-container">
+                                    <label class="credit-toggle">
+                                        <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="value-column">
+                                    <div class="value-input" style="display: none !important;">
+                                        <span class="currency">$</span>
+                                        <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                    </div>
+                                    <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="credit-info">
+                                <div class="credit-name">
+                                    Grubhub monthly credit
+                                </div>
+                                <div class="credit-description">
+                                    <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">$10 credit per billing statement (up to $120 per 12 statements) on Grubhub orders paid with the card.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Pay with the card; a statement credit of up to $10 posts each billing cycle when you place an order.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">One $10 credit per billing statement; credits don't stack; taxes/fees/tips are on you.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">People who already order delivery or pickup monthly.</td>
+                                        </tr>
+                                        <tr class="credit-row">
+                                            <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                            <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">Simple $120/year if you order anyway; $0 if you're forcing orders.</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                            <div class="mobile-controls-table">
+                                <div class="mobile-label-include">Include:</div>
+                                <div class="mobile-label-value">Your Value:</div>
+                                <div class="toggle-container">
+                                    <label class="credit-toggle">
+                                        <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="value-column">
+                                    <div class="value-input" style="display: none !important;">
+                                        <span class="currency">$</span>
+                                        <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                    </div>
+                                    <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                <div class="calculator-results">
+                        <div class="result-row">
+                            <span class="result-label">Annual Fee:</span>
+                            <span class="result-value">$595</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Your Credits:</span>
+                            <span class="result-value">$<span id="total-credits">0</span></span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">YOUR Annual Fee:</span>
+                            <span class="result-value negative" id="effective-fee">$595</span>
+                        </div>
+                        <div class="result-explanation">
+                            <p>This is effectively what you are paying for this card. It is now up to you if the perks, protections, and earning rates are worth this fee to you over other cards.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERKS AND PROTECTIONS WRAPPER -->
+        <div class="perks-protections-wrapper">
+            <!-- PERKS SECTION -->
+            <div class="recommendation-section perks-section">
+                <div class="recommendation-content">
+                    <h2>Perks</h2>
+                    <div class="recommendation-text">
+                        <ul class="recommendation-list">
+                            <li><strong>Earning rates (headline)</strong> – 4x american airlines purchases; 10x hotels via aadvantagehotels.com; 10x car rentals via aadvantagecars.com; 1x everything else. After $150,000 in calendar-year purchases, american airlines purchases earn a total 5x for the rest of that year.</li>
+                            <li><strong>Admirals Club membership (primary)</strong> – Primary cardholder gets full Admirals Club membership with entry for immediate family (spouse/domestic partner and children under 18) or up to 2 guests when flying American Airlines, oneworld carriers, or Alaska Airlines the same day. Bring a government ID and your physical card or your American Airlines number on the boarding pass. — <a href="https://www.aa.com/i18n/travel-info/clubs/admirals-club-locations.jsp" target="_blank">See lounge list</a></li>
+                            <li><strong>Admirals Club access (authorized users)</strong> – Authorized users get Admirals Club access (not full membership) and may bring immediate family or up to 2 guests when flying eligible airlines the same day. Authorized users do not have partner-lounge access and do not receive first checked bag or priority boarding benefits. — <a href="https://www.aa.com/i18n/travel-info/clubs/admirals-club-locations.jsp" target="_blank">See lounge list</a></li>
+                            <li><strong>Partner lounges</strong> – Full Admirals Club members (primary cardholder) can use select partner lounges when rules allow; arrivals lounges, International First Class Lounges, and Flagship Lounges are excluded. Always check the list before you bank on it. — <a href="https://www.aa.com/i18n/travel-info/clubs/admirals-club-locations.jsp" target="_blank">See lounge list</a></li>
+                            <li><strong>First checked bag (domestic)</strong> – First checked bag free for the primary cardholder and up to 8 companions on the same domestic reservation on American Airlines-marketed and operated (or American Eagle) flights.</li>
+                            <li><strong>Priority check-in, screening, and boarding</strong> – Primary cardholder gets priority check-in, preferred security lanes where available, and Group 4 boarding; extends to up to 8 companions on the same reservation.</li>
+                            <li><strong>In-flight savings</strong> – 25% back as a statement credit on food and beverage purchases on American Airlines flights when you pay with the card.</li>
+                            <li><strong>Loyalty Points bonuses</strong> – Earn 1 Loyalty Point per mile earned from purchases, plus 10,000 Loyalty Points after hitting 50,000 Loyalty Points and another 10,000 after 90,000 in the same qualification year.</li>
+                            <li><strong>No foreign transaction fees</strong> – Use it abroad without the extra 3% tax.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROTECTIONS SECTION -->
+            <div class="recommendation-section protections-section">
+                <div class="recommendation-content">
+                    <h2>Protections</h2>
+                    <div class="recommendation-text">
+                        <ul class="recommendation-list">
+                            <li><strong>Trip cancellation & interruption</strong> – Reimburses up to $5,000 per trip for prepaid, nonrefundable travel if you cancel, interrupt, or reasonably extend a trip for covered reasons (like illness, injury, severe weather).</li>
+                            <li><strong>Trip delay</strong> – If your common-carrier trip is delayed 6+ hours, covers up to $500 per covered traveler, per trip for meals, lodging, transport, and necessities. Secondary to other reimbursements.</li>
+                            <li><strong>Lost baggage</strong> – Up to $3,000 per traveler per trip (max $10,000 per trip) for checked baggage lost, stolen, or damaged by a common carrier (New York: $2,000 per bag).</li>
+                            <li><strong>Worldwide car rental insurance</strong> – Collision and theft coverage up to $75,000 when you pay with the card and decline the rental company's collision damage waiver.</li>
+                            <li><strong>Damage & theft purchase protection</strong> – New purchases covered for 90 days against damage or theft, up to $10,000 per incident, $50,000 per account per year.</li>
+                            <li><strong>Extended warranty</strong> – Extends eligible manufacturer warranties by up to 24 months, up to $10,000 per item, with total coverage up to 7 years from purchase.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIRALS CLUB LOUNGES SECTION -->
+        <div class="recommendation-section">
+            <div class="recommendation-content">
+                <h2>American Airlines Lounges</h2>
+                <div class="recommendation-text">
+                    <p>A big perk of <strong>Citi® / AAdvantage® Executive</strong> is a built-in <strong>Admirals Club membership</strong>. If your airport has one, it's an easy quality-of-life win: quieter space, desk help, snacks, drinks, and power outlets. Note: this is <strong>Admirals Club</strong> membership—not the fancier <strong>Flagship Lounge</strong>—so manage expectations accordingly.</p>
+                    
+                    <h3>Guest Access</h3>
+                    <ul class="recommendation-list">
+                        <li><strong>Admirals Club</strong> — Primary cardholders get full Admirals Club membership. Show your membership (digital or physical), ID, and a same-day boarding pass on a flight marketed or operated by American, any oneworld airline, or Alaska Airlines. You may bring immediate family (spouse/domestic partner and children under 18) or up to 2 guests at no extra charge, space permitting. Authorized users receive Admirals Club access when flying the same eligible itineraries, but do not get partner-lounge privileges or conference-room discounts. Day passes are sold at select clubs for $79 or 7,900 miles. — <a href="https://www.aa.com/i18n/travel-info/clubs/admirals-club-locations.jsp" target="_blank">See lounge list</a></li>
+                        <li><strong>Alaska Lounges (partner access)</strong> — As an Admirals Club member, you can use Alaska Lounges when you're flying American or Alaska the same day. Guest rules follow Alaska's lounge policy. Authorized users do not receive partner-lounge access via this card benefit. — <a href="https://www.alaskaair.com/content/airport-lounge/location-and-hours" target="_blank">See lounge list</a></li>
+                        <li class="x-mark"><strong>Flagship Lounges & Joint Premium Lounges (not included by membership)</strong> — Access requires an eligible premium ticket or status-based itinerary; Admirals Club membership alone doesn't get you in. No complimentary guests via membership. — <a href="https://www.aa.com/i18n/travel-info/clubs/flagship-lounge-terms-and-conditions.jsp" target="_blank">See Flagship rules</a> • <a href="https://www.aa.com/i18n/travel-info/clubs/joint-premium-lounges.jsp" target="_blank">See joint premium lounges</a></li>
+                    </ul>
+                    
+                    <h3>Admirals Club (U.S.)</h3>
+                    <ul class="recommendation-list">
+                        <li><strong>Atlanta (ATL)</strong> — Domestic Terminal North, Concourse T (near T11). Terminals connect landside; no airside links between concourses. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/atl-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Austin (AUS)</strong> — Main Terminal (near Gate 22). Single-terminal airport; easy walk from all AA gates. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/aus-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Boston (BOS)</strong> — Terminal B (upper level, near B4). Terminals B-C not linked airside; allow time if switching. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/bos-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Charlotte (CLT)</strong> — Concourses B and C; plus Provisions by Admirals Club concept in Concourse A (grab-and-go). All concourses are airside-connected. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/clt-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Chicago–O'Hare (ORD)</strong> — Terminal 3: Concourses G, H/K, L. All in T3; use connectors for other concourses. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/ord-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Dallas–Fort Worth (DFW)</strong> — Terminals A, B, C, D (mezzanine locations). Skylink connects all terminals airside. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/dfw-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Denver (DEN)</strong> — Concourse C mezzanine near C32. Underground train links A/B/C airside. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/den-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Honolulu (HNL)</strong> — Terminal 2 Admirals Club / JAL Sakura (shared), Level 3 above The Local @ HNL. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/hnl-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Los Angeles (LAX)</strong> — Terminal 4 Admirals Club (near security); airside connectors to T5-T8 and TBIT. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/lax-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Miami (MIA)</strong> — Concourse D lounges (multiple zones). D↔E have airside links; other concourses may require re-screening. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/mia-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>New York–JFK (JFK)</strong> — Terminal 8, Concourse C (Level 3 across from Gate 42). No airside links between terminals. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/jfk-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>New York–LaGuardia (LGA)</strong> — Terminal B lounge level near Eastern Concourse bridge. Terminals aren't airside-connected. — <a href="https://www.aa.com/i18n/travel-info/clubs/admirals-club-locations.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Philadelphia (PHL)</strong> — A-West (mezzanine between A15–A16) and B/C connector. Terminals connect airside. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/phl-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Phoenix (PHX)</strong> — Terminal 4: Concourse A (above A7–A9) and Concourse B (near B5). T4 concourses connect airside. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/phx-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Raleigh–Durham (RDU)</strong> — Terminal 2 (across from C1/C3). Single-terminal post-security concourses. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/rdu-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>San Francisco (SFO)</strong> — Terminal 1, Concourse B (near B13). Airside walkway to most of T1; other terminals may require re-screening depending on gate. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/sfo-club.jsp" target="_blank">Official page</a></li>
+                        <li><strong>Washington National (DCA)</strong> — Terminal 2 (National Hall). All piers inside T2 are airside-connected. — <a href="https://www.aa.com/i18n/travelInformation/airportAmenities/dca-club.jsp" target="_blank">Official page</a></li>
+                    </ul>
+                    
+                    <p>Important fine print: Admirals Club membership (including via this card) does not include Flagship Lounge, International First Class Lounge, Flagship First Dining, or Arrivals Lounge access; those require separate eligibility. Authorized users: lounge access only (no partner-lounge privileges). Policies can change and local lounge rules apply; always check the official page before you go.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="../../cards.html" class="nav-btn secondary">Back to All Cards</a>
+            <a href="#" class="nav-btn primary">Apply for AAdvantage Executive</a>
+        </div>
+    </div>
+
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
+
+    <script src="./card-scripts.js?v=3.1"></script>
+    <script>
+        // Page-specific configuration
+        const annualFee = 595;
+        
+        // Debug mobile menu after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                console.log('=== CITI AADVANTAGE EXECUTIVE DEBUG ===');
+                const toggle = document.getElementById('mobile-menu-toggle');
+                const menu = document.getElementById('mobile-menu');
+                const overlay = document.getElementById('mobile-menu-overlay');
+                
+                console.log('Mobile menu elements found:', {
+                    toggle: toggle ? 'YES' : 'NO',
+                    menu: menu ? 'YES' : 'NO',
+                    overlay: overlay ? 'YES' : 'NO'
+                });
+                
+                if (toggle) {
+                    console.log('Toggle button found, testing click...');
+                    toggle.addEventListener('click', function() {
+                        console.log('CITI AADVANTAGE EXECUTIVE: Toggle button clicked!');
+                    });
+                }
+                
+                console.log('setupMobileMenu function available:', typeof window.setupMobileMenu);
+                console.log('Header placeholder content:', document.getElementById('header-placeholder').innerHTML.substring(0, 200));
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

@@ -1445,7 +1445,7 @@
                 console.log('🔄 Attempting to fetch cards from database...');
                 
                 // First try with status filter and explicit column selection
-                let response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories&status=eq.active', {
+                let response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,airline_hotels,earning_categories&status=eq.active', {
                     headers: {
                         'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
                         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
@@ -1457,7 +1457,7 @@
                 // If that fails, try without status filter
                 if (!response.ok) {
                     console.log('🔄 Status filter failed, trying without filter...');
-                    response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories', {
+                    response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,airline_hotels,earning_categories', {
                         headers: {
                             'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
                             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
@@ -1491,6 +1491,8 @@
                             featureCategories: card.feature_categories || [],
                             perkCategories: card.perk_categories || [],
                             protectionCategories: card.protection_categories || [],
+                            airline_hotels: card.airline_hotels || [],
+                            earningCategories: card.earning_categories || [],
                             url: card.card_url,
                             status: card.status || 'active'
                         };
@@ -1576,6 +1578,24 @@
                         perkCategories: ["lounge-access", "clear", "metal-card"],
                         protectionCategories: ["rental-car-insurance", "trip-delay-cancellation", "purchase-protection"],
                         url: "card-pages/amex-platinum.html"
+                    },
+                    {
+                        id: 4,
+                        name: "Citi® / AAdvantage® Executive",
+                        type: "travel",
+                        annualFee: 595,
+                        bankType: "citi",
+                        rewards: "miles",
+                        image: "images/citi_aadavntage.png",
+                        welcomeBonus: "70k miles",
+                        practicalAdvice: "If you'll visit Admirals Clubs several times a year, it's a win; if not, the fee and monthly credits will feel like homework.",
+                        features: ["4x american airlines", "10x hotels via aadvantagehotels.com", "10x car rentals via aadvantagecars.com", "Admirals Club membership"],
+                        perks: ["Lounge Access", "Free Checked Bags", "Priority Boarding"],
+                        protections: ["Rental car CDW", "Trip delay", "Purchase protection"],
+                        featureCategories: ["lounge-access", "free-checked-bags", "priority-boarding"],
+                        perkCategories: ["lounge-access", "free-checked-bags", "priority-boarding", "metal-card"],
+                        protectionCategories: ["rental-car-insurance", "trip-delay-cancellation", "purchase-protection"],
+                        url: "card-pages/citi-aadvantage-executive.html"
                     }
                 ];
                 }
@@ -1893,7 +1913,7 @@
                         if (!hasPerk) return false;
                     } else if (filterType === 'airline-hotel') {
                         // Check if card has any of the selected airline/hotel categories
-                        const cardAirlineHotel = card.airline_hotel || [];
+                        const cardAirlineHotel = card.airline_hotels || card.airline_hotel || [];
                         const hasAirlineHotel = filterValues.some(airlineHotel => cardAirlineHotel.includes(airlineHotel));
                         if (!hasAirlineHotel) return false;
                     } else if (filterType === 'protections') {

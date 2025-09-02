@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>American Express® Green Card - Practical Rewards</title>
+    <link rel="stylesheet" href="../../css/styles.css?v=2.0">
+    <link rel="stylesheet" href="./card-styles.css?v=2.0">
+</head>
+<body>
+    <!-- Header placeholder -->
+    <div id="header-placeholder">
+        <div class="loading-placeholder">Loading navigation...</div>
+    </div>
+
+    <div class="card-container">
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>American Express® Green Card</h1>
+                    <p class="hero-subtitle">Simple 3x on Dining, Travel & Transit</p>
+                    <div class="hero-card-container">
+                        <div class="hero-card">
+                            <img src="../../images/amex-green.png" alt="American Express Green Card" class="hero-card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hero-card-fallback" style="display: none;">
+                                <div class="card-preview">
+                                    <div class="card-chip"></div>
+                                    <div class="card-logo">American Express</div>
+                                    <div class="card-name">GREEN</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-info">
+                    <div class="info-section">
+                        <div class="info-row">
+                            <span class="info-label">Annual Fee</span>
+                            <span class="info-value">$150</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Earning Rate</span>
+                            <span class="info-value">3x restaurants worldwide • 3x transit (U.S. rideshare, taxis, subways, buses, trains, tolls, parking) • 3x travel (flights, hotels, cruises, tours, car rentals)</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Welcome Bonus</span>
+                            <span class="info-value">40,000 points after $3,000 spend in 6 months</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Card Material</span>
+                            <span class="info-value">Reclaimed plastic (about 70% recycled) card with classic green finish • colors: Green</span>
+                        </div>
+                    </div>
+                    <div class="hero-cta">
+                        <a href="#" class="btn btn-primary">
+                            Apply for Green Card
+                            <span>→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRACTICAL RECOMMENDATION SECTION -->
+        <div class="recommendation-section">
+            <div class="recommendation-content">
+                <h2>Practical Recommendation</h2>
+                <div class="recommendation-text">
+                    <p>If you want a basic travel card that just works, this is it. Green gives 3x on travel, transit, and dining with no portals, caps, or rotating hoops. The $150 annual fee is straightforward, and there aren't monthly nickels-and-dimes to track—there's basically just one optional Clear Plus credit you can use or ignore.</p>
+                    <p><strong>Who it fits:</strong> people who actually spend on flights, hotels, and getting around town and want points without babysitting a stack of credits. If you want a coupon book and lounge hype, look elsewhere. <strong>Bottom line:</strong> a simple, good-value travel card that actually rewards travel.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EAA CALCULATOR SECTION -->
+        <div class="calculator-section collapsible-section">
+            <div class="section-container">
+                <div class="calculator-header" id="calculator-header" role="button" tabindex="0" aria-expanded="false" aria-controls="calculator-content" onclick="toggleCalculatorSection(event)" onkeydown="handleKeyToggle(event)">
+                    <div class="section-header-content">
+                        <h2>Credits</h2>
+                        <div class="recommendation-text">
+                            <div class="tip-box">
+                                <h3>Practical Advice</h3>
+                                <p>This is what makes or breaks a card for you. If you can use these credits in your normal spend, the perks and protections are all bonus for you. We have a calculator at the bottom of this section to help you calculate that. Below we break down exactly what every credit is to show you if it's easy or if they're going to make you jump through 17 hoops to redeem it.</p>
+                            </div>
+                            <ul class="recommendation-list">
+                                <li><strong>$209 Clear Plus credit (per calendar year)</strong> – Statement credits up to $209 when you pay for a Clear Plus airport membership with this card (enrollment required). Covers the member fee each year; taxes/extra add-ons don't always count. If you use airline-member pricing (Delta/United/Alaska), you must still charge the fee to this Amex to trigger the credit. Auto-renews annually unless you cancel. Good value if you fly from Clear airports; $0 value if you don't. — <a href="https://global.americanexpress.com/card-benefits/terms/amex-green" target="_blank">Clear Plus benefit terms</a></li>
+                            </ul>
+                        </div>
+                        <div class="calculator-toggle-container">
+                            <div class="section-toggle-icon" aria-hidden="true">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="toggle-tip">Click Here to Calculate Your Annual Fee</div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="calculator-content collapsed" id="calculator-content" role="region" aria-labelledby="calculator-header">
+                <div class="calculator-table">
+                    <div class="table-header">
+                        <div class="header-credit">Credit</div>
+                        <div class="header-toggle">Include</div>
+                        <div class="header-value">Your Value</div>
+                    </div>
+                    
+                    <div class="calculator-note" style="margin: 1rem 2rem; padding: 0.75rem; background: #fefce8; border-left: 3px solid #eab308; border-radius: 0; font-size: 0.875rem; color: #1e293b; grid-column: 1 / -1; line-height: 1.5;">
+                        <style>
+                            @media (max-width: 768px) {
+                                .calculator-note {
+                                    margin: 1rem 0 !important;
+                                    padding: 0.75rem !important;
+                                }
+                            }
+                        </style>
+                        <div style="font-weight: bold; color: #eab308; margin-bottom: 0.5rem; text-transform: uppercase; text-align: center;">Practical Tip</div>
+                        <div style="color: #475569; font-style: italic;">You can edit the amounts in the number fields if you value a credit at less than the full value. For example, if you only use a $10/month Uber credit half the months, you might value it at $60 instead of $120.</div>
+                    </div>
+                    
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                Clear Plus Credit
+                            </div>
+                            <div class="credit-description">
+                                <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Up to $209 in statement credits each calendar year for Clear Plus airport membership when you pay with the Green card.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Enroll the benefit, then charge Clear Plus to this card; credits post after the charge settles. Applies once per account per calendar year; renews annually if you keep auto-renew on.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Enrollment required; must pay with this card; taxes/fees or add-on family pricing may not be fully covered; pricing and participating airports change; credit does not roll over.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Travelers using Clear airports a few times a year who value shorter ID lines (especially at busy hubs).</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">Easy $209 if you'll keep Clear; otherwise worth $0. — <a href="https://global.americanexpress.com/card-benefits/detail/hundred-clear-credit/amex-green" target="_blank">Benefit page</a></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="209">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="209" onchange="syncInputValues(this)" data-max="209">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="209">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="209" onchange="syncInputValues(this)" data-max="209">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calculator-results">
+                    <div class="result-row">
+                        <span class="result-label">Annual Fee:</span>
+                        <span class="result-value">$150</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Your Credits:</span>
+                        <span class="result-value">$<span id="total-credits">0</span></span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">YOUR Annual Fee:</span>
+                        <span class="result-value negative" id="effective-fee">$150</span>
+                    </div>
+                    <div class="result-explanation">
+                        <p>This is effectively what you are paying for this card. It is now up to you if the perks, protections, and earning rates are worth this fee to you over other cards.</p>
+                    </div>
+
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERKS AND PROTECTIONS WRAPPER -->
+        <div class="perks-protections-wrapper">
+            <!-- PERKS SECTION -->
+            <div class="recommendation-section perks-section">
+                <div class="recommendation-content">
+                    <h2>Perks</h2>
+                    <div class="recommendation-text">
+                        <ul class="recommendation-list">
+                            <li><strong>Earning: 3x dining, 3x travel, 3x transit</strong> – Use for restaurants worldwide, flights/hotels/cruises/tours/car rentals, plus U.S. transit like rideshare, subways, buses, trains, parking, and tolls. Simple way to rack up points on everyday movement. Terms apply. — <a href="https://www.americanexpress.com/us/credit-cards/card/green/" target="_blank">Earning details</a></li>
+                            <li><strong>No foreign transaction fees</strong> – Take it abroad without the usual 3% hit; still compare exchange rates and watch for dynamic currency conversion. — <a href="https://global.americanexpress.com/card-benefits/detail/no-foreign-transaction-fees/amex-green" target="_blank">See benefit</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROTECTIONS SECTION -->
+            <div class="recommendation-section protections-section">
+                <div class="recommendation-content">
+                    <h2>Protections</h2>
+                    <div class="recommendation-text">
+                        <p style="font-style: italic; margin-bottom: 1rem;">(use the card to pay for the trip; terms apply):</p>
+                        <ul class="recommendation-list">
+                            <li><strong>Trip Delay Insurance</strong> – Reimburses up to $300 per trip for essentials (hotel, meals) when a covered round-trip flight is delayed 12+ hours; up to 2 claims per 12 months. Handy for weather meltdowns and missed connections.</li>
+                            <li><strong>Baggage Insurance Plan</strong> – Coverage for lost, damaged, or stolen baggage on eligible tickets paid with the card (typical limits: up to ~$1,250 carry-on / ~$500 checked; see your guide for exact amounts and exclusions).</li>
+                            <li><strong>Car Rental Loss & Damage Insurance (secondary)</strong> – Pays for damage/theft to the rental car when you decline the agency's collision damage waiver and pay with the card; liability not included. Optional paid Premium Protection available.</li>
+                            <li><strong>Purchase Protection</strong> – Covers theft/accidental damage for 90 days, up to $1,000 per item and $50,000 per account per calendar year. Good backstop for gadgets and small appliances.</li>
+                            <li><strong>Extended Warranty</strong> – Adds up to 1 extra year to eligible manufacturer warranties of 5 years or less on covered purchases. Useful on electronics that come with 1-year coverage.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="../../cards.html" class="nav-btn secondary">Back to All Cards</a>
+            <a href="#" class="nav-btn primary">Apply for Green Card</a>
+        </div>
+    </div>
+
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder">
+        <div class="loading-placeholder">Loading footer...</div>
+    </div>
+
+    <script src="./card-scripts.js?v=3.1"></script>
+    <script>
+        // Page-specific configuration
+        const annualFee = 150;
+        
+        // Debug mobile menu after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                console.log('=== AMEX GREEN DEBUG ===');
+                const toggle = document.getElementById('mobile-menu-toggle');
+                const menu = document.getElementById('mobile-menu');
+                const overlay = document.getElementById('mobile-menu-overlay');
+                
+                console.log('Mobile menu elements found:', {
+                    toggle: toggle ? 'YES' : 'NO',
+                    menu: menu ? 'YES' : 'NO',
+                    overlay: overlay ? 'YES' : 'NO'
+                });
+                
+                if (toggle) {
+                    console.log('Toggle button found, testing click...');
+                    toggle.addEventListener('click', function() {
+                        console.log('AMEX GREEN: Toggle button clicked!');
+                    });
+                }
+                
+                console.log('setupMobileMenu function available:', typeof window.setupMobileMenu);
+                console.log('Header placeholder content:', document.getElementById('header-placeholder').innerHTML.substring(0, 200));
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
