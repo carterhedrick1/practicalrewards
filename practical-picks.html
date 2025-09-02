@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Practical Picks - Practical Rewards</title>
 
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; overflow-x: hidden; }
@@ -76,6 +77,12 @@
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
+        }
+
+        /* Override grid layout when showing intro text */
+        .cards-grid.showing-intro {
+            display: block;
+            grid-template-columns: none;
         }
 
         .card-item {
@@ -156,6 +163,121 @@
         .card-item.fade-in { animation: fadeInScale 0.3s ease-out forwards; }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
+        /* Recommendation list styling (matching card pages) */
+        .recommendation-list li strong {
+            color: #1e293b !important; /* Black for bold benefit names */
+            font-weight: 600 !important;
+        }
+
+        .recommendation-list li {
+            color: #64748b !important; /* Lighter grey for descriptions */
+            font-size: 0.9rem !important; /* Smaller font size */
+            line-height: 1.5 !important;
+        }
+
+        /* Ensure the text after the dash is styled correctly */
+        .help-box .recommendation-list li {
+            color: #64748b !important;
+            font-size: 0.9rem !important;
+        }
+
+        .help-box .recommendation-list li strong {
+            color: #1e293b !important;
+            font-weight: 600 !important;
+        }
+
+        /* Style quiz options with vertical layout */
+        .option label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            display: none !important; /* Hide radio buttons completely */
+        }
+
+        /* Create a container for the text content */
+        .option .text-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            width: 100%;
+        }
+
+        /* Style the strong text at top */
+        .option .text-content strong {
+            color: #1e293b !important;
+            font-weight: 600 !important;
+            font-size: 0.85rem !important;
+            line-height: 1.2 !important;
+        }
+
+        /* Style the descriptive text underneath */
+        .option .text-content .description {
+            color: #64748b !important;
+            font-size: 0.9rem !important;
+            line-height: 1.4 !important;
+        }
+
+        /* Space-efficient grid layout for category options */
+        .options.grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            grid-auto-rows: 1fr;
+        }
+
+        .options.grid-layout .option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            min-height: 48px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+
+        .options.grid-layout .option label {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .options.grid-layout .option.active {
+            border-color: #059669;
+            background: #f0fdf4;
+            transform: scale(1.02);
+        }
+
+        /* Responsive adjustments for grid */
+        @media (max-width: 768px) {
+            .options.grid-layout {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .options.grid-layout {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.4rem;
+            }
+            
+            .options.grid-layout .option {
+                padding: 0.6rem 0.4rem;
+                font-size: 0.85rem;
+                min-height: 42px;
+            }
+        }
+
         /* Mobile tweaks */
         @media (max-width: 768px) {
             /* Match header/hero behavior from cards page */
@@ -199,12 +321,16 @@
 
                 <div class="wizard-actions">
                     <button class="btn btn-secondary" id="back-btn">Back</button>
-                    <button class="btn btn-primary" id="next-btn">Next</button>
+                    <button class="btn btn-primary" id="next-btn" style="display: none;">Next</button>
                 </div>
 
                 <div class="help-box" id="help-box" aria-live="polite">
                     <div class="help-title">Need help?</div>
-                    <div class="help-text" id="help-content">Answer the question above to narrow your results. Tips for this step will appear here.</div>
+                    <div class="help-text" id="help-content">
+                        <ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;">
+                            <li><strong>Getting started</strong> – Answer the question above. Tips update here.</li>
+                        </ul>
+                    </div>
                 </div>
             </aside>
 
@@ -259,44 +385,111 @@
 
     async function initializeCards() {
         try {
-            let response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories&status=eq.active', {
+            console.log('🔄 Attempting to fetch cards from database...');
+            
+            // First try with status filter and explicit column selection (including earning_categories and airline_hotels)
+            let response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,earning_categories,airline_hotels&status=eq.active', {
                 headers: {
                     'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
                     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                    'Content-Type': 'application/json', 'Prefer': 'return=representation'
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
                 }
             });
-            if (!response.ok) throw new Error('db');
-            const databaseCards = await response.json();
-            const mapped = databaseCards.map(card => ({
-                id: card.id,
-                name: card.name,
-                type: card.type,
-                annualFee: card.annual_fee,
-                bankType: card.bank_type,
-                rewards: card.rewards_type,
-                image: card.image_url,
-                welcomeBonus: card.welcome_bonus || 'None',
-                practicalAdvice: card.practical_advice || '',
-                features: card.features || [],
-                perkCategories: card.perk_categories || [],
-                protectionCategories: card.protection_categories || [],
-                url: card.card_url,
-                status: card.status || 'active'
-            }));
-            allCards = mapped.filter(c => c.status === 'active');
+            
+            // If that fails, try without status filter (same as cards.html)
+            if (!response.ok) {
+                console.log('🔄 Status filter failed, trying without filter...');
+                response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,earning_categories,airline_hotels', {
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    }
+                });
+            }
+            
+            if (response.ok) {
+                const databaseCards = await response.json();
+                console.log('✅ Database fetch successful, received cards:', databaseCards);
+                console.log('🔍 First card details:', databaseCards[0]);
+                
+                // Convert database format to match your existing code (same as cards.html)
+                let allCardsFromDB = databaseCards.map(card => {
+                    console.log('🔍 Processing card:', card);
+                    console.log('🔍 perk_categories:', card.perk_categories, typeof card.perk_categories);
+                    console.log('🔍 protection_categories:', card.protection_categories, typeof card.protection_categories);
+                    console.log('🔍 earning_categories:', card.earning_categories, typeof card.earning_categories);
+                    console.log('🔍 airline_hotels:', card.airline_hotels, typeof card.airline_hotels);
+                    
+                    // Helper function to safely parse array data
+                    const parseArrayField = (field) => {
+                        console.log('🔍 Parsing field:', field, 'type:', typeof field);
+                        if (!field || field === '0' || field === 0) {
+                            console.log('🔍 Field is empty/zero, returning []');
+                            return [];
+                        }
+                        if (Array.isArray(field)) {
+                            console.log('🔍 Field is already array:', field);
+                            return field;
+                        }
+                        if (typeof field === 'string') {
+                            console.log('🔍 Field is string, attempting to parse:', field);
+                            try {
+                                const parsed = JSON.parse(field);
+                                console.log('🔍 Parsed result:', parsed);
+                                return Array.isArray(parsed) ? parsed : [];
+                            } catch (e) {
+                                console.log('🔍 JSON parse failed, returning []');
+                                return [];
+                            }
+                        }
+                        console.log('🔍 Unknown field type, returning []');
+                        return [];
+                    };
+                    
+                    return {
+                        id: card.id,
+                        name: card.name,
+                        type: card.type,
+                        annualFee: card.annual_fee,
+                        bankType: card.bank_type,
+                        rewards: card.rewards_type,
+                        image: card.image_url,
+                        welcomeBonus: card.welcome_bonus || card.welcomeBonus || 'None',
+                        practicalAdvice: card.practical_advice || card.practicalAdvice || '',
+                        features: card.features || [],
+                        perkCategories: parseArrayField(card.perk_categories),
+                        protectionCategories: parseArrayField(card.protection_categories),
+                        earningCategories: parseArrayField(card.earning_categories),
+                        airlineHotel: parseArrayField(card.airline_hotels),
+                        url: card.card_url,
+                        status: card.status || 'active'
+                    };
+                });
+                
+                // Filter to only show active cards
+                allCards = allCardsFromDB.filter(card => card.status === 'active');
+                console.log('✅ Loaded cards from database:', allCards.length);
+            } else {
+                throw new Error('Database fetch failed');
+            }
         } catch (e) {
-            // Fallback minimal sample
+            console.warn('Falling back due to error loading cards:', e && e.message);
+            // Final minimal sample
             allCards = [
-                { id:1,name:'Capital One Venture X',type:'travel',annualFee:395,bankType:'capital-one',rewards:'miles',image:'images/venture-x.png',welcomeBonus:'75k miles',features:['2x miles','3x travel & dining'],perkCategories:['lounge-access','tsa-precheck','no-foreign-fees'],protectionCategories:['rental-car-insurance','trip-delay-cancellation'],url:'card-pages/venture-x.html',status:'active' },
-                { id:2,name:'Chase Sapphire Reserve',type:'travel',annualFee:795,bankType:'chase',rewards:'points',image:'images/sapphire-reserve.jpg',welcomeBonus:'60k points',features:['3x travel & dining'],perkCategories:['lounge-access','tsa-precheck'],protectionCategories:['rental-car-insurance','trip-delay-cancellation','lost-delayed-baggage'],url:'card-pages/sapphire-reserve.html',status:'active' },
-                { id:3,name:'Citi Double Cash',type:'cashback',annualFee:0,bankType:'citi',rewards:'cashback',image:'images/citi-double-cash.png',welcomeBonus:'',features:['2% on everything'],perkCategories:[],protectionCategories:['purchase-protection'],url:'card-pages/citi-double-cash.html',status:'active' }
+                { id:1,name:'Capital One Venture X',type:'travel',annualFee:395,bankType:'capital-one',rewards:'miles',image:'images/venture-x.png',welcomeBonus:'75k miles',features:['2x miles','3x travel & dining'],perkCategories:['lounge-access','tsa-precheck','no-foreign-fees'],protectionCategories:['rental-car-insurance','trip-delay-cancellation'],earningCategories:[],airlineHotel:[],url:'card-pages/venture-x.html',status:'active' },
+                { id:2,name:'Chase Sapphire Reserve',type:'travel',annualFee:795,bankType:'chase',rewards:'points',image:'images/sapphire-reserve.jpg',welcomeBonus:'60k points',features:['3x travel & dining'],perkCategories:['lounge-access','tsa-precheck'],protectionCategories:['rental-car-insurance','trip-delay-cancellation','lost-delayed-baggage'],earningCategories:[],airlineHotel:[],url:'card-pages/sapphire-reserve.html',status:'active' },
+                { id:3,name:'Citi Double Cash',type:'cashback',annualFee:0,bankType:'citi',rewards:'cashback',image:'images/citi-double-cash.png',welcomeBonus:'',features:['2% on everything'],perkCategories:[],protectionCategories:['purchase-protection'],earningCategories:['flat-rate'],airlineHotel:[],url:'card-pages/citi-double-cash.html',status:'active' }
             ];
         }
         filteredCards = [...allCards];
         renderCards(filteredCards);
         updateResultsHeadline(filteredCards.length, allCards.length);
     }
+
+
 
     function generatePracticalAdvice(card) {
         // Use database practical advice if available, otherwise generate it
@@ -372,14 +565,38 @@
 
     function renderCards(cards) {
         const grid = document.getElementById('cards-grid');
+        grid.classList.remove('showing-intro');
         grid.innerHTML = '';
         cards.forEach(c => grid.appendChild(createCardElement(c)));
+    }
+
+    function showIntroText() {
+        const grid = document.getElementById('cards-grid');
+        grid.classList.add('showing-intro');
+        grid.innerHTML = `
+            <div style="width: 100%; margin: 0; padding: 2rem; text-align: center; background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+                <h2 style="color: #1e293b; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600;">We built Practical Picks to help you find the right card for your life.</h2>
+                <p style="color: #64748b; font-size: 1rem; line-height: 1.6; margin-bottom: 1rem;">
+                    Answer a few quick questions and tell us what matters—cash back, travel, lounges, no foreign fees, or keeping it simple. Then we put our practical research to work and surface cards that actually fit your goals.
+                </p>
+                <p style="color: #64748b; font-size: 1rem; line-height: 1.6; margin: 0;">
+                    The result? Clear, personalized options you can choose from.
+                </p>
+            </div>
+        `;
     }
 
     function updateResultsHeadline(count, total) {
         const c = document.getElementById('results-display-count');
         const t = document.getElementById('results-display-total');
         if (c) c.textContent = count; if (t) t.textContent = total;
+    }
+
+    function updateResultsHeadlineForQuiz() {
+        const headline = document.getElementById('results-headline');
+        if (headline) {
+            headline.innerHTML = 'Find your perfect card';
+        }
     }
 
     // --- Filtering helpers (map to existing data fields) ---
@@ -393,6 +610,18 @@
         if (b.includes('discover') || n.includes('discover')) return 'discover';
         if (b.includes('wells') || n.includes('wells fargo')) return 'wells-fargo';
         return 'other';
+    }
+
+    function inferBrandTags(card) {
+        const name = (card.name || '').toLowerCase();
+        const tags = new Set(Array.isArray(card.airlineHotel) ? card.airlineHotel.map(v => (v||'').toLowerCase()) : []);
+        const brandMap = {
+            'delta':'delta', 'united':'united', 'american':'american', 'aa ':'american', 'aadvantage':'american',
+            'southwest':'southwest', 'jetblue':'jetblue', 'alaska':'alaska',
+            'marriott':'marriott', 'hilton':'hilton', 'hyatt':'hyatt', 'ihg':'ihg', 'wyndham':'wyndham', 'choice':'choice'
+        };
+        Object.keys(brandMap).forEach(k => { if (name.includes(k)) tags.add(brandMap[k]); });
+        return Array.from(tags);
     }
 
     function applyFiltersTo(cards, filters) {
@@ -414,10 +643,40 @@
                     if (!values.includes(getIssuerCategory(card))) return false;
                 } else if (k === 'perks') {
                     const perks = card.perkCategories || [];
-                    if (!values.some(v => perks.includes(v))) return false;
+                    console.log(`🔍 Filtering ${card.name} for perks:`, values, 'Card has perks:', perks);
+                    // Use OR logic for perks - card must have ANY selected perk
+                    const hasAnyPerk = values.some(v => perks.includes(v));
+                    if (!hasAnyPerk) {
+                        console.log(`❌ ${card.name} filtered out - missing any required perk(s)`);
+                        return false;
+                    }
                 } else if (k === 'protections') {
                     const prots = card.protectionCategories || [];
                     if (!values.some(v => prots.includes(v))) return false;
+                } else if (k === 'airline-hotel') {
+                    const brandsOnCard = inferBrandTags(card);
+                    if (!values.some(v => brandsOnCard.includes(v))) return false;
+                } else if (k === 'earning_any') {
+                    const selected = new Set(values);
+                    const earningCats = Array.isArray(card.earningCategories) ? card.earningCategories : [];
+                    
+                    console.log(`🔍 Filtering ${card.name} for earning_any:`, values, 'Card has earning categories:', earningCats);
+                    
+                    // Check if card matches any selected earning category (OR logic)
+                    const hasAnyCategory = earningCats.some(cat => selected.has(cat));
+                    
+                    // Special handling for "flat-rate" - only match cards that explicitly have flat-rate in earning_categories
+                    const wantsFlatRate = selected.has('flat-rate');
+                    const cardHasFlatRate = earningCats.includes('flat-rate');
+                    
+                    console.log(`🔍 ${card.name}: hasAnyCategory=${hasAnyCategory}, wantsFlatRate=${wantsFlatRate}, cardHasFlatRate=${cardHasFlatRate}`);
+                    
+                    if (!(hasAnyCategory || (wantsFlatRate && cardHasFlatRate))) {
+                        console.log(`❌ ${card.name} filtered out`);
+                        return false;
+                    } else {
+                        console.log(`✅ ${card.name} passed earning filter`);
+                    }
                 } else if (k === 'fee') {
                     if (values.includes('0-100') && !(card.annualFee >= 0 && card.annualFee <= 100)) return false;
                     if (values.includes('100-300') && !(card.annualFee >= 100 && card.annualFee <= 300)) return false;
@@ -433,12 +692,12 @@
     const state = {
         stepIndex: 0,
         steps: [],
-        stage: null, // beginner | optimizer
         mode: null,  // travel | cashback | either
         baseFilters: {},
         travelFilters: {},
         cashbackFilters: {},
-        activeTab: 'cashback'
+        activeTab: 'cashback',
+        lastApplied: null
     };
 
     function initCoach() {
@@ -451,104 +710,227 @@
     function buildSteps() {
         state.steps = [
             {
-                id: 'stage',
-                title: 'First rewards card or adding to your setup?',
+                id: 'goal',
+                title: 'What’s your goal right now?',
                 type: 'radio',
                 options: [
-                    { label: 'Beginner – first rewards card', value: 'beginner' },
-                    { label: 'Optimizer – adding to a setup', value: 'optimizer' }
+                    { label: '<div class="text-content"><strong>Travel</strong><div class="description">points, perks, airport sanity</div></div>', value: 'travel' },
+                    { label: '<div class="text-content"><strong>Cash back</strong><div class="description">real money back, no drama</div></div>', value: 'cashback' },
+                    { label: '<div class="text-content"><strong>Not sure / show both</strong><div class="description">see travel and cash back side‑by‑side</div></div>', value: 'either' }
                 ],
-                help: 'If it’s your first card, we’ll keep it simple and fee-friendly. If you already have a couple, we’ll optimize around gaps.',
-                onAnswer: (val) => { state.stage = val; }
+                help: 'If you’re new or undecided, start with Cash back. It’s simple, real money, and a great baseline.',
+                onAnswer: (val) => { 
+                    state.mode = val; 
+                    // Always jump to the first branch step upon selecting a goal
+                    state.stepIndex = 1; 
+                    state.lastApplied = null; 
+                    configureModeTabs();
+                    recomputeAndRender();
+                    // Render the next step immediately for single-mode choices
+                    if (val !== 'either') {
+                        setTimeout(() => {
+                            renderStep();
+                        }, 300);
+                    }
+                }
+            },
+            // Cashback path
+            {
+                id: 'cb1', branch: 'cashback',
+                title: 'Do you already have a flat 2%+ “catch‑all” card?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>No / Not sure</strong><div class="description">keep cards that cover everything at 2%+</div></div>', value: 'no' },
+                    { label: '<div class="text-content"><strong>Yes</strong><div class="description">we’ll focus on category boosts</div></div>', value: 'yes' }
+                ],
+                help: 'If you don’t, grab one first. A 2% card quietly wins on everything you don’t optimize.',
+                onAnswer: (val) => {
+                    // Store the user's answer for step visibility logic
+                    state.cashbackFilters.hasFlatRate = val === 'yes';
+                    
+                    const arr = state.cashbackFilters['earning_any'] || [];
+                    if (val === 'no') {
+                        // They don't have flat-rate, show them flat-rate cards
+                        if (!arr.includes('flat-rate')) arr.push('flat-rate');
+                        state.lastApplied = { key: 'earning_any', value: 'flat-rate' };
+                    } else {
+                        // They already have flat-rate, focus on categories instead
+                        state.cashbackFilters['earning_any'] = arr.filter(v => v !== 'flat-rate');
+                        state.lastApplied = { key: 'earning_any', value: 'flat-rate' };
+                    }
+                    state.cashbackFilters['earning_any'] = Array.from(new Set(state.cashbackFilters['earning_any'] || arr));
+                }
             },
             {
-                id: 'goal',
-                title: 'What’s your goal?',
-                type: 'radio',
+                id: 'cb2', branch: 'cashback',
+                title: 'Where do you want a boost? (pick up to 3)',
+                type: 'checkbox',
                 options: [
+                    { label: 'Dining', value: 'dining' },
+                    { label: 'Groceries', value: 'groceries' },
+                    { label: 'Gas', value: 'gas' },
+                    { label: 'Transit', value: 'transit' },
                     { label: 'Travel', value: 'travel' },
-                    { label: 'Cash back', value: 'cashback' },
-                    { label: 'Not sure / show both', value: 'either' }
+                    { label: 'Drugstores', value: 'drugstores' },
+                    { label: 'Online', value: 'online' },
+                    { label: 'Streaming', value: 'streaming' },
+                    { label: 'Telecom', value: 'telecom' },
+                    { label: 'Entertainment', value: 'entertainment' }
                 ],
-                help: 'Travel cards earn bank points or airline/hotel miles; cash-back cards put money back on everyday purchases.',
-                onAnswer: (val) => { state.mode = val; configureModeTabs(); }
+                help: 'Pick 1–3. We’ll keep cards that bonus at least one of them. More boxes = fewer results.',
+                onAnswer: (vals) => {
+                    const current = new Set(state.cashbackFilters['earning_any'] || []);
+                    vals.forEach(v => current.add(v));
+                    state.cashbackFilters['earning_any'] = Array.from(current);
+                    if (vals.length > 0) {
+                        state.lastApplied = { key: 'earning_any', value: vals[vals.length - 1] };
+                    }
+                }
             },
-            // Cashback branch
             {
                 id: 'cb3', branch: 'cashback',
-                title: 'Must-have protection?',
-                type: 'radio',
+                title: 'Any must‑have protection?',
+                type: 'checkbox',
                 options: [
-                    { label: 'Cell phone protection', value: 'cell-phone-protection' },
-                    { label: 'No preference', value: 'none' }
+                    { label: 'Cell phone protection', value: 'cell-phone-protection' }
                 ],
-                help: 'Cell phone protection can reimburse repairs if you pay your monthly bill with the card.',
-                onAnswer: (val) => { state.cashbackFilters.protections = (val === 'none') ? [] : ['cell-phone-protection']; }
+                help: 'Only useful if you pay your phone bill with the card.',
+                onAnswer: (vals) => { state.cashbackFilters.protections = vals; }
             },
-            // Travel branch
+            // Travel path
             {
                 id: 'tr1', branch: 'travel',
                 title: 'What do you want most right now?',
                 type: 'radio',
                 options: [
-                    { label: 'Flexible points', value: 'ecosystem' },
-                    { label: 'Airline perks', value: 'airline' },
-                    { label: 'Hotel perks', value: 'hotel' },
-                    { label: 'Not sure', value: 'none' }
+                    { label: '<div class="text-content"><strong>Flexible points</strong><div class="description">Amex/Chase/Capital One/Citi</div></div>', value: 'flex' },
+                    { label: '<div class="text-content"><strong>Airline perks</strong><div class="description">bags, boarding, credits</div></div>', value: 'airline' },
+                    { label: '<div class="text-content"><strong>Hotel perks</strong><div class="description">free night, status</div></div>', value: 'hotel' },
+                    { label: '<div class="text-content"><strong>Not sure</strong><div class="description">keep more options open</div></div>', value: 'none' }
                 ],
-                help: 'Flexible points (Amex/Chase/Cap1/Citi) can be transferred to many airlines/hotels. Co-brands focus on one airline or hotel.',
+                help: 'Flexible points are the safest start. Pick Airline/Hotel only if you use that brand often.',
                 onAnswer: (val) => {
-                    delete state.travelFilters.issuer; delete state.travelFilters.type; delete state.travelFilters.perks;
-                    if (val === 'airline') { state.travelFilters.type = ['travel']; /* keep general */ }
-                    else if (val === 'hotel') { state.travelFilters.type = ['travel']; }
+                    state.travelFilters.focus = [val];
+                    // Do not hard filter issuer; only controls visibility of brand step
                 }
             },
             {
+                id: 'tr1b', branch: 'travel',
+                title: 'Which brand? (check any)',
+                type: 'checkbox',
+                getOptions: () => {
+                    const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
+                    if (focus === 'airline') {
+                        return [
+                            { label: 'Delta', value: 'delta' },
+                            { label: 'United', value: 'united' },
+                            { label: 'American', value: 'american' },
+                            { label: 'Southwest', value: 'southwest' },
+                            { label: 'JetBlue', value: 'jetblue' },
+                            { label: 'Alaska', value: 'alaska' }
+                        ];
+                    } else if (focus === 'hotel') {
+                        return [
+                            { label: 'Marriott', value: 'marriott' },
+                            { label: 'Hilton', value: 'hilton' },
+                            { label: 'Hyatt', value: 'hyatt' },
+                            { label: 'IHG', value: 'ihg' },
+                            { label: 'Wyndham', value: 'wyndham' },
+                            { label: 'Choice', value: 'choice' }
+                        ];
+                    } else {
+                        // Fallback to all options
+                        return [
+                            { label: 'Delta', value: 'delta' },
+                            { label: 'United', value: 'united' },
+                            { label: 'American', value: 'american' },
+                            { label: 'Southwest', value: 'southwest' },
+                            { label: 'JetBlue', value: 'jetblue' },
+                            { label: 'Alaska', value: 'alaska' },
+                            { label: 'Marriott', value: 'marriott' },
+                            { label: 'Hilton', value: 'hilton' },
+                            { label: 'Hyatt', value: 'hyatt' },
+                            { label: 'IHG', value: 'ihg' },
+                            { label: 'Wyndham', value: 'wyndham' },
+                            { label: 'Choice', value: 'choice' }
+                        ];
+                    }
+                },
+                help: 'Pick the airline or hotel you actually use. If none, leave blank to keep more options.',
+                onAnswer: (vals) => { state.travelFilters['airline-hotel'] = vals; }
+            },
+            {
                 id: 'tr2', branch: 'travel',
-                title: 'International sometimes?',
+                title: 'Do you travel outside the U.S. at least once a year?',
                 type: 'radio',
                 options: [
-                    { label: 'Yes – no foreign transaction fees', value: 'no-foreign-fees' },
-                    { label: 'No / not sure', value: 'none' }
+                    { label: '<div class="text-content"><strong>Yes — no foreign transaction fees</strong><div class="description">save ~3% abroad</div></div>', value: 'yes' },
+                    { label: '<div class="text-content"><strong>No / Not sure</strong><div class="description">skip this filter</div></div>', value: 'no' }
                 ],
-                help: 'No foreign transaction fees save 3% when abroad and often signal good global acceptance.',
-                onAnswer: (val) => { state.travelFilters.perks = (val === 'no-foreign-fees') ? ['no-foreign-fees'] : (state.travelFilters.perks || []).filter(p => p !== 'no-foreign-fees'); }
+                help: 'Saving ~3% abroad and better acceptance.',
+                onAnswer: (val) => {
+                    const arr = new Set(state.travelFilters.perks || []);
+                    if (val === 'yes') { arr.add('no-foreign-fees'); state.lastApplied = { key: 'perks', value: 'no-foreign-fees' }; }
+                    else { arr.delete('no-foreign-fees'); state.lastApplied = { key: 'perks', value: 'no-foreign-fees' }; }
+                    state.travelFilters.perks = Array.from(arr);
+                }
             },
             {
                 id: 'tr3', branch: 'travel',
-                title: 'Must-have perks (check any)',
+                title: 'Want this travel card to earn extra on everyday spend too?',
                 type: 'checkbox',
                 options: [
-                    { label: 'Lounge access', value: 'lounge-access' },
-                    { label: 'TSA PreCheck / Global Entry', value: 'tsa-precheck' },
-                    { label: 'CLEAR', value: 'clear' }
+                    { label: 'Dining', value: 'dining' },
+                    { label: 'Groceries', value: 'groceries' },
+                    { label: 'Gas', value: 'gas' },
+                    { label: 'Transit', value: 'transit' },
+                    { label: 'Online', value: 'online' },
+                    { label: 'Drugstores', value: 'drugstores' },
+                    { label: 'Streaming', value: 'streaming' },
+                    { label: 'Telecom', value: 'telecom' },
+                    { label: 'Entertainment', value: 'entertainment' }
                 ],
-                help: 'Perks like lounges or PreCheck reduce travel friction. Pick only what you’ll actually use this year.',
-                onAnswer: (vals) => { state.travelFilters.perks = vals; }
-            },
-            {
-                id: 'tr3b', branch: 'travel',
-                title: 'Strong trip/rental protections?',
-                type: 'checkbox',
-                options: [
-                    { label: 'Trip protections', value: 'trip-delay-cancellation' },
-                    { label: 'Rental car CDW', value: 'rental-car-insurance' }
-                ],
-                help: 'Good protections can be worth more than points in a bad day—useful for road trips and weather delays.',
-                onAnswer: (vals) => { state.travelFilters.protections = vals; }
+                help: 'Check 1–3. We’ll keep cards that bonus at least one. If you’ll pair with cash back, skip this.',
+                onAnswer: (vals) => { 
+                    state.travelFilters['earning_any'] = vals; 
+                    if (vals.length > 0) {
+                        state.lastApplied = { key: 'earning_any', value: vals[vals.length - 1] };
+                    }
+                }
             },
             {
                 id: 'tr4', branch: 'travel',
-                title: 'Ecosystem preference (optional)',
+                title: 'Do you want airport lounge access?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Must‑have</strong><div class="description">include only cards with lounge access</div></div>', value: 'must' },
+                    { label: '<div class="text-content"><strong>Nice to have</strong><div class="description">don’t filter by lounges</div></div>', value: 'nice' },
+                    { label: '<div class="text-content"><strong>Don’t care</strong><div class="description">don’t filter by lounges</div></div>', value: 'no' }
+                ],
+                help: 'Make it Must-have only if you will fly a few times and actually use lounges—this narrows results fast.',
+                onAnswer: (val) => {
+                    const arr = new Set(state.travelFilters.perks || []);
+                    if (val === 'must') { 
+                        arr.add('lounge-access'); 
+                        state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
+                    } else { 
+                        arr.delete('lounge-access'); 
+                        state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
+                    }
+                    state.travelFilters.perks = Array.from(arr);
+                }
+            },
+            {
+                id: 'tr5', branch: 'travel',
+                title: 'Any travel protections you care about? (pick any)',
                 type: 'checkbox',
                 options: [
-                    { label: 'Amex', value: 'amex' },
-                    { label: 'Chase', value: 'chase' },
-                    { label: 'Capital One', value: 'capital-one' },
-                    { label: 'Citi', value: 'citi' }
+                    { label: 'Trip delay & cancellation', value: 'trip-delay-cancellation' },
+                    { label: 'Rental car CDW', value: 'rental-car-insurance' },
+                    { label: 'Lost/Delayed baggage', value: 'lost-delayed-baggage' }
                 ],
-                help: 'Picking one bank’s ecosystem keeps points together and unlocks stronger redemptions via transfers.',
-                onAnswer: (vals) => { state.travelFilters.issuer = vals; }
+                help: 'Great safety nets, but they can shrink options. Toggle only what matters. (For rentals, primary CDW is best—do not oversell secondary.)',
+                onAnswer: (vals) => { state.travelFilters.protections = vals; }
             }
         ];
     }
@@ -556,16 +938,85 @@
     function visibleSteps() {
         return state.steps.filter(s => {
             if (!s.branch) return true;
-            if (state.mode === 'travel') return s.branch === 'travel';
-            if (state.mode === 'cashback') return s.branch === 'cashback';
-            if (state.mode === 'either') return false; // no travel-only Qs in either mode
+            if (state.mode === 'travel') {
+                if (s.id === 'tr1b') {
+                    const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
+                    return focus === 'airline' || focus === 'hotel';
+                }
+                return s.branch === 'travel';
+            }
+            if (state.mode === 'cashback') {
+                // Skip categories step (cb2) if they don't have a flat-rate card (answered 'no' to cb1)
+                if (s.id === 'cb2' && state.cashbackFilters.hasFlatRate === false) {
+                    return false;
+                }
+                return s.branch === 'cashback';
+            }
+            if (state.mode === 'either') return false; // show only goal in show-both
             return false;
         });
     }
 
+    function clearFiltersFromFutureSteps(currentStepIndex) {
+        const steps = visibleSteps();
+        const currentMode = state.mode;
+        
+        // Determine which filter set to modify
+        let targetFilters;
+        if (currentMode === 'travel') {
+            targetFilters = state.travelFilters;
+        } else if (currentMode === 'cashback') {
+            targetFilters = state.cashbackFilters;
+        } else {
+            // For 'either' mode, don't clear anything since they're still on goal step
+            return;
+        }
+        
+        // Clear filters from steps after the current one
+        for (let i = currentStepIndex; i < steps.length; i++) {
+            const step = steps[i];
+            const filterKey = stepToFilterKey(step.id);
+            
+            if (filterKey && targetFilters[filterKey]) {
+                console.log(`Clearing filter ${filterKey} from step ${step.id}`);
+                delete targetFilters[filterKey];
+            }
+        }
+        
+        // Clear lastApplied if it was from a future step
+        state.lastApplied = null;
+    }
+
     function bindWizardControls() {
-        document.getElementById('back-btn').addEventListener('click', () => {
-            if (state.stepIndex > 0) { state.stepIndex--; renderStep(); }
+        const backBtn = document.getElementById('back-btn');
+        // Remove any existing listeners to prevent duplicates
+        backBtn.replaceWith(backBtn.cloneNode(true));
+        const newBackBtn = document.getElementById('back-btn');
+        
+        newBackBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Back button clicked, current stepIndex:', state.stepIndex);
+            if (state.stepIndex > 0) { 
+                // Clear filters from steps we're going back from
+                clearFiltersFromFutureSteps(state.stepIndex);
+                state.stepIndex--; 
+                console.log('Going back to stepIndex:', state.stepIndex);
+                
+                // If going back to the goal step (index 0), reset mode and filters
+                if (state.stepIndex === 0) {
+                    state.mode = null;
+                    state.travelFilters = {};
+                    state.cashbackFilters = {};
+                    state.activeTab = null;
+                    configureModeTabs();
+                }
+                
+                renderStep(); 
+                recomputeAndRender();
+            } else {
+                console.log('Already at first step, cannot go back');
+            }
         });
         document.getElementById('next-btn').addEventListener('click', () => {
             const steps = visibleSteps();
@@ -583,9 +1034,14 @@
     function renderStep() {
         const steps = visibleSteps();
         const total = Math.max(steps.length, 1);
-        const current = Math.min(state.stepIndex, total - 1);
+        // Ensure stepIndex is within bounds of visible steps
+        const current = Math.min(Math.max(state.stepIndex, 0), total - 1);
         state.stepIndex = current;
         const step = steps[current];
+        
+        console.log('🔍 renderStep - mode:', state.mode, 'stepIndex:', state.stepIndex, 'current:', current);
+        console.log('🔍 visibleSteps:', steps.map(s => s.id));
+        console.log('🔍 current step:', step ? step.id : 'none');
         const container = document.getElementById('steps-container');
         const bar = document.getElementById('progress-bar');
 
@@ -595,38 +1051,79 @@
 
         // Build options UI
         const selected = getCurrentAnswer(step.id);
+        // Get options from either static array or dynamic function
+        const options = step.getOptions ? step.getOptions() : step.options;
         let optionsHtml = '';
         if (step.type === 'radio') {
-            optionsHtml = step.options.map(opt => {
+            optionsHtml = options.map(opt => {
                 const checked = selected === opt.value ? 'checked' : '';
                 return `<label class="option ${checked? 'active':''}"><input type="radio" name="${step.id}" value="${opt.value}" ${checked}/> ${opt.label}</label>`;
             }).join('');
         } else if (step.type === 'checkbox') {
             const selectedArr = Array.isArray(selected) ? selected : [];
-            optionsHtml = step.options.map(opt => {
+            optionsHtml = options.map(opt => {
                 const checked = selectedArr.includes(opt.value) ? 'checked' : '';
                 return `<label class="option ${checked? 'active':''}"><input type="checkbox" name="${step.id}" value="${opt.value}" ${checked}/> ${opt.label}</label>`;
             }).join('');
         }
 
-        container.innerHTML = `<div class="step"><h3>${step.title}</h3><div class="options">${optionsHtml}</div></div>`;
+        // Apply grid layout for category steps that have many options
+        const shouldUseGrid = (step.id === 'cb2' || step.id === 'tr3' || step.id === 'tr1b' || step.id === 'tr5') && step.type === 'checkbox';
+        const optionsClass = shouldUseGrid ? 'options grid-layout' : 'options';
+        
+        container.innerHTML = `<div class="step"><h3>${step.title}</h3><div class="${optionsClass}">${optionsHtml}</div></div>`;
         updateHelp(step);
 
-        // Wire inputs
-        container.querySelectorAll('input').forEach(input => {
-            input.addEventListener('change', () => {
-                if (step.type === 'radio') { step.onAnswer(input.value); }
-                else if (step.type === 'checkbox') {
+        // Wire inputs and make entire options clickable
+        container.querySelectorAll('.option').forEach(option => {
+            const input = option.querySelector('input');
+
+            // Make entire option clickable and drive state transitions reliably
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (step.type === 'radio') {
+                    // Exclusive select
+                    container.querySelectorAll('input').forEach(cb => cb.checked = false);
+                    input.checked = true;
+                    // Visual state
+                    container.querySelectorAll('.option').forEach(l => l.classList.remove('active'));
+                    option.classList.add('active');
+                    // Apply answer and auto-advance (except for goal step)
+                    step.onAnswer(input.value);
+                    recomputeAndRender();
+                    
+                    // Don't auto-advance for the goal step - it handles its own navigation
+                    if (step.id !== 'goal') {
+                        setTimeout(() => {
+                            const steps = visibleSteps();
+                            if (state.stepIndex < steps.length - 1) {
+                                state.stepIndex++;
+                                renderStep();
+                            }
+                        }, 300);
+                    }
+                } else if (step.type === 'checkbox') {
+                    // Toggle selection
+                    input.checked = !input.checked;
+                    // Visual state
+                    option.classList.toggle('active', input.checked);
                     const vals = Array.from(container.querySelectorAll('input:checked')).map(cb => cb.value);
                     step.onAnswer(vals);
+                    state.lastApplied = { key: stepToFilterKey(step.id), value: input.value };
+                    recomputeAndRender();
                 }
-                // Visual active state
-                container.querySelectorAll('.option').forEach(l => l.classList.remove('active'));
-                container.querySelectorAll('input:checked').forEach(cb => cb.closest('.option').classList.add('active'));
-                configureModeTabs();
-                recomputeAndRender();
             });
         });
+    }
+
+    function stepToFilterKey(stepId) {
+        if (stepId.startsWith('cb')) return stepId === 'cb3' ? 'protections' : 'earning_any';
+        if (stepId === 'tr1b') return 'airline-hotel';
+        if (stepId === 'tr2') return 'perks';
+        if (stepId === 'tr3') return 'earning_any';
+        if (stepId === 'tr4') return 'perks';
+        if (stepId === 'tr5') return 'protections';
+        return null;
     }
 
     function updateHelp(step) {
@@ -634,10 +1131,11 @@
         const box = document.getElementById('help-box');
         if (!helpEl || !box) return;
         if (!step || !step.help) {
-            helpEl.textContent = 'Answer the question above to narrow your results. Tips for this step will appear here.';
+            helpEl.innerHTML = '<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li><strong>Getting started</strong><br>Answer the question above to narrow your results. Tips for this step will appear here.</li></ul>';
             return;
         }
-        helpEl.textContent = step.help;
+        // For each step, show its helper
+        helpEl.innerHTML = `<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li><strong>Tip</strong><br>${step.help}</li></ul>`;
     }
 
     function getCurrentAnswer(stepId) {
@@ -650,13 +1148,42 @@
 
     function configureModeTabs() {
         const tabs = document.getElementById('mode-tabs');
-        if (state.mode === 'either') { tabs.style.display = 'flex'; }
-        else { tabs.style.display = 'none'; state.activeTab = state.mode || 'cashback'; document.querySelectorAll('#mode-tabs .tab').forEach((t,i)=> t.classList.toggle('active', i===0)); }
+        if (state.mode === 'either') { 
+            tabs.style.display = 'flex';
+            // Ensure we have a default active tab
+            if (!state.activeTab) {
+                state.activeTab = 'cashback';
+            }
+            // Update tab visual state
+            document.querySelectorAll('#mode-tabs .tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.tab === state.activeTab);
+            });
+        } else if (state.mode) { 
+            tabs.style.display = 'none'; 
+            state.activeTab = state.mode; 
+            // When a goal is chosen, always start at the first step of that branch
+            state.stepIndex = 1;
+        } else {
+            // No mode selected (after reset)
+            tabs.style.display = 'none';
+            state.activeTab = null;
+        }
     }
 
     function recomputeAndRender() {
         const total = allCards.length;
         let showCards = [];
+        
+        console.log('Recomputing with state:', state);
+
+        // If no mode is selected (still in quiz), show intro text instead of cards
+        if (!state.mode) {
+            console.log('No mode selected, showing intro text');
+            showIntroText();
+            updateActiveFilterChipsUI({});
+            updateResultsHeadlineForQuiz();
+            return;
+        }
 
         if (state.mode === 'either') {
             // Render per tab
@@ -669,7 +1196,7 @@
             showCards = state.activeTab === 'cashback' ? cashCards : travCards;
             updateActiveFilterChipsUI( state.activeTab === 'cashback' ? cashFilters : travFilters );
             updateResultsHeadline(showCards.length, total);
-            renderCards(showCards);
+            if (showCards.length === 0) { renderZeroState(); } else { renderCards(showCards); }
             return;
         }
 
@@ -681,7 +1208,7 @@
         const cards = applyFiltersTo(allCards, merged);
         updateActiveFilterChipsUI(merged);
         updateResultsHeadline(cards.length, total);
-        renderCards(cards);
+        if (cards.length === 0) { renderZeroState(); } else { renderCards(cards); }
     }
 
     function mergeFilters(a, b) {
@@ -694,14 +1221,27 @@
         const container = document.getElementById('active-filters-chips');
         const line = document.getElementById('active-filters-line');
         container.innerHTML = '';
-        const entries = Object.entries(filters || {}).filter(([_,vals]) => vals && vals.length);
-        if (entries.length === 0) { line.style.display = 'none'; return; }
+        
+        // Handle case where filters is null/undefined or empty
+        if (!filters || Object.keys(filters).length === 0) { 
+            line.style.display = 'none'; 
+            return; 
+        }
+        
+        const entries = Object.entries(filters).filter(([_,vals]) => vals && vals.length);
+        if (entries.length === 0) { 
+            line.style.display = 'none'; 
+            return; 
+        }
+        
         line.style.display = 'flex';
         const nameMap = {
             type:{travel:'Travel',cashback:'Cash back'},
             issuer:{'amex':'American Express','chase':'Chase','capital-one':'Capital One','citi':'Citi','wells-fargo':'Wells Fargo','discover':'Discover'},
-            perks:{'lounge-access':'Lounge access','tsa-precheck':'TSA Pre/GE','clear':'CLEAR','no-foreign-fees':'No FTF'},
-            protections:{'trip-delay-cancellation':'Trip protections','rental-car-insurance':'Rental CDW','cell-phone-protection':'Cell phone protection'}
+            perks:{'lounge-access':'Lounge access','tsa-precheck':'TSA PreCheck','clear':'CLEAR','no-foreign-fees':'No FTF','free-checked-bags':'Free checked bags','priority-boarding':'Priority boarding','annual-free-night':'Annual free night','automatic-elite-status':'Elite status','rotating':'Rotating','flat-rate':'Flat rate'},
+            'airline-hotel':{'delta':'Delta','united':'United','american':'American','southwest':'Southwest','jetblue':'JetBlue','alaska':'Alaska','marriott':'Marriott','hilton':'Hilton','hyatt':'Hyatt','ihg':'IHG','wyndham':'Wyndham','choice':'Choice'},
+            protections:{'trip-delay-cancellation':'Trip protections','rental-car-insurance':'Rental CDW','cell-phone-protection':'Cell phone protection','lost-delayed-baggage':'Lost/Delayed baggage'},
+            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment'}
         };
         entries.forEach(([k,vals]) => {
             vals.forEach(v => {
@@ -717,13 +1257,72 @@
     }
 
     function removeFilter(key, value) {
-        const target = state.mode === 'travel' ? state.travelFilters : state.cashbackFilters;
-        if (!target[key]) return; target[key] = target[key].filter(v => v !== value); if (target[key].length === 0) delete target[key];
+        // Determine which filter set to modify based on current mode
+        let target;
+        if (state.mode === 'travel') {
+            target = state.travelFilters;
+        } else if (state.mode === 'cashback') {
+            target = state.cashbackFilters;
+        } else if (state.mode === 'either') {
+            // For "either" mode, modify the active tab's filter set
+            target = state.activeTab === 'cashback' ? state.cashbackFilters : state.travelFilters;
+        } else {
+            // If no mode is set, don't modify anything
+            return;
+        }
+        
+        if (!target[key]) return;
+        target[key] = target[key].filter(v => v !== value);
+        if (target[key].length === 0) delete target[key];
+        
         recomputeAndRender();
     }
 
+    function renderZeroState() {
+        const grid = document.getElementById('cards-grid');
+        const nameMap = {
+            type:{travel:'Travel',cashback:'Cash back'},
+            perks:{'lounge-access':'Lounge access','no-foreign-fees':'No FTF'},
+            protections:{'trip-delay-cancellation':'Trip protections','rental-car-insurance':'Rental CDW','cell-phone-protection':'Cell phone protection','lost-delayed-baggage':'Lost/Delayed baggage'},
+            'airline-hotel':{'delta':'Delta','united':'United','american':'American','southwest':'Southwest','jetblue':'JetBlue','alaska':'Alaska','marriott':'Marriott','hilton':'Hilton','hyatt':'Hyatt','ihg':'IHG','wyndham':'Wyndham','choice':'Choice'},
+            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment'}
+        };
+        const last = state.lastApplied;
+        const lastLabel = last && nameMap[last.key] ? (nameMap[last.key][last.value] || last.value) : 'last filter';
+        grid.classList.add('showing-intro');
+        grid.innerHTML = `
+            <div style="width: 100%; margin: 0; padding: 1rem; text-align: center; background: #fff; border-radius: 12px; border:1px solid #e5e7eb;">
+                <div style="color:#1e293b; font-weight:600; margin-bottom:.25rem;">No matches for that combo.</div>
+                <div style="color:#64748b;">Remove ${lastLabel} to see options. <button id="remove-last" class="btn btn-secondary" style="margin-left:.5rem; padding:.25rem .5rem;">× Remove</button></div>
+            </div>
+        `;
+        const btn = document.getElementById('remove-last');
+        if (btn && last && last.key) {
+            btn.addEventListener('click', () => removeFilter(last.key, last.value));
+        }
+    }
+
     function resetAllFilters() {
-        state.travelFilters = {}; state.cashbackFilters = {}; recomputeAndRender();
+        console.log('Resetting all filters...');
+        
+        // Reset all filter states
+        state.travelFilters = {};
+        state.cashbackFilters = {};
+        state.baseFilters = {};
+        
+        // Reset wizard state to beginning
+        state.stepIndex = 0;
+        state.mode = null;
+        state.lastApplied = null;
+        
+        // Re-render the wizard and results
+        renderStep();
+        recomputeAndRender();
+        
+        // Hide the active filters line
+        document.getElementById('active-filters-line').style.display = 'none';
+        
+        console.log('Filters reset complete. State:', state);
     }
     </script>
 </body>

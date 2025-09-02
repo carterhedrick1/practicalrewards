@@ -1037,7 +1037,7 @@
 
                 <div class="filter-pill" data-filter="issuer">
                     <button class="pill-button" onclick="toggleFilterDropdown('issuer')">
-                        <span class="pill-label">Issuer / Brand</span>
+                        <span class="pill-label">Banks</span>
                         <span class="pill-arrow">▼</span>
                     </button>
                     <div class="pill-dropdown" id="issuer-dropdown">
@@ -1049,11 +1049,33 @@
                         <label><input type="checkbox" name="issuer" value="citi" onchange="autoApplyFilters()"> Citi</label>
                         <label><input type="checkbox" name="issuer" value="discover" onchange="autoApplyFilters()"> Discover</label>
                         <label><input type="checkbox" name="issuer" value="bilt" onchange="autoApplyFilters()"> Bilt</label>
-                        <label><input type="checkbox" name="issuer" value="airlines" onchange="autoApplyFilters()"> Airlines</label>
-                        <label><input type="checkbox" name="issuer" value="hotels" onchange="autoApplyFilters()"> Hotels</label>
                         </div>
                         <div class="dropdown-footer">
                             <button class="reset-btn" onclick="resetFilter('issuer')">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-pill" data-filter="airline-hotel">
+                    <button class="pill-button" onclick="toggleFilterDropdown('airline-hotel')">
+                        <span class="pill-label">Airlines / Hotels</span>
+                        <span class="pill-arrow">▼</span>
+                    </button>
+                    <div class="pill-dropdown" id="airline-hotel-dropdown">
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="airline-hotel" value="delta" onchange="autoApplyFilters()"> Delta</label>
+                            <label><input type="checkbox" name="airline-hotel" value="united" onchange="autoApplyFilters()"> United</label>
+                            <label><input type="checkbox" name="airline-hotel" value="american" onchange="autoApplyFilters()"> American Airlines</label>
+                            <label><input type="checkbox" name="airline-hotel" value="southwest" onchange="autoApplyFilters()"> Southwest</label>
+                            <label><input type="checkbox" name="airline-hotel" value="jetblue" onchange="autoApplyFilters()"> JetBlue</label>
+                            <label><input type="checkbox" name="airline-hotel" value="alaska" onchange="autoApplyFilters()"> Alaska Airlines</label>
+                            <label><input type="checkbox" name="airline-hotel" value="marriott" onchange="autoApplyFilters()"> Marriott</label>
+                            <label><input type="checkbox" name="airline-hotel" value="hilton" onchange="autoApplyFilters()"> Hilton</label>
+                            <label><input type="checkbox" name="airline-hotel" value="hyatt" onchange="autoApplyFilters()"> Hyatt</label>
+                            <label><input type="checkbox" name="airline-hotel" value="ihg" onchange="autoApplyFilters()"> IHG</label>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button class="reset-btn" onclick="resetFilter('airline-hotel')">Reset</button>
                         </div>
                     </div>
                 </div>
@@ -1088,6 +1110,10 @@
         <label><input type="checkbox" name="perks" value="clear" onchange="autoApplyFilters()"> CLEAR</label>
         <label><input type="checkbox" name="perks" value="no-foreign-fees" onchange="autoApplyFilters()"> No Foreign Transaction Fees</label>
         <label><input type="checkbox" name="perks" value="metal-card" onchange="autoApplyFilters()"> Metal Card</label>
+        <label><input type="checkbox" name="perks" value="free-checked-bags" onchange="autoApplyFilters()"> Free Checked Bags</label>
+        <label><input type="checkbox" name="perks" value="priority-boarding" onchange="autoApplyFilters()"> Priority Boarding</label>
+        <label><input type="checkbox" name="perks" value="annual-free-night" onchange="autoApplyFilters()"> Annual Free Night</label>
+        <label><input type="checkbox" name="perks" value="automatic-elite-status" onchange="autoApplyFilters()"> Automatic Elite Status</label>
                         </div>
                         <div class="dropdown-footer">
                             <button class="reset-btn" onclick="resetFilter('perks')">Reset</button>
@@ -1104,7 +1130,7 @@
                         <div class="dropdown-content">
                             <label><input type="checkbox" name="protections" value="trip-delay-cancellation" onchange="autoApplyFilters()"> Trip Delay & Cancellation Insurance</label>
                             <label><input type="checkbox" name="protections" value="lost-delayed-baggage" onchange="autoApplyFilters()"> Lost/Delayed Baggage Insurance</label>
-                            <label><input type="checkbox" name="protections" value="rental-car-insurance" onchange="autoApplyFilters()"> Rental Car Collision Damage Waiver</label>
+                            <label><input type="checkbox" name="protections" value="rental-car-insurance" onchange="autoApplyFilters()"> Primary Rental Car Coverage</label>
                             <label><input type="checkbox" name="protections" value="cell-phone-protection" onchange="autoApplyFilters()"> Cell Phone Protection</label>
                             <label><input type="checkbox" name="protections" value="purchase-protection" onchange="autoApplyFilters()"> Purchase Protection</label>
                             <label><input type="checkbox" name="protections" value="extended-warranty" onchange="autoApplyFilters()"> Extended Warranty</label>
@@ -1187,7 +1213,7 @@
                     <!-- Issuer Section -->
                     <div class="mobile-filter-section">
                         <div class="mobile-filter-header" onclick="toggleMobileSection('issuer')">
-                            <h4>Issuer / Brand</h4>
+                            <h4>Banks</h4>
                             <span class="mobile-arrow">▼</span>
                         </div>
                         <div class="mobile-filter-options" id="mobile-issuer-options">
@@ -1198,8 +1224,26 @@
                         <label><input type="checkbox" name="mobile-issuer" value="citi" onchange="autoApplyMobileFilters()"> Citi</label>
                         <label><input type="checkbox" name="mobile-issuer" value="discover" onchange="autoApplyMobileFilters()"> Discover</label>
                         <label><input type="checkbox" name="mobile-issuer" value="bilt" onchange="autoApplyMobileFilters()"> Bilt</label>
-                        <label><input type="checkbox" name="mobile-issuer" value="airlines" onchange="autoApplyMobileFilters()"> Airlines</label>
-                        <label><input type="checkbox" name="mobile-issuer" value="hotels" onchange="autoApplyMobileFilters()"> Hotels</label>
+                        </div>
+                    </div>
+
+                    <!-- Airline/Hotel Section -->
+                    <div class="mobile-filter-section">
+                        <div class="mobile-filter-header" onclick="toggleMobileSection('airline-hotel')">
+                            <h4>Airlines / Hotels</h4>
+                            <span class="mobile-arrow">▼</span>
+                        </div>
+                        <div class="mobile-filter-options" id="mobile-airline-hotel-options">
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="delta" onchange="autoApplyMobileFilters()"> Delta</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="united" onchange="autoApplyMobileFilters()"> United</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="american" onchange="autoApplyMobileFilters()"> American Airlines</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="southwest" onchange="autoApplyMobileFilters()"> Southwest</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="jetblue" onchange="autoApplyMobileFilters()"> JetBlue</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="alaska" onchange="autoApplyMobileFilters()"> Alaska Airlines</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="marriott" onchange="autoApplyMobileFilters()"> Marriott</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="hilton" onchange="autoApplyMobileFilters()"> Hilton</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="hyatt" onchange="autoApplyMobileFilters()"> Hyatt</label>
+                            <label><input type="checkbox" name="mobile-airline-hotel" value="ihg" onchange="autoApplyMobileFilters()"> IHG</label>
                         </div>
                     </div>
 
@@ -1229,6 +1273,10 @@
         <label><input type="checkbox" name="mobile-perks" value="clear" onchange="autoApplyMobileFilters()"> CLEAR</label>
         <label><input type="checkbox" name="mobile-perks" value="no-foreign-fees" onchange="autoApplyMobileFilters()"> No Foreign Transaction Fees</label>
         <label><input type="checkbox" name="mobile-perks" value="metal-card" onchange="autoApplyMobileFilters()"> Metal Card</label>
+        <label><input type="checkbox" name="mobile-perks" value="free-checked-bags" onchange="autoApplyMobileFilters()"> Free Checked Bags</label>
+        <label><input type="checkbox" name="mobile-perks" value="priority-boarding" onchange="autoApplyMobileFilters()"> Priority Boarding</label>
+        <label><input type="checkbox" name="mobile-perks" value="annual-free-night" onchange="autoApplyMobileFilters()"> Annual Free Night</label>
+        <label><input type="checkbox" name="mobile-perks" value="automatic-elite-status" onchange="autoApplyMobileFilters()"> Automatic Elite Status</label>
                         </div>
                     </div>
 
@@ -1241,7 +1289,7 @@
                         <div class="mobile-filter-options" id="mobile-protections-options">
                             <label><input type="checkbox" name="mobile-protections" value="trip-delay-cancellation" onchange="autoApplyMobileFilters()"> Trip Delay & Cancellation Insurance</label>
                             <label><input type="checkbox" name="mobile-protections" value="lost-delayed-baggage" onchange="autoApplyMobileFilters()"> Lost/Delayed Baggage Insurance</label>
-                            <label><input type="checkbox" name="mobile-protections" value="rental-car-insurance" onchange="autoApplyMobileFilters()"> Rental Car Collision Damage Waiver</label>
+                            <label><input type="checkbox" name="mobile-protections" value="rental-car-insurance" onchange="autoApplyMobileFilters()"> Primary Rental Car Coverage</label>
                             <label><input type="checkbox" name="mobile-protections" value="cell-phone-protection" onchange="autoApplyMobileFilters()"> Cell Phone Protection</label>
                             <label><input type="checkbox" name="mobile-protections" value="purchase-protection" onchange="autoApplyMobileFilters()"> Purchase Protection</label>
                             <label><input type="checkbox" name="mobile-protections" value="extended-warranty" onchange="autoApplyMobileFilters()"> Extended Warranty</label>
@@ -1843,6 +1891,11 @@
                         const cardPerks = card.perkCategories || [];
                         const hasPerk = filterValues.some(perk => cardPerks.includes(perk));
                         if (!hasPerk) return false;
+                    } else if (filterType === 'airline-hotel') {
+                        // Check if card has any of the selected airline/hotel categories
+                        const cardAirlineHotel = card.airline_hotel || [];
+                        const hasAirlineHotel = filterValues.some(airlineHotel => cardAirlineHotel.includes(airlineHotel));
+                        if (!hasAirlineHotel) return false;
                     } else if (filterType === 'protections') {
                         // Check if card has any of the selected protections
                         const cardProtections = card.protectionCategories || [];
@@ -1901,9 +1954,7 @@
                     'wells-fargo': 'Wells Fargo',
                     'citi': 'Citi',
                     'discover': 'Discover',
-                    'bilt': 'Bilt',
-                    'airlines': 'Airlines',
-                    'hotels': 'Hotels'
+                    'bilt': 'Bilt'
                 },
                 'fee': {
                     '0-100': '$0-$100',
@@ -1915,12 +1966,29 @@
                     'lounge-access': 'Lounge Access',
                     'tsa-precheck': 'TSA Pre/Global Entry',
                     'clear': 'CLEAR',
-                    'no-foreign-fees': 'No Foreign Transaction Fees'
+                    'no-foreign-fees': 'No Foreign Transaction Fees',
+                    'metal-card': 'Metal Card',
+                    'free-checked-bags': 'Free Checked Bags',
+                    'priority-boarding': 'Priority Boarding',
+                    'annual-free-night': 'Annual Free Night',
+                    'automatic-elite-status': 'Automatic Elite Status'
+                },
+                'airline-hotel': {
+                    'delta': 'Delta',
+                    'united': 'United',
+                    'american': 'American Airlines',
+                    'southwest': 'Southwest',
+                    'jetblue': 'JetBlue',
+                    'alaska': 'Alaska Airlines',
+                    'marriott': 'Marriott',
+                    'hilton': 'Hilton',
+                    'hyatt': 'Hyatt',
+                    'ihg': 'IHG'
                 },
                 'protections': {
                     'trip-delay-cancellation': 'Trip Delay & Cancellation Insurance',
                     'lost-delayed-baggage': 'Lost/Delayed Baggage Insurance',
-                    'rental-car-insurance': 'Rental Car Collision Damage Waiver',
+                    'rental-car-insurance': 'Primary Rental Car Coverage',
                     'cell-phone-protection': 'Cell Phone Protection',
                     'purchase-protection': 'Purchase Protection',
                     'extended-warranty': 'Extended Warranty'
@@ -2223,6 +2291,12 @@
                 newFilters.perks = Array.from(perksCheckboxes).map(cb => cb.value);
             }
             
+            // Collect airline/hotel filters
+            const airlineHotelCheckboxes = document.querySelectorAll('input[name="airline-hotel"]:checked');
+            if (airlineHotelCheckboxes.length > 0) {
+                newFilters['airline-hotel'] = Array.from(airlineHotelCheckboxes).map(cb => cb.value);
+            }
+            
             // Collect protections filters
             const protectionsCheckboxes = document.querySelectorAll('input[name="protections"]:checked');
             if (protectionsCheckboxes.length > 0) {
@@ -2259,6 +2333,12 @@
             const perksCheckboxes = document.querySelectorAll('input[name="mobile-perks"]:checked');
             if (perksCheckboxes.length > 0) {
                 newFilters.perks = Array.from(perksCheckboxes).map(cb => cb.value);
+            }
+            
+            // Collect airline/hotel filters
+            const airlineHotelCheckboxes = document.querySelectorAll('input[name="mobile-airline-hotel"]:checked');
+            if (airlineHotelCheckboxes.length > 0) {
+                newFilters['airline-hotel'] = Array.from(airlineHotelCheckboxes).map(cb => cb.value);
             }
             
             // Collect protections filters

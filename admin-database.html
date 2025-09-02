@@ -8,66 +8,287 @@
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             margin: 0; 
-            padding: 20px; 
-            background: #f5f5f5; 
+            padding: 0; 
+            background: #f8fafc; 
+            color: #1e293b;
+            line-height: 1.6;
         }
-        .container { max-width: 1400px; margin: 0 auto; }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 20px;
+        }
+        
         .header { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 8px; 
-            margin-bottom: 20px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);    
         }
+        
+        .header h1 { 
+            margin: 0 0 10px 0; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header p { 
+            margin: 0; 
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
         .status-bar {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border-left: 4px solid #2196f3;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            border: none;
+            text-align: center;
         }
-        .status-bar.success { background: #e8f5e8; border-left-color: #4caf50; }
-        .status-bar.error { background: #ffebee; border-left-color: #f44336; }
-        .card-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
-            gap: 20px; 
+        
+        .status-bar.success { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
         }
-        .card { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-            border: 1px solid #e0e0e0;
+        
+        .status-bar.error { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
         }
-        .card h3 { margin-top: 0; color: #333; }
-        .card img { max-width: 80px; height: auto; border-radius: 4px; }
-        .card-details { margin: 10px 0; }
-        .card-details p { margin: 5px 0; font-size: 14px; }
+        
+        .database-info {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .database-info h4 { 
+            margin: 0 0 15px 0; 
+            color: #1e293b;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .database-info p { 
+            margin: 8px 0; 
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+        
+        .controls-header {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
         .btn { 
-            background: #007bff; 
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white; 
             border: none; 
-            padding: 8px 16px; 
-            border-radius: 4px; 
+            padding: 12px 24px; 
+            border-radius: 12px; 
             cursor: pointer; 
-            margin: 3px; 
-            font-size: 14px;
+            margin: 8px; 
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
-        .btn:hover { background: #0056b3; }
-        .btn-danger { background: #dc3545; }
-        .btn-danger:hover { background: #c82333; }
-        .btn-success { background: #28a745; }
-        .btn-success:hover { background: #218838; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-success { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-success:hover { 
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-danger { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-danger:hover { 
+            box-shadow: 0 6px 25px rgba(239, 68, 68, 0.4);
+        }
+        
+        .cards-table {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table-header h3 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .table th {
+            background: #f8fafc;
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        
+        .table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        
+        .table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .card-name {
+            font-weight: 600;
+            color: #1e293b;
+            min-width: 200px;
+        }
+        
+        .card-type {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+        
+        .card-fee {
+            font-weight: 600;
+            color: #059669;
+        }
+        
+        .card-fee.zero {
+            color: #10b981;
+        }
+        
+        .card-fee.high {
+            color: #dc2626;
+        }
+        
+        .card-bank {
+            color: #64748b;
+            font-size: 0.85rem;
+            text-transform: capitalize;
+        }
+        
+        .card-rewards {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+        
+        .card-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .card-status.active {
+            background: #dcfce7;
+            color: #059669;
+        }
+        
+        .card-status.inactive {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        
+        .card-status.coming-soon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        
+        .table-actions .btn {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+        
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.95rem;
+        }
+        
         .form-group input, .form-group select, .form-group textarea { 
             width: 100%; 
-            padding: 8px; 
-            border: 1px solid #ddd; 
-            border-radius: 4px; 
-            font-size: 14px;
+            padding: 12px 16px; 
+            border: 2px solid #e5e7eb; 
+            border-radius: 12px; 
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #f9fafb;
         }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
         .modal { 
             display: none; 
             position: fixed; 
@@ -75,39 +296,113 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0,0,0,0.5); 
+            background: rgba(0,0,0,0.6); 
             z-index: 1000;
+            backdrop-filter: blur(5px);
         }
+        
         .modal-content { 
             background: white; 
-            margin: 5% auto; 
-            padding: 25px; 
+            padding: 30px; 
             width: 90%; 
-            max-width: 700px; 
-            border-radius: 8px; 
-            max-height: 90vh;
+            max-width: 800px; 
+            border-radius: 20px; 
+            max-height: 85vh;
             overflow-y: auto;
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-sizing: border-box;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 1px solid #e2e8f0;
         }
+        
         .close { 
             float: right; 
-            font-size: 28px; 
-            font-weight: bold; 
+            font-size: 32px; 
+            font-weight: 300; 
             cursor: pointer; 
-            color: #999;
+            color: #9ca3af;
+            transition: color 0.3s ease;
+            line-height: 1;
         }
-        .close:hover { color: #333; }
-        .loading { text-align: center; padding: 40px; color: #666; }
-        .error { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 4px; margin: 10px 0; }
-        .success { color: #28a745; background: #d4edda; padding: 10px; border-radius: 4px; margin: 10px 0; }
-        .database-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border: 1px solid #dee2e6;
+        
+        .close:hover { 
+            color: #374151;
         }
-        .database-info h4 { margin-top: 0; color: #495057; }
-        .database-info p { margin: 5px 0; font-size: 14px; }
+        
+        .loading { 
+            text-align: center; 
+            padding: 60px; 
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        .error { 
+            color: #dc2626; 
+            background: #fef2f2; 
+            padding: 16px; 
+            border-radius: 12px; 
+            margin: 15px 0; 
+            border: 1px solid #fecaca;
+        }
+        
+        .success { 
+            color: #059669; 
+            background: #f0fdf4; 
+            padding: 16px; 
+            border-radius: 12px; 
+            margin: 15px 0; 
+            border: 1px solid #bbf7d0;
+        }
+        
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-grid label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-grid label:hover {
+            background: #f1f5f9;
+        }
+        
+        .checkbox-grid input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .modal h2 {
+            color: #1e293b;
+            margin-bottom: 25px;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+        
+        .form-submit {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .form-submit .btn {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -128,14 +423,14 @@
             <p><strong>Status:</strong> <span id="dbStatus">Checking...</span></p>
         </div>
 
-        <div class="header">
+        <div class="controls-header">
             <button class="btn btn-success" onclick="openAddModal()">➕ Add New Card</button>
             <button class="btn" onclick="refreshData()">🔄 Refresh Data</button>
             <button class="btn" onclick="exportData()">📥 Export Data</button>
             <button class="btn" onclick="importData()">📤 Import Data</button>
             <button class="btn" onclick="setupDatabase()">🔧 Setup Database</button>
-            <button class="btn" onclick="addWellsFargoActiveCash()" style="background: #ff6b35;">🔧 Add Wells Fargo Card</button>
-            <button class="btn" onclick="addCitiDoubleCash()" style="background: #059669;">🔧 Add Citi Double Cash</button>
+            <button class="btn" onclick="addWellsFargoActiveCash()" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">🔧 Add Wells Fargo Card</button>
+            <button class="btn" onclick="addCitiDoubleCash()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Citi Double Cash</button>
         </div>
 
         <div id="cards-container">
@@ -155,21 +450,21 @@
                 </div>
                 <div class="form-group">
                     <label>Type:</label>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;">
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="cardTypes" value="travel" style="width: auto; margin-right: 8px;">
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="cardTypes" value="travel">
                             Travel
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="cardTypes" value="cashback" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="cardTypes" value="cashback">
                             Cashback
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="cardTypes" value="hybrid" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="cardTypes" value="hybrid">
                             Hybrid
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="cardTypes" value="business" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="cardTypes" value="business">
                             Business
                         </label>
                     </div>
@@ -194,21 +489,21 @@
                 </div>
                 <div class="form-group">
                     <label>Rewards Type:</label>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;">
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="rewardsTypes" value="points" style="width: auto; margin-right: 8px;">
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="rewardsTypes" value="points">
                             Points
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="rewardsTypes" value="miles" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="rewardsTypes" value="miles">
                             Miles
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="rewardsTypes" value="cashback" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="rewardsTypes" value="cashback">
                             Cashback
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="rewardsTypes" value="hybrid" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="rewardsTypes" value="hybrid">
                             Hybrid
                         </label>
                     </div>
@@ -246,26 +541,144 @@
                 <!-- Perk Categories (exactly matching your filters) -->
                 <div class="form-group">
                     <label>Perk Categories:</label>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;">
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="perkCategories" value="lounge-access" style="width: auto; margin-right: 8px;">
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="lounge-access">
                             Lounge Access
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="perkCategories" value="tsa-precheck" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="tsa-precheck">
                             TSA Pre/Global Entry
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="perkCategories" value="clear" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="clear">
                             CLEAR
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="perkCategories" value="no-foreign-fees" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="no-foreign-fees">
                             No Foreign Transaction Fees
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="perkCategories" value="metal-card" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="metal-card">
                             Metal Card
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="free-checked-bags">
+                            Free Checked Bags
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="priority-boarding">
+                            Priority Boarding
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="annual-free-night">
+                            Annual Free Night
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="automatic-elite-status">
+                            Automatic Elite Status
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Airline/Hotel Categories -->
+                <div class="form-group">
+                    <label>Airline/Hotel Categories:</label>
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="delta">
+                            Delta
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="united">
+                            United
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="american">
+                            American Airlines
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="southwest">
+                            Southwest
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="jetblue">
+                            JetBlue
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="alaska">
+                            Alaska Airlines
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="marriott">
+                            Marriott
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="hilton">
+                            Hilton
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="hyatt">
+                            Hyatt
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="ihg">
+                            IHG
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Earning Categories -->
+                <div class="form-group">
+                    <label>Earning Categories:</label>
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="dining">
+                            Dining
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="groceries">
+                            Groceries
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="gas">
+                            Gas
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="travel">
+                            Travel
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="transit">
+                            Transit
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="drugstores">
+                            Drugstores
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="online">
+                            Online
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="streaming">
+                            Streaming
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="telecom">
+                            Telecom
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="entertainment">
+                            Entertainment
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="rotating">
+                            Rotating
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="flat-rate">
+                            Flat Rate
                         </label>
                     </div>
                 </div>
@@ -273,30 +686,32 @@
                 <!-- Protection Categories (exactly as you specified) -->
                 <div class="form-group">
                     <label>Protection Categories:</label>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;">
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="protectionCategories" value="trip-delay-cancellation" style="width: auto; margin-right: 8px;">
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="trip-delay-cancellation">
                             Trip Delay & Cancellation
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="protectionCategories" value="lost-delayed-baggage" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="lost-delayed-baggage">
                             Lost or Delayed Baggage
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="protectionCategories" value="rental-car-insurance" style="width: auto; margin-right: 8px;">
-                            Rental Car Insurance
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="rental-car-insurance">
+                            Primary Rental Car Coverage
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="protectionCategories" value="cell-phone-protection" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="cell-phone-protection">
                             Cell Phone Protection
                         </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="checkbox" name="protectionCategories" value="purchase-protection" style="width: auto; margin-right: 8px;">
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="purchase-protection">
                             Purchase Protection
                         </label>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">💾 Save to Database</button>
+                <div class="form-submit">
+                    <button type="submit" class="btn btn-success">💾 Save to Database</button>
+                </div>
             </form>
         </div>
     </div>
@@ -429,13 +844,17 @@
                 console.log('Loading cards from database...');
                 updateStatus('Loading cards from database...', 'info');
                 
-                const { data, error } = await supabase.from('cards').select('id, name, type, annual_fee, bank_type, rewards_type, image_url, features, card_url, status, welcome_bonus, practical_advice, perk_categories, protection_categories').order('name', { ascending: true });
+                const { data, error } = await supabase.from('cards').select('id, name, type, annual_fee, bank_type, rewards_type, image_url, features, card_url, status, welcome_bonus, practical_advice, perk_categories, earning_categories, airline_hotels, protection_categories').order('name', { ascending: true });
 
                 if (error) {
                     throw new Error(`Database error: ${error.message}`);
                 } else {
                     console.log('Cards loaded from database:', data);
                     console.log('🔍 First card raw data:', data[0]);
+                    if (data[0]) {
+                        console.log('🔍 First card features from DB:', data[0].features);
+                        console.log('🔍 First card features type:', typeof data[0].features);
+                    }
                     
                     // Map database fields to our expected format
                     cards = data.map(card => ({
@@ -452,6 +871,8 @@
                         welcome_bonus: card.welcome_bonus || '',
                         practical_advice: card.practical_advice || '',
                         perk_categories: card.perk_categories || [],
+                        earning_categories: card.earning_categories || [],
+                        airline_hotels: card.airline_hotels || [],
                         protection_categories: card.protection_categories || []
                     }));
                     
@@ -570,34 +991,45 @@
                 return;
             }
             
-            container.innerHTML = '';
-            
-            cards.forEach(card => {
-                const cardDiv = document.createElement('div');
-                cardDiv.className = 'card';
-                cardDiv.innerHTML = `
-                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                        <img src="${card.image || 'images/venture-x.png'}" alt="${card.name}" onerror="this.src='images/venture-x.png'" style="margin-right: 15px;">
-                        <div>
-                            <h3>${card.name}</h3>
-                            <span class="btn" style="background: ${card.status === 'active' ? '#28a745' : '#6c757d'}; font-size: 12px;">${card.status}</span>
-                        </div>
+            container.innerHTML = `
+                <div class="cards-table">
+                    <div class="table-header">
+                        <h3>📊 Credit Cards Database (${cards.length} cards)</h3>
                     </div>
-                    <div class="card-details">
-                        <p><strong>Type:</strong> ${Array.isArray(card.type) ? card.type.join(', ') : card.type}</p>
-                        <p><strong>Annual Fee:</strong> $${card.annualFee}</p>
-                        <p><strong>Bank:</strong> ${card.bankType}</p>
-                        <p><strong>Rewards:</strong> ${Array.isArray(card.rewards) ? card.rewards.join(', ') : card.rewards}</p>
-                        <p><strong>Earning Rate:</strong> ${card.features ? card.features.slice(0, 2).join(', ') + (card.features.length > 2 ? '...' : '') : 'None'}</p>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Card Name</th>
+                                    <th>Type</th>
+                                    <th>Annual Fee</th>
+                                    <th>Bank</th>
+                                    <th>Rewards</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${cards.map(card => `
+                                    <tr>
+                                        <td class="card-name">${card.name}</td>
+                                        <td class="card-type">${Array.isArray(card.type) ? card.type.join(', ') : card.type || 'N/A'}</td>
+                                        <td class="card-fee ${card.annualFee === 0 ? 'zero' : card.annualFee >= 400 ? 'high' : ''}">$${card.annualFee || 0}</td>
+                                        <td class="card-bank">${card.bankType || 'N/A'}</td>
+                                        <td class="card-rewards">${Array.isArray(card.rewards) ? card.rewards.join(', ') : card.rewards || 'N/A'}</td>
+                                        <td><span class="card-status ${card.status || 'active'}">${card.status || 'active'}</span></td>
+                                        <td class="table-actions">
+                                            <button class="btn" onclick="editCard(${card.id})">✏️ Edit</button>
+                                            <button class="btn btn-danger" onclick="deleteCard(${card.id})">🗑️ Delete</button>
+                                            <button class="btn" onclick="viewCard(${card.id})">👁️ View</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
                     </div>
-                    <div style="margin-top: 15px;">
-                        <button class="btn" onclick="editCard(${card.id})">✏️ Edit</button>
-                        <button class="btn btn-danger" onclick="deleteCard(${card.id})">🗑️ Delete</button>
-                        <button class="btn" onclick="viewCard(${card.id})">👁️ View</button>
-                    </div>
-                `;
-                container.appendChild(cardDiv);
-            });
+                </div>
+            `;
         }
 
         function openAddModal() {
@@ -607,6 +1039,8 @@
             
             // Clear all checkboxes
             document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="earningCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="airlineHotel"]').forEach(checkbox => checkbox.checked = false);
             document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
             document.querySelectorAll('input[name="rewardsTypes"]').forEach(checkbox => checkbox.checked = false);
             document.querySelectorAll('input[name="cardTypes"]').forEach(checkbox => checkbox.checked = false);
@@ -717,7 +1151,25 @@
                 }
             }
             document.getElementById('imageUrl').value = card.image || '';
-            document.getElementById('features').value = Array.isArray(card.features) ? card.features.join('\n') : '';
+            
+            // Debug features data
+            console.log('🔍 Card features data:', card.features);
+            console.log('🔍 Features type:', typeof card.features);
+            console.log('🔍 Is features array?', Array.isArray(card.features));
+            
+            // Handle features data more robustly
+            let featuresValue = '';
+            if (Array.isArray(card.features)) {
+                featuresValue = card.features.join('\n');
+            } else if (typeof card.features === 'string') {
+                featuresValue = card.features;
+            } else if (card.features) {
+                featuresValue = String(card.features);
+            }
+            
+            console.log('🔍 Final features value:', featuresValue);
+            document.getElementById('features').value = featuresValue;
+            
             document.getElementById('welcomeBonus').value = card.welcome_bonus || card.welcomeBonus || '';
             document.getElementById('practicalAdvice').value = card.practical_advice || card.practicalAdvice || '';
             document.getElementById('cardUrl').value = card.url || '';
@@ -726,6 +1178,8 @@
             
             // Clear all checkboxes first
             document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="earningCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="airlineHotel"]').forEach(checkbox => checkbox.checked = false);
             document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
             
             // Populate perk categories
@@ -735,6 +1189,40 @@
                     const cleanValue = category.replace(/[\[\]"]/g, '');
                     const checkbox = document.querySelector(`input[name="perkCategories"][value="${cleanValue}"]`);
                     if (checkbox) checkbox.checked = true;
+                });
+            }
+            
+            // Populate earning categories
+            console.log('🔍 Card earning_categories data:', card.earning_categories);
+            if (card.earning_categories) {
+                card.earning_categories.forEach(category => {
+                    // Remove brackets and quotes from array values
+                    const cleanValue = category.replace(/[\[\]"]/g, '');
+                    console.log('🔍 Looking for earning category checkbox with value:', cleanValue);
+                    const checkbox = document.querySelector(`input[name="earningCategories"][value="${cleanValue}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        console.log('✅ Found and checked earning category checkbox for:', cleanValue);
+                    } else {
+                        console.log('❌ No earning category checkbox found for value:', cleanValue);
+                    }
+                });
+            }
+            
+            // Populate airline/hotel categories
+            console.log('🔍 Card airline_hotels data:', card.airline_hotels);
+            if (card.airline_hotels) {
+                card.airline_hotels.forEach(category => {
+                    // Remove brackets and quotes from array values
+                    const cleanValue = category.replace(/[\[\]"]/g, '');
+                    console.log('🔍 Looking for airline/hotel checkbox with value:', cleanValue);
+                    const checkbox = document.querySelector(`input[name="airlineHotel"][value="${cleanValue}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        console.log('✅ Found and checked airline/hotel checkbox for:', cleanValue);
+                    } else {
+                        console.log('❌ No airline/hotel checkbox found for value:', cleanValue);
+                    }
                 });
             }
             
@@ -779,7 +1267,28 @@
             const card = cards.find(c => c.id === cardId);
             if (!card) return;
 
-            alert(`Card: ${card.name}\nType: ${card.type}\nAnnual Fee: $${card.annualFee}\nBank: ${card.bankType}\nRewards: ${card.rewards}\nFeatures: ${Array.isArray(card.features) ? card.features.join(', ') : 'None'}`);
+            const cardInfo = [
+                `📋 ${card.name}`,
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                `Type: ${Array.isArray(card.type) ? card.type.join(', ') : card.type}`,
+                `Annual Fee: $${card.annualFee}`,
+                `Bank: ${card.bankType}`,
+                `Status: ${card.status || 'active'}`,
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                `Rewards: ${Array.isArray(card.rewards) ? card.rewards.join(', ') : card.rewards}`,
+                `Features: ${Array.isArray(card.features) ? card.features.join(' | ') : 'None'}`,
+                `Welcome Bonus: ${card.welcome_bonus || 'None'}`,
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                `Practical Advice: ${card.practical_advice || 'None'}`,
+                `Card URL: ${card.card_url || 'None'}`,
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                `Perks: ${Array.isArray(card.perk_categories) && card.perk_categories.length > 0 ? card.perk_categories.join(', ') : 'None'}`,
+                `Earning Categories: ${Array.isArray(card.earning_categories) && card.earning_categories.length > 0 ? card.earning_categories.join(', ') : 'None'}`,
+                `Airline/Hotel: ${Array.isArray(card.airline_hotels) && card.airline_hotels.length > 0 ? card.airline_hotels.join(', ') : 'None'}`,
+                `Protections: ${Array.isArray(card.protection_categories) && card.protection_categories.length > 0 ? card.protection_categories.join(', ') : 'None'}`
+            ].join('\n');
+
+            alert(cardInfo);
         }
 
         // Form submission
@@ -800,6 +1309,12 @@
                 return;
             }
             
+            // Debug form data before submission
+            const featuresText = document.getElementById('features').value;
+            const featuresArray = featuresText.split('\n').filter(f => f.trim());
+            console.log('🔍 Features text from form:', featuresText);
+            console.log('🔍 Features array from form:', featuresArray);
+            
             const cardData = {
                 name: document.getElementById('cardName').value,
                 type: Array.from(document.querySelectorAll('input[name="cardTypes"]:checked')).map(cb => cb.value),
@@ -807,13 +1322,15 @@
                 bank_type: document.getElementById('bankType').value,
                 rewards_type: Array.from(document.querySelectorAll('input[name="rewardsTypes"]:checked')).map(cb => cb.value),
                 image_url: document.getElementById('imageUrl').value || '',
-                features: document.getElementById('features').value.split('\n').filter(f => f.trim()),
+                features: featuresArray,
                 welcome_bonus: document.getElementById('welcomeBonus').value || '',
                 practical_advice: document.getElementById('practicalAdvice').value || '',
                 card_url: document.getElementById('cardUrl').value || '',
                 status: document.getElementById('cardStatus').value,
 
                 perk_categories: Array.from(document.querySelectorAll('input[name="perkCategories"]:checked')).map(cb => cb.value),
+                earning_categories: Array.from(document.querySelectorAll('input[name="earningCategories"]:checked')).map(cb => cb.value),
+                airline_hotels: Array.from(document.querySelectorAll('input[name="airlineHotel"]:checked')).map(cb => cb.value),
                 protection_categories: Array.from(document.querySelectorAll('input[name="protectionCategories"]:checked')).map(cb => cb.value)
             };
 
@@ -955,6 +1472,7 @@
                     card_url: "card-pages/wells-fargo-active-cash.html",
                     status: "active",
                     perk_categories: [],
+                    earning_categories: ["flat-rate"],
                     protection_categories: ["rental-car-insurance", "cell-phone-protection"]
                 };
 
@@ -1002,6 +1520,7 @@
                     card_url: "card-pages/citi-double-cash.html",
                     status: "active",
                     perk_categories: [],
+                    earning_categories: ["flat-rate"],
                     protection_categories: ["purchase-protection", "extended-warranty"]
                 };
 
@@ -1049,6 +1568,7 @@
                     card_url: "card-pages/amex-gold.html",
                     status: "active",
                     perk_categories: ["no-foreign-fees", "metal-card"],
+                    earning_categories: ["dining", "groceries", "travel"],
                     protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
                 };
 
@@ -1096,6 +1616,7 @@
                     card_url: "card-pages/capital-one-savor.html",
                     status: "active",
                     perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["dining", "entertainment", "groceries", "streaming", "travel"],
                     protection_categories: ["rental-car-insurance", "purchase-protection", "extended-warranty"]
                 };
 
@@ -1143,6 +1664,7 @@
                     card_url: "card-pages/chase-sapphire-preferred.html",
                     status: "active",
                     perk_categories: ["no-foreign-fees", "lounge-access"],
+                    earning_categories: ["dining", "travel", "groceries", "streaming"],
                     protection_categories: ["trip-cancellation-interruption", "trip-delay", "baggage-delay", "lost-damaged-luggage", "rental-car-insurance", "travel-accident-insurance", "purchase-protection", "extended-warranty"]
                 };
 
@@ -1190,6 +1712,7 @@
                     card_url: "card-pages/chase-freedom-unlimited.html",
                     status: "active",
                     perk_categories: ["no-annual-fee"],
+                    earning_categories: ["travel", "dining", "drugstores"],
                     protection_categories: ["purchase-protection", "extended-warranty", "trip-cancellation-interruption", "rental-car-insurance"]
                 };
 
@@ -1237,6 +1760,7 @@
                     card_url: "card-pages/wells-fargo-autograph-journey.html",
                     status: "active",
                     perk_categories: ["no-foreign-fees", "airline-hotel-transfers"],
+                    earning_categories: ["travel", "dining"],
                     protection_categories: ["trip-cancellation-interruption", "trip-delay", "lost-damaged-luggage", "rental-car-insurance", "cell-phone-protection"]
                 };
 
@@ -1284,6 +1808,7 @@
                     card_url: "card-pages/amex-blue-business-plus.html",
                     status: "active",
                     perk_categories: ["no-annual-fee", "amex-offers"],
+                    earning_categories: ["flat-rate"],
                     protection_categories: ["purchase-protection", "extended-warranty", "rental-car-insurance"]
                 };
 
@@ -1331,6 +1856,7 @@
                     card_url: "card-pages/bilt-mastercard.html",
                     status: "active",
                     perk_categories: ["no-annual-fee", "no-foreign-fees", "point-transfers"],
+                    earning_categories: ["dining", "travel"],
                     protection_categories: ["cell-phone-protection", "trip-cancellation-interruption", "trip-delay", "rental-car-insurance", "purchase-protection"]
                 };
 
@@ -1378,6 +1904,7 @@
                     card_url: "card-pages/citi-custom-cash.html",
                     status: "active",
                     perk_categories: ["no-annual-fee", "citi-entertainment"],
+                    earning_categories: ["entertainment", "travel"],
                     protection_categories: ["purchase-protection", "extended-warranty", "id-theft-protection"]
                 };
 
@@ -1425,6 +1952,7 @@
                     card_url: "card-pages/discover-it-cash-back.html",
                     status: "active",
                     perk_categories: ["no-annual-fee", "no-foreign-fees"],
+                    earning_categories: ["rotating"],
                     protection_categories: ["fraud-liability"]
                 };
 
