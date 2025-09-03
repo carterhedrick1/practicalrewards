@@ -436,6 +436,9 @@
             <button class="btn" onclick="addAmexGreen()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Amex Green</button>
             <button class="btn" onclick="addBlueCashPreferred()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Blue Cash Preferred</button>
             <button class="btn" onclick="addCapitalOneVenture()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Capital One Venture</button>
+            <button class="btn" onclick="addBankOfAmericaUnlimitedCashRewards()" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">🔧 Add Bank of America Unlimited Cash Rewards</button>
+        <button class="btn" onclick="addUSBankSmartly()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add U.S. Bank Smartly</button>
+        <button class="btn" onclick="addCitiStrataElite()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Citi Strata Elite</button>
         </div>
 
         <div id="cards-container">
@@ -488,6 +491,9 @@
                         <option value="discover">Discover</option>
                         <option value="bilt">Bilt</option>
                         <option value="wells-fargo">Wells Fargo</option>
+                        <option value="bank-of-america">Bank of America</option>
+                        <option value="us-bank">U.S. Bank</option>
+                        <option value="fidelity">Fidelity</option>
                         <option value="airlines">Airlines</option>
                         <option value="hotels">Hotels</option>
                     </select>
@@ -795,6 +801,20 @@
                     setTimeout(() => {
                         window.addWellsFargoAutograph();
                     }, 3500);
+                }
+                
+                // Try to add U.S. Bank Altitude Go card after successful connection
+                if (typeof window.addUSBankAltitudeGo === 'function') {
+                    setTimeout(() => {
+                        window.addUSBankAltitudeGo();
+                    }, 4000);
+                }
+                
+                // Try to add Costco Anywhere Visa card after successful connection
+                if (typeof window.addCostcoAnywhereVisa === 'function') {
+                    setTimeout(() => {
+                        window.addCostcoAnywhereVisa();
+                    }, 4500);
                 }
                 
                 updateStatus('✅ Connected to Supabase database successfully!', 'success');
@@ -2469,6 +2489,294 @@
             }
         }
 
+        // Auto-add Bank of America Unlimited Cash Rewards
+        async function addBankOfAmericaUnlimitedCashRewards() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Bank of America® Unlimited Cash Rewards');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Bank of America® Unlimited Cash Rewards already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Bank of America® Unlimited Cash Rewards",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "bank-of-america",
+                    rewards_type: ["cashback"],
+                    image_url: "images/bank-of-america-unlimited-cash-rewards-credit-card.png.webp",
+                    features: ["2% everything (year 1)", "1.5% everything else"],
+                    welcome_bonus: "$200 Bonus",
+                    practical_advice: "Simple 1.5% everywhere (2% year 1). Best if you have Preferred Rewards; otherwise a flat 2% card is easier math.",
+                    card_url: "card-pages/bank-of-america-unlimited-cash-rewards.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee"],
+                    earning_categories: ["everything"],
+                    protection_categories: ["fraud-liability", "purchase-protection", "extended-warranty", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Bank of America® Unlimited Cash Rewards:', error);
+                } else {
+                    console.log('✅ Bank of America® Unlimited Cash Rewards added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addBankOfAmericaUnlimitedCashRewards:', error);
+            }
+        }
+
+        // Auto-add U.S. Bank Smartly™ Visa Signature® Card
+        async function addUSBankSmartly() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'U.S. Bank Smartly™ Visa Signature® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('U.S. Bank Smartly™ Visa Signature® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "U.S. Bank Smartly™ Visa Signature® Card",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "us-bank",
+                    rewards_type: ["cashback"],
+                    image_url: "images/us-bank-smartly.png",
+                    features: ["2% everything", "up to 4% with smartly balances", "+4% hotels & car rentals via u.s. bank travel"],
+                    welcome_bonus: "—",
+                    practical_advice: "Best if you bank with U.S. Bank—2% base; up to 4% needs large balances and deposit redemption. Otherwise, pick a simpler 2% card.",
+                    card_url: "card-pages/us-bank-smartly.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "intro-apr"],
+                    earning_categories: ["everything", "hotels", "car-rentals"],
+                    protection_categories: ["fraud-liability", "rental-car-insurance", "travel-assistance", "roadside-dispatch"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding U.S. Bank Smartly™ Visa Signature® Card:', error);
+                } else {
+                    console.log('✅ U.S. Bank Smartly™ Visa Signature® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUSBankSmartly:', error);
+            }
+        }
+
+        // Auto-add Fidelity Rewards Visa Signature
+        async function addFidelityRewardsVisaSignature() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Fidelity® Rewards Visa Signature® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Fidelity® Rewards Visa Signature® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Fidelity® Rewards Visa Signature® Card",
+                    type: ["cashback", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "fidelity",
+                    rewards_type: ["cashback", "hybrid"],
+                    image_url: "images/cardArt_Fidelity-Rewards-Signature-card.png",
+                    features: ["2x everything else"],
+                    welcome_bonus: "$0 Bonus",
+                    practical_advice: "Simple 2% everywhere, no fee. Best if you redeem into a Fidelity account; otherwise it's just another flat-2% card.",
+                    card_url: "card-pages/fidelity-rewards-visa-signature.html",
+                    status: "active",
+                    perk_categories: ["tsa-precheck", "no-foreign-fees"],
+                    earning_categories: ["flat-rate"],
+                    protection_categories: ["purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Fidelity® Rewards Visa Signature® Card:', error);
+                } else {
+                    console.log('✅ Fidelity® Rewards Visa Signature® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addFidelityRewardsVisaSignature:', error);
+            }
+        }
+
+        // Auto-add Citi Strata Elite card
+        async function addCitiStrataElite() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi Strata Elite℠ Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi Strata Elite℠ Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi Strata Elite℠ Card",
+                    type: "travel",
+                    annual_fee: 595,
+                    bank_type: "citi",
+                    rewards_type: "points",
+                    image_url: "images/Strata-Elite.png",
+                    features: ["12x hotels, car rentals & attractions via cititravel.com", "6x air via cititravel.com", "6x restaurants on Friday & Saturday 6 p.m.–6 a.m. ET (Citi Nights)", "3x restaurants other times", "1.5x everything else"],
+                    welcome_bonus: "80k Points",
+                    practical_advice: "Portal bookers and weekend diners win here; the $595 fee pays only if you use the hotel credit, Splurge picks, Blacklane, and lounges.",
+                    card_url: "card-pages/citi-strata-elite.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "tsa-precheck", "no-foreign-fees", "metal-card"],
+                    earning_categories: ["dining", "travel", "hotels"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi Strata Elite℠ Card:', error);
+                } else {
+                    console.log('✅ Citi Strata Elite℠ Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiStrataElite:', error);
+            }
+        }
+
+        // Auto-add U.S. Bank Altitude Go card
+        async function addUSBankAltitudeGo() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'U.S. Bank Altitude® Go Visa Signature®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('U.S. Bank Altitude® Go Visa Signature® already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "U.S. Bank Altitude® Go Visa Signature®",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "us-bank",
+                    rewards_type: "points",
+                    image_url: "images/altitude-go.png",
+                    features: ["4x restaurants, takeout & delivery (first $2,000 each quarter)", "2x groceries", "2x gas & EV charging", "2x streaming services", "1x everything else"],
+                    welcome_bonus: "20k Points",
+                    practical_advice: "Great $0 dining card. 4x is capped each quarter; $15 streaming credit helps. A 3% foreign fee means leave it home abroad.",
+                    card_url: "card-pages/us-bank-altitude-go.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["dining", "groceries", "gas", "streaming"],
+                    protection_categories: []
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding U.S. Bank Altitude® Go Visa Signature®:', error);
+                } else {
+                    console.log('✅ U.S. Bank Altitude® Go Visa Signature® added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUSBankAltitudeGo:', error);
+            }
+        }
+
+        // Auto-add Costco Anywhere Visa card
+        async function addCostcoAnywhereVisa() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Costco Anywhere Visa® Card by Citi');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Costco Anywhere Visa® Card by Citi already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Costco Anywhere Visa® Card by Citi",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "citi",
+                    rewards_type: "cashback",
+                    image_url: "images/costco-anywhere.png",
+                    features: ["5% gas at Costco (with 4% other gas & EV charging on a combined $7,000/year cap; then 1%)", "3% restaurants", "3% eligible travel (incl. Costco Travel)", "2% Costco & Costco.com", "1% everything else"],
+                    welcome_bonus: "$0 Bonus",
+                    practical_advice: "Great Costco card if you buy gas and shop there; rewards arrive once a year as a certificate, not monthly cash. No foreign fees helps.",
+                    card_url: "card-pages/costco-anywhere-visa.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["gas", "dining", "travel"],
+                    protection_categories: ["rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Costco Anywhere Visa® Card by Citi:', error);
+                } else {
+                    console.log('✅ Costco Anywhere Visa® Card by Citi added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCostcoAnywhereVisa:', error);
+            }
+        }
+
         // Call this function after database is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Add a delay to ensure database is fully loaded
@@ -2490,6 +2798,12 @@
             setTimeout(addSouthwestPriority, 9500);
             setTimeout(addAmazonPrimeVisa, 10000);
             setTimeout(addBlueCashPreferred, 10500);
+            setTimeout(addBankOfAmericaUnlimitedCashRewards, 11000);
+            setTimeout(addUSBankSmartly, 11500);
+            setTimeout(addFidelityRewardsVisaSignature, 12000);
+            setTimeout(addCitiStrataElite, 12500);
+            setTimeout(addUSBankAltitudeGo, 13000);
+            setTimeout(addCostcoAnywhereVisa, 13500);
         });
 
         // Also try to add the card when database connection is successful
@@ -2520,6 +2834,12 @@
         window.addSouthwestPriority = addSouthwestPriority;
         window.addAmazonPrimeVisa = addAmazonPrimeVisa;
         window.addBlueCashPreferred = addBlueCashPreferred;
+        window.addBankOfAmericaUnlimitedCashRewards = addBankOfAmericaUnlimitedCashRewards;
+        window.addUSBankSmartly = addUSBankSmartly;
+        window.addFidelityRewardsVisaSignature = addFidelityRewardsVisaSignature;
+        window.addCitiStrataElite = addCitiStrataElite;
+        window.addUSBankAltitudeGo = addUSBankAltitudeGo;
+        window.addCostcoAnywhereVisa = addCostcoAnywhereVisa;
     </script>
 </body>
 </html> 

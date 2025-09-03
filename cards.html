@@ -1042,13 +1042,16 @@
                     </button>
                     <div class="pill-dropdown" id="issuer-dropdown">
                         <div class="dropdown-content">
-                            <label><input type="checkbox" name="issuer" value="amex" onchange="autoApplyFilters()"> American Express</label>
-                                                    <label><input type="checkbox" name="issuer" value="chase" onchange="autoApplyFilters()"> Chase</label>
-                        <label><input type="checkbox" name="issuer" value="capital-one" onchange="autoApplyFilters()"> Capital One</label>
-                        <label><input type="checkbox" name="issuer" value="wells-fargo" onchange="autoApplyFilters()"> Wells Fargo</label>
-                        <label><input type="checkbox" name="issuer" value="citi" onchange="autoApplyFilters()"> Citi</label>
-                        <label><input type="checkbox" name="issuer" value="discover" onchange="autoApplyFilters()"> Discover</label>
-                        <label><input type="checkbox" name="issuer" value="bilt" onchange="autoApplyFilters()"> Bilt</label>
+                                            <label><input type="checkbox" name="issuer" value="amex" onchange="autoApplyFilters()"> American Express</label>
+                <label><input type="checkbox" name="issuer" value="chase" onchange="autoApplyFilters()"> Chase</label>
+                <label><input type="checkbox" name="issuer" value="capital-one" onchange="autoApplyFilters()"> Capital One</label>
+                <label><input type="checkbox" name="issuer" value="wells-fargo" onchange="autoApplyFilters()"> Wells Fargo</label>
+                <label><input type="checkbox" name="issuer" value="citi" onchange="autoApplyFilters()"> Citi</label>
+                <label><input type="checkbox" name="issuer" value="discover" onchange="autoApplyFilters()"> Discover</label>
+                <label><input type="checkbox" name="issuer" value="bilt" onchange="autoApplyFilters()"> Bilt</label>
+                <label><input type="checkbox" name="issuer" value="bank-of-america" onchange="autoApplyFilters()"> Bank of America</label>
+                <label><input type="checkbox" name="issuer" value="us-bank" onchange="autoApplyFilters()"> U.S. Bank</label>
+                <label><input type="checkbox" name="issuer" value="fidelity" onchange="autoApplyFilters()"> Fidelity</label>
                         </div>
                         <div class="dropdown-footer">
                             <button class="reset-btn" onclick="resetFilter('issuer')">Reset</button>
@@ -1217,13 +1220,16 @@
                             <span class="mobile-arrow">▼</span>
                         </div>
                         <div class="mobile-filter-options" id="mobile-issuer-options">
-                            <label><input type="checkbox" name="mobile-issuer" value="amex" onchange="autoApplyMobileFilters()"> American Express</label>
-                                                    <label><input type="checkbox" name="mobile-issuer" value="chase" onchange="autoApplyMobileFilters()"> Chase</label>
-                        <label><input type="checkbox" name="mobile-issuer" value="capital-one" onchange="autoApplyMobileFilters()"> Capital One</label>
-                        <label><input type="checkbox" name="mobile-issuer" value="wells-fargo" onchange="autoApplyMobileFilters()"> Wells Fargo</label>
-                        <label><input type="checkbox" name="mobile-issuer" value="citi" onchange="autoApplyMobileFilters()"> Citi</label>
-                        <label><input type="checkbox" name="mobile-issuer" value="discover" onchange="autoApplyMobileFilters()"> Discover</label>
-                        <label><input type="checkbox" name="mobile-issuer" value="bilt" onchange="autoApplyMobileFilters()"> Bilt</label>
+                                            <label><input type="checkbox" name="mobile-issuer" value="amex" onchange="autoApplyMobileFilters()"> American Express</label>
+                <label><input type="checkbox" name="mobile-issuer" value="chase" onchange="autoApplyMobileFilters()"> Chase</label>
+                <label><input type="checkbox" name="mobile-issuer" value="capital-one" onchange="autoApplyMobileFilters()"> Capital One</label>
+                <label><input type="checkbox" name="mobile-issuer" value="wells-fargo" onchange="autoApplyMobileFilters()"> Wells Fargo</label>
+                <label><input type="checkbox" name="mobile-issuer" value="citi" onchange="autoApplyMobileFilters()"> Citi</label>
+                <label><input type="checkbox" name="mobile-issuer" value="discover" onchange="autoApplyMobileFilters()"> Discover</label>
+                <label><input type="checkbox" name="mobile-issuer" value="bilt" onchange="autoApplyMobileFilters()"> Bilt</label>
+                <label><input type="checkbox" name="mobile-issuer" value="bank-of-america" onchange="autoApplyMobileFilters()"> Bank of America</label>
+                <label><input type="checkbox" name="mobile-issuer" value="us-bank" onchange="autoApplyMobileFilters()"> U.S. Bank</label>
+                <label><input type="checkbox" name="mobile-issuer" value="fidelity" onchange="autoApplyMobileFilters()"> Fidelity</label>
                         </div>
                     </div>
 
@@ -1845,6 +1851,9 @@
             if (bankType === 'discover') return 'discover';
             if (bankType === 'bilt') return 'bilt';
             if (bankType === 'wells-fargo') return 'wells-fargo';
+            if (bankType === 'bank-of-america') return 'bank-of-america';
+            if (bankType === 'us-bank') return 'us-bank';
+            if (bankType === 'fidelity') return 'fidelity';
             
             // Check by card name if bankType doesn't match
             if (name.includes('amex') || name.includes('american express')) return 'amex';
@@ -1854,6 +1863,9 @@
             if (name.includes('discover')) return 'discover';
             if (name.includes('bilt')) return 'bilt';
             if (name.includes('wells fargo')) return 'wells-fargo';
+            if (name.includes('bank of america') || name.includes('boa')) return 'bank-of-america';
+            if (name.includes('us bank') || name.includes('u.s. bank')) return 'us-bank';
+            if (name.includes('fidelity')) return 'fidelity';
             if (name.includes('airline') || name.includes('delta') || name.includes('united') || name.includes('american airlines')) return 'airlines';
             if (name.includes('hotel') || name.includes('marriott') || name.includes('hilton') || name.includes('hyatt')) return 'hotels';
             
@@ -1974,7 +1986,10 @@
                     'wells-fargo': 'Wells Fargo',
                     'citi': 'Citi',
                     'discover': 'Discover',
-                    'bilt': 'Bilt'
+                    'bilt': 'Bilt',
+                    'bank-of-america': 'Bank of America',
+                    'us-bank': 'U.S. Bank',
+                    'fidelity': 'Fidelity'
                 },
                 'fee': {
                     '0-100': '$0-$100',
