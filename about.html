@@ -4,426 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Practical Rewards</title>
+    <link rel="stylesheet" href="css/styles.css?v=2.0">
+    <link rel="stylesheet" href="card-pages/card-styles.css?v=2.0">
     <style>
-        /* Base page styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #374151;
-            background: #fafaf9;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Header - Modern Desktop Navigation */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(250, 250, 249, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(231, 229, 228, 0.6);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        nav {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #059669;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .logo:hover {
-            color: #047857;
-            transform: translateY(-1px);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 3rem;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #57534e;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #059669, #10b981);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #059669;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .cta-nav {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            color: #047857 !important;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .cta-nav::after {
-            display: none;
-        }
-
-        .cta-nav:hover {
-            color: #047857 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
-            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
-        }
-
-        /* Header toggle and hamburger styles come from header.html to ensure consistency */
-
-        .mobile-menu-toggle.active .hamburger span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-
-        .mobile-menu-toggle.active .hamburger span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-toggle.active .hamburger span:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-        }
-
-        /* Mobile Menu Overlay */
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.active {
-            opacity: 1;
-        }
-
-        /* Mobile Menu Sidebar */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 280px;
-            height: 100vh;
-            background: white;
-            box-shadow: -2px 0 20px rgba(0,0,0,0.1);
-            z-index: 1000;
-            transition: right 0.3s ease;
-            padding-top: 80px;
-        }
-
-        .mobile-menu.active {
-            right: 0;
-        }
-
-        .mobile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            color: white;
-            margin-top: -80px;
-            padding-top: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .mobile-menu-header h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-top: 60px;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .mobile-nav-links li {
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .mobile-nav-links a:hover {
-            color: #059669;
-            background: #f8fafc;
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-links a::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #059669;
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .mobile-nav-links a:hover::before {
-            transform: scaleY(1);
-        }
-
-        /* Close button */
-        .mobile-menu-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: white;
-            cursor: pointer;
-            padding: 0.5rem;
-            z-index: 1001;
-        }
-
-        /* Footer Styles */
-        footer {
-            background: #292524;
-            color: #a8a29e;
-            padding: 3rem 0 1rem 0;
-            margin-top: 3rem;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            color: #fafaf9;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .footer-section p {
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            color: #a8a29e;
-        }
-
-        .footer-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .footer-section li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-section a {
-            color: #a8a29e;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: #fafaf9;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #44403c;
-            padding-top: 1rem;
-            text-align: center;
-            font-size: 0.875rem;
-        }
-
-        /* About page specific styles */
-        .about-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 120px 2rem 2rem 2rem;
-        }
-
         .hero-section {
-            text-align: center;
-            padding: 3rem 2rem;
+            padding: 100px 0 100px 0;
             background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            color: white !important;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
             color: white;
-            border-radius: 16px;
-            margin-bottom: 3rem;
+            display: block;
+        }
+
+        .hero-content h1,
+        .hero-content .hero-subtitle {
+            display: block;
+            width: 100%;
         }
 
         .hero-section h1 {
-            font-size: 2.5rem;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
             margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: white !important;
+            word-break: keep-all;
+            overflow-wrap: normal;
+            hyphens: none;
+            -webkit-hyphens: none;
+            -moz-hyphens: none;
+            -ms-hyphens: none;
         }
 
-        .hero-section p {
-            font-size: 1.2rem;
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+            line-height: 1.5;
             opacity: 0.9;
+            margin: 0 auto;
+            max-width: 700px;
+            color: white !important;
         }
 
-        .content-section {
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin: 2rem 0;
-        }
-
-        .content-section h2 {
-            color: #1e293b;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-        }
-
-        .content-section h3 {
-            color: #1e293b;
-            margin: 2rem 0 1rem 0;
-            font-size: 1.4rem;
-        }
-
-        .content-section p {
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
-            color: #374151;
-        }
-
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .value-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .value-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .value-card h4 {
-            color: #1e293b;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .value-card p {
-            color: #475569;
-            font-size: 0.95rem;
+        .hero-description {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.85;
+            max-width: 700px;
+            margin: 0 auto;
             line-height: 1.6;
-            margin: 0;
+            color: white !important;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: none;
         }
 
-        .callout-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-            border-left: 4px solid #f59e0b;
-            padding: 2rem;
-            border-radius: 8px;
+        .tool-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-name {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .tool-name a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .tool-name a:hover {
+            text-decoration: underline;
+        }
+
+        .tool-name::after {
+            content: " — ";
+            font-weight: 400;
+            color: #6b7280;
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+        .tool-oneliner {
+            font-size: 1rem;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .tool-divider {
+            height: 1px;
+            background: #e5e7eb;
             margin: 2rem 0;
         }
 
-        /* Mobile Responsive */
+        /* Mobile responsive styles */
         @media (max-width: 768px) {
-            .mobile-menu-toggle {
-                display: flex;
+            .hero-section {
+                padding: 80px 0 80px 0;
             }
 
-            .nav-links {
+            .hero-container {
+                padding: 0 1rem;
+            }
+
+            .tool-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+
+            .tool-name::after {
                 display: none;
             }
 
-            nav {
-                padding: 0 1rem;
-                height: 70px;
-            }
-
-            .about-container {
-                padding: 100px 1rem 2rem 1rem;
-            }
-
-            .content-section {
-                padding: 2rem;
-            }
-
-            .hero-section {
-                padding: 2rem 1rem;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
+            .tool-oneliner {
+                margin-left: 0;
             }
         }
     </style>
@@ -434,82 +162,69 @@
         <div class="loading-placeholder">Loading navigation...</div>
     </div>
 
-    <div class="about-container">
+    <div class="card-container">
         <div class="hero-section">
-            <h1>About Practical Rewards</h1>
-            <p>We're tired of credit card advice that assumes you want to become a points expert</p>
-        </div>
-
-        <div class="content-section">
-            <h2>Why We Started This</h2>
-            <p>The credit card world is full of conflicting advice, endless Reddit threads, and "experts" trying to convince you that you need 17 different cards to optimize every purchase category.</p>
-            
-            <p>But here's the thing: most people just want a straightforward answer. They want to know which card makes sense for their actual life, not for some theoretical optimal-spending scenario that requires a spreadsheet to manage.</p>
-
-            <p>We built Practical Rewards because we believe good financial advice should be simple, honest, and focused on what actually matters in real life.</p>
-
-            <h3>Our Philosophy</h3>
-            <p>Credit cards are tools, not hobbies. A good card should make your life easier, not more complicated. Sometimes the "optimal" choice on paper is terrible in practice if it requires constant mental overhead.</p>
-
-            <p>We're not here to turn you into a points maximizer or convince you to apply for cards with $500 annual fees. We're here to help you find the card that fits your spending, your goals, and your tolerance for complexity.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>What Makes Us Different</h2>
-            
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon">🎯</div>
-                    <h4>We Answer Your Actual Question</h4>
-                    <p>No 20-paragraph blog posts about card history. Just clear, direct answers to what you're actually wondering about.</p>
-                </div>
-
-                <div class="value-card">
-                    <div class="value-icon">🛡️</div>
-                    <h4>Zero Sales Pitch</h4>
-                    <p>We're not affiliate marketers trying to convince you to sign up for premium cards. Our recommendations are based on what actually makes sense.</p>
-                </div>
-
-                <div class="value-card">
-                    <div class="value-icon">🧠</div>
-                    <h4>Honest About Complexity</h4>
-                    <p>We'll tell you when simple beats optimal, and when the mental overhead isn't worth the extra rewards.</p>
-                </div>
-
-                <div class="value-card">
-                    <div class="value-icon">📊</div>
-                    <h4>Real Math, Not Marketing</h4>
-                    <p>We calculate break-even points, factor in annual fees, and show you the actual dollar impact of different strategies.</p>
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>About Practical Rewards</h1>
+                    <p class="hero-subtitle">I needed to get to Europe for a wedding. Two round-trip tickets were pricing around $3,000…</p>
                 </div>
             </div>
         </div>
 
-        <div class="content-section">
-            <h2>Who This Is For</h2>
-            <p>Practical Rewards is designed for people who:</p>
-            
-            <p>• Want credit card rewards but don't want it to become a second job</p>
-            <p>• Are tired of advice that assumes you have unlimited time to optimize everything</p>
-            <p>• Prefer straightforward explanations over complex strategies</p>
-            <p>• Want to understand the trade-offs before making decisions</p>
-            <p>• Value simplicity and consistency over theoretical maximum optimization</p>
+        <!-- THE ORIGIN SECTION -->
+        <div class="recommendation-section">
+            <div class="recommendation-content">
+                <h2>The Origin</h2>
+                <div class="recommendation-text">
+                    <p>I needed to get to Europe for a wedding. Two round-trip tickets were pricing around $3,000—a pricey way to start a trip. I'd heard the whispers—people flying "for free" with credit cards—so I decided to see if that was real or just internet lore.</p>
 
-            <div class="callout-box">
-                <h4>💡 Our Promise</h4>
-                <p>We'll never recommend a card or strategy without explaining exactly why it makes sense for your situation. And we'll always be honest when the simple option is better than the "optimal" one.</p>
+                    <p>I already knew cash-back cards, so I figured this would be easy to pick up. Travel rewards were another planet. Acronyms everywhere. Charts, rules, transfer partners. I spent nights buried in Reddit threads, The Points Guy articles, and any blog I could find, while bugging an old friend who spoke "points."</p>
+
+                    <p>At first, nothing clicked. I booked the wrong thing, missed better options, and learned the hard way that "availability" moves. Then it started to make sense. I stitched together a simple system, kept notes, and booked us to Europe in premium economy with points—just taxes and fees. There was real value here, it only took weeks of reading and headaches.</p>
+
+                    <p>That win felt great, but it exposed the problem: the game rewards insiders. Friends and family asked how to do it, and there was no way to explain it. Too many gotchas. Too much jargon. Most people tap out before they see value.</p>
+
+                    <p>So I pulled together a small team, and we built Practical Rewards. We translate card-speak into plain English, show the exact math, and give straight answers—even when that means "don't get this card." We build tools that do the heavy lifting for normal people with normal lives. Some folks like researching and squeezing every last drop. Others want a card they never have to think about again. Our job is to help each person find what fits—because there's money on the table either way.</p>
+
+                    <p>Banks keep it complicated; we keep it practical—so you can grab the value without a dictionary or a spreadsheet degree. That's Practical Rewards.</p>
+                </div>
             </div>
         </div>
 
-        <div class="content-section">
-            <h2>What We're Building</h2>
-            <p>This site is our attempt to cut through the noise and provide the kind of credit card advice we wish we'd had when we were starting out.</p>
+        <!-- HELPFUL TOOLS SECTION -->
+        <div class="recommendation-section">
+            <div class="recommendation-content">
+                <h2>Helpful Tools</h2>
+                <div class="recommendation-text">
+                    <div class="tool-header">
+                        <h3 class="tool-name"><a href="practical-picks.html">Practical Picks</a></h3>
+                        <span class="tool-oneliner">Answer a few questions → get cards that fit your life.</span>
+                    </div>
+                    <p>Your helpful friend in card form. We ask a few quick questions about your spending, travel, and hassle tolerance—then suggest cards that fit your lifestyle. No hype, no 10-card spreadsheets. Just "here's what makes sense for you" with a one-sentence reason why.</p>
+                    
+                    <div class="tool-divider"></div>
+                    
+                    <div class="tool-header">
+                        <h3 class="tool-name">Credit Calculators</h3>
+                        <span class="tool-oneliner">See a card's true annual fee—after the math.</span>
+                    </div>
+                    <p>Annual fees aren't scary when you see the real math. Plug in your monthly spend and perks; we show your true annual cost after credits, protections, and earnings—so you know if a card pays for itself (or not).</p>
+                    
+                    <div class="tool-divider"></div>
+                    
+                    <div class="tool-header">
+                        <h3 class="tool-name"><a href="learning.html">Learning Path</a></h3>
+                        <span class="tool-oneliner">Choose a topic, pick your depth, learn without the jargon.</span>
+                    </div>
+                    <p>Learn at your pace, in your order. Pick topics (cash back, points, transfers, lounges) and choose how deep to go—quick overviews or detailed guides. We explain the why behind every tip so you actually understand the system.</p>
+                </div>
+            </div>
+        </div>
 
-            <p>We're constantly working to make our recommendations more helpful, our explanations clearer, and our tools more useful for real-world decision making.</p>
-
-            <h3>Have Feedback?</h3>
-            <p>We'd love to hear from you. If something isn't clear, if you have questions we haven't answered, or if you just want to tell us about your experience with the cards we've recommended, <a href="contact.html" style="color: #059669; text-decoration: none;">get in touch</a>.</p>
-
-            <p>After all, we're building this for normal people like you.</p>
+        <div class="navigation-buttons">
+            <a href="learning.html" class="nav-btn primary">Start Learning Today</a>
+            <a href="index.html" class="nav-btn secondary">Back to Home</a>
         </div>
     </div>
 
@@ -518,33 +233,8 @@
         <div class="loading-placeholder">Loading footer...</div>
     </div>
 
+    <script src="card-pages/card-scripts.js?v=3.1"></script>
     <script>
-        // Mobile menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileToggle = document.getElementById('mobile-menu-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileOverlay = document.getElementById('mobile-menu-overlay');
-            const mobileClose = document.getElementById('mobile-menu-close');
-
-            function openMobileMenu() {
-                mobileMenu.classList.add('active');
-                mobileOverlay.classList.add('active');
-                mobileToggle.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeMobileMenu() {
-                mobileMenu.classList.remove('active');
-                mobileOverlay.classList.remove('active');
-                mobileToggle.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            mobileToggle.addEventListener('click', openMobileMenu);
-            mobileClose.addEventListener('click', closeMobileMenu);
-            mobileOverlay.addEventListener('click', closeMobileMenu);
-        });
-
         // Load shared header and footer
         document.addEventListener('DOMContentLoaded', function() {
             loadComponent('header.html', 'header-placeholder', 'header-fallback');
@@ -553,7 +243,7 @@
 
         function loadComponent(filename, placeholderId, fallbackId) {
             const placeholder = document.getElementById(placeholderId);
-            
+
             fetch(filename)
                 .then(response => {
                     if (!response.ok) {
@@ -563,20 +253,20 @@
                 })
                 .then(html => {
                     console.log(`Successfully loaded ${filename}, length:`, html.length);
-                    
+
                     // Extract and execute JavaScript from the loaded HTML
                     if (filename === 'header.html') {
                         // Extract script tags
                         const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
                         const scripts = [];
                         let match;
-                        
+
                         while ((match = scriptRegex.exec(html)) !== null) {
                             scripts.push(match[1]);
                         }
-                        
+
                         console.log(`Found ${scripts.length} script tags in header`);
-                        
+
                         // Execute each script
                         scripts.forEach((script, index) => {
                             console.log(`Executing script ${index + 1}`);
@@ -586,7 +276,7 @@
                                 console.error(`Error executing script ${index + 1}:`, error);
                             }
                         });
-                        
+
                         // Remove script tags from HTML before inserting
                         const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
                         placeholder.innerHTML = cleanHtml;
@@ -594,7 +284,7 @@
                         // For non-header files, just insert the HTML
                         placeholder.innerHTML = html;
                     }
-                    
+
                     initializeLoadedContent();
                 })
                 .catch(error => {
@@ -613,9 +303,9 @@
                             <div style="text-align: center;">
                                 <p>&copy; 2025 Practical Rewards. All rights reserved.</p>
                                 <p style="margin-top: 1rem;">
-                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
-                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
-                                    <a href="#" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
+                                    <a href="learning.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
+                                    <a href="eaacalc.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
+                                    <a href="about.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
                                 </p>
                             </div>
                         </div>
@@ -628,6 +318,16 @@
         function initializeLoadedContent() {
             if (typeof window.attachHeaderScrollBehavior === 'function') {
                 window.attachHeaderScrollBehavior();
+            }
+            
+            // Setup mobile menu
+            if (typeof window.setupMobileMenu === 'function') {
+                window.setupMobileMenu();
+            }
+            
+            // Fix navigation paths
+            if (typeof window.fixNavigationPaths === 'function') {
+                window.fixNavigationPaths();
             }
         }
     </script>
