@@ -4,237 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service - Practical Rewards</title>
+    <link rel="stylesheet" href="css/styles.css?v=2.0">
+    <link rel="stylesheet" href="card-pages/card-styles.css?v=2.0">
     <style>
-        /* Modern CSS Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .hero-section {
+            padding: 100px 0 100px 0;
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            color: white !important;
         }
 
-        html {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #292524;
-            background: #fafaf9;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Header - Modern Desktop Navigation */
-        header {
-            position: fixed;
+        .hero-section::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(250, 250, 249, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(231, 229, 228, 0.6);
-            z-index: 1000;
-            transition: all 0.3s ease;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 70%);
         }
 
-        nav {
+        .hero-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #059669;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .logo:hover {
-            color: #047857;
-            transform: translateY(-1px);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #57534e;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
             position: relative;
-            padding: 0.5rem 0;
+            z-index: 2;
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #059669, #10b981);
-            transition: width 0.3s ease;
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            color: white;
+            display: block;
         }
 
-        .nav-links a:hover {
-            color: #059669;
-        }
-
-        .nav-links a:hover::after {
+        .hero-content h1,
+        .hero-content .hero-subtitle {
+            display: block;
             width: 100%;
         }
 
-        .cta-nav {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            color: #047857 !important;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .cta-nav::after {
-            display: none;
-        }
-
-        .cta-nav:hover {
-            color: #047857 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
-            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
-        }
-
-        /* Header toggle and hamburger styles come from header.html to ensure consistency */
-
-        /* Footer */
-        footer {
-            background: #292524;
-            color: #a8a29e;
-            padding: 3rem 0 1rem 0;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 1.125rem;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-section ul li a {
-            color: #a8a29e;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section ul li a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #44403c;
-            padding-top: 1rem;
-            text-align: center;
-            font-size: 0.875rem;
-        }
-
-        /* Terms page specific styles */
-        .terms-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 120px 2rem 2rem 2rem;
-        }
-
-        .hero-section {
-            text-align: center;
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, #047857 0%, #059669 100%);
-            color: white;
-            border-radius: 16px;
-            margin-bottom: 3rem;
-        }
-
         .hero-section h1 {
-            font-size: 2.5rem;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
             margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: white !important;
+            word-break: keep-all;
+            overflow-wrap: normal;
+            hyphens: none;
+            -webkit-hyphens: none;
+            -moz-hyphens: none;
+            -ms-hyphens: none;
         }
 
-        .hero-section p {
-            font-size: 1.2rem;
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+            line-height: 1.5;
             opacity: 0.9;
+            margin: 0 auto;
+            max-width: 700px;
+            color: white !important;
         }
 
-        .content-section {
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin: 2rem 0;
-        }
-
-        .content-section h2 {
-            color: #1e293b;
-            margin-bottom: 1.5rem;
-            margin-top: 2.5rem;
-            font-size: 1.8rem;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 0.5rem;
-        }
-
-        .content-section h2:first-child {
-            margin-top: 0;
-        }
-
-        .content-section h3 {
-            color: #1e293b;
-            margin: 2rem 0 1rem 0;
-            font-size: 1.3rem;
-        }
-
-        .content-section p {
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
-            color: #374151;
-        }
-
-        .content-section ul {
-            margin-bottom: 1.5rem;
-            padding-left: 1.5rem;
-        }
-
-        .content-section li {
-            margin-bottom: 0.5rem;
+        .hero-description {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.85;
+            max-width: 700px;
+            margin: 0 auto;
             line-height: 1.6;
-            color: #374151;
+            color: white !important;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: none;
         }
 
         .callout-box {
@@ -268,60 +119,25 @@
             color: #64748b;
         }
 
-        /* Loading states */
-        .loading-placeholder {
-            background: #f3f4f6;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            color: #6b7280;
-            margin: 1rem 0;
-        }
-
-        .loading-placeholder::before {
-            content: "Loading...";
-            display: block;
+        .recommendation-text ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
             margin-bottom: 1rem;
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            /* Show mobile menu toggle */
-            .mobile-menu-toggle {
-                display: flex;
-            }
-
-            /* Hide desktop navigation */
-            .nav-links {
-                display: none;
-            }
-
-            nav {
-                padding: 0 1rem;
-                height: 70px;
-            }
-
-            .terms-container {
-                padding: 100px 1rem 2rem 1rem;
-            }
-
-            .content-section {
-                padding: 2rem;
-            }
-
-            .hero-section {
-                padding: 2rem 1rem;
-            }
+        .recommendation-text li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
         }
 
-        /* Tablet Responsive */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .nav-links {
-                gap: 2rem;
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 80px 0 80px 0;
             }
 
-            nav {
-                padding: 0 1.5rem;
+            .hero-container {
+                padding: 0 1rem;
             }
         }
     </style>
@@ -332,105 +148,143 @@
         <div class="loading-placeholder">Loading navigation...</div>
     </div>
 
-    <div class="terms-container">
+    <div class="card-container">
         <div class="hero-section">
-            <h1>Terms of Service</h1>
-            <p>The rules and guidelines for using Practical Rewards</p>
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>Terms of Service</h1>
+                    <p class="hero-subtitle">The rules and guidelines for using Practical Rewards</p>
+                </div>
+            </div>
         </div>
 
-        <div class="content-section">
-            <div class="last-updated">
-                <strong>Last Updated:</strong> January 2025
+        <!-- TERMS CONTENT SECTION -->
+        <div class="recommendation-section">
+            <div class="recommendation-content">
+                <div class="last-updated">
+                    <strong>Last Updated:</strong> January 2025
+                </div>
+
+                <div class="callout-box">
+                    <h4>📋 The Simple Version</h4>
+                    <p>Use our site responsibly, don't try to break it, and understand that we provide general advice, not personalized financial guidance. That's pretty much it.</p>
+                </div>
+
+                <h2>1. Acceptance of Terms</h2>
+                <div class="recommendation-text">
+                    <p>By accessing and using Practical Rewards ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
+                </div>
+
+                <h2>2. Description of Service</h2>
+                <div class="recommendation-text">
+                    <p>Practical Rewards provides educational content, tools, and general advice about credit cards and personal finance. Our service includes:</p>
+                    <ul>
+                        <li>Educational articles and guides about credit cards</li>
+                        <li>Interactive tools like our annual fee calculator</li>
+                        <li>General advice and recommendations</li>
+                        <li>Information about credit card benefits and features</li>
+                    </ul>
+                </div>
+
+                <h2>3. Not Financial Advice</h2>
+                <div class="recommendation-text">
+                    <p><strong>Important:</strong> The information provided on this website is for educational and informational purposes only. It is not intended to be and should not be construed as financial advice, investment advice, or any other type of professional advice.</p>
+                    
+                    <p>We are not:</p>
+                    <ul>
+                        <li>Financial advisors or financial planners</li>
+                        <li>Credit counselors</li>
+                        <li>Investment professionals</li>
+                        <li>Legal professionals</li>
+                    </ul>
+
+                    <p>Always consult with qualified professionals before making financial decisions.</p>
+                </div>
+
+                <h2>4. User Responsibilities</h2>
+                <div class="recommendation-text">
+                    <p>When using our service, you agree to:</p>
+                    <ul>
+                        <li>Use the information responsibly and at your own risk</li>
+                        <li>Not rely solely on our content for financial decisions</li>
+                        <li>Verify information independently before acting on it</li>
+                        <li>Use the service in compliance with applicable laws</li>
+                        <li>Not attempt to gain unauthorized access to our systems</li>
+                        <li>Not use the service for any illegal or harmful purposes</li>
+                    </ul>
+                </div>
+
+                <h2>5. Accuracy of Information</h2>
+                <div class="recommendation-text">
+                    <p>While we strive to provide accurate and up-to-date information:</p>
+                    <ul>
+                        <li>Credit card terms and conditions change frequently</li>
+                        <li>Information may become outdated</li>
+                        <li>We cannot guarantee the accuracy of all information</li>
+                        <li>You should verify current terms with credit card issuers</li>
+                    </ul>
+
+                    <p>We make no representations or warranties about the accuracy, completeness, or reliability of any information on this website.</p>
+                </div>
+
+                <h2>6. Limitation of Liability</h2>
+                <div class="recommendation-text">
+                    <p>To the fullest extent permitted by applicable law, Practical Rewards shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:</p>
+                    <ul>
+                        <li>Your use of the service</li>
+                        <li>Any financial decisions made based on our content</li>
+                        <li>Any errors or omissions in our information</li>
+                        <li>Any interruption or cessation of the service</li>
+                    </ul>
+                </div>
+
+                <h2>7. Intellectual Property</h2>
+                <div class="recommendation-text">
+                    <p>The content on this website, including but not limited to text, graphics, images, logos, and software, is the property of Practical Rewards and is protected by copyright and other intellectual property laws.</p>
+                    
+                    <p>You may not reproduce, distribute, modify, or republish materials from this website without our prior written consent.</p>
+                </div>
+
+                <h2>8. Third-Party Links</h2>
+                <div class="recommendation-text">
+                    <p>Our website may contain links to third-party websites. We are not responsible for the content, privacy policies, or practices of any third-party websites. Links to third-party websites do not constitute an endorsement or recommendation.</p>
+                </div>
+
+                <h2>9. Privacy</h2>
+                <div class="recommendation-text">
+                    <p>Your privacy is important to us. Please review our <a href="privacy.html" style="color: #059669;">Privacy Policy</a>, which also governs your use of the service.</p>
+                </div>
+
+                <h2>10. Modifications to Terms</h2>
+                <div class="recommendation-text">
+                    <p>We reserve the right to modify these terms at any time. We will notify users of any material changes by updating the "Last Updated" date at the top of this page. Your continued use of the service after any changes constitutes acceptance of the new terms.</p>
+                </div>
+
+                <h2>11. Termination</h2>
+                <div class="recommendation-text">
+                    <p>We may terminate or suspend your access to the service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the terms.</p>
+                </div>
+
+                <h2>12. Governing Law</h2>
+                <div class="recommendation-text">
+                    <p>These terms shall be governed by and construed in accordance with the laws of the United States, without regard to its conflict of law provisions.</p>
+                </div>
+
+                <h2>13. Contact Information</h2>
+                <div class="recommendation-text">
+                    <p>If you have any questions about these terms, please contact us at <a href="mailto:contact@practicalrewards.com" style="color: #059669;">contact@practicalrewards.com</a>.</p>
+
+                    <div class="callout-box">
+                        <h4>💡 Questions About These Terms?</h4>
+                        <p>We've tried to keep these terms simple and clear. If anything is confusing or if you have questions, please reach out. We're happy to clarify anything that isn't clear.</p>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="callout-box">
-                <h4>📋 The Simple Version</h4>
-                <p>Use our site responsibly, don't try to break it, and understand that we provide general advice, not personalized financial guidance. That's pretty much it.</p>
-            </div>
-
-            <h2>1. Acceptance of Terms</h2>
-            <p>By accessing and using Practical Rewards ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
-
-            <h2>2. Description of Service</h2>
-            <p>Practical Rewards provides educational content, tools, and general advice about credit cards and personal finance. Our service includes:</p>
-            <ul>
-                <li>Educational articles and guides about credit cards</li>
-                <li>Interactive tools like our annual fee calculator</li>
-                <li>General advice and recommendations</li>
-                <li>Information about credit card benefits and features</li>
-            </ul>
-
-            <h2>3. Not Financial Advice</h2>
-            <p><strong>Important:</strong> The information provided on this website is for educational and informational purposes only. It is not intended to be and should not be construed as financial advice, investment advice, or any other type of professional advice.</p>
-            
-            <p>We are not:</p>
-            <ul>
-                <li>Financial advisors or financial planners</li>
-                <li>Credit counselors</li>
-                <li>Investment professionals</li>
-                <li>Legal professionals</li>
-            </ul>
-
-            <p>Always consult with qualified professionals before making financial decisions.</p>
-
-            <h2>4. User Responsibilities</h2>
-            <p>When using our service, you agree to:</p>
-            <ul>
-                <li>Use the information responsibly and at your own risk</li>
-                <li>Not rely solely on our content for financial decisions</li>
-                <li>Verify information independently before acting on it</li>
-                <li>Use the service in compliance with applicable laws</li>
-                <li>Not attempt to gain unauthorized access to our systems</li>
-                <li>Not use the service for any illegal or harmful purposes</li>
-            </ul>
-
-            <h2>5. Accuracy of Information</h2>
-            <p>While we strive to provide accurate and up-to-date information:</p>
-            <ul>
-                <li>Credit card terms and conditions change frequently</li>
-                <li>Information may become outdated</li>
-                <li>We cannot guarantee the accuracy of all information</li>
-                <li>You should verify current terms with credit card issuers</li>
-            </ul>
-
-            <p>We make no representations or warranties about the accuracy, completeness, or reliability of any information on this website.</p>
-
-            <h2>6. Limitation of Liability</h2>
-            <p>To the fullest extent permitted by applicable law, Practical Rewards shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:</p>
-            <ul>
-                <li>Your use of the service</li>
-                <li>Any financial decisions made based on our content</li>
-                <li>Any errors or omissions in our information</li>
-                <li>Any interruption or cessation of the service</li>
-            </ul>
-
-            <h2>7. Intellectual Property</h2>
-            <p>The content on this website, including but not limited to text, graphics, images, logos, and software, is the property of Practical Rewards and is protected by copyright and other intellectual property laws.</p>
-            
-            <p>You may not reproduce, distribute, modify, or republish materials from this website without our prior written consent.</p>
-
-            <h2>8. Third-Party Links</h2>
-            <p>Our website may contain links to third-party websites. We are not responsible for the content, privacy policies, or practices of any third-party websites. Links to third-party websites do not constitute an endorsement or recommendation.</p>
-
-            <h2>9. Privacy</h2>
-            <p>Your privacy is important to us. Please review our <a href="privacy.html" style="color: #059669;">Privacy Policy</a>, which also governs your use of the service.</p>
-
-            <h2>10. Modifications to Terms</h2>
-            <p>We reserve the right to modify these terms at any time. We will notify users of any material changes by updating the "Last Updated" date at the top of this page. Your continued use of the service after any changes constitutes acceptance of the new terms.</p>
-
-            <h2>11. Termination</h2>
-            <p>We may terminate or suspend your access to the service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the terms.</p>
-
-            <h2>12. Governing Law</h2>
-            <p>These terms shall be governed by and construed in accordance with the laws of the United States, without regard to its conflict of law provisions.</p>
-
-            <h2>13. Contact Information</h2>
-            <p>If you have any questions about these terms, please contact us at <a href="mailto:hello@practicalrewards.com" style="color: #059669;">hello@practicalrewards.com</a>.</p>
-
-            <div class="callout-box">
-                <h4>💡 Questions About These Terms?</h4>
-                <p>We've tried to keep these terms simple and clear. If anything is confusing or if you have questions, please reach out. We're happy to clarify anything that isn't clear.</p>
-            </div>
+        <div class="navigation-buttons">
+            <a href="learning.html" class="nav-btn primary">Start Learning Today</a>
+            <a href="index.html" class="nav-btn secondary">Back to Home</a>
         </div>
     </div>
 
@@ -439,34 +293,17 @@
         <div class="loading-placeholder">Loading footer...</div>
     </div>
 
+    <script src="card-pages/card-scripts.js?v=3.1"></script>
     <script>
-        // Header background on scroll
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(250, 250, 249, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(250, 250, 249, 0.95)';
-                header.style.boxShadow = 'none';
-            }
-        });
-
-        // Mobile menu functionality is handled by the dynamic header
-
-        // Smart header and footer loading with fallbacks
+        // Load shared header and footer
         document.addEventListener('DOMContentLoaded', function() {
-            // Load header
             loadComponent('header.html', 'header-placeholder', 'header-fallback');
-            
-            // Load footer
             loadComponent('footer.html', 'footer-placeholder', 'footer-fallback');
         });
 
         function loadComponent(filename, placeholderId, fallbackId) {
             const placeholder = document.getElementById(placeholderId);
-            
-            // Try to load the component
+
             fetch(filename)
                 .then(response => {
                     if (!response.ok) {
@@ -476,20 +313,20 @@
                 })
                 .then(html => {
                     console.log(`Successfully loaded ${filename}, length:`, html.length);
-                    
+
                     // Extract and execute JavaScript from the loaded HTML
                     if (filename === 'header.html') {
                         // Extract script tags
                         const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
                         const scripts = [];
                         let match;
-                        
+
                         while ((match = scriptRegex.exec(html)) !== null) {
                             scripts.push(match[1]);
                         }
-                        
+
                         console.log(`Found ${scripts.length} script tags in header`);
-                        
+
                         // Execute each script
                         scripts.forEach((script, index) => {
                             console.log(`Executing script ${index + 1}`);
@@ -499,7 +336,7 @@
                                 console.error(`Error executing script ${index + 1}:`, error);
                             }
                         });
-                        
+
                         // Remove script tags from HTML before inserting
                         const cleanHtml = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
                         placeholder.innerHTML = cleanHtml;
@@ -507,16 +344,11 @@
                         // For non-header files, just insert the HTML
                         placeholder.innerHTML = html;
                     }
-                    
-                    // Initialize any JavaScript functionality in the loaded content
-                    if (typeof window.attachHeaderScrollBehavior === 'function') {
-                        window.attachHeaderScrollBehavior();
-                    }
+
+                    initializeLoadedContent();
                 })
                 .catch(error => {
                     console.warn(`Could not load ${filename}:`, error);
-                    
-                    // Show fallback content
                     placeholder.innerHTML = getFallbackContent(filename);
                 });
         }
@@ -532,7 +364,7 @@
                                 <p>&copy; 2025 Practical Rewards. All rights reserved.</p>
                                 <p style="margin-top: 1rem;">
                                     <a href="learning.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Learning</a>
-                                    <a href="cards.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Cards</a>
+                                    <a href="eaacalc.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">Calculator</a>
                                     <a href="about.html" style="color: #a8a29e; text-decoration: none; margin: 0 1rem;">About</a>
                                 </p>
                             </div>
@@ -544,27 +376,18 @@
         }
 
         function initializeLoadedContent() {
-            // Initialize header scroll effects
-            const header = document.querySelector('header');
-            if (header) {
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 100) {
-                        header.style.background = 'rgba(250, 250, 249, 0.98)';
-                        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-                    } else {
-                        header.style.background = 'rgba(250, 250, 249, 0.95)';
-                        header.style.boxShadow = 'none';
-                    }
-                });
+            if (typeof window.attachHeaderScrollBehavior === 'function') {
+                window.attachHeaderScrollBehavior();
             }
-
-            // Initialize mobile menu functionality
-            const mobileToggle = document.querySelector('.mobile-menu-toggle');
-            if (mobileToggle) {
-                mobileToggle.addEventListener('click', function() {
-                    console.log('Mobile menu toggle clicked');
-                    // Add mobile menu functionality here
-                });
+            
+            // Setup mobile menu
+            if (typeof window.setupMobileMenu === 'function') {
+                window.setupMobileMenu();
+            }
+            
+            // Fix navigation paths
+            if (typeof window.fixNavigationPaths === 'function') {
+                window.fixNavigationPaths();
             }
         }
     </script>
