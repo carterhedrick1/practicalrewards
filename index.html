@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practical Rewards - Find Your Perfect Credit Card</title>
+    <title>Practical Rewards - Find Credit Cards That Actually Reward You</title>
     <style>
         /* Modern CSS Reset */
         * {
@@ -245,7 +245,7 @@
 
         /* Hero Section */
         .hero {
-            padding: 100px 0 100px 0;
+            padding: 60px 0 60px 0;
             background: linear-gradient(135deg, #047857 0%, #059669 100%);
             position: relative;
             overflow: hidden;
@@ -289,14 +289,58 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
         .hero-subtitle {
             font-size: clamp(1.125rem, 2.5vw, 1.375rem);
             line-height: 1.5;
             opacity: 0.9;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        .hero-value-props {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .value-prop {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .value-icon {
+            font-size: 1.25rem;
+        }
+
+        .hero-proof {
+            margin-top: 2rem;
+            opacity: 0.8;
+        }
+
+        .hero-proof p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .hero-cta {
@@ -305,6 +349,7 @@
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
+            margin-top: 2rem;
         }
 
         .btn {
@@ -336,17 +381,18 @@
         }
 
         .btn-secondary {
-            background: rgba(240, 253, 244, 0.1);
-            color: white;
-            border: 2px solid rgba(240, 253, 244, 0.3);
-            backdrop-filter: blur(10px);
+            background: white;
+            color: #059669;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
         }
 
         .btn-secondary:hover {
-            background: rgba(240, 253, 244, 0.2);
-            border-color: rgba(240, 253, 244, 0.5);
-            color: white;
+            background: #f8fafc;
+            border-color: #059669;
+            color: #047857;
             transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);
         }
 
         /* Problem Statement Section */
@@ -413,6 +459,12 @@
             background: linear-gradient(90deg, #dc2626, #ef4444);
         }
 
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
         .problem-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 40px rgba(5, 150, 105, 0.1);
@@ -466,31 +518,71 @@
         }
 
         .solution-features {
-            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
             margin: 2rem 0;
         }
 
-        .solution-features li {
+        .solution-feature {
             display: flex;
-            align-items: center;
-            padding: 0.75rem 0;
-            font-size: 1.125rem;
-            color: #44403c;
+            align-items: flex-start;
+            gap: 1rem;
         }
 
-        .solution-features li::before {
-            content: '✓';
+        .feature-checkmark {
             color: #059669;
             font-weight: bold;
-            margin-right: 1rem;
             background: #f0fdf4;
-            width: 24px;
-            height: 24px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.875rem;
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+        }
+
+        .solution-feature h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #292524;
+            margin-bottom: 0.5rem;
+        }
+
+        .solution-feature p {
+            margin: 0;
+            color: #57534e;
+            line-height: 1.5;
+        }
+
+        .path-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .path-option {
+            background: #f0fdf4;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #d6d3d1;
+        }
+
+        .path-option h4 {
+            font-size: 1.25rem;
+            color: #059669;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .path-option p {
+            color: #44403c;
+            line-height: 1.6;
+            margin: 0;
         }
 
         .solution-visual {
@@ -540,7 +632,7 @@
 
         /* Features Section */
         .features-section {
-            padding: 100px 0 0 0;
+            padding: 100px 0 100px 0;
             background: #f5f5f4;
         }
 
@@ -560,6 +652,31 @@
             border: 1px solid #e7e5e4;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .feature-card.featured {
+            border: 2px solid #10b981;
+            transform: scale(1.02);
+        }
+
+        .feature-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0 0 6px 0;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            line-height: 1;
+            min-width: 80px;
+            text-align: center;
         }
 
         .feature-card::before {
@@ -594,6 +711,16 @@
         .feature-card p {
             color: #57534e;
             line-height: 1.6;
+            flex-grow: 1;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .feature-card .btn {
+            margin-top: auto;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* CTA Section */
@@ -738,11 +865,22 @@
             }
 
             .hero {
-                padding: 80px 0 80px 0;
+                padding: 50px 0 50px 0;
             }
 
             .hero-container {
                 padding: 0 1rem;
+            }
+
+            .hero-value-props {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+                margin-bottom: 2rem;
+            }
+
+            .value-prop {
+                justify-content: center;
             }
 
             .hero-cta {
@@ -772,6 +910,15 @@
                 align-items: center;
             }
 
+            .path-options {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .path-option {
+                padding: 1.25rem;
+            }
+
             .problems-grid,
             .features-grid {
                 grid-template-columns: 1fr;
@@ -784,6 +931,56 @@
 
             .solution-visual {
                 padding: 2rem;
+            }
+
+            /* Mobile styles for the new comparison grid */
+            .comparison-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+
+            .comparison-card {
+                padding: 1.5rem !important;
+            }
+
+            .how-it-works-steps {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 2rem !important;
+            }
+
+            .how-it-works-steps > div:nth-child(even) {
+                display: none !important; /* Hide arrows on mobile */
+            }
+
+            /* Mobile styles for benefit cards - make them stretch wider */
+            .benefits-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+                max-width: none !important;
+                margin: 0 !important;
+            }
+
+            .benefits-grid > div {
+                margin: 0 !important;
+            }
+
+            /* Reorder cards on mobile - Learning Center first */
+            .features-grid {
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            .feature-card:nth-child(1) {
+                order: 2; /* Practical Picks second */
+            }
+
+            .feature-card:nth-child(2) {
+                order: 1; /* Learning Center first */
+            }
+
+            .feature-card:nth-child(3) {
+                order: 3; /* Card Directory third */
             }
         }
 
@@ -823,15 +1020,148 @@
     <section class="hero" id="home">
         <div class="hero-container">
             <div class="hero-content">
-                <h1>Knowledge is Money</h1>
-                <p class="hero-subtitle">If you know how this game works, you get real rewards. We teach the basics, then show cards that fit your goals. Practical advice, not promotional noise.</p>
+                <div class="hero-badge">Credit Card Recommendations</div>
+                <h1>Stop Leaving Money on the Table</h1>
+                <p class="hero-subtitle">Get personalized credit card recommendations that actually fit your spending habits and lifestyle. No generic advice, no overwhelming options—just the cards that will earn you the most rewards.</p>
+                
+                <!-- Value Props -->
+                <div class="hero-value-props">
+                    <div class="value-prop">
+                        <span>Personalized to your spending</span>
+                    </div>
+                    <div class="value-prop">
+                        <span>Maximize your rewards</span>
+                    </div>
+                    <div class="value-prop">
+                        <span>Simple, not overwhelming</span>
+                    </div>
+                </div>
+                
                 <div class="hero-cta">
                     <a href="practical-picks.html" class="btn btn-primary">
-                        Find Your Rewards
+                        Find My Perfect Cards
                         <span>→</span>
                     </a>
                     <a href="learning.html" class="btn btn-secondary">
-                        Learn More About Rewards
+                        Learn How Rewards Work
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- Real Value Section -->
+    <section style="padding: 100px 0; background: white;">
+        <div class="container">
+            <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+                <h2 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: #292524; margin-bottom: 1.5rem; line-height: 1.2;">What Credit Cards Can Do for You</h2>
+                <p style="font-size: 1.25rem; color: #57534e; margin-bottom: 3rem; line-height: 1.6;">From simple cash back to premium perks—here's everything credit cards can offer beyond just earning rewards.</p>
+                
+                <!-- Card Benefits Overview -->
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 20px; padding: 3rem; margin: 3rem 0; position: relative; overflow: hidden;">
+                    <!-- Background Pattern -->
+                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05)); border-radius: 50%; z-index: 1;"></div>
+                    <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; background: linear-gradient(135deg, rgba(5, 150, 105, 0.08), rgba(16, 185, 129, 0.03)); border-radius: 50%; z-index: 1;"></div>
+                    
+                    <div style="position: relative; z-index: 2;">
+                        <!-- Benefits Grid -->
+                        <div class="benefits-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto;">
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">2% Back On Everything</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Simple, straightforward rewards on every purchase. No categories to track, no rotating bonuses—just consistent cash back.</p>
+                            </div>
+                            
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Keep Lounges</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Free food, drinks, and WiFi at airports. Priority Pass, Centurion Lounges, airline lounges. Worth $50+ per visit.</p>
+                            </div>
+                            
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Credits Back On What You Already Buy</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">$300 travel credits, $200 airline fees, $240 streaming credits. Get money back on what you're already spending.</p>
+                            </div>
+                            
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">TSA PreCheck</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">$100 credit every 4-5 years. Skip the security lines. Time is money, and this saves hours.</p>
+                            </div>
+                            
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Food Credits</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">$25/month dining credits. Get money back on restaurants, food delivery, and grocery stores.</p>
+                            </div>
+                            
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Streaming Credits</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">$20/month Netflix, Spotify, etc. Get money back on entertainment you're already paying for.</p>
+                            </div>
+                            
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Cell Phone Insurance</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Pay your phone bill with the right card and get free damage/theft coverage. Save $200+ per year on insurance.</p>
+                            </div>
+                            
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Rental Car Insurance</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Skip the $30/day rental insurance. Your card covers it. Primary coverage means no hassle with your regular insurance.</p>
+                            </div>
+                            
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Purchase Protection</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Buy something and it breaks? Get your money back. Extended warranties, price protection, return protection.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complexity Message -->
+                <div style="background: #f0fdf4; border: 1px solid #10b981; border-radius: 12px; padding: 2rem; margin-top: 2rem;">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; color: #059669; margin-bottom: 1rem;">It Can Get Complicated—That's Okay</h3>
+                    <p style="color: #374151; font-size: 1rem; line-height: 1.6; margin: 0;">Some people want one simple card. Others want to optimize every dollar. We help you find your sweet spot—whether that's earning 2% on everything or juggling 5 cards for maximum value. Your goals, your complexity level.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Find What Works for You</h2>
+                <p class="section-subtitle">Whether you want to learn the basics, get personalized picks, or research on your own—we've built tools that match how you like to make decisions.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Practical Picks</h3>
+                    <p>Answer a few questions about your personality and spending. Get cards that actually fit your lifestyle—not generic recommendations.</p>
+                    <a href="practical-picks.html" class="btn btn-primary" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                        Find Your Cards
+                        <span>→</span>
+                    </a>
+                </div>
+
+                <div class="feature-card featured">
+                    <div class="feature-badge">Great Starting Point</div>
+                    <h3>Learning Center</h3>
+                    <p>Want to understand how rewards work first? Start with the basics or dive deep into advanced strategies—your choice.</p>
+                    <a href="learning.html" class="btn btn-primary" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                        Start Learning
+                        <span>→</span>
+                    </a>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Card Directory</h3>
+                    <p>Built like an e-commerce site—filter by fees, rewards, perks, and protections. Shop for credit cards like you would any other product. Perfect for experts who know exactly what they want.</p>
+                    <a href="cards.html" class="btn btn-primary" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                        Shop Cards
+                        <span>→</span>
                     </a>
                 </div>
             </div>
@@ -839,41 +1169,6 @@
     </section>
 
 
-
-
-
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="container">
-            <div class="section-header">
-
-                <h2 class="section-title">Honest Education, Not Sales Pitches</h2>
-                <p class="section-subtitle">We believe you should understand how credit cards work before deciding which one to get. No hidden agendas, no assumptions about what you want.</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3>We Explain the Real Math</h3>
-                    <p>Points aren't always worth what they claim. We'll show you the actual value you'll get based on how you'll realistically use them, not theoretical maximums that require hours of optimization.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>Honest About Annual Fees</h3>
-                    <p>We'll break down exactly when a $500 annual fee makes sense and when it doesn't. Most people don't travel enough to justify premium cards, and that's perfectly fine.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>Simple vs. Complex Strategies</h3>
-                    <p>We'll show you both approaches: using one good card for everything, or optimizing across multiple cards. You decide what level of complexity makes sense for your lifestyle.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>No Assumptions About What You Want</h3>
-                    <p>We don't assume you want to become a points optimization expert. We'll teach you what you need to know, then let you decide if the complexity is worth the extra rewards.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
 
 
