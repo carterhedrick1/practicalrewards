@@ -1207,13 +1207,13 @@
             // Cashback path
             {
                 id: 'cb1', branch: 'cashback',
-                title: 'Do you already have a 2%+ everywhere card?',
+                title: 'Do you already have a Flat Rate Card?',
                 type: 'radio',
                 options: [
                     { label: '<div class="text-content"><strong>Yes</strong></div>', value: 'yes' },
                     { label: '<div class="text-content"><strong>No</strong></div>', value: 'no' }
                 ],
-                help: 'A <strong>2% everywhere card</strong> earns the same cash back on almost every purchase. No categories to track. Simple and predictable. If you only want one card, this is the easy choice. Swipe and move on.\n\nIf you want to optimize your setup, start with a 2% everywhere card as your default. Use category cards when they beat 2%. The 2% card quietly covers everything else.\n\nEither way—simple or optimized—a <strong>2%+ everywhere card</strong> is your practical starting point.',
+                help: 'A <strong>Flat Rate Card</strong> earns the same cash back on almost every purchase. No categories to track. Simple and predictable. These cards typically offer 1.5%–2% everywhere—much better than the standard 1%. If you only want one card, this is the easy choice. Swipe and move on.\n\nIf you want to optimize your setup, start with a Flat Rate Card as your default. Use category cards when they beat your flat rate. The Flat Rate Card quietly covers everything else.\n\nEither way—simple or optimized—a <strong>Flat Rate Card</strong> is your practical starting point.',
                 onAnswer: (val) => {
                     // Store the user's answer for step visibility logic
                     state.cashbackFilters.hasFlatRate = val === 'yes';
@@ -1249,7 +1249,7 @@
                     { label: 'Wholesale Clubs', value: 'wholesale-clubs' },
                     { label: 'Amazon', value: 'amazon' }
                 ],
-                help: 'Once you\'ve got a <strong>2% everywhere</strong> baseline, add cards that pay higher rates where you actually spend. Pick 1–2 to start; your 2% card covers the rest.\n\nCategory rules vary by card. We\'ll flag common quirks (exclusions, caps, portal-only rates) so there are no surprises.\n\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.\n• <strong>Wholesale clubs</strong> — Costco, Sam\'s Club (codes differently than groceries).\n• <strong>Amazon</strong> — The Amazon Credit card is amazing if you shop on Amazon. 5% back on everything!\n\nNot sure what to pick? Go with the categories you hit every month. Your 2% everywhere card backs up everything else.',
+                help: 'Once you\'ve got a <strong>Flat Rate Card</strong> baseline, add cards that pay higher rates where you actually spend. Pick 1–2 to start; your Flat Rate Card covers the rest.\n\nCategory rules vary by card. We\'ll flag common quirks (exclusions, caps, portal-only rates) so there are no surprises.\n\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.\n• <strong>Wholesale clubs</strong> — Costco, Sam\'s Club (codes differently than groceries).\n• <strong>Amazon</strong> — The Amazon Credit card is amazing if you shop on Amazon. 5% back on everything!\n\nNot sure what to pick? Go with the categories you hit every month. Your Flat Rate Card backs up everything else.',
                 onAnswer: (vals) => {
                     // Replace the earning_any array with the new selections (allows deselection)
                     state.cashbackFilters['earning_any'] = [...vals];
@@ -1266,12 +1266,13 @@
             },
             {
                 id: 'cb3', branch: 'cashback',
-                title: 'Any must‑have protection?',
+                title: 'What protections matter to you?',
                 type: 'checkbox',
                 options: [
-                    { label: 'Cell phone protection', value: 'cell-phone-protection' }
+                    { label: '<div class="text-content"><strong>Phone protection</strong><div class="description">Ditch paid phone insurance</div></div>', value: 'cell-phone-protection' },
+                    { label: '<div class="text-content"><strong>Purchase protection & extended warranty</strong><div class="description">Peace of mind on big buys</div></div>', value: 'purchase-protection' }
                 ],
-                help: 'Only useful if you pay your phone bill with the card.',
+                help: 'Protections aren\'t as exciting as rewards, but they can save real money when something goes wrong.\n\n<strong>Phone protection</strong>\nPay your monthly cell phone bill with the card; if a covered phone is accidentally damaged or stolen, you can file a claim. It applies to every line on that bill, so one card can cover multiple phones. This can let you drop paid phone insurance like AppleCare+ or carrier add-ons.\n\n<strong>Purchase protection & extended warranty</strong>\nPay with the card, keep your receipt, and if an eligible item is damaged, stolen, or fails within the covered window, you can file a claim. Terms, caps, and exclusions vary by card.',
                 onAnswer: (vals) => { state.cashbackFilters.protections = vals; }
             },
             // Travel path
