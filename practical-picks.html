@@ -997,22 +997,37 @@
                     const brandsOnCard = inferBrandTags(card);
                     if (!values.some(v => brandsOnCard.includes(v))) return false;
                 } else if (k === 'earning_any') {
-                    const selected = new Set(values);
                     const earningCats = Array.isArray(card.earningCategories) ? card.earningCategories : [];
 
                     console.log(`🔍 Filtering ${card.name} for earning_any:`, values, 'Card has earning categories:', earningCats);
 
-                    // Strict mode: card must have ALL of the selected categories
-                    const matchingCategories = earningCats.filter(cat => selected.has(cat));
-                    const hasAllMatches = matchingCategories.length === values.length;
+                    // Exclude Citi Custom Cash when 2+ categories selected (it can only do 1 category)
+                    if (values.length >= 2 && card.name === 'Citi Custom Cash® Card') {
+                        console.log(`❌ ${card.name} filtered out - can only handle 1 category, ${values.length} selected`);
+                        return false;
+                    }
 
-                    console.log(`🔍 ${card.name} strict mode: ${matchingCategories.length}/${values.length} matches`);
+                    // Strict mode: card must have ALL of the selected categories/groups
+                    let allMatches = true;
 
-                    if (!hasAllMatches) {
-                        console.log(`❌ ${card.name} filtered out - needs ALL matching categories (has ${matchingCategories.length}/${values.length})`);
+                    for (const selectedValue of values) {
+                        // Handle grouped categories (e.g., "gas|ev-charging")
+                        const selectedOptions = selectedValue.split('|');
+                        const hasMatchForGroup = selectedOptions.some(option => earningCats.includes(option));
+
+                        if (!hasMatchForGroup) {
+                            allMatches = false;
+                            break;
+                        }
+                    }
+
+                    console.log(`🔍 ${card.name} strict mode: ${allMatches ? 'matches all' : 'missing some'} categories`);
+
+                    if (!allMatches) {
+                        console.log(`❌ ${card.name} filtered out - needs ALL matching categories`);
                         return false;
                     } else {
-                        console.log(`✅ ${card.name} passed strict earning filter (${matchingCategories.length} matches)`);
+                        console.log(`✅ ${card.name} passed strict earning filter`);
                     }
                 } else if (k === 'fee') {
                     if (values.includes('0-100') && !(card.annualFee >= 0 && card.annualFee <= 100)) return false;
@@ -1219,24 +1234,22 @@
             },
             {
                 id: 'cb2', branch: 'cashback',
-                title: 'Where do you want a boost?',
-                tip: 'Pick the categories you care about most. We\'ll keep cards that boost all of them. If the list gets thin, remove a pick.',
+                title: 'Where do you want more cash back?',
+                tip: 'Choose your top category, then add others to find cards that hit multiple categories—results will match <u>all</u> categories you select.',
                 type: 'checkbox',
                 options: [
-                    { label: 'Dining', value: 'dining' },
+                    { label: 'Dining / Bars', value: 'dining' },
                     { label: 'Groceries', value: 'groceries' },
-                    { label: 'Gas', value: 'gas' },
-                    { label: 'Transit', value: 'transit' },
-                    { label: 'Travel', value: 'travel' },
-                    { label: 'Hotels', value: 'hotels' },
-                    { label: 'Flights', value: 'flights' },
-                    { label: 'Drugstores', value: 'drugstores' },
-                    { label: 'Online', value: 'online' },
+                    { label: 'Gas/EV Charging', value: 'gas|ev-charging' },
+                    { label: 'Travel', value: 'travel|hotels|airlines' },
+                    { label: 'Rideshare/Transit', value: 'rideshare|transit' },
                     { label: 'Streaming', value: 'streaming' },
-                    { label: 'Telecom', value: 'telecom' },
-                    { label: 'Entertainment', value: 'entertainment' }
+                    { label: 'Drugstores', value: 'drugstores' },
+                    { label: 'Entertainment', value: 'entertainment' },
+                    { label: 'Wholesale Clubs', value: 'wholesale-clubs' },
+                    { label: 'Amazon', value: 'amazon' }
                 ],
-                help: 'Pick categories you want boosted. Cards must match ALL selected categories.',
+                help: 'Once you\'ve got a <strong>2% everywhere</strong> baseline, add cards that pay higher rates where you actually spend. Pick 1–2 to start; your 2% card covers the rest.\n\nCategory rules vary by card. We\'ll flag common quirks (exclusions, caps, portal-only rates) so there are no surprises.\n\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.\n• <strong>Wholesale clubs</strong> — Costco, Sam\'s Club (codes differently than groceries).\n• <strong>Amazon</strong> — The Amazon Credit card is amazing if you shop on Amazon. 5% back on everything!\n\nNot sure what to pick? Go with the categories you hit every month. Your 2% everywhere card backs up everything else.',
                 onAnswer: (vals) => {
                     // Replace the earning_any array with the new selections (allows deselection)
                     state.cashbackFilters['earning_any'] = [...vals];
@@ -1644,7 +1657,11 @@
             // For each step, show its helper
             // Split the help text by double line breaks and create proper paragraphs
             const paragraphs = step.help.split('\n\n');
-            const htmlContent = paragraphs.map(para => `<p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.9rem; line-height: 1.6;">${para}</p>`).join('');
+            const htmlContent = paragraphs.map(para => {
+                // Replace single line breaks with <br> tags for proper line breaks
+                const formattedPara = para.replace(/\n/g, '<br>');
+                return `<p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.9rem; line-height: 1.6;">${formattedPara}</p>`;
+            }).join('');
             helpEl.innerHTML = `<div>${htmlContent}</div>`;
         }
         
