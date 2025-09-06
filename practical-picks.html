@@ -1753,8 +1753,8 @@
         const box = document.getElementById('help-box');
         if (!helpEl || !box) return;
         
-        // Hide the help box on the first question (goal step) or when no step
-        if (!step || (step && step.id === 'goal')) {
+        // Hide the help box when no step
+        if (!step) {
             box.style.display = 'none';
             return;
         }
