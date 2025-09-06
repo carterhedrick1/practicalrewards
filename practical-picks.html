@@ -84,6 +84,7 @@
             border-radius: 8px; 
             padding: 1rem; 
             position: relative;
+            display: none; /* Hide by default, show when needed */
         }
         .help-title { 
             font-weight: 700; 
@@ -329,6 +330,58 @@
             line-height: 1.4;
         }
 
+        /* Desktop tweaks */
+        @media (min-width: 769px) {
+            /* Hide results bar and filter bar on desktop */
+            .results-bar {
+                display: none !important;
+            }
+
+            #active-filters-line {
+                display: none !important;
+            }
+
+            /* Desktop card count indicator */
+            .desktop-card-count {
+                /* visibility controlled by JS; default hidden */
+                display: none;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+                margin: 0 0 1rem 0;
+                padding: 0.75rem 1rem;
+                text-align: center;
+                border: 1px solid #059669;
+            }
+
+            .desktop-card-count-number {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #059669;
+                line-height: 1;
+                margin-bottom: 0.25rem;
+            }
+
+            .desktop-card-count-label {
+                font-size: 0.9rem;
+                color: #1e293b;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+
+            .desktop-card-count-subtitle {
+                font-size: 0.8rem;
+                color: #64748b;
+            }
+        }
+
+        /* Hide desktop indicator on mobile */
+        @media (max-width: 768px) {
+            .desktop-card-count {
+                display: none !important;
+            }
+        }
+
         /* Mobile tweaks */
         @media (max-width: 768px) {
             /* Match header/hero behavior from cards page */
@@ -348,12 +401,12 @@
                 margin-right: -50vw;
             }
             .hero-section h1 { font-size: 2.5rem; }
-            
+
             /* Hide hero section on mobile */
             .hero-section {
                 display: none;
             }
-            
+
             /* Additional mobile improvements for wizard */
             .wizard {
                 position: static;
@@ -459,6 +512,7 @@
                 box-sizing: border-box;
                 overflow-x: hidden;
                 overflow-y: visible;
+                display: none; /* Hide by default on mobile too */
             }
             
             .help-title {
@@ -599,6 +653,13 @@
                 <div id="active-filters-line" class="results-bar" style="display:none;">
                     <div style="display:flex;gap:.5rem;flex-wrap:wrap;" id="active-filters-chips"></div>
                     <button class="btn btn-secondary" onclick="resetAllFilters()">Clear all</button>
+                </div>
+
+                <!-- Desktop card count indicator (only visible on desktop) -->
+                <div class="desktop-card-count" id="desktop-card-count" style="display: none;">
+                    <div class="desktop-card-count-number" id="desktop-card-count-number">0 Cards</div>
+                    <div class="desktop-card-count-label">Fit Your Criteria So Far</div>
+                    <div class="desktop-card-count-subtitle">Refine your answers on the left to see more options</div>
                 </div>
 
                 <div class="cards-grid" id="cards-grid"></div>
@@ -885,9 +946,12 @@
         grid.classList.remove('showing-intro');
         grid.innerHTML = '';
         cards.forEach(c => grid.appendChild(createCardElement(c)));
-        
+
         // Update mobile scroll indicator
         updateMobileScrollIndicator(cards);
+
+        // Update desktop card count
+        updateDesktopCardCount(cards);
     }
 
     function showIntroText() {
@@ -904,11 +968,17 @@
                 </p>
             </div>
         `;
-        
+
         // Hide mobile scroll indicator when showing intro
         const mobileIndicator = document.getElementById('mobile-scroll-indicator');
         if (mobileIndicator) {
             mobileIndicator.style.display = 'none';
+        }
+
+        // Hide desktop card count when showing intro
+        const desktopIndicator = document.getElementById('desktop-card-count');
+        if (desktopIndicator) {
+            desktopIndicator.style.display = 'none';
         }
     }
 
@@ -992,7 +1062,17 @@
                     }
                 } else if (k === 'protections') {
                     const prots = card.protectionCategories || [];
-                    if (!values.some(v => prots.includes(v))) return false;
+
+                    // Strict mode: card must have ALL of the selected protections
+                    let allMatches = true;
+                    for (const selectedValue of values) {
+                        if (!prots.includes(selectedValue)) {
+                            allMatches = false;
+                            break;
+                        }
+                    }
+
+                    if (!allMatches) return false;
                 } else if (k === 'airline-hotel') {
                     const brandsOnCard = inferBrandTags(card);
                     if (!values.some(v => brandsOnCard.includes(v))) return false;
@@ -1083,6 +1163,21 @@
         }
     }
 
+    function updateDesktopCardCount(cards) {
+        const desktopIndicator = document.getElementById('desktop-card-count');
+        const desktopCount = document.getElementById('desktop-card-count-number');
+
+        if (!desktopIndicator || !desktopCount) return;
+
+        // Only show on desktop and when there are cards to show, and not on the goal step, and not when no mode is selected
+        if (window.innerWidth > 768 && cards.length > 0 && state.stepIndex !== 0 && state.mode) {
+            desktopIndicator.style.display = 'block';
+            desktopCount.textContent = cards.length + ' Cards';
+        } else {
+            desktopIndicator.style.display = 'none';
+        }
+    }
+
     function bindHelpBoxToggle() {
         const helpBox = document.getElementById('help-box');
         const helpTitle = helpBox.querySelector('.help-title');
@@ -1165,6 +1260,7 @@
             if (state.mode && allCards.length > 0) {
                 const currentCards = getCurrentFilteredCards();
                 updateMobileScrollIndicator(currentCards);
+                updateDesktopCardCount(currentCards);
             }
         });
     }
@@ -1267,6 +1363,7 @@
             {
                 id: 'cb3', branch: 'cashback',
                 title: 'What protections matter to you?',
+                tip: 'Choose your top protection, then add others to find cards that offer multiple protections—results will match <u>all</u> protections you select.',
                 type: 'checkbox',
                 options: [
                     { label: '<div class="text-content"><strong>Phone protection</strong><div class="description">Ditch paid phone insurance</div></div>', value: 'cell-phone-protection' },
@@ -1655,7 +1752,17 @@
         const helpEl = document.getElementById('help-content');
         const box = document.getElementById('help-box');
         if (!helpEl || !box) return;
-        if (!step || !step.help) {
+        
+        // Hide the help box on the first question (goal step) or when no step
+        if (!step || (step && step.id === 'goal')) {
+            box.style.display = 'none';
+            return;
+        }
+        
+        // Show the help box for all other steps
+        box.style.display = 'block';
+        
+        if (!step.help) {
             helpEl.innerHTML = '<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li><strong>Getting started</strong><br>Answer the question above to narrow your results. Tips for this step will appear here.</li></ul>';
         } else {
             // For each step, show its helper
@@ -1893,6 +2000,12 @@
         const mobileIndicator = document.getElementById('mobile-scroll-indicator');
         if (mobileIndicator) {
             mobileIndicator.style.display = 'none';
+        }
+
+        // Hide desktop card count when showing zero state
+        const desktopIndicator = document.getElementById('desktop-card-count');
+        if (desktopIndicator) {
+            desktopIndicator.style.display = 'none';
         }
     }
 
