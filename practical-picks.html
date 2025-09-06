@@ -1650,8 +1650,10 @@
         let optionsHtml = '';
         if (step.type === 'radio') {
             optionsHtml = options.map(opt => {
-                const checked = selected === opt.value ? 'checked' : '';
-                return `<label class="option ${checked? 'active':''}"><input type="radio" name="${step.id}" value="${opt.value}" ${checked}/> ${opt.label}</label>`;
+                const isSelected = selected === opt.value;
+                const checked = isSelected ? 'checked' : '';
+                const activeClass = isSelected ? 'active' : '';
+                return `<label class="option ${activeClass}"><input type="radio" name="${step.id}" value="${opt.value}" ${checked}/> ${opt.label}</label>`;
             }).join('');
         } else if (step.type === 'checkbox') {
             const selectedArr = Array.isArray(selected) ? selected : [];
@@ -1673,6 +1675,16 @@
         // Add tip if it exists
         const tipHtml = step.tip ? `<div class="step-tip">${step.tip}</div>` : '';
         container.innerHTML = `${tipHtml}<div class="${optionsClass}">${optionsHtml}</div>`;
+
+        // Ensure no radio options are pre-selected for steps with no current answer
+        if (step.type === 'radio' && !selected) {
+            container.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('active');
+                const input = option.querySelector('input');
+                if (input) input.checked = false;
+            });
+        }
+
         updateHelp(step);
 
         // Show/hide Next button based on step type and position
@@ -1827,14 +1839,17 @@
     function getCurrentAnswer(stepId) {
         if (stepId === 'stage') return state.stage;
         if (stepId === 'goal') return state.mode;
-        
+
         // Return current filter state for specific steps
         if (stepId === 'cb2') return state.cashbackFilters['earning_any'] || [];
         if (stepId === 'cb3') return state.cashbackFilters.protections || [];
         if (stepId === 'tr1b') return state.travelFilters['airline-hotel'] || [];
         if (stepId === 'tr3') return state.travelFilters['earning_any'] || [];
         if (stepId === 'tr5') return state.travelFilters.protections || [];
-        
+
+        // For cb1 (Do you already have a Flat Rate Card?), return null to ensure no pre-selection
+        if (stepId === 'cb1') return null;
+
         // For other travel/cashback steps, derive from filters or return null
         if (stepId.startsWith('tr')) return null;
         if (stepId.startsWith('cb')) return null;
