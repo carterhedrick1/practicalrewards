@@ -55,15 +55,41 @@
         .option { border: 2px solid #e2e8f0; border-radius: 10px; padding: .75rem; background: white; cursor: pointer; display: flex; align-items: center; gap: .5rem; }
         .option input { margin: 0; }
         .option.active, .option:hover { border-color: #059669; background: #f0fdf4; }
-        .wizard-actions { display: flex; gap: .5rem; justify-content: space-between; margin-top: .5rem; }
+        .wizard-actions { display: flex; gap: .5rem; align-items: center; }
         .btn { padding: .6rem 1rem; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
         .btn-primary { background: #059669; color: white; }
         .btn-secondary { background: white; color: #059669; border: 1px solid #059669; }
 
         /* Context help box in wizard */
-        .help-box { margin-top: .75rem; background: #f8fafc; border: 1px solid #e5e7eb; border-left: 3px solid #059669; border-radius: 0 8px 8px 0; padding: .75rem .9rem; }
-        .help-title { font-weight: 700; color: #059669; font-size: .9rem; margin-bottom: .25rem; text-transform: uppercase; letter-spacing: .5px; }
-        .help-text { color: #475569; font-size: .9rem; line-height: 1.5; }
+        .help-box { 
+            margin-top: .75rem; 
+            background: #f8fafc; 
+            border: 1px solid #e5e7eb; 
+            border-left: 3px solid #059669; 
+            border-radius: 0 8px 8px 0; 
+            padding: .75rem .9rem; 
+            position: relative;
+        }
+        .help-title { 
+            font-weight: 700; 
+            color: #059669; 
+            font-size: .9rem; 
+            margin-bottom: .25rem; 
+            text-transform: uppercase; 
+            letter-spacing: .5px; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .help-text { 
+            color: #475569; 
+            font-size: .9rem; 
+            line-height: 1.5; 
+            max-height: none;
+            overflow: visible;
+            transition: all 0.3s ease;
+        }
 
         /* Content side */
         .results-bar { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: .75rem 1rem; margin-bottom: 1rem; }
@@ -297,6 +323,158 @@
                 margin-right: -50vw;
             }
             .hero-section h1 { font-size: 2.5rem; }
+            
+            /* Hide hero section on mobile */
+            .hero-section {
+                display: none;
+            }
+            
+            /* Additional mobile improvements for wizard */
+            .wizard {
+                position: static;
+                margin-bottom: 2rem;
+            }
+            
+            .wizard-header {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.5rem;
+            }
+            
+            .wizard-title {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .wizard-actions {
+                flex-shrink: 0;
+                gap: 0.5rem;
+            }
+            
+            .wizard-actions .btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.85rem;
+                min-width: 60px;
+            }
+            
+            /* Mobile scroll indicator */
+            .mobile-scroll-indicator {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+                margin: 1rem 0 2rem 0;
+                padding: 0.75rem 1.5rem;
+                text-align: center;
+                position: relative;
+                border: 2px solid #059669;
+            }
+            
+            /* Hide results bar and filter bar on mobile */
+            .results-bar {
+                display: none !important;
+            }
+            
+            #active-filters-line {
+                display: none !important;
+            }
+            
+            .mobile-scroll-count {
+                font-size: 3rem;
+                font-weight: 800;
+                color: #059669;
+                line-height: 1;
+                margin-bottom: 0.5rem;
+            }
+            
+            .mobile-scroll-label {
+                font-size: 1rem;
+                color: #1e293b;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+            }
+            
+            .mobile-scroll-hint {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+                color: #64748b;
+                font-size: 0.9rem;
+            }
+            
+            .mobile-scroll-arrow {
+                font-size: 1.5rem;
+                animation: bounce 2s infinite;
+            }
+            
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% {
+                    transform: translateY(0);
+                }
+                40% {
+                    transform: translateY(-10px);
+                }
+                60% {
+                    transform: translateY(-5px);
+                }
+            }
+            
+            /* Collapsible help box for mobile */
+            .help-box {
+                margin-top: 1rem;
+                padding: 1rem;
+                border-radius: 8px;
+                border-left: 3px solid #059669;
+            }
+            
+            .help-title {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .help-text {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+            
+            /* Collapsible behavior for mobile */
+            .help-box.collapsible .help-text {
+                max-height: 200px;
+                overflow: hidden;
+                position: relative;
+            }
+            
+            .help-box.collapsible .help-text::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 30px;
+                background: linear-gradient(transparent, #f8fafc);
+                pointer-events: none;
+            }
+            
+            .help-box.collapsible .help-title::after {
+                content: '▼';
+                font-size: 0.8rem;
+                transition: transform 0.3s ease;
+                margin-left: 0.5rem;
+            }
+            
+            .help-box.expanded .help-title::after {
+                transform: rotate(180deg);
+            }
+            
+            .help-box.expanded .help-text {
+                max-height: none;
+                overflow: visible;
+            }
+            
+            .help-box.expanded .help-text::after {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -314,15 +492,14 @@
             <aside class="wizard" id="wizard">
                 <div class="wizard-header">
                     <div class="wizard-title">Step-by-step</div>
+                    <div class="wizard-actions">
+                        <button class="btn btn-secondary" id="back-btn">Back</button>
+                        <button class="btn btn-primary" id="next-btn" style="display: none;">Next</button>
+                    </div>
                 </div>
                 <div class="progress"><span id="progress-bar"></span></div>
 
                 <div id="steps-container"></div>
-
-                <div class="wizard-actions">
-                    <button class="btn btn-secondary" id="back-btn">Back</button>
-                    <button class="btn btn-primary" id="next-btn" style="display: none;">Next</button>
-                </div>
 
                 <div class="help-box" id="help-box" aria-live="polite">
                     <div class="help-title">Need help?</div>
@@ -333,6 +510,16 @@
                     </div>
                 </div>
             </aside>
+
+            <!-- Mobile scroll indicator (only visible on mobile) -->
+            <div class="mobile-scroll-indicator" id="mobile-scroll-indicator" style="display: none;">
+                <div class="mobile-scroll-count" id="mobile-scroll-count">0</div>
+                <div class="mobile-scroll-label">Cards Match Your Criteria</div>
+                <div class="mobile-scroll-hint">
+                    <div>Scroll down to see your personalized picks</div>
+                    <div class="mobile-scroll-arrow">↓</div>
+                </div>
+            </div>
 
             <!-- Results -->
             <section>
@@ -568,6 +755,9 @@
         grid.classList.remove('showing-intro');
         grid.innerHTML = '';
         cards.forEach(c => grid.appendChild(createCardElement(c)));
+        
+        // Update mobile scroll indicator
+        updateMobileScrollIndicator(cards);
     }
 
     function showIntroText() {
@@ -584,6 +774,12 @@
                 </p>
             </div>
         `;
+        
+        // Hide mobile scroll indicator when showing intro
+        const mobileIndicator = document.getElementById('mobile-scroll-indicator');
+        if (mobileIndicator) {
+            mobileIndicator.style.display = 'none';
+        }
     }
 
     function updateResultsHeadline(count, total) {
@@ -696,9 +892,72 @@
         lastApplied: null
     };
 
+    function getCurrentFilteredCards() {
+        if (!state.mode) return allCards;
+        
+        if (state.mode === 'either') {
+            const cashFilters = mergeFilters({ type: ['cashback'] }, state.cashbackFilters);
+            const travFilters = mergeFilters({ type: ['travel'] }, state.travelFilters);
+            return state.activeTab === 'cashback' ? applyFiltersTo(allCards, cashFilters) : applyFiltersTo(allCards, travFilters);
+        }
+        
+        const base = {};
+        if (state.mode === 'cashback') base.type = ['cashback'];
+        if (state.mode === 'travel') base.type = ['travel'];
+        const merged = mergeFilters(base, state.mode === 'travel' ? state.travelFilters : state.cashbackFilters);
+        return applyFiltersTo(allCards, merged);
+    }
+
+    function updateMobileScrollIndicator(cards) {
+        const mobileIndicator = document.getElementById('mobile-scroll-indicator');
+        const mobileCount = document.getElementById('mobile-scroll-count');
+        
+        if (!mobileIndicator || !mobileCount) return;
+        
+        // Only show on mobile and when there are cards to show
+        if (window.innerWidth <= 768 && cards.length > 0) {
+            mobileIndicator.style.display = 'block';
+            mobileCount.textContent = cards.length;
+        } else {
+            mobileIndicator.style.display = 'none';
+        }
+    }
+
+    function bindHelpBoxToggle() {
+        const helpBox = document.getElementById('help-box');
+        const helpTitle = helpBox.querySelector('.help-title');
+        
+        // Only add collapsible behavior on mobile
+        function checkMobileAndSetup() {
+            if (window.innerWidth <= 768) {
+                helpBox.classList.add('collapsible');
+                helpTitle.addEventListener('click', () => {
+                    helpBox.classList.toggle('expanded');
+                });
+            } else {
+                helpBox.classList.remove('collapsible', 'expanded');
+            }
+        }
+        
+        // Setup on load
+        checkMobileAndSetup();
+        
+        // Re-setup on resize
+        window.addEventListener('resize', checkMobileAndSetup);
+        
+        // Also update mobile scroll indicator on resize
+        window.addEventListener('resize', () => {
+            if (state.mode && allCards.length > 0) {
+                const currentCards = getCurrentFilteredCards();
+                updateMobileScrollIndicator(currentCards);
+            }
+        });
+    }
+
     function initCoach() {
         buildSteps();
         bindWizardControls();
+        bindHelpBoxToggle();
         renderStep();
         recomputeAndRender();
     }
@@ -1328,6 +1587,12 @@
         const btn = document.getElementById('remove-last');
         if (btn && last && last.key) {
             btn.addEventListener('click', () => removeFilter(last.key, last.value));
+        }
+        
+        // Hide mobile scroll indicator when showing zero state
+        const mobileIndicator = document.getElementById('mobile-scroll-indicator');
+        if (mobileIndicator) {
+            mobileIndicator.style.display = 'none';
         }
     }
 
