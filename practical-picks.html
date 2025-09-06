@@ -377,13 +377,13 @@
             /* Mobile scroll indicator */
             .mobile-scroll-indicator {
                 background: white;
-                border-radius: 12px;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-                margin: 0 0 1rem 0;
-                padding: 0.5rem 1rem;
+                border-radius: 8px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+                margin: 0 0 0.5rem 0;
+                padding: 0.25rem 0.75rem;
                 text-align: center;
                 position: relative;
-                border: 2px solid #059669;
+                border: 1px solid #059669;
             }
             
             /* Hide results bar and filter bar on mobile */
@@ -396,31 +396,31 @@
             }
             
             .mobile-scroll-count {
-                font-size: 2.5rem;
-                font-weight: 800;
+                font-size: 1.2rem;
+                font-weight: 700;
                 color: #059669;
                 line-height: 1;
-                margin-bottom: 0.25rem;
+                margin-bottom: 0.1rem;
             }
             
             .mobile-scroll-label {
-                font-size: 0.9rem;
+                font-size: 0.75rem;
                 color: #1e293b;
                 font-weight: 600;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.25rem;
             }
             
             .mobile-scroll-hint {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 0.25rem;
+                gap: 0.1rem;
                 color: #64748b;
-                font-size: 0.8rem;
+                font-size: 0.7rem;
             }
             
             .mobile-scroll-arrow {
-                font-size: 1.5rem;
+                font-size: 1.1rem;
                 animation: bounce 2s infinite;
             }
             
@@ -440,8 +440,15 @@
             .help-box {
                 margin-top: 1rem;
                 padding: 1rem;
+                background: #f8fafc;
+                border: 1px solid #e5e7eb;
                 border-radius: 8px;
                 border-left: 3px solid #059669;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                overflow-x: hidden;
+                overflow-y: visible;
             }
             
             .help-title {
@@ -450,18 +457,30 @@
             }
             
             .help-text {
+                color: #475569;
                 font-size: 0.95rem;
                 line-height: 1.6;
+                max-height: none;
+                overflow-x: hidden;
+                overflow-y: visible;
+                transition: all 0.3s ease;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                hyphens: auto;
+                box-sizing: border-box;
+                width: 100%;
+                max-width: 100%;
             }
             
             /* Collapsible behavior for mobile - expanded by default */
             .help-box.collapsible .help-text {
-                max-height: 300px;
-                overflow: visible;
+                max-height: none;
+                overflow-x: hidden;
+                overflow-y: visible;
                 position: relative;
             }
             
-            .help-box.collapsible .help-text::after {
+            .help-box.collapsible:not(.collapsed) .help-text::after {
                 display: none;
             }
             
@@ -473,29 +492,39 @@
             }
             
             .help-box.expanded .help-title::after {
-                transform: rotate(180deg);
+                /* Hide the arrow entirely when expanded */
+                display: none;
             }
             
             /* Collapsed state when content is too long */
             .help-box.collapsed .help-text {
-                max-height: 300px;
+                max-height: 140px;
                 overflow: hidden;
                 position: relative;
             }
-            
+
             .help-box.collapsed .help-text::after {
                 content: '';
                 position: absolute;
                 bottom: 0;
                 left: 0;
                 right: 0;
-                height: 30px;
-                background: linear-gradient(transparent, #f8fafc);
+                height: 70px;
+                /* Very prominent chevron above the fade */
+                background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center 42px / 25px 25px no-repeat,
+                            linear-gradient(to bottom, rgba(248, 250, 252, 0), rgba(248, 250, 252, 0.2), rgba(248, 250, 252, 0.6), rgba(248, 250, 252, 0.9), #f8fafc);
                 pointer-events: none;
+                z-index: 1;
             }
             
             .help-box.collapsed .help-title::after {
-                transform: rotate(0deg);
+                display: none;
+            }
+            
+            /* Explicitly set expanded state to override collapsed max-height */
+            .help-box.expanded .help-text {
+                max-height: none !important;
+                overflow: visible !important;
             }
         }
     </style>
@@ -536,8 +565,8 @@
 
             <!-- Mobile scroll indicator (only visible on mobile) -->
             <div class="mobile-scroll-indicator" id="mobile-scroll-indicator" style="display: none;">
-                <div class="mobile-scroll-count" id="mobile-scroll-count">0</div>
-                <div class="mobile-scroll-label">Fit Your Criteria</div>
+                <div class="mobile-scroll-count" id="mobile-scroll-count">0 Cards</div>
+                <div class="mobile-scroll-label">Fit Your Criteria So Far</div>
                 <div class="mobile-scroll-hint">
                     <div>Scroll to your practical options</div>
                     <div class="mobile-scroll-arrow">↓</div>
@@ -977,13 +1006,13 @@
     function updateMobileScrollIndicator(cards) {
         const mobileIndicator = document.getElementById('mobile-scroll-indicator');
         const mobileCount = document.getElementById('mobile-scroll-count');
-        
+
         if (!mobileIndicator || !mobileCount) return;
-        
+
         // Only show on mobile and when there are cards to show
         if (window.innerWidth <= 768 && cards.length > 0) {
             mobileIndicator.style.display = 'block';
-            mobileCount.textContent = cards.length;
+            mobileCount.textContent = cards.length + ' Cards';
         } else {
             mobileIndicator.style.display = 'none';
         }
@@ -998,7 +1027,7 @@
         function shouldCollapse() {
             if (!helpText) return false;
             const contentHeight = helpText.scrollHeight;
-            return contentHeight > 350; // 300px max-height + 50px buffer
+            return contentHeight > 200; // Lower threshold to show fade more often
         }
         
         // Only add collapsible behavior on mobile
@@ -1015,16 +1044,49 @@
                 
                 // Remove any existing click listeners to avoid duplicates
                 const newHelpTitle = helpBox.querySelector('.help-title');
+                const newHelpText = helpBox.querySelector('.help-text');
+                
+                function handleToggle() {
+                    helpBox.classList.toggle('expanded');
+                    helpBox.classList.toggle('collapsed');
+                    // Update cursor based on state
+                    const isCollapsed = helpBox.classList.contains('collapsed');
+                    newHelpText.style.cursor = isCollapsed ? 'pointer' : 'default';
+                    helpBox.style.cursor = isCollapsed ? 'pointer' : 'default';
+                }
+                
                 newHelpTitle.removeEventListener('click', handleToggle);
                 newHelpTitle.addEventListener('click', handleToggle);
+                
+                // Also make the collapsed text area clickable (for the bottom arrow)
+                newHelpText.removeEventListener('click', handleToggle);
+                newHelpText.addEventListener('click', handleToggle);
+
+                // As a safety net on mobile Safari, toggle when tapping anywhere in the help box
+                function containerToggle(e) {
+                    // Don't toggle when tapping links inside the advice text
+                    const isLink = e.target.closest && e.target.closest('a');
+                    if (isLink) return;
+                    // Only toggle when currently collapsed to prevent accidental collapses when expanded
+                    if (helpBox.classList.contains('collapsed')) {
+                        handleToggle();
+                    }
+                }
+                helpBox.removeEventListener('click', containerToggle);
+                helpBox.addEventListener('click', containerToggle);
+                
+                // Set initial cursor based on collapsed state
+                const isInitiallyCollapsed = helpBox.classList.contains('collapsed');
+                newHelpText.style.cursor = isInitiallyCollapsed ? 'pointer' : 'default';
+                helpBox.style.cursor = isInitiallyCollapsed ? 'pointer' : 'default';
             } else {
                 helpBox.classList.remove('collapsible', 'expanded', 'collapsed');
+                const helpText = helpBox.querySelector('.help-text');
+                if (helpText) {
+                    helpText.style.cursor = 'default';
+                }
+                helpBox.style.cursor = 'default';
             }
-        }
-        
-        function handleToggle() {
-            helpBox.classList.toggle('expanded');
-            helpBox.classList.toggle('collapsed');
         }
         
         // Setup on load
@@ -1080,13 +1142,13 @@
             // Cashback path
             {
                 id: 'cb1', branch: 'cashback',
-                title: 'Do you already have a flat 2%+ “catch‑all” card?',
+                title: 'Do you already have a 2%+ everywhere card?',
                 type: 'radio',
                 options: [
-                    { label: '<div class="text-content"><strong>No / Not Sure</strong><div class="description">Keep cards that cover everything at 2%+</div></div>', value: 'no' },
-                    { label: '<div class="text-content"><strong>Yes</strong><div class="description">We will focus on category boosts</div></div>', value: 'yes' }
+                    { label: '<div class="text-content"><strong>Yes</strong></div>', value: 'yes' },
+                    { label: '<div class="text-content"><strong>No</strong></div>', value: 'no' }
                 ],
-                help: 'If you don’t, grab one first. A 2% card quietly wins on everything you don’t optimize.',
+                help: 'A <strong>2% everywhere card</strong> earns the same cash back on almost every purchase. No categories to track. Simple and predictable. If you only want one card, this is the easy choice. Swipe and move on.\n\nIf you want to optimize your setup, start with a 2% everywhere card as your default. Use category cards when they beat 2%. The 2% card quietly covers everything else.\n\nEither way—simple or optimized—a <strong>2%+ everywhere card</strong> is your practical starting point.',
                 onAnswer: (val) => {
                     // Store the user's answer for step visibility logic
                     state.cashbackFilters.hasFlatRate = val === 'yes';
@@ -1155,7 +1217,7 @@
                     { label: '<div class="text-content"><strong>Hotel Perks</strong><div class="description">Free night, status</div></div>', value: 'hotel' },
                     { label: '<div class="text-content"><strong>Not Sure</strong><div class="description">Keep more options open</div></div>', value: 'none' }
                 ],
-                help: 'Flexible points are the safest start. Pick Airline/Hotel only if you use that brand often.',
+                help: 'If you\'re just getting started, go with <strong>flexible points</strong> (also called bank points). This is what people mean by "Amex points" or "Capital One Miles." You earn on everyday spending, then use them to book on any airline or hotels.\n\n<strong>Airline and hotel cards</strong> are different. You\'re earning rewards tied to one brand, and the value shows up as that brand\'s perks—think a free night or a checked-bag benefit.\n\nFlexible points cards usually earn more on everyday spend, while airline or hotel cards are mostly about perks—so lean flexible unless your brand loyalty makes those extras a clear win.',
                 onAnswer: (val) => {
                     state.travelFilters.focus = [val];
                     // Do not hard filter issuer; only controls visibility of brand step
@@ -1523,7 +1585,10 @@
             helpEl.innerHTML = '<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li><strong>Getting started</strong><br>Answer the question above to narrow your results. Tips for this step will appear here.</li></ul>';
         } else {
             // For each step, show its helper
-            helpEl.innerHTML = `<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li>${step.help}</li></ul>`;
+            // Split the help text by double line breaks and create proper paragraphs
+            const paragraphs = step.help.split('\n\n');
+            const htmlContent = paragraphs.map(para => `<p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.9rem; line-height: 1.6;">${para}</p>`).join('');
+            helpEl.innerHTML = `<div>${htmlContent}</div>`;
         }
         
         // Re-evaluate collapsible state after content update
@@ -1531,15 +1596,45 @@
             const helpText = box.querySelector('.help-text');
             if (helpText) {
                 const contentHeight = helpText.scrollHeight;
-                const shouldCollapse = contentHeight > 350;
+                const shouldCollapse = contentHeight > 200;
                 
                 if (shouldCollapse) {
                     box.classList.add('collapsed');
                     box.classList.remove('expanded');
+                    helpText.style.cursor = 'pointer';
+                    box.style.cursor = 'pointer';
                 } else {
                     box.classList.add('expanded');
                     box.classList.remove('collapsed');
+                    helpText.style.cursor = 'default';
+                    box.style.cursor = 'default';
                 }
+                
+                // Ensure click handlers are attached
+                const helpTitle = box.querySelector('.help-title');
+                const handleToggle = () => {
+                    box.classList.toggle('expanded');
+                    box.classList.toggle('collapsed');
+                    // Update cursor based on state
+                    const isCollapsed = box.classList.contains('collapsed');
+                    helpText.style.cursor = isCollapsed ? 'pointer' : 'default';
+                    box.style.cursor = isCollapsed ? 'pointer' : 'default';
+                };
+                helpTitle.removeEventListener('click', handleToggle);
+                helpTitle.addEventListener('click', handleToggle);
+                helpText.removeEventListener('click', handleToggle);
+                helpText.addEventListener('click', handleToggle);
+
+                // Container-level handler so tapping the down-arrow overlay always expands
+                function containerToggle(e) {
+                    const isLink = e.target.closest && e.target.closest('a');
+                    if (isLink) return;
+                    if (box.classList.contains('collapsed')) {
+                        handleToggle();
+                    }
+                }
+                box.removeEventListener('click', containerToggle);
+                box.addEventListener('click', containerToggle);
             }
         }
     }
