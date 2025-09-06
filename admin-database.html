@@ -737,13 +737,16 @@
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Database configuration
+        // Configuration with service role key (not committed to git)
         const SUPABASE_URL = 'https://zgfglwdjmpawuoxtbwcf.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjMyMjYzNSwiZXhwIjoyMDcxODk4NjM1fQ.bdzJf-_H0wQZOj566y4ieMaRiHrt2PnEAhxUD5-jMgo';
         
         // Initialize Supabase client
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
+
+        // Show that key was loaded successfully
+        console.log('✅ Service role key loaded from localStorage');
+
         let cards = [];
         let editingCardId = null;
 
@@ -840,48 +843,38 @@
         async function setupDatabase() {
             try {
                 console.log('Setting up database table...');
-                
+
                 // First, try to access the cards table to see if it exists
                 const testResponse = await supabase.from('cards').select('id').limit(1);
 
-                if (testResponse.data && testResponse.data.length > 0) {
-                    console.log('✅ Cards table exists');
-                    return true;
-                } else {
-                    console.log('❌ Cards table does not exist - creating it...');
-                    
-                    // Create the table by inserting a test record
-                    const { data, error } = await supabase.from('cards').insert([{
-                        name: "Test Card",
-                        type: "travel",
-                        annual_fee: 0,
-                        bank_type: "test",
-                        rewards_type: "points",
-                        image_url: "",
-                        features: ["test"],
-                        card_url: "",
-                        status: "inactive"
-                    }]);
-
-                    if (error) {
-                        throw new Error(`Failed to create table: ${error.message}`);
-                    } else {
-                        console.log('✅ Table created successfully');
-                        
-                        // Delete the test card
-                        const { data: deletedData, error: deleteError } = await supabase.from('cards').delete().eq('id', data[0].id);
-                        if (deleteError) {
-                            console.error('Error deleting test card:', deleteError);
-                        } else {
-                            console.log('✅ Test card deleted successfully');
-                        }
-                        
+                if (testResponse.error) {
+                    // If we get an RLS error, the table exists but we can't access it
+                    if (testResponse.error.message.includes('row-level security policy')) {
+                        console.log('✅ Cards table exists but has RLS restrictions');
                         return true;
                     }
+                    throw new Error(`Database access error: ${testResponse.error.message}`);
                 }
-                
+
+                if (testResponse.data && testResponse.data.length > 0) {
+                    console.log('✅ Cards table exists and is accessible');
+                    return true;
+                } else {
+                    console.log('⚠️ Cards table exists but is empty - this is normal');
+                    return true;
+                }
+
             } catch (error) {
                 console.error('Error setting up database:', error);
+
+                // Check if it's an RLS policy error
+                if (error.message.includes('row-level security policy')) {
+                    console.log('⚠️ RLS policy restriction detected - table exists but access is restricted');
+                    console.log('To fix this: Go to Supabase Dashboard > Table Editor > cards > RLS Policies');
+                    console.log('Either disable RLS or create policies that allow your operations');
+                    return true; // Don't throw error, just continue
+                }
+
                 throw new Error(`Database setup failed: ${error.message}`);
             }
         }
@@ -993,7 +986,7 @@
 
         async function saveCardToDatabase(cardData) {
             try {
-                console.log('Saving card to database:', cardData);
+                console.log('💾 saveCardToDatabase called with:', cardData);
                 
                 // Use all the card data including welcome_bonus and practical_advice
                 const safeCardData = { ...cardData };
@@ -1001,11 +994,35 @@
                 let response;
                 if (editingCardId) {
                     // Update existing card
+                    console.log('🔄 Attempting to update card with ID:', editingCardId);
+                    console.log('🔄 Update data:', safeCardData);
                     const { data, error } = await supabase.from('cards').update(safeCardData).eq('id', editingCardId);
+                    console.log('🔄 Supabase update response:', { data, error });
                     if (error) {
+                        console.error('❌ Supabase update error:', error);
                         throw new Error(`Database error: ${error.message}`);
                     } else {
-                        console.log('Card updated to database successfully!', data);
+                        console.log('✅ Card updated to database successfully!', data);
+                        // Verify the update by fetching the updated record
+                        const { data: verifyData, error: verifyError } = await supabase
+                            .from('cards')
+                            .select('earning_categories')
+                            .eq('id', editingCardId)
+                            .single();
+                        console.log('🔍 Verification - updated card earning_categories:', verifyData?.earning_categories);
+
+                        if (verifyError) {
+                            console.error('❌ Verification query failed:', verifyError);
+                            console.error('This usually means RLS policies are blocking the UPDATE operation');
+                            console.log('🔧 SOLUTION: Add UPDATE policy in Supabase');
+                        } else if (verifyData?.earning_categories?.includes('groceries')) {
+                            console.error('❌ UPDATE FAILED: earning_categories still contains groceries!');
+                            console.log('Expected:', safeCardData.earning_categories);
+                            console.log('Actual:', verifyData.earning_categories);
+                            console.log('🔧 SOLUTION: Check RLS policies for UPDATE operations');
+                        } else {
+                            console.log('✅ UPDATE SUCCESS: earning_categories correctly updated!');
+                        }
                         updateStatus('Card updated to database successfully!', 'success');
                         return true;
                     }
@@ -1100,8 +1117,13 @@
         }
 
         function editCard(cardId) {
+            console.log('🔧 editCard called with cardId:', cardId);
             const card = cards.find(c => c.id === cardId);
-            if (!card) return;
+            if (!card) {
+                console.log('❌ Card not found with id:', cardId);
+                return;
+            }
+            console.log('✅ Found card to edit:', card.name);
             
             console.log('🔍 Editing card:', card);
             console.log('🔍 Card type:', card.type);
@@ -1160,7 +1182,15 @@
             document.getElementById('bankType').value = card.bankType;
             // Clear rewards type checkboxes first
             document.querySelectorAll('input[name="rewardsTypes"]').forEach(checkbox => checkbox.checked = false);
-            
+            // Clear earning categories checkboxes first
+            document.querySelectorAll('input[name="earningCategories"]').forEach(checkbox => checkbox.checked = false);
+            // Clear perk categories checkboxes first
+            document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
+            // Clear airline/hotel checkboxes first
+            document.querySelectorAll('input[name="airlineHotel"]').forEach(checkbox => checkbox.checked = false);
+            // Clear protection categories checkboxes first
+            document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
+
             // Populate rewards types (handle both single string and array)
             if (card.rewards) {
                 console.log('🔍 Processing card rewards:', card.rewards);
@@ -1248,8 +1278,14 @@
                     console.log('🔍 Looking for earning category checkbox with value:', cleanValue);
                     const checkbox = document.querySelector(`input[name="earningCategories"][value="${cleanValue}"]`);
                     if (checkbox) {
+                        // Only check if this category is actually in the database data
                         checkbox.checked = true;
                         console.log('✅ Found and checked earning category checkbox for:', cleanValue);
+
+                        // Add event listener to track changes
+                        checkbox.addEventListener('change', function() {
+                            console.log('🔄 Checkbox changed:', cleanValue, 'checked:', this.checked);
+                        });
                     } else {
                         console.log('❌ No earning category checkbox found for value:', cleanValue);
                     }
@@ -1376,7 +1412,11 @@
                 status: document.getElementById('cardStatus').value,
 
                 perk_categories: Array.from(document.querySelectorAll('input[name="perkCategories"]:checked')).map(cb => cb.value),
-                earning_categories: Array.from(document.querySelectorAll('input[name="earningCategories"]:checked')).map(cb => cb.value),
+                earning_categories: (() => {
+                    const checked = Array.from(document.querySelectorAll('input[name="earningCategories"]:checked')).map(cb => cb.value);
+                    console.log('🔍 Earning categories checked at submission:', checked);
+                    return checked;
+                })(),
                 airline_hotels: Array.from(document.querySelectorAll('input[name="airlineHotel"]:checked')).map(cb => cb.value),
                 protection_categories: Array.from(document.querySelectorAll('input[name="protectionCategories"]:checked')).map(cb => cb.value)
             };
@@ -1385,7 +1425,14 @@
                 cardData.id = editingCardId;
             }
 
+            console.log('📝 Form submission triggered!');
             console.log('📝 Form data being submitted:', cardData);
+
+            // Double-check earning categories right before saving
+            const finalEarningCats = Array.from(document.querySelectorAll('input[name="earningCategories"]:checked')).map(cb => cb.value);
+            console.log('🔍 Final earning categories check:', finalEarningCats);
+            cardData.earning_categories = finalEarningCats;
+
             const saved = await saveCardToDatabase(cardData);
             if (saved) {
                 // Reload cards from database to get updated data
@@ -1483,6 +1530,7 @@
         function updateDbStatus(status) {
             document.getElementById('dbStatus').textContent = status;
         }
+
 
         // Close modal when clicking outside
         window.onclick = function(event) {

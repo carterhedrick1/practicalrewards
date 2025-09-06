@@ -319,6 +319,16 @@
             }
         }
 
+
+        /* Step tip styling */
+        .step-tip {
+            font-style: italic;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
         /* Mobile tweaks */
         @media (max-width: 768px) {
             /* Match header/hero behavior from cards page */
@@ -712,9 +722,34 @@
                         }
                         if (typeof field === 'string') {
                             try {
-                                const parsed = JSON.parse(field);
+                                // Handle double-encoded JSON strings and malformed data
+                                let cleanField = field.trim();
+
+                                // Remove surrounding quotes if they exist
+                                if (cleanField.startsWith('"') && cleanField.endsWith('"')) {
+                                    cleanField = cleanField.slice(1, -1);
+                                }
+
+                                // Handle cases where the inner content is still quoted
+                                if (cleanField.startsWith('"[') && cleanField.endsWith(']"')) {
+                                    cleanField = cleanField.slice(1, -1);
+                                }
+
+                                const parsed = JSON.parse(cleanField);
+
+                                // Clean up any quoted strings within the array
+                                if (Array.isArray(parsed)) {
+                                    return parsed.map(item => {
+                                        if (typeof item === 'string' && item.startsWith('"') && item.endsWith('"')) {
+                                            return item.slice(1, -1);
+                                        }
+                                        return item;
+                                    });
+                                }
+
                                 return Array.isArray(parsed) ? parsed : [];
                             } catch (e) {
+                                console.warn('Failed to parse array field:', field, e);
                                 return [];
                             }
                         }
@@ -917,6 +952,20 @@
 
     function applyFiltersTo(cards, filters) {
         return cards.filter(card => {
+            // First, apply flat-rate exclusion if user has a 2% everywhere card
+            if (state.cashbackFilters.hasFlatRate) {
+                const earningCats = Array.isArray(card.earningCategories) ? card.earningCategories : [];
+                if (earningCats.includes('flat-rate')) {
+                    console.log(`❌ ${card.name} filtered out - user already has 2% everywhere card, excluding flat-rate`);
+                    return false;
+                }
+                // Also check for "flat-rate" with quotes (in case of double encoding)
+                if (earningCats.includes('"flat-rate"')) {
+                    console.log(`❌ ${card.name} filtered out - user already has 2% everywhere card, excluding "flat-rate"`);
+                    return false;
+                }
+            }
+
             for (const [k, values] of Object.entries(filters)) {
                 if (!values || values.length === 0) continue;
                 if (k === 'type') {
@@ -950,19 +999,20 @@
                 } else if (k === 'earning_any') {
                     const selected = new Set(values);
                     const earningCats = Array.isArray(card.earningCategories) ? card.earningCategories : [];
-                    
+
                     console.log(`🔍 Filtering ${card.name} for earning_any:`, values, 'Card has earning categories:', earningCats);
-                    
-                    // Check if card matches ANY selected earning category (OR logic)
-                    const hasAnyCategory = earningCats.some(cat => selected.has(cat));
-                    
-                    console.log(`🔍 ${card.name}: hasAnyCategory=${hasAnyCategory}`);
-                    
-                    if (!hasAnyCategory) {
-                        console.log(`❌ ${card.name} filtered out - no matching earning categories`);
+
+                    // Strict mode: card must have ALL of the selected categories
+                    const matchingCategories = earningCats.filter(cat => selected.has(cat));
+                    const hasAllMatches = matchingCategories.length === values.length;
+
+                    console.log(`🔍 ${card.name} strict mode: ${matchingCategories.length}/${values.length} matches`);
+
+                    if (!hasAllMatches) {
+                        console.log(`❌ ${card.name} filtered out - needs ALL matching categories (has ${matchingCategories.length}/${values.length})`);
                         return false;
                     } else {
-                        console.log(`✅ ${card.name} passed earning filter`);
+                        console.log(`✅ ${card.name} passed strict earning filter (${matchingCategories.length} matches)`);
                     }
                 } else if (k === 'fee') {
                     if (values.includes('0-100') && !(card.annualFee >= 0 && card.annualFee <= 100)) return false;
@@ -1152,6 +1202,7 @@
                 onAnswer: (val) => {
                     // Store the user's answer for step visibility logic
                     state.cashbackFilters.hasFlatRate = val === 'yes';
+                    console.log(`🔍 Set hasFlatRate to:`, state.cashbackFilters.hasFlatRate, 'for answer:', val);
                     
                     const arr = state.cashbackFilters['earning_any'] || [];
                     if (val === 'no') {
@@ -1168,7 +1219,8 @@
             },
             {
                 id: 'cb2', branch: 'cashback',
-                title: 'Where do you want a boost? (pick up to 3)',
+                title: 'Where do you want a boost?',
+                tip: 'Pick the categories you care about most. We\'ll keep cards that boost all of them. If the list gets thin, remove a pick.',
                 type: 'checkbox',
                 options: [
                     { label: 'Dining', value: 'dining' },
@@ -1184,7 +1236,7 @@
                     { label: 'Telecom', value: 'telecom' },
                     { label: 'Entertainment', value: 'entertainment' }
                 ],
-                help: 'Pick 1–3. We’ll keep cards that bonus at least one of them. More boxes = fewer results.',
+                help: 'Pick categories you want boosted. Cards must match ALL selected categories.',
                 onAnswer: (vals) => {
                     // Replace the earning_any array with the new selections (allows deselection)
                     state.cashbackFilters['earning_any'] = [...vals];
@@ -1194,6 +1246,9 @@
                         // Clear lastApplied if no categories are selected
                         state.lastApplied = null;
                     }
+
+                    // Update toggle state when categories change
+                    setTimeout(() => renderStep(), 0);
                 }
             },
             {
@@ -1500,8 +1555,10 @@
         const questionEl = document.getElementById('wizard-question');
         questionEl.textContent = step.title;
         questionEl.className = 'wizard-title question';
-        
-        container.innerHTML = `<div class="${optionsClass}">${optionsHtml}</div>`;
+
+        // Add tip if it exists
+        const tipHtml = step.tip ? `<div class="step-tip">${step.tip}</div>` : '';
+        container.innerHTML = `${tipHtml}<div class="${optionsClass}">${optionsHtml}</div>`;
         updateHelp(step);
 
         // Show/hide Next button based on step type and position
