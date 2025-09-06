@@ -58,17 +58,19 @@
         /* Wizard */
         .wizard { position: sticky; top: 100px; background: white; border: 1px solid #e5e7eb; border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 0.75rem; }
-        .wizard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; }
+        .wizard-header { margin-bottom: .5rem; }
         .wizard-title { font-size: 1.1rem; font-weight: 700; color: #047857; }
-        .progress { height: 6px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; margin: .5rem 0 .75rem; }
+        .wizard-title.question { font-size: 1.3rem; font-weight: 600; color: #047857; line-height: 1.3; }
+        .progress { height: 6px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; margin: .5rem 0; }
+        .wizard-actions { display: flex; gap: .5rem; align-items: center; justify-content: center; margin-top: .75rem; }
         .progress > span { display: block; height: 100%; width: 0; background: linear-gradient(135deg,#059669,#10b981); transition: width .3s ease; }
         .step { padding: .5rem; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: .5rem; }
         .step h3 { font-size: 1rem; color: #1e293b; margin-bottom: .5rem; }
+        #steps-container { margin-bottom: .5rem; }
         .options { display: grid; grid-template-columns: 1fr; gap: .5rem; }
         .option { border: 2px solid #e2e8f0; border-radius: 10px; padding: .75rem; background: white; cursor: pointer; display: flex; align-items: center; gap: .5rem; }
         .option input { margin: 0; }
         .option.active, .option:hover { border-color: #059669; background: #f0fdf4; }
-        .wizard-actions { display: flex; gap: .5rem; align-items: center; }
         .btn { padding: .6rem 1rem; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
         .btn-primary { background: #059669; color: white; }
         .btn-secondary { background: white; color: #059669; border: 1px solid #059669; }
@@ -504,11 +506,7 @@
             <!-- Wizard -->
             <aside class="wizard" id="wizard">
                 <div class="wizard-header">
-                    <div class="wizard-title">Step-by-step</div>
-                    <div class="wizard-actions">
-                        <button class="btn btn-secondary" id="back-btn">Back</button>
-                        <button class="btn btn-primary" id="next-btn" style="display: none;">Next</button>
-                    </div>
+                    <div class="wizard-title" id="wizard-question">Step-by-step</div>
                 </div>
                 <div class="progress"><span id="progress-bar"></span></div>
 
@@ -521,6 +519,11 @@
                             <li><strong>Getting started</strong> – Answer the question above. Tips update here.</li>
                         </ul>
                     </div>
+                </div>
+                
+                <div class="wizard-actions">
+                    <button class="btn btn-secondary" id="back-btn">Back</button>
+                    <button class="btn btn-primary" id="next-btn" style="display: none;">Next</button>
                 </div>
             </aside>
 
@@ -1368,7 +1371,15 @@
         const container = document.getElementById('steps-container');
         const bar = document.getElementById('progress-bar');
 
-        if (!step) { container.innerHTML = '<div style="color:#64748b;">All set. Adjust answers on the left anytime.</div>'; bar.style.width = '100%'; updateHelp(null); return; }
+        if (!step) { 
+            const questionEl = document.getElementById('wizard-question');
+            questionEl.textContent = 'Step-by-step';
+            questionEl.className = 'wizard-title';
+            container.innerHTML = '<div style="color:#64748b;">All set. Adjust answers on the left anytime.</div>'; 
+            bar.style.width = '100%'; 
+            updateHelp(null); 
+            return; 
+        }
 
         const idx = current; bar.style.width = ((idx / total) * 100) + '%';
 
@@ -1394,7 +1405,12 @@
         const shouldUseGrid = (step.id === 'cb2' || step.id === 'tr3' || step.id === 'tr1b' || step.id === 'tr5') && step.type === 'checkbox';
         const optionsClass = shouldUseGrid ? 'options grid-layout' : 'options';
         
-        container.innerHTML = `<div class="step"><h3>${step.title}</h3><div class="${optionsClass}">${optionsHtml}</div></div>`;
+        // Put the question in the header and options in the container
+        const questionEl = document.getElementById('wizard-question');
+        questionEl.textContent = step.title;
+        questionEl.className = 'wizard-title question';
+        
+        container.innerHTML = `<div class="${optionsClass}">${optionsHtml}</div>`;
         updateHelp(step);
 
         // Show/hide Next button based on step type and position
