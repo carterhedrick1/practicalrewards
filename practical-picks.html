@@ -81,15 +81,15 @@
             background: #f8fafc; 
             border: 1px solid #e5e7eb; 
             border-left: 3px solid #059669; 
-            border-radius: 0 8px 8px 0; 
-            padding: .5rem .75rem; 
+            border-radius: 8px; 
+            padding: 1rem; 
             position: relative;
         }
         .help-title { 
             font-weight: 700; 
             color: #059669; 
-            font-size: .9rem; 
-            margin-bottom: .25rem; 
+            font-size: 1rem; 
+            margin-bottom: 0.5rem; 
             text-transform: uppercase; 
             letter-spacing: .5px; 
             display: flex;
@@ -99,8 +99,8 @@
         }
         .help-text { 
             color: #475569; 
-            font-size: .9rem; 
-            line-height: 1.5; 
+            font-size: 0.95rem; 
+            line-height: 1.6; 
             max-height: none;
             overflow: visible;
             transition: all 0.3s ease;
@@ -326,7 +326,7 @@
             .nav-links { display: none; }
             nav { padding: 0 1rem; height: 70px; }
 
-            .coach-container { padding: 40px 1rem 0 1rem; }
+            .coach-container { padding: 20px 1rem 0 1rem; }
             .hero-section {
                 margin: -65px -1rem 0 -1rem;
                 padding: 2rem 1rem;
@@ -347,7 +347,8 @@
             /* Additional mobile improvements for wizard */
             .wizard {
                 position: static;
-                margin-bottom: 2rem;
+                margin-bottom: 1rem;
+                margin-top: 0;
             }
             
             .wizard-header {
@@ -379,7 +380,7 @@
                 border-radius: 12px;
                 box-shadow: 0 2px 12px rgba(0,0,0,0.08);
                 margin: 0 0 1rem 0;
-                padding: 0.75rem 1.5rem;
+                padding: 0.5rem 1rem;
                 text-align: center;
                 position: relative;
                 border: 2px solid #059669;
@@ -395,27 +396,27 @@
             }
             
             .mobile-scroll-count {
-                font-size: 3rem;
+                font-size: 2.5rem;
                 font-weight: 800;
                 color: #059669;
                 line-height: 1;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.25rem;
             }
             
             .mobile-scroll-label {
-                font-size: 1rem;
+                font-size: 0.9rem;
                 color: #1e293b;
                 font-weight: 600;
-                margin-bottom: 0.75rem;
+                margin-bottom: 0.5rem;
             }
             
             .mobile-scroll-hint {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 0.5rem;
+                gap: 0.25rem;
                 color: #64748b;
-                font-size: 0.9rem;
+                font-size: 0.8rem;
             }
             
             .mobile-scroll-arrow {
@@ -530,9 +531,9 @@
             <!-- Mobile scroll indicator (only visible on mobile) -->
             <div class="mobile-scroll-indicator" id="mobile-scroll-indicator" style="display: none;">
                 <div class="mobile-scroll-count" id="mobile-scroll-count">0</div>
-                <div class="mobile-scroll-label">Cards Match Your Criteria</div>
+                <div class="mobile-scroll-label">Fit Your Criteria</div>
                 <div class="mobile-scroll-hint">
-                    <div>Scroll down to see your personalized picks</div>
+                    <div>Scroll to your practical options</div>
                     <div class="mobile-scroll-arrow">↓</div>
                 </div>
             </div>
@@ -1415,7 +1416,16 @@
 
         // Show/hide Next button based on step type and position
         const nextBtn = document.getElementById('next-btn');
+        const backBtn = document.getElementById('back-btn');
         const isLastStep = current >= steps.length - 1;
+        const isFirstStep = current === 0;
+        
+        // Show/hide back button - hide on first step
+        if (isFirstStep) {
+            backBtn.style.display = 'none';
+        } else {
+            backBtn.style.display = 'inline-block';
+        }
         
         if (step.type === 'checkbox' && !isLastStep) {
             // Show Next button for checkbox steps (except the last one)
@@ -1486,7 +1496,7 @@
             return;
         }
         // For each step, show its helper
-        helpEl.innerHTML = `<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li><strong>Tip</strong><br>${step.help}</li></ul>`;
+        helpEl.innerHTML = `<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li>${step.help}</li></ul>`;
     }
 
     function getCurrentAnswer(stepId) {
