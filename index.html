@@ -291,14 +291,27 @@
 
         .hero-badge {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-bottom: 0.25rem;
+        }
+
+        .hero-badge::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #fef3c7, #fde68a);
+            border-radius: 1px;
         }
 
         .hero-subtitle {
@@ -1023,20 +1036,7 @@
                 <div class="hero-badge">Credit Card Recommendations</div>
                 <h1>Stop Leaving Money on the Table</h1>
                 <p class="hero-subtitle">Get personalized credit card recommendations that actually fit your spending habits and lifestyle. No generic advice, no overwhelming options—just the cards that will earn you the most rewards.</p>
-                
-                <!-- Value Props -->
-                <div class="hero-value-props">
-                    <div class="value-prop">
-                        <span>Personalized to your spending</span>
-                    </div>
-                    <div class="value-prop">
-                        <span>Maximize your rewards</span>
-                    </div>
-                    <div class="value-prop">
-                        <span>Simple, not overwhelming</span>
-                    </div>
-                </div>
-                
+
                 <div class="hero-cta">
                     <a href="practical-picks.html" class="btn btn-primary">
                         Find My Perfect Cards
@@ -1060,69 +1060,55 @@
         <div class="container">
             <div style="max-width: 900px; margin: 0 auto; text-align: center;">
                 <h2 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: #292524; margin-bottom: 1.5rem; line-height: 1.2;">What Credit Cards Can Do for You</h2>
-                <p style="font-size: 1.25rem; color: #57534e; margin-bottom: 3rem; line-height: 1.6;">From simple cash back to premium perks—here's everything credit cards can offer beyond just earning rewards.</p>
+                <p style="font-size: 1.25rem; color: #57534e; margin-bottom: 3rem; line-height: 1.6;">From simple cash back to premium perks—here's what credit cards can offer beyond just earning rewards.</p>
                 
                 <!-- Card Benefits Overview -->
-                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 20px; padding: 3rem; margin: 3rem 0; position: relative; overflow: hidden;">
-                    <!-- Background Pattern -->
-                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05)); border-radius: 50%; z-index: 1;"></div>
-                    <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; background: linear-gradient(135deg, rgba(5, 150, 105, 0.08), rgba(16, 185, 129, 0.03)); border-radius: 50%; z-index: 1;"></div>
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%), url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27120%27 height=%2780%27 viewBox=%270 0 120 80%27%3E%3Cg fill-opacity=%270.1%27%3E%3Crect x=%2720%27 y=%2715%27 width=%2780%27 height=%2750%27 rx=%278%27 ry=%278%27 fill=%27%23ffffff%27/%3E%3Crect x=%2725%27 y=%2735%27 width=%2725%27 height=%274%27 rx=%272%27 fill=%27%23ffffff%27/%3E%3Crect x=%2755%27 y=%2735%27 width=%2715%27 height=%274%27 rx=%272%27 fill=%27%23ffffff%27/%3E%3Crect x=%2725%27 y=%2745%27 width=%2745%27 height=%273%27 rx=%271.5%27 fill=%27%23ffffff%27/%3E%3C/g%3E%3C/svg%3E'); background-size: 140px 100px; border-radius: 20px; padding: 3rem; margin: 3rem 0; position: relative; overflow: hidden;">
                     
                     <div style="position: relative; z-index: 2;">
                         <!-- Benefits Grid -->
                         <div class="benefits-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto;">
                             <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">2% Back On Everything</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Simple, straightforward rewards on every purchase. No categories to track, no rotating bonuses—just consistent cash back.</p>
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Simple Value</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Money in your pocket on every single purchase. No complicated rules or bonus categories to chase.</p>
                             </div>
-                            
+
                             <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Keep Lounges</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Free food, drinks, and WiFi at airports. Priority Pass, Centurion Lounges, airline lounges. Worth $50+ per visit.</p>
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Statement Credits</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Free money back on monthly bills you pay anyway. Cancel expensive subscriptions and get cash back instead.</p>
                             </div>
-                            
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Credits Back On What You Already Buy</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">$300 travel credits, $200 airline fees, $240 streaming credits. Get money back on what you're already spending.</p>
-                            </div>
-                            
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">TSA PreCheck</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">$100 credit every 4-5 years. Skip the security lines. Time is money, and this saves hours.</p>
-                            </div>
-                            
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Food Credits</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">$25/month dining credits. Get money back on restaurants, food delivery, and grocery stores.</p>
-                            </div>
-                            
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Streaming Credits</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">$20/month Netflix, Spotify, etc. Get money back on entertainment you're already paying for.</p>
-                            </div>
-                            
+
                             <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
                                 <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Cell Phone Insurance</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Pay your phone bill with the right card and get free damage/theft coverage. Save $200+ per year on insurance.</p>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Coverage for theft or damage when you pay your bill with eligible cards. Ditch insurance or AppleCare+ you're already paying for.</p>
                             </div>
-                            
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Rental Car Insurance</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Skip the $30/day rental insurance. Your card covers it. Primary coverage means no hassle with your regular insurance.</p>
-                            </div>
-                            
+
                             <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
                                 <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Purchase Protection</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Buy something and it breaks? Get your money back. Extended warranties, price protection, return protection.</p>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Get your money back if something breaks or gets stolen. No deductibles or paperwork hassles.</p>
+                            </div>
+
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Rental Car Insurance</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Skip the rental company's $30/day insurance fee. Your card covers you with no extra cost.</p>
+                            </div>
+
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Free Checked Bags & Priority Boarding</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Save $30+ per bag on checked luggage fees. Board early to get your preferred seat.</p>
+                            </div>
+
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">TSA PreCheck / Global Entry</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Save hours at the airport by skipping security lines. Get your money back on Global Entry fees.</p>
+                            </div>
+
+                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
+                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Airport Lounges</h4>
+                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Relax in luxury before your flight. Worth $50+ per visit in free food, drinks, and Wi-Fi.</p>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Complexity Message -->
-                <div style="background: #f0fdf4; border: 1px solid #10b981; border-radius: 12px; padding: 2rem; margin-top: 2rem;">
-                    <h3 style="font-size: 1.25rem; font-weight: 600; color: #059669; margin-bottom: 1rem;">It Can Get Complicated—That's Okay</h3>
-                    <p style="color: #374151; font-size: 1rem; line-height: 1.6; margin: 0;">Some people want one simple card. Others want to optimize every dollar. We help you find your sweet spot—whether that's earning 2% on everything or juggling 5 cards for maximum value. Your goals, your complexity level.</p>
                 </div>
             </div>
         </div>
