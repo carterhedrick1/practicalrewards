@@ -70,7 +70,8 @@
         .options { display: grid; grid-template-columns: 1fr; gap: .5rem; }
         .option { border: 2px solid #e2e8f0; border-radius: 10px; padding: .75rem; background: white; cursor: pointer; display: flex; align-items: center; gap: .5rem; }
         .option input { margin: 0; }
-        .option.active, .option:hover { border-color: #059669; background: #f0fdf4; }
+        .option.active { border-color: #059669; background: #f0fdf4; }
+        .option:hover { border-color: #10b981; background: #f9fafb; }
         .btn { padding: .6rem 1rem; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
         .btn-primary { background: #059669; color: white; }
         .btn-secondary { background: white; color: #059669; border: 1px solid #059669; }
@@ -98,13 +99,78 @@
             justify-content: space-between;
             cursor: pointer;
         }
+        .help-title .expand-icon {
+            transition: transform 0.3s ease;
+            font-size: 0.9rem;
+            color: #059669;
+        }
+        .help-title.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
         .help-text { 
             color: #475569; 
             font-size: 0.95rem; 
             line-height: 1.6; 
-            max-height: none;
-            overflow: visible;
-            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, margin-top 0.3s ease;
+            margin-top: 0;
+        }
+        .help-text.expanded {
+            max-height: 500px;
+            margin-top: 0.5rem;
+        }
+        
+        /* Collapsible states - desktop version with fade and arrow like mobile */
+        .help-box.collapsible .help-text {
+            max-height: 140px;
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.3s ease, margin-top 0.3s ease;
+            margin-top: 0.5rem;
+        }
+        
+        .help-box.collapsible.expanded .help-text {
+            max-height: 500px;
+            margin-top: 0.5rem;
+        }
+        
+        .help-box.collapsible.collapsed .help-text {
+            max-height: 140px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Fade effect and arrow for collapsed state */
+        .help-box.collapsed .help-text::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center 42px / 25px 25px no-repeat,
+                        linear-gradient(to bottom, rgba(248, 250, 252, 0), rgba(248, 250, 252, 0.2), rgba(248, 250, 252, 0.6), rgba(248, 250, 252, 0.9), #f8fafc);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .help-box.collapsed .help-title .expand-icon {
+            display: none;
+        }
+        
+        /* Explicitly set expanded state to override collapsed max-height */
+        .help-box.expanded .help-text {
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        
+        .help-box.expanded .help-text::after {
+            display: none;
+        }
+        
+        .help-box.expanded .help-title .expand-icon {
+            display: none;
         }
 
         /* Content side */
@@ -613,7 +679,10 @@
                 <div id="steps-container"></div>
 
                 <div class="help-box" id="help-box" aria-live="polite">
-                    <div class="help-title">Practical Advice</div>
+                    <div class="help-title" id="help-title">
+                        Practical Advice
+                        <span class="expand-icon">▼</span>
+                    </div>
                     <div class="help-text" id="help-content">
                         <ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;">
                             <li><strong>Getting started</strong> – Answer the question above. Tips update here.</li>
@@ -702,6 +771,9 @@
             return;
         }
         
+        // Show loading state immediately
+        showLoadingState();
+        
         // Check cache first (valid for 5 minutes)
         if (cardsCache && Date.now() - cardsCache.timestamp < 300000) {
             console.log('✅ Using cached cards data');
@@ -709,14 +781,21 @@
             filteredCards = [...allCards];
             renderCards(filteredCards);
             updateResultsHeadline(filteredCards.length, allCards.length);
+            hideLoadingState();
             return;
         }
         
         isLoading = true;
+        
         try {
             console.log('🔄 Attempting to fetch cards from database...');
             
-            // Retry logic with exponential backoff
+            // Create a timeout promise that rejects after 10 seconds
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Request timeout after 10 seconds')), 10000);
+            });
+            
+            // Retry logic with exponential backoff and timeout
             let response = null;
             let lastError = null;
             
@@ -724,8 +803,8 @@
                 try {
                     console.log(`🔄 Attempt ${attempt}/3...`);
                     
-                    // First try with status filter
-                    response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,earning_categories,airline_hotels&status=eq.active', {
+                    // First try with status filter - optimized query
+                    const fetchPromise = fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,earning_categories,airline_hotels&status=eq.active&order=id.asc', {
                         headers: {
                             'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
                             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
@@ -733,12 +812,14 @@
                             'Prefer': 'return=representation'
                         }
                     });
+                    
+                    response = await Promise.race([fetchPromise, timeoutPromise]);
                     
                     if (response.ok) break;
                     
                     // If status filter fails, try without it
                     console.log('🔄 Status filter failed, trying without filter...');
-                    response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,earning_categories,airline_hotels', {
+                    const fallbackPromise = fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,earning_categories,airline_hotels&order=id.asc', {
                         headers: {
                             'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
                             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
@@ -746,6 +827,8 @@
                             'Prefer': 'return=representation'
                         }
                     });
+                    
+                    response = await Promise.race([fallbackPromise, timeoutPromise]);
                     
                     if (response.ok) break;
                     
@@ -851,20 +934,83 @@
                 throw lastError || new Error('Database fetch failed after all retries');
             }
         } catch (e) {
-            console.warn('Falling back due to error loading cards:', e && e.message);
-            // Final minimal sample
-            allCards = [
-                { id:1,name:'Capital One Venture X',type:'travel',annualFee:395,bankType:'capital-one',rewards:'miles',image:'images/venture-x.png',welcomeBonus:'75k miles',features:['2x miles','3x travel & dining'],perkCategories:['lounge-access','tsa-precheck','no-foreign-fees'],protectionCategories:['rental-car-insurance','trip-delay-cancellation'],earningCategories:[],airlineHotel:[],url:'card-pages/venture-x.html',status:'active' },
-                { id:2,name:'Chase Sapphire Reserve',type:'travel',annualFee:795,bankType:'chase',rewards:'points',image:'images/sapphire-reserve.jpg',welcomeBonus:'60k points',features:['3x travel & dining'],perkCategories:['lounge-access','tsa-precheck'],protectionCategories:['rental-car-insurance','trip-delay-cancellation','lost-delayed-baggage'],earningCategories:[],airlineHotel:[],url:'card-pages/sapphire-reserve.html',status:'active' },
-                { id:3,name:'Citi Double Cash',type:'cashback',annualFee:0,bankType:'citi',rewards:'cashback',image:'images/citi-double-cash.png',welcomeBonus:'',features:['2% on everything'],perkCategories:[],protectionCategories:['purchase-protection'],earningCategories:['flat-rate'],airlineHotel:[],url:'card-pages/citi-double-cash.html',status:'active' }
-            ];
+            console.warn('Failed to load cards from database:', e && e.message);
+            
+            // Show error state instead of fallback cards
+            showErrorState(e.message);
         } finally {
             isLoading = false;
+            hideLoadingState();
         }
         
         filteredCards = [...allCards];
         renderCards(filteredCards);
         updateResultsHeadline(filteredCards.length, allCards.length);
+    }
+
+    function showLoadingState() {
+        const cardsGrid = document.getElementById('cards-grid');
+        if (cardsGrid) {
+            cardsGrid.innerHTML = `
+                <div style="width: 100%; margin: 0; padding: 2rem; text-align: center; background: #fff; border-radius: 12px; border: 1px solid #e5e7eb;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                        <div style="width: 40px; height: 40px; border: 3px solid #e5e7eb; border-top: 3px solid #059669; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                        <div style="color: #1e293b; font-weight: 600;">Loading credit cards...</div>
+                        <div style="color: #64748b; font-size: 0.875rem;">Please wait while we fetch the latest data</div>
+                    </div>
+                </div>
+            `;
+            
+            // Add CSS animation if not already present
+            if (!document.getElementById('loading-spinner-css')) {
+                const style = document.createElement('style');
+                style.id = 'loading-spinner-css';
+                style.textContent = `
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+    }
+
+    function hideLoadingState() {
+        // The loading state will be replaced when renderCards() is called
+        // No need to explicitly hide it here
+    }
+
+    function showErrorState(errorMessage) {
+        const cardsGrid = document.getElementById('cards-grid');
+        if (cardsGrid) {
+            cardsGrid.innerHTML = `
+                <div style="width: 100%; margin: 0; padding: 2rem; text-align: center; background: #fff; border-radius: 12px; border: 1px solid #e5e7eb;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; background: #fef2f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">⚠️</div>
+                        <div style="color: #1e293b; font-weight: 600; font-size: 1.125rem;">Unable to load credit cards</div>
+                        <div style="color: #64748b; font-size: 0.875rem; max-width: 400px; line-height: 1.5;">
+                            We're having trouble connecting to our database. Please check your internet connection and try refreshing the page.
+                        </div>
+                        <button onclick="window.location.reload()" style="
+                            background: #059669; 
+                            color: white; 
+                            border: none; 
+                            padding: 0.75rem 1.5rem; 
+                            border-radius: 8px; 
+                            font-weight: 600; 
+                            cursor: pointer;
+                            font-size: 0.875rem;
+                        ">Refresh Page</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Clear the cards arrays so nothing renders
+        allCards = [];
+        filteredCards = [];
+        updateResultsHeadline(0, 0);
     }
 
 
@@ -1183,70 +1329,57 @@
         const helpTitle = helpBox.querySelector('.help-title');
         const helpText = helpBox.querySelector('.help-text');
         
-        // Check if content height exceeds threshold (300px + some buffer)
+        // Check if content height exceeds threshold - make it collapse more aggressively like mobile
         function shouldCollapse() {
             if (!helpText) return false;
             const contentHeight = helpText.scrollHeight;
-            return contentHeight > 200; // Lower threshold to show fade more often
+            return contentHeight > 100; // Much lower threshold to match mobile behavior
         }
         
-        // Only add collapsible behavior on mobile
+        // Add collapsible behavior on both mobile and desktop
         function checkMobileAndSetup() {
-            if (window.innerWidth <= 768) {
-                helpBox.classList.add('collapsible');
-                
-                // Check if content should be collapsed initially
-                if (shouldCollapse()) {
-                    helpBox.classList.add('collapsed');
-                } else {
-                    helpBox.classList.add('expanded');
-                }
-                
-                // Remove any existing click listeners to avoid duplicates
-                const newHelpTitle = helpBox.querySelector('.help-title');
-                const newHelpText = helpBox.querySelector('.help-text');
-                
-                function handleToggle() {
-                    helpBox.classList.toggle('expanded');
-                    helpBox.classList.toggle('collapsed');
-                    // Update cursor based on state
-                    const isCollapsed = helpBox.classList.contains('collapsed');
-                    newHelpText.style.cursor = isCollapsed ? 'pointer' : 'default';
-                    helpBox.style.cursor = isCollapsed ? 'pointer' : 'default';
-                }
-                
-                newHelpTitle.removeEventListener('click', handleToggle);
-                newHelpTitle.addEventListener('click', handleToggle);
-                
-                // Also make the collapsed text area clickable (for the bottom arrow)
-                newHelpText.removeEventListener('click', handleToggle);
-                newHelpText.addEventListener('click', handleToggle);
-
-                // As a safety net on mobile Safari, toggle when tapping anywhere in the help box
-                function containerToggle(e) {
-                    // Don't toggle when tapping links inside the advice text
-                    const isLink = e.target.closest && e.target.closest('a');
-                    if (isLink) return;
-                    // Only toggle when currently collapsed to prevent accidental collapses when expanded
-                    if (helpBox.classList.contains('collapsed')) {
-                        handleToggle();
-                    }
-                }
-                helpBox.removeEventListener('click', containerToggle);
-                helpBox.addEventListener('click', containerToggle);
-                
-                // Set initial cursor based on collapsed state
-                const isInitiallyCollapsed = helpBox.classList.contains('collapsed');
-                newHelpText.style.cursor = isInitiallyCollapsed ? 'pointer' : 'default';
-                helpBox.style.cursor = isInitiallyCollapsed ? 'pointer' : 'default';
-            } else {
-                helpBox.classList.remove('collapsible', 'expanded', 'collapsed');
-                const helpText = helpBox.querySelector('.help-text');
-                if (helpText) {
-                    helpText.style.cursor = 'default';
-                }
-                helpBox.style.cursor = 'default';
+            helpBox.classList.add('collapsible');
+            
+            // Start collapsed to show text with fade effect like mobile
+            helpBox.classList.add('collapsed');
+            
+            // Remove any existing click listeners to avoid duplicates
+            const newHelpTitle = helpBox.querySelector('.help-title');
+            const newHelpText = helpBox.querySelector('.help-text');
+            
+            function handleToggle() {
+                helpBox.classList.toggle('expanded');
+                helpBox.classList.toggle('collapsed');
+                // Update cursor based on state
+                const isCollapsed = helpBox.classList.contains('collapsed');
+                newHelpText.style.cursor = isCollapsed ? 'pointer' : 'default';
+                helpBox.style.cursor = isCollapsed ? 'pointer' : 'default';
             }
+            
+            newHelpTitle.removeEventListener('click', handleToggle);
+            newHelpTitle.addEventListener('click', handleToggle);
+            
+            // Also make the collapsed text area clickable (for the bottom arrow)
+            newHelpText.removeEventListener('click', handleToggle);
+            newHelpText.addEventListener('click', handleToggle);
+
+            // As a safety net on mobile Safari, toggle when tapping anywhere in the help box
+            function containerToggle(e) {
+                // Don't toggle when tapping links inside the advice text
+                const isLink = e.target.closest && e.target.closest('a');
+                if (isLink) return;
+                // Only toggle when currently collapsed to prevent accidental collapses when expanded
+                if (helpBox.classList.contains('collapsed')) {
+                    handleToggle();
+                }
+            }
+            helpBox.removeEventListener('click', containerToggle);
+            helpBox.addEventListener('click', containerToggle);
+            
+            // Set initial cursor based on collapsed state
+            const isInitiallyCollapsed = helpBox.classList.contains('collapsed');
+            newHelpText.style.cursor = isInitiallyCollapsed ? 'pointer' : 'default';
+            helpBox.style.cursor = isInitiallyCollapsed ? 'pointer' : 'default';
         }
         
         // Setup on load
@@ -1280,9 +1413,9 @@
                 title: 'What’s your goal right now?',
                 type: 'radio',
                 options: [
-                    { label: '<div class="text-content"><strong>Travel</strong><div class="description">Points, perks, big welcome bonuses</div></div>', value: 'travel' },
-                    { label: '<div class="text-content"><strong>Cash Back</strong><div class="description">Real money back, no drama</div></div>', value: 'cashback' },
-                    { label: '<div class="text-content"><strong>Not Sure / Show Both</strong><div class="description">See Travel and Cash Back side-by-side</div></div>', value: 'either' }
+                    { label: '<div class="text-content"><strong>Travel</strong></div>', value: 'travel' },
+                    { label: '<div class="text-content"><strong>Cash Back</strong></div>', value: 'cashback' },
+                    { label: '<div class="text-content"><strong>Not Sure / Show Both</strong></div>', value: 'either' }
                 ],
                 help: 'If you are new or undecided, start with Cash Back. It is simple, real money, and a great baseline.<br><br>If you\'re experienced, or okay putting in some additional work, you can get more value out of travel cards. Know your own personality, because it is more work.<br><br>If you really have no idea, we\'d recommend learning more about each option <a href="learning.html" style="color: #059669; text-decoration: underline;">here</a> and coming back.',
                 onAnswer: (val) => { 
@@ -1366,8 +1499,8 @@
                 tip: 'Choose your top protection, then add others to find cards that offer multiple protections—results will match <u>all</u> protections you select.',
                 type: 'checkbox',
                 options: [
-                    { label: '<div class="text-content"><strong>Phone protection</strong><div class="description">Ditch paid phone insurance</div></div>', value: 'cell-phone-protection' },
-                    { label: '<div class="text-content"><strong>Purchase protection & extended warranty</strong><div class="description">Peace of mind on big buys</div></div>', value: 'purchase-protection' }
+                    { label: '<div class="text-content"><strong>Phone protection</strong></div>', value: 'cell-phone-protection' },
+                    { label: '<div class="text-content"><strong>Purchase protection & extended warranty</strong></div>', value: 'purchase-protection' }
                 ],
                 help: 'Protections aren\'t as exciting as rewards, but they can save real money when something goes wrong.\n\n<strong>Phone protection</strong>\nPay your monthly cell phone bill with the card; if a covered phone is accidentally damaged or stolen, you can file a claim. It applies to every line on that bill, so one card can cover multiple phones. This can let you drop paid phone insurance like AppleCare+ or carrier add-ons.\n\n<strong>Purchase protection & extended warranty</strong>\nPay with the card, keep your receipt, and if an eligible item is damaged, stolen, or fails within the covered window, you can file a claim. Terms, caps, and exclusions vary by card.',
                 onAnswer: (vals) => { state.cashbackFilters.protections = vals; }
@@ -1378,10 +1511,10 @@
                 title: 'What do you want most right now?',
                 type: 'radio',
                 options: [
-                    { label: '<div class="text-content"><strong>Flexible Points</strong><div class="description">Bank points you can use with many airlines/hotels</div></div>', value: 'flex' },
-                    { label: '<div class="text-content"><strong>Airline Perks</strong><div class="description">Free checked bags, earlier boarding, credits</div></div>', value: 'airline' },
-                    { label: '<div class="text-content"><strong>Hotel Perks</strong><div class="description">Annual free night, status boost, late checkout</div></div>', value: 'hotel' },
-                    { label: '<div class="text-content"><strong>Not Sure</strong><div class="description">Keep options open; show both paths</div></div>', value: 'none' }
+                    { label: '<div class="text-content"><strong>Flexible Points</strong></div>', value: 'flex' },
+                    { label: '<div class="text-content"><strong>Airline Perks</strong></div>', value: 'airline' },
+                    { label: '<div class="text-content"><strong>Hotel Perks</strong></div>', value: 'hotel' },
+                    { label: '<div class="text-content"><strong>Not Sure</strong></div>', value: 'none' }
                 ],
                 help: 'If you\'re just getting started, go with <strong>flexible points</strong> (also called bank points). This is what people mean by "Amex points" or "Capital One Miles." You earn on everyday spending, then use them to book on any airline or hotels.\n\n<strong>Airline and hotel cards</strong> are different. You\'re earning rewards tied to one brand, and the value shows up as that brand\'s perks—think a free night or a checked-bag benefit.\n\nFlexible points cards usually earn more on everyday spend, while airline or hotel cards are mostly about perks—so lean flexible unless your brand loyalty makes those extras a clear win.',
                 onAnswer: (val) => {
@@ -1487,9 +1620,9 @@
                 title: 'Do you want airport lounge access?',
                 type: 'radio',
                 options: [
-                    { label: '<div class="text-content"><strong>Must-Have</strong><div class="description">Include only cards with lounge access</div></div>', value: 'must' },
-                    { label: '<div class="text-content"><strong>Nice to Have</strong><div class="description">Do not filter by lounges</div></div>', value: 'nice' },
-                    { label: '<div class="text-content"><strong>Do not Care</strong><div class="description">Do not filter by lounges</div></div>', value: 'no' }
+                    { label: '<div class="text-content"><strong>Must-Have</strong></div>', value: 'must' },
+                    { label: '<div class="text-content"><strong>Nice to Have</strong></div>', value: 'nice' },
+                    { label: '<div class="text-content"><strong>Do not Care</strong></div>', value: 'no' }
                 ],
                 help: 'Make it Must-have only if you will fly a few times and actually use lounges—this narrows results fast.',
                 onAnswer: (val) => {
@@ -1788,24 +1921,15 @@
             helpEl.innerHTML = `<div>${htmlContent}</div>`;
         }
         
-        // Re-evaluate collapsible state after content update
-        if (window.innerWidth <= 768 && box.classList.contains('collapsible')) {
+        // Reset practical advice to collapsed state for both mobile and desktop
+        if (box.classList.contains('collapsible')) {
             const helpText = box.querySelector('.help-text');
             if (helpText) {
-                const contentHeight = helpText.scrollHeight;
-                const shouldCollapse = contentHeight > 200;
-                
-                if (shouldCollapse) {
-                    box.classList.add('collapsed');
-                    box.classList.remove('expanded');
-                    helpText.style.cursor = 'pointer';
-                    box.style.cursor = 'pointer';
-                } else {
-                    box.classList.add('expanded');
-                    box.classList.remove('collapsed');
-                    helpText.style.cursor = 'default';
-                    box.style.cursor = 'default';
-                }
+                // Always start collapsed when moving to a new step
+                box.classList.add('collapsed');
+                box.classList.remove('expanded');
+                helpText.style.cursor = 'pointer';
+                box.style.cursor = 'pointer';
                 
                 // Ensure click handlers are attached
                 const helpTitle = box.querySelector('.help-title');
