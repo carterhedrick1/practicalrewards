@@ -68,7 +68,7 @@
         .step h3 { font-size: 1rem; color: #1e293b; margin-bottom: .5rem; }
         #steps-container { margin-bottom: .5rem; }
         .options { display: grid; grid-template-columns: 1fr; gap: .5rem; }
-        .option { border: 2px solid #e2e8f0; border-radius: 10px; padding: .75rem; background: white; cursor: pointer; display: flex; align-items: center; gap: .5rem; }
+        .option { border: 2px solid #e2e8f0; border-radius: 10px; padding: .75rem; background: white; cursor: pointer; display: flex; align-items: center; gap: .5rem; transition: all 0.3s ease; }
         .option input { margin: 0; }
         .option.active { border-color: #059669; background: #f0fdf4; }
         .option:hover { border-color: #10b981; background: #f9fafb; }
@@ -365,6 +365,11 @@
             transform: scale(1.02);
         }
 
+        .options.grid-layout .option:hover {
+            border-color: #10b981;
+            background: #f9fafb;
+        }
+
         /* Responsive adjustments for grid */
         @media (max-width: 768px) {
             .options.grid-layout {
@@ -655,6 +660,96 @@
             .help-box.expanded .help-text {
                 max-height: none !important;
                 overflow: visible !important;
+            }
+        }
+
+        /* Celebration animations */
+        .celebration-bar {
+            background: linear-gradient(90deg, #10b981, #059669, #10b981) !important;
+            background-size: 200% 100% !important;
+            animation: celebration-shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes celebration-shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .completion-title {
+            color: #10b981 !important;
+            font-weight: 700 !important;
+            animation: celebration-bounce 0.6s ease-out;
+        }
+
+        .completion-content {
+            text-align: center;
+            padding: 2rem 0;
+            animation: celebration-fade-in 0.8s ease-out;
+        }
+
+        .celebration-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #10b981;
+            font-weight: bold;
+            animation: celebration-scale 0.8s ease-out;
+        }
+
+        .completion-message {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+            animation: celebration-slide-up 0.8s ease-out 0.2s both;
+        }
+
+        .completion-subtitle {
+            font-size: 1rem;
+            color: #6b7280;
+            animation: celebration-slide-up 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes celebration-bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes celebration-fade-in {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes celebration-scale {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes celebration-slide-up {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Completion card styling */
+        .completion-card {
+            animation: completion-glow 0.8s ease-out;
+            transition: all 0.3s ease !important;
+        }
+
+        .completion-card:hover {
+            transform: translateY(-12px) !important;
+            box-shadow: 0 12px 35px rgba(16, 185, 129, 0.25) !important;
+        }
+
+        @keyframes completion-glow {
+            0% { 
+                border-color: #e5e7eb;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            }
+            100% { 
+                border-color: #10b981;
+                box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
             }
         }
     </style>
@@ -1087,17 +1182,41 @@
         return div;
     }
 
+    function isCompletionStep() {
+        const steps = visibleSteps();
+        const currentStep = steps[state.stepIndex];
+        return currentStep && currentStep.type === 'completion';
+    }
+
     function renderCards(cards) {
         const grid = document.getElementById('cards-grid');
         grid.classList.remove('showing-intro');
         grid.innerHTML = '';
-        cards.forEach(c => grid.appendChild(createCardElement(c)));
+        
+        const isCompletion = isCompletionStep();
+        
+        cards.forEach(c => {
+            const cardElement = createCardElement(c);
+            
+            // Add special styling for completion step
+            if (isCompletion) {
+                cardElement.style.border = '3px solid #10b981';
+                cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
+                cardElement.classList.add('completion-card');
+            }
+            
+            grid.appendChild(cardElement);
+        });
 
-        // Update mobile scroll indicator
-        updateMobileScrollIndicator(cards);
+        // Update mobile scroll indicator (but not during completion)
+        if (!isCompletion) {
+            updateMobileScrollIndicator(cards);
+        }
 
-        // Update desktop card count
-        updateDesktopCardCount(cards);
+        // Update desktop card count (but not during completion)
+        if (!isCompletion) {
+            updateDesktopCardCount(cards);
+        }
     }
 
     function showIntroText() {
@@ -1158,11 +1277,23 @@
         const name = (card.name || '').toLowerCase();
         const tags = new Set(Array.isArray(card.airlineHotel) ? card.airlineHotel.map(v => (v||'').toLowerCase()) : []);
         const brandMap = {
-            'delta':'delta', 'united':'united', 'american':'american', 'aa ':'american', 'aadvantage':'american',
+            'delta':'delta', 'united':'united', 'aa ':'american', 'aadvantage':'american',
             'southwest':'southwest', 'jetblue':'jetblue', 'alaska':'alaska',
             'marriott':'marriott', 'hilton':'hilton', 'hyatt':'hyatt', 'ihg':'ihg', 'wyndham':'wyndham', 'choice':'choice'
         };
-        Object.keys(brandMap).forEach(k => { if (name.includes(k)) tags.add(brandMap[k]); });
+        
+        // Special handling for American Airlines to avoid false positives with American Express
+        if (name.includes('american airlines') || name.includes('aa ') || name.includes('aadvantage')) {
+            tags.add('american');
+        }
+        
+        // Check other brands (excluding 'american' to avoid American Express false positives)
+        Object.keys(brandMap).forEach(k => { 
+            if (k !== 'american' && name.includes(k)) {
+                tags.add(brandMap[k]); 
+            }
+        });
+        
         return Array.from(tags);
     }
 
@@ -1260,6 +1391,33 @@
                     if (values.includes('100-300') && !(card.annualFee >= 100 && card.annualFee <= 300)) return false;
                     if (values.includes('300-500') && !(card.annualFee >= 300 && card.annualFee <= 500)) return false;
                     if (values.includes('500+') && !(card.annualFee >= 500)) return false;
+                } else if (k === 'focus') {
+                    const brandsOnCard = inferBrandTags(card);
+                    const hasAirlineOrHotelBrand = brandsOnCard.length > 0;
+                    
+                    if (values.includes('flex')) {
+                        // For flexible points, exclude cards with any airline or hotel brands
+                        if (hasAirlineOrHotelBrand) {
+                            console.log(`❌ ${card.name} filtered out - has airline/hotel brand(s): ${brandsOnCard.join(', ')}, not flexible points`);
+                            return false;
+                        }
+                    } else if (values.includes('airline')) {
+                        // For airline cards, only show cards with airline brands
+                        const airlineBrands = ['delta', 'united', 'american', 'southwest', 'jetblue', 'alaska'];
+                        const hasAirlineBrand = brandsOnCard.some(brand => airlineBrands.includes(brand));
+                        if (!hasAirlineBrand) {
+                            console.log(`❌ ${card.name} filtered out - not an airline card`);
+                            return false;
+                        }
+                    } else if (values.includes('hotel')) {
+                        // For hotel cards, only show cards with hotel brands
+                        const hotelBrands = ['marriott', 'hilton', 'hyatt', 'ihg', 'wyndham', 'choice'];
+                        const hasHotelBrand = brandsOnCard.some(brand => hotelBrands.includes(brand));
+                        if (!hasHotelBrand) {
+                            console.log(`❌ ${card.name} filtered out - not a hotel card`);
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
@@ -1300,6 +1458,12 @@
 
         if (!mobileIndicator || !mobileCount) return;
 
+        // Hide during completion step
+        if (isCompletionStep()) {
+            mobileIndicator.style.display = 'none';
+            return;
+        }
+
         // Only show on mobile and when there are cards to show
         if (window.innerWidth <= 768 && cards.length > 0) {
             mobileIndicator.style.display = 'block';
@@ -1315,8 +1479,14 @@
 
         if (!desktopIndicator || !desktopCount) return;
 
-        // Only show on desktop and when there are cards to show, and not on the goal step, and not when no mode is selected
-        if (window.innerWidth > 768 && cards.length > 0 && state.stepIndex !== 0 && state.mode) {
+        // Hide during completion step
+        if (isCompletionStep()) {
+            desktopIndicator.style.display = 'none';
+            return;
+        }
+
+        // Only show on desktop and when there are cards to show, and when a mode is selected
+        if (window.innerWidth > 768 && cards.length > 0 && state.mode) {
             desktopIndicator.style.display = 'block';
             desktopCount.textContent = cards.length + ' Cards';
         } else {
@@ -1413,9 +1583,9 @@
                 title: 'What’s your goal right now?',
                 type: 'radio',
                 options: [
-                    { label: '<div class="text-content"><strong>Travel</strong></div>', value: 'travel' },
-                    { label: '<div class="text-content"><strong>Cash Back</strong></div>', value: 'cashback' },
-                    { label: '<div class="text-content"><strong>Not Sure</strong></div>', value: 'not-sure' }
+                    { label: '<div class="text-content"><strong>I want to earn cash back</strong></div>', value: 'cashback' },
+                    { label: '<div class="text-content"><strong>I want to earn travel rewards</strong></div>', value: 'travel' },
+                    { label: '<div class="text-content"><strong>I\'m not sure</strong></div>', value: 'not-sure' }
                 ],
                 help: 'If you are new or undecided, start with Cash Back. It is simple, real money, and a great baseline.<br><br>If you\'re experienced, or okay putting in some additional work, you can get more value out of travel cards. Know your own personality, because it is more work.<br><br>If you really have no idea, we\'d recommend learning more about each option <a href="learning.html" style="color: #059669; text-decoration: underline;">here</a> and coming back.',
                 onAnswer: (val) => { 
@@ -1440,7 +1610,6 @@
                     { label: '<div class="text-content"><strong>Yes</strong></div>', value: 'yes' },
                     { label: '<div class="text-content"><strong>No</strong></div>', value: 'no' }
                 ],
-                help: 'If you tap <strong>Not sure</strong>, we\'ll ask two quick questions to place you on the right track without the overwhelm.',
                 onAnswer: (val) => {
                     state.notSureAnswers = state.notSureAnswers || {};
                     state.notSureAnswers.travels = val === 'yes';
@@ -1466,7 +1635,7 @@
                     { label: '<div class="text-content"><strong>Lower maintenance</strong></div>', value: 'low' },
                     { label: '<div class="text-content"><strong>I\'ll put in the work</strong></div>', value: 'high' }
                 ],
-                help: 'This is about upkeep. <strong>"Lower maintenance"</strong> keeps things steady with fewer rules. <strong>"I\'ll put in the work"</strong> adds more moving parts but more outsized value. Pick what you\'ll actually use.',
+                help: 'This is a personality call. If you like simple routines and hate fine print, go <strong>"Lower maintenance"</strong>. If you enjoy tinkering and don\'t mind a few extra steps for more upside, pick <strong>"I\'ll put in the work"</strong>. There\'s no right answer—choose the one that matches your personality.',
                 onAnswer: (val) => {
                     state.notSureAnswers = state.notSureAnswers || {};
                     state.notSureAnswers.handsOn = val === 'high';
@@ -1483,6 +1652,137 @@
                         state.stepIndex = 0; // Override to 0 to start with tr1 (international travel question)
                     }
                     
+                    recomputeAndRender();
+                    setTimeout(() => {
+                        renderStep();
+                    }, 300);
+                }
+            },
+            // Travel mini-quiz Q0: First travel card?
+            {
+                id: 'tmq0', branch: 'travel-mini-quiz',
+                title: 'Would this be your first travel card?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Yes</strong></div>', value: 'yes' },
+                    { label: '<div class="text-content"><strong>No</strong></div>', value: 'no' }
+                ],
+                help: 'If you\'ve never opened a card mainly for flights, hotels, or travel perks, pick Yes. Everyday cash-back cards don\'t count here.',
+                onAnswer: (val) => {
+                    state.travelMiniQuizAnswers = state.travelMiniQuizAnswers || {};
+                    state.travelMiniQuizAnswers.firstTravelCard = val === 'yes';
+                    
+                    if (val === 'yes') {
+                        // Route to Flexible points path
+                        state.mode = 'travel';
+                        state.travelFilters.focus = ['flex'];
+                        configureModeTabs();
+                        state.stepIndex = 2; // Skip tr1 (international) and tr2 (focus), go to next step
+                        recomputeAndRender();
+                        setTimeout(() => {
+                            renderStep();
+                        }, 300);
+                        return;
+                    }
+                    // If no, continue to next question
+                }
+            },
+            // Travel mini-quiz Q1: Same airline?
+            {
+                id: 'tmq1', branch: 'travel-mini-quiz',
+                title: 'Do you mostly fly the same airline?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Yes, mostly one</strong></div>', value: 'yes' },
+                    { label: '<div class="text-content"><strong>No, I mix it up</strong></div>', value: 'no' }
+                ],
+                help: 'Think about last year (or next). If you usually start with one airline—or fly it more often than not—that\'s a Yes.',
+                onAnswer: (val) => {
+                    state.travelMiniQuizAnswers = state.travelMiniQuizAnswers || {};
+                    state.travelMiniQuizAnswers.airlineLoyal = val === 'yes';
+                    // Continue to next question
+                }
+            },
+            // Travel mini-quiz Q2: Same hotel chain?
+            {
+                id: 'tmq2', branch: 'travel-mini-quiz',
+                title: 'Do you mostly stay with one hotel chain?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Yes, mostly one</strong></div>', value: 'yes' },
+                    { label: '<div class="text-content"><strong>No, I mix it up</strong></div>', value: 'no' }
+                ],
+                help: 'If you find yourself booking the same hotel brand on most trips, that\'s a Yes. If you chase price or location across brands, pick No.',
+                onAnswer: (val) => {
+                    state.travelMiniQuizAnswers = state.travelMiniQuizAnswers || {};
+                    state.travelMiniQuizAnswers.hotelLoyal = val === 'yes';
+                    
+                    const airlineLoyal = state.travelMiniQuizAnswers.airlineLoyal;
+                    const hotelLoyal = val === 'yes';
+                    
+                    // Route based on loyalty combinations
+                    if (!airlineLoyal && !hotelLoyal) {
+                        // Flexible points path
+                        state.mode = 'travel';
+                        state.travelFilters.focus = ['flex'];
+                        configureModeTabs();
+                        state.stepIndex = 2;
+                        recomputeAndRender();
+                        setTimeout(() => {
+                            renderStep();
+                        }, 300);
+                        return;
+                    } else if (airlineLoyal && !hotelLoyal) {
+                        // Airline path
+                        state.mode = 'travel';
+                        state.travelFilters.focus = ['airline'];
+                        configureModeTabs();
+                        state.stepIndex = 2;
+                        recomputeAndRender();
+                        setTimeout(() => {
+                            renderStep();
+                        }, 300);
+                        return;
+                    } else if (!airlineLoyal && hotelLoyal) {
+                        // Hotel path
+                        state.mode = 'travel';
+                        state.travelFilters.focus = ['hotel'];
+                        configureModeTabs();
+                        state.stepIndex = 2;
+                        recomputeAndRender();
+                        setTimeout(() => {
+                            renderStep();
+                        }, 300);
+                        return;
+                    }
+                    // If both are loyal, continue to Q3
+                }
+            },
+            // Travel mini-quiz Q3: What sounds nicer?
+            {
+                id: 'tmq3', branch: 'travel-mini-quiz',
+                title: 'What sounds nicer this year?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Free checked bags & earlier boarding</strong></div>', value: 'airline' },
+                    { label: '<div class="text-content"><strong>A free hotel night & status perks</strong></div>', value: 'hotel' },
+                    { label: '<div class="text-content"><strong>Not sure</strong></div>', value: 'not-sure' }
+                ],
+                help: 'Go with what sounds better for your trips this year. If it\'s a toss-up, Not sure is honest.',
+                onAnswer: (val) => {
+                    state.mode = 'travel';
+                    
+                    if (val === 'airline') {
+                        state.travelFilters.focus = ['airline'];
+                    } else if (val === 'hotel') {
+                        state.travelFilters.focus = ['hotel'];
+                    } else {
+                        // Not sure -> Flexible points
+                        state.travelFilters.focus = ['flex'];
+                    }
+                    
+                    configureModeTabs();
+                    state.stepIndex = 2;
                     recomputeAndRender();
                     setTimeout(() => {
                         renderStep();
@@ -1591,9 +1891,9 @@
                 help: 'If you\'re just getting started, go with <strong>flexible points</strong> (also called bank points). This is what people mean by "Amex points" or "Capital One Miles." You earn on everyday spending, then use them to book on any airline or hotels.\n\n<strong>Airline and hotel cards</strong> are different. You\'re earning rewards tied to one brand, and the value shows up as that brand\'s perks—think a free night or a checked-bag benefit.\n\nFlexible points cards usually earn more on everyday spend, while airline or hotel cards are mostly about perks—so lean flexible unless your brand loyalty makes those extras a clear win.',
                 onAnswer: (val) => {
                     if (val === 'none') {
-                        // Redirect to "Not sure" flow
-                        state.mode = 'not-sure';
-                        state.stepIndex = 1; // Go to first "Not sure" question (ns1)
+                        // Redirect to travel mini-quiz
+                        state.mode = 'travel-mini-quiz';
+                        state.stepIndex = 1; // Go to first travel mini-quiz question (tmq0)
                         configureModeTabs();
                         recomputeAndRender();
                         setTimeout(() => {
@@ -1708,26 +2008,69 @@
             },
             {
                 id: 'tr5', branch: 'travel',
-                title: 'Any travel protections you care about? (pick any)',
+                title: 'What travel protections matter to you?',
+                tip: 'Choose your top protection, then add others to find cards that offer multiple protections—results will match <u>all</u> protections you select.',
                 type: 'checkbox',
                 options: [
-                    { label: 'Trip delay & cancellation', value: 'trip-delay-cancellation' },
-                    { label: 'Rental car CDW', value: 'rental-car-insurance' },
-                    { label: 'Lost/Delayed baggage', value: 'lost-delayed-baggage' }
+                    { label: '<div class="text-content"><strong>Trip Delay or Cancellation</strong></div>', value: 'trip-delay-cancellation' },
+                    { label: '<div class="text-content"><strong>Rental Car Insurance</strong></div>', value: 'rental-car-insurance' },
+                    { label: '<div class="text-content"><strong>Lost or Delayed Baggage</strong></div>', value: 'lost-delayed-baggage' }
                 ],
-                help: 'Great safety nets, but they can shrink options. Toggle only what matters. (For rentals, primary CDW is best—do not oversell secondary.)',
+                help: 'Travel protections aren\'t as exciting as rewards, but they can save real money when something goes wrong.\n\n<strong>Trip delay & cancellation</strong>\nIf your trip is delayed or cancelled due to covered reasons (weather, mechanical issues, etc.), you can file a claim for expenses like meals, hotels, and transportation. Coverage amounts and time thresholds vary by card.\n\n<strong>Rental car CDW (Collision Damage Waiver)</strong>\nPrimary CDW is best—it covers damage without involving your personal auto insurance. Secondary CDW only kicks in after your personal insurance. Always decline the rental company\'s expensive coverage when you have primary CDW.\n\n<strong>Lost/Delayed baggage</strong>\nIf your checked bags are lost, stolen, or delayed, you can file a claim for essential items and replacement costs. Coverage amounts and time requirements vary by card.',
                 onAnswer: (vals) => { state.travelFilters.protections = vals; }
+            },
+            // Completion step - shows for all branches
+            {
+                id: 'completion',
+                title: 'Congratulations!',
+                type: 'completion',
+                branch: 'all'
             }
         ];
     }
 
     function visibleSteps() {
-        return state.steps.filter(s => {
+        const steps = state.steps.filter(s => {
             if (!s.branch) return true;
+            if (s.id === 'completion') {
+                // Show completion step when we're on or past the last regular step
+                const regularSteps = state.steps.filter(step => {
+                    if (!step.branch) return true;
+                    if (state.mode === 'travel') {
+                        if (step.id === 'tr1b') {
+                            const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
+                            return focus === 'airline' || focus === 'hotel';
+                        }
+                        if (step.id === 'tr3') {
+                            const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
+                            return focus !== 'airline' && focus !== 'hotel';
+                        }
+                        return step.branch === 'travel';
+                    }
+                    if (state.mode === 'cashback') {
+                        if (step.id === 'cb2' && state.cashbackFilters.hasFlatRate === false) {
+                            return false;
+                        }
+                        return step.branch === 'cashback';
+                    }
+                    if (state.mode === 'not-sure') {
+                        return step.branch === 'not-sure';
+                    }
+                    if (state.mode === 'travel-mini-quiz') {
+                        return step.branch === 'travel-mini-quiz';
+                    }
+                    return false;
+                });
+                return state.stepIndex >= regularSteps.length - 1;
+            }
             if (state.mode === 'travel') {
                 if (s.id === 'tr1b') {
                     const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
                     return focus === 'airline' || focus === 'hotel';
+                }
+                if (s.id === 'tr3') {
+                    const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
+                    return focus !== 'airline' && focus !== 'hotel';
                 }
                 return s.branch === 'travel';
             }
@@ -1741,8 +2084,12 @@
             if (state.mode === 'not-sure') {
                 return s.branch === 'not-sure';
             }
+            if (state.mode === 'travel-mini-quiz') {
+                return s.branch === 'travel-mini-quiz';
+            }
             return false;
         });
+        return steps;
     }
 
     function clearFiltersFromFutureSteps(currentStepIndex) {
@@ -1755,6 +2102,8 @@
             targetFilters = state.travelFilters;
         } else if (currentMode === 'cashback') {
             targetFilters = state.cashbackFilters;
+        } else if (currentMode === 'travel-mini-quiz') {
+            targetFilters = state.travelFilters;
         } else {
             // For 'either' mode, don't clear anything since they're still on goal step
             return;
@@ -1784,7 +2133,22 @@
         newBackBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('Back button clicked, current stepIndex:', state.stepIndex);
+            console.log('Back button clicked, current stepIndex:', state.stepIndex, 'mode:', state.mode);
+            
+            // Special case: if we're in travel mode but came from travel-mini-quiz, 
+            // and we're at the end showing results, go back to tr2 (focus question)
+            if (state.mode === 'travel' && state.travelFilters.focus && state.travelMiniQuizAnswers) {
+                console.log('Going back from travel mini-quiz results to tr2 (focus question)');
+                // Clear the focus filter and mini-quiz answers
+                delete state.travelFilters.focus;
+                delete state.travelMiniQuizAnswers;
+                // Go to tr2 step (flexible/airline/hotel question)
+                state.stepIndex = 1; // tr2 is at index 1 in travel mode
+                renderStep();
+                recomputeAndRender();
+                return;
+            }
+            
             if (state.stepIndex > 0) { 
                 // Clear filters from steps we're going back from
                 clearFiltersFromFutureSteps(state.stepIndex);
@@ -1800,6 +2164,30 @@
                     configureModeTabs();
                 }
                 
+                // Special handling: if we're going back to tr2 (focus question), ensure focus filter is cleared
+                const steps = visibleSteps();
+                const currentStep = steps[state.stepIndex];
+                if (currentStep && currentStep.id === 'tr2') {
+                    console.log('Going back to tr2, clearing focus filter to show all travel cards');
+                    console.log('Before clearing - travelFilters:', JSON.stringify(state.travelFilters));
+                    delete state.travelFilters.focus;
+                    delete state.travelMiniQuizAnswers; // Also clear any mini-quiz state
+                    console.log('After clearing - travelFilters:', JSON.stringify(state.travelFilters));
+                }
+                
+                // Additional safety: if in travel mode, ensure focus filter is cleared when going back to any question
+                if (state.mode === 'travel' && state.travelFilters.focus) {
+                    console.log('Additional safety: clearing focus filter when going back in travel mode');
+                    delete state.travelFilters.focus;
+                }
+                
+                // Even more explicit: clear focus from travelFilters to ensure it's not applied
+                if (state.mode === 'travel') {
+                    state.travelFilters.focus = undefined;
+                    delete state.travelFilters.focus;
+                    console.log('Explicitly cleared focus filter, travelFilters now:', JSON.stringify(state.travelFilters));
+                }
+                
                 renderStep(); 
                 recomputeAndRender();
             } else {
@@ -1808,7 +2196,11 @@
         });
         document.getElementById('next-btn').addEventListener('click', () => {
             const steps = visibleSteps();
-            if (state.stepIndex < steps.length - 1) { state.stepIndex++; renderStep(); }
+            if (state.stepIndex < steps.length - 1) { 
+                state.stepIndex++; 
+                renderStep(); 
+                recomputeAndRender(); // Re-render cards when advancing steps
+            }
         });
         document.getElementById('mode-tabs').addEventListener('click', (e) => {
             const btn = e.target.closest('.tab'); if (!btn) return;
@@ -1841,6 +2233,47 @@
             bar.style.width = '100%'; 
             updateHelp(null); 
             return; 
+        }
+
+        // Handle completion step with celebration
+        if (step.type === 'completion') {
+            const questionEl = document.getElementById('wizard-question');
+            questionEl.textContent = step.title;
+            questionEl.className = 'wizard-title completion-title';
+            
+            // Green progress bar for completion
+            bar.style.width = '100%';
+            bar.style.backgroundColor = '#10b981';
+            bar.classList.add('celebration-bar');
+            
+            // Celebration content
+            container.innerHTML = `
+                <div class="completion-content">
+                    <div class="celebration-icon">✓</div>
+                    <h2 class="completion-message">We've narrowed all the cards to ones that match you!</h2>
+                    <p class="completion-subtitle">Your personalized recommendations are ready.</p>
+                </div>
+            `;
+            
+            // Hide navigation buttons
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('back-btn').style.display = 'none';
+            
+            // Explicitly hide card count indicators
+            const desktopIndicator = document.getElementById('desktop-card-count');
+            if (desktopIndicator) {
+                desktopIndicator.style.display = 'none';
+            }
+            const mobileIndicator = document.getElementById('mobile-scroll-indicator');
+            if (mobileIndicator) {
+                mobileIndicator.style.display = 'none';
+            }
+            
+            updateHelp(null);
+            
+            // Re-render cards with completion styling and hide card count
+            recomputeAndRender();
+            return;
         }
 
         const idx = current; bar.style.width = ((idx / total) * 100) + '%';
@@ -1902,11 +2335,11 @@
             backBtn.style.display = 'inline-block';
         }
         
-        if (step.type === 'checkbox' && !isLastStep) {
-            // Show Next button for checkbox steps (except the last one)
+        if (step.type === 'checkbox' && step.id !== 'completion') {
+            // Show Next button for checkbox steps (except completion step)
             nextBtn.style.display = 'inline-block';
         } else {
-            // Hide Next button for radio steps (they auto-advance) and last step
+            // Hide Next button for radio steps (they auto-advance) and completion step
             nextBtn.style.display = 'none';
         }
 
@@ -1935,6 +2368,7 @@
                             if (state.stepIndex < steps.length - 1) {
                                 state.stepIndex++;
                                 renderStep();
+                                recomputeAndRender(); // Re-render cards when auto-advancing
                             }
                         }, 300);
                     }
@@ -1955,10 +2389,12 @@
     function stepToFilterKey(stepId) {
         if (stepId.startsWith('cb')) return stepId === 'cb3' ? 'protections' : 'earning_any';
         if (stepId === 'tr1b') return 'airline-hotel';
-        if (stepId === 'tr2') return 'perks';
+        if (stepId === 'tr2') return 'focus'; // This is the flexible/airline/hotel focus question
         if (stepId === 'tr3') return 'earning_any';
         if (stepId === 'tr4') return 'perks';
         if (stepId === 'tr5') return 'protections';
+        // Travel mini-quiz steps should clear the focus filter when going back
+        if (stepId.startsWith('tmq')) return 'focus';
         return null;
     }
 
@@ -1977,7 +2413,7 @@
         box.style.display = 'block';
         
         if (!step.help) {
-            helpEl.innerHTML = '<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li><strong>Getting started</strong><br>Answer the question above to narrow your results. Tips for this step will appear here.</li></ul>';
+            helpEl.innerHTML = '<ul class="recommendation-list" style="margin: 0; padding: 0; list-style: none;"><li>Answering "Yes" doesn\'t mean we are going to start recommending you crazy cards, we are just tyring to get to know you!</li></ul>';
         } else {
             // For each step, show its helper
             // Split the help text by double line breaks and create proper paragraphs
@@ -2055,7 +2491,11 @@
             tabs.style.display = 'none'; 
             state.activeTab = state.mode; 
             // When a goal is chosen, always start at the first step of that branch
-            state.stepIndex = 1;
+            if (state.mode === 'travel-mini-quiz') {
+                state.stepIndex = 0; // Start at tmq0 for travel mini-quiz
+            } else {
+                state.stepIndex = 1;
+            }
         } else {
             // No mode selected (after reset)
             tabs.style.display = 'none';
@@ -2075,6 +2515,26 @@
             showIntroText();
             updateActiveFilterChipsUI({});
             updateResultsHeadlineForQuiz();
+            return;
+        }
+        
+        // If in travel mini-quiz, show all travel cards
+        if (state.mode === 'travel-mini-quiz') {
+            console.log('In travel mini-quiz, showing all travel cards');
+            const travelCards = allCards.filter(card => {
+                let cardType;
+                if (Array.isArray(card.type)) {
+                    cardType = card.type;
+                } else if (typeof card.type === 'string' && card.type.trim().startsWith('[') && card.type.trim().endsWith(']')) {
+                    try { cardType = JSON.parse(card.type); } catch(e) { cardType = [card.type]; }
+                } else {
+                    cardType = [card.type];
+                }
+                return cardType.includes('travel');
+            });
+            updateActiveFilterChipsUI({});
+            updateResultsHeadline(travelCards.length, total);
+            renderCards(travelCards);
             return;
         }
 
@@ -2123,10 +2583,10 @@
         const nameMap = {
             type:{travel:'Travel',cashback:'Cash back'},
             issuer:{'amex':'American Express','chase':'Chase','capital-one':'Capital One','citi':'Citi','wells-fargo':'Wells Fargo','discover':'Discover'},
-            perks:{'lounge-access':'Lounge access','tsa-precheck':'TSA PreCheck','clear':'CLEAR','no-foreign-fees':'No FTF','free-checked-bags':'Free checked bags','priority-boarding':'Priority boarding','annual-free-night':'Annual free night','automatic-elite-status':'Elite status','rotating':'Rotating','flat-rate':'Flat rate'},
+            perks:{'lounge-access':'Lounge Access','tsa-precheck':'TSA PreCheck','clear':'CLEAR','no-foreign-fees':'No Foreign Transaction Fees','free-checked-bags':'Free Checked Bags','priority-boarding':'Priority Boarding','annual-free-night':'Annual Free Night','automatic-elite-status':'Elite Status','rotating':'Rotating','flat-rate':'Flat Rate'},
             'airline-hotel':{'delta':'Delta','united':'United','american':'American','southwest':'Southwest','jetblue':'JetBlue','alaska':'Alaska','marriott':'Marriott','hilton':'Hilton','hyatt':'Hyatt','ihg':'IHG','wyndham':'Wyndham','choice':'Choice'},
-            protections:{'trip-delay-cancellation':'Trip protections','rental-car-insurance':'Rental CDW','cell-phone-protection':'Cell phone protection','lost-delayed-baggage':'Lost/Delayed baggage'},
-            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','hotels':'Hotels','flights':'Flights','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment'}
+            protections:{'trip-delay-cancellation':'Trip Protections','rental-car-insurance':'Rental Car Insurance','cell-phone-protection':'Cell Phone Protection','lost-delayed-baggage':'Lost/Delayed Baggage'},
+            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','hotels':'Hotels','flights':'Flights','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment','amazon':'Amazon','gas|ev-charging':'Gas/EV Charging','rideshare|transit':'Rideshare/Transit','travel|hotels|airlines':'Travel','wholesale-clubs':'Wholesale Clubs'}
         };
         entries.forEach(([k,vals]) => {
             vals.forEach(v => {
@@ -2160,30 +2620,171 @@
         target[key] = target[key].filter(v => v !== value);
         if (target[key].length === 0) delete target[key];
         
+        // Update the visual state of the wizard step to reflect the change
+        renderStep();
         recomputeAndRender();
+    }
+
+    function clearCurrentStepSelections() {
+        // Get the current step to determine what to clear
+        const steps = visibleSteps();
+        const currentStep = steps[state.stepIndex];
+        if (!currentStep) return;
+        
+        // Get the filter key for this step
+        const filterKey = stepToFilterKey(currentStep.id);
+        if (!filterKey) return;
+        
+        // Determine which filter set to modify based on current mode
+        let target;
+        if (state.mode === 'travel') {
+            target = state.travelFilters;
+        } else if (state.mode === 'cashback') {
+            target = state.cashbackFilters;
+        } else if (state.mode === 'either') {
+            target = state.activeTab === 'cashback' ? state.cashbackFilters : state.travelFilters;
+        } else {
+            return;
+        }
+        
+        // Clear only this step's selections
+        if (target[filterKey]) {
+            delete target[filterKey];
+        }
+        
+        // Clear lastApplied if it was from this step
+        if (state.lastApplied && state.lastApplied.key === filterKey) {
+            state.lastApplied = null;
+        }
+        
+        // Update the visual state and results
+        renderStep();
+        recomputeAndRender();
+    }
+
+    function getContextualTip() {
+        // Get the current step to provide relevant advice
+        const steps = visibleSteps();
+        const currentStep = steps[state.stepIndex];
+        if (!currentStep) return 'Start by selecting your preferences above to find cards that match your needs.';
+        
+        // Provide contextual tips based on step type and content
+        switch (currentStep.id) {
+            case 'cb2': // Cashback earning categories
+                return 'For cash back, focus on 1-2 categories where you spend the most each month. Your flat-rate card will handle everything else at 2%.';
+            
+            case 'cb3': // Cashback protections
+                return 'These protections can save hundreds of dollars when you need them. Phone protection alone often replaces paid insurance plans.';
+            
+            case 'tr3': // Travel earning categories  
+                return 'Travel cards often earn 2-3x on dining and travel. Focus on categories you hit regularly—your travel card covers the rest at 1x.';
+            
+            case 'tr1b': // Travel brands (airlines/hotels)
+                return 'Brand cards are best when you\'re loyal to that specific airline or hotel. If you mix it up, flexible points are usually better.';
+            
+            case 'tr5': // Travel protections
+                return 'Trip protections can reimburse thousands in cancelled flight costs. Rental car coverage can replace expensive counter insurance.';
+            
+            case 'goal': // Initial goal selection
+                return 'Cash back is simpler and gives you real money. Travel rewards can offer more value but require more planning.';
+                
+            default:
+                // Generic helpful advice for other steps
+                if (state.mode === 'cashback') {
+                    return 'Most people succeed with cash back by keeping it simple: one flat-rate card plus one category card for their biggest expense.';
+                } else if (state.mode === 'travel') {
+                    return 'Travel rewards work best when you focus on a specific strategy: either flexible points OR loyalty to one airline/hotel.';
+                } else {
+                    return 'The best card strategy is one you\'ll actually use consistently. Start simple and add complexity only if it\'s worth it.';
+                }
+        }
     }
 
     function renderZeroState() {
         const grid = document.getElementById('cards-grid');
         const nameMap = {
             type:{travel:'Travel',cashback:'Cash back'},
-            perks:{'lounge-access':'Lounge access','no-foreign-fees':'No FTF'},
-            protections:{'trip-delay-cancellation':'Trip protections','rental-car-insurance':'Rental CDW','cell-phone-protection':'Cell phone protection','lost-delayed-baggage':'Lost/Delayed baggage'},
+            perks:{'lounge-access':'Lounge Access','no-foreign-fees':'No Foreign Transaction Fees'},
+            protections:{'trip-delay-cancellation':'Trip Protections','rental-car-insurance':'Rental Car Insurance','cell-phone-protection':'Cell Phone Protection','lost-delayed-baggage':'Lost/Delayed Baggage'},
             'airline-hotel':{'delta':'Delta','united':'United','american':'American','southwest':'Southwest','jetblue':'JetBlue','alaska':'Alaska','marriott':'Marriott','hilton':'Hilton','hyatt':'Hyatt','ihg':'IHG','wyndham':'Wyndham','choice':'Choice'},
-            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','hotels':'Hotels','flights':'Flights','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment'}
+            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','hotels':'Hotels','flights':'Flights','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment','amazon':'Amazon','gas|ev-charging':'Gas/EV Charging','rideshare|transit':'Rideshare/Transit','travel|hotels|airlines':'Travel','wholesale-clubs':'Wholesale Clubs'}
         };
         const last = state.lastApplied;
-        const lastLabel = last && nameMap[last.key] ? (nameMap[last.key][last.value] || last.value) : 'last filter';
+        const lastLabel = last && nameMap[last.key] ? (nameMap[last.key][last.value] || last.value) : 'the last filter';
+        
         grid.classList.add('showing-intro');
         grid.innerHTML = `
-            <div style="width: 100%; margin: 0; padding: 1rem; text-align: center; background: #fff; border-radius: 12px; border:1px solid #e5e7eb;">
-                <div style="color:#1e293b; font-weight:600; margin-bottom:.25rem;">No matches for that combo.</div>
-                <div style="color:#64748b;">Remove ${lastLabel} to see options. <button id="remove-last" class="btn btn-secondary" style="margin-left:.5rem; padding:.25rem .5rem;">× Remove</button></div>
+            <div style="width: 100%; margin: 0; padding: 2.5rem 2rem; text-align: center; background: #fff; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+                <!-- Icon -->
+                <div style="width: 64px; height: 64px; background: #f0fdf4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem auto; font-size: 28px;">
+                    🔍
+                </div>
+                
+                <!-- Main message -->
+                <h3 style="color: #1e293b; font-weight: 600; font-size: 1.25rem; margin-bottom: 0.75rem; line-height: 1.3;">
+                    No cards match your exact criteria
+                </h3>
+                
+                <!-- Explanation -->
+                <p style="color: #64748b; font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem; max-width: 400px; margin-left: auto; margin-right: auto;">
+                    Your combination of preferences is pretty specific! Try adjusting some of your choices to see more options.
+                </p>
+                
+                <!-- Action buttons -->
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">
+                    ${last && last.key ? `
+                    <button id="remove-last" style="
+                        background: #059669; 
+                        color: white; 
+                        border: none; 
+                        padding: 0.75rem 1.5rem; 
+                        border-radius: 8px; 
+                        font-weight: 600; 
+                        cursor: pointer;
+                        font-size: 0.95rem;
+                        transition: background 0.2s ease;
+                    " onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">
+                        Unselect ${lastLabel}
+                    </button>
+                    ` : ''}
+                    
+                    <button id="clear-current-step" style="
+                        background: white; 
+                        color: #059669; 
+                        border: 1px solid #059669; 
+                        padding: 0.75rem 1.5rem; 
+                        border-radius: 8px; 
+                        font-weight: 600; 
+                        cursor: pointer;
+                        font-size: 0.95rem;
+                        transition: all 0.2s ease;
+                    " onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='white'">
+                        Clear All Selections
+                    </button>
+                </div>
+                
+                <!-- Helpful tip -->
+                <div style="background: #f8fafc; border-left: 3px solid #059669; padding: 1rem; margin-top: 1.5rem; border-radius: 0 8px 8px 0; text-align: left;">
+                    <div style="color: #059669; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">
+                        Tip
+                    </div>
+                    <div style="color: #475569; font-size: 0.9rem; line-height: 1.5;">
+                        ${getContextualTip()}
+                    </div>
+                </div>
             </div>
         `;
-        const btn = document.getElementById('remove-last');
-        if (btn && last && last.key) {
-            btn.addEventListener('click', () => removeFilter(last.key, last.value));
+        
+        // Wire up the remove last filter button
+        const removeBtn = document.getElementById('remove-last');
+        if (removeBtn && last && last.key) {
+            removeBtn.addEventListener('click', () => removeFilter(last.key, last.value));
+        }
+        
+        // Wire up the clear current step button
+        const clearBtn = document.getElementById('clear-current-step');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => clearCurrentStepSelections());
         }
         
         // Hide mobile scroll indicator when showing zero state
