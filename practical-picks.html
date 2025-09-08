@@ -1415,7 +1415,7 @@
                 options: [
                     { label: '<div class="text-content"><strong>Travel</strong></div>', value: 'travel' },
                     { label: '<div class="text-content"><strong>Cash Back</strong></div>', value: 'cashback' },
-                    { label: '<div class="text-content"><strong>Not Sure / Show Both</strong></div>', value: 'either' }
+                    { label: '<div class="text-content"><strong>Not Sure</strong></div>', value: 'not-sure' }
                 ],
                 help: 'If you are new or undecided, start with Cash Back. It is simple, real money, and a great baseline.<br><br>If you\'re experienced, or okay putting in some additional work, you can get more value out of travel cards. Know your own personality, because it is more work.<br><br>If you really have no idea, we\'d recommend learning more about each option <a href="learning.html" style="color: #059669; text-decoration: underline;">here</a> and coming back.',
                 onAnswer: (val) => { 
@@ -1425,12 +1425,68 @@
                     state.lastApplied = null; 
                     configureModeTabs();
                     recomputeAndRender();
-                    // Render the next step immediately for single-mode choices
-                    if (val !== 'either') {
+                    // Render the next step immediately for all choices
+                    setTimeout(() => {
+                        renderStep();
+                    }, 300);
+                }
+            },
+            // Not sure flow - Question 1: Do you travel?
+            {
+                id: 'ns1', branch: 'not-sure',
+                title: 'Do you ever travel?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Yes</strong></div>', value: 'yes' },
+                    { label: '<div class="text-content"><strong>No</strong></div>', value: 'no' }
+                ],
+                help: 'If you tap <strong>Not sure</strong>, we\'ll ask two quick questions to place you on the right track without the overwhelm.',
+                onAnswer: (val) => {
+                    state.notSureAnswers = state.notSureAnswers || {};
+                    state.notSureAnswers.travels = val === 'yes';
+                    if (val === 'no') {
+                        // Route directly to cash-back flow
+                        state.mode = 'cashback';
+                        configureModeTabs();
+                        state.stepIndex = 0; // Set after configureModeTabs to override its default
+                        recomputeAndRender();
                         setTimeout(() => {
                             renderStep();
                         }, 300);
                     }
+                    // If yes, continue to next question (step will auto-advance)
+                }
+            },
+            // Not sure flow - Question 2: How hands-on?
+            {
+                id: 'ns2', branch: 'not-sure',
+                title: 'How hands-on do you want to be?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Lower maintenance</strong></div>', value: 'low' },
+                    { label: '<div class="text-content"><strong>I\'ll put in the work</strong></div>', value: 'high' }
+                ],
+                help: 'This is about upkeep. <strong>"Lower maintenance"</strong> keeps things steady with fewer rules. <strong>"I\'ll put in the work"</strong> adds more moving parts but more outsized value. Pick what you\'ll actually use.',
+                onAnswer: (val) => {
+                    state.notSureAnswers = state.notSureAnswers || {};
+                    state.notSureAnswers.handsOn = val === 'high';
+                    
+                    if (val === 'low') {
+                        // Route to cash-back flow (fewer rules, steady results)
+                        state.mode = 'cashback';
+                        configureModeTabs();
+                        state.stepIndex = 0; // Set after configureModeTabs to override its default
+                    } else {
+                        // Route to travel flow (more moving parts, higher upside)
+                        state.mode = 'travel';
+                        configureModeTabs(); // This sets stepIndex = 1, which goes to tr2
+                        state.stepIndex = 0; // Override to 0 to start with tr1 (international travel question)
+                    }
+                    
+                    recomputeAndRender();
+                    setTimeout(() => {
+                        renderStep();
+                    }, 300);
                 }
             },
             // Cashback path
@@ -1505,9 +1561,25 @@
                 help: 'Protections aren\'t as exciting as rewards, but they can save real money when something goes wrong.\n\n<strong>Phone protection</strong>\nPay your monthly cell phone bill with the card; if a covered phone is accidentally damaged or stolen, you can file a claim. It applies to every line on that bill, so one card can cover multiple phones. This can let you drop paid phone insurance like AppleCare+ or carrier add-ons.\n\n<strong>Purchase protection & extended warranty</strong>\nPay with the card, keep your receipt, and if an eligible item is damaged, stolen, or fails within the covered window, you can file a claim. Terms, caps, and exclusions vary by card.',
                 onAnswer: (vals) => { state.cashbackFilters.protections = vals; }
             },
-            // Travel path
+            // Travel path - International question first
             {
                 id: 'tr1', branch: 'travel',
+                title: 'Do you travel outside the U.S. at least once a year?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Yes</strong></div>', value: 'yes' },
+                    { label: '<div class="text-content"><strong>No</strong></div>', value: 'no' }
+                ],
+                help: 'If you go abroad even once a year, a <strong>no foreign transaction fee</strong> card is an easy win—about <strong>3%</strong> saved on every purchase (including online charges in foreign currency). That\'s $30 for every $1000 that you spend.',
+                onAnswer: (val) => {
+                    const arr = new Set(state.travelFilters.perks || []);
+                    if (val === 'yes') { arr.add('no-foreign-fees'); state.lastApplied = { key: 'perks', value: 'no-foreign-fees' }; }
+                    else { arr.delete('no-foreign-fees'); state.lastApplied = { key: 'perks', value: 'no-foreign-fees' }; }
+                    state.travelFilters.perks = Array.from(arr);
+                }
+            },
+            {
+                id: 'tr2', branch: 'travel',
                 title: 'What do you want most right now?',
                 type: 'radio',
                 options: [
@@ -1518,6 +1590,17 @@
                 ],
                 help: 'If you\'re just getting started, go with <strong>flexible points</strong> (also called bank points). This is what people mean by "Amex points" or "Capital One Miles." You earn on everyday spending, then use them to book on any airline or hotels.\n\n<strong>Airline and hotel cards</strong> are different. You\'re earning rewards tied to one brand, and the value shows up as that brand\'s perks—think a free night or a checked-bag benefit.\n\nFlexible points cards usually earn more on everyday spend, while airline or hotel cards are mostly about perks—so lean flexible unless your brand loyalty makes those extras a clear win.',
                 onAnswer: (val) => {
+                    if (val === 'none') {
+                        // Redirect to "Not sure" flow
+                        state.mode = 'not-sure';
+                        state.stepIndex = 1; // Go to first "Not sure" question (ns1)
+                        configureModeTabs();
+                        recomputeAndRender();
+                        setTimeout(() => {
+                            renderStep();
+                        }, 300);
+                        return;
+                    }
                     state.travelFilters.focus = [val];
                     // Do not hard filter issuer; only controls visibility of brand step
                 }
@@ -1566,22 +1649,6 @@
                 },
                 help: 'Pick the airline or hotel you actually use. If none, leave blank to keep more options.',
                 onAnswer: (vals) => { state.travelFilters['airline-hotel'] = vals; }
-            },
-            {
-                id: 'tr2', branch: 'travel',
-                title: 'Do you travel outside the U.S. at least once a year?',
-                type: 'radio',
-                options: [
-                    { label: '<div class="text-content"><strong>Yes</strong></div>', value: 'yes' },
-                    { label: '<div class="text-content"><strong>No</strong></div>', value: 'no' }
-                ],
-                help: 'If you go abroad even once a year, a <strong>no foreign transaction fee</strong> card is an easy win—about <strong>3%</strong> saved on every purchase (including online charges in foreign currency). That\'s $30 for every $1000 that you spend.',
-                onAnswer: (val) => {
-                    const arr = new Set(state.travelFilters.perks || []);
-                    if (val === 'yes') { arr.add('no-foreign-fees'); state.lastApplied = { key: 'perks', value: 'no-foreign-fees' }; }
-                    else { arr.delete('no-foreign-fees'); state.lastApplied = { key: 'perks', value: 'no-foreign-fees' }; }
-                    state.travelFilters.perks = Array.from(arr);
-                }
             },
             {
                 id: 'tr3', branch: 'travel',
@@ -1671,7 +1738,9 @@
                 }
                 return s.branch === 'cashback';
             }
-            if (state.mode === 'either') return false; // show only goal in show-both
+            if (state.mode === 'not-sure') {
+                return s.branch === 'not-sure';
+            }
             return false;
         });
     }
@@ -1982,17 +2051,7 @@
 
     function configureModeTabs() {
         const tabs = document.getElementById('mode-tabs');
-        if (state.mode === 'either') { 
-            tabs.style.display = 'flex';
-            // Ensure we have a default active tab
-            if (!state.activeTab) {
-                state.activeTab = 'cashback';
-            }
-            // Update tab visual state
-            document.querySelectorAll('#mode-tabs .tab').forEach(t => {
-                t.classList.toggle('active', t.dataset.tab === state.activeTab);
-            });
-        } else if (state.mode) { 
+        if (state.mode) { 
             tabs.style.display = 'none'; 
             state.activeTab = state.mode; 
             // When a goal is chosen, always start at the first step of that branch
@@ -2019,25 +2078,17 @@
             return;
         }
 
-        if (state.mode === 'either') {
-            // Render per tab
-            const cashFilters = mergeFilters({ type: ['cashback'] }, state.cashbackFilters);
-            const travFilters = mergeFilters({ type: ['travel'] }, state.travelFilters);
-            const cashCards = applyFiltersTo(allCards, cashFilters);
-            const travCards = applyFiltersTo(allCards, travFilters);
-            document.getElementById('cashback-count').textContent = cashCards.length;
-            document.getElementById('travel-count').textContent = travCards.length;
-            showCards = state.activeTab === 'cashback' ? cashCards : travCards;
-            updateActiveFilterChipsUI( state.activeTab === 'cashback' ? cashFilters : travFilters );
-            updateResultsHeadline(showCards.length, total);
-            if (showCards.length === 0) { renderZeroState(); } else { renderCards(showCards); }
-            return;
-        }
-
         // Single mode
         const base = {};
         if (state.mode === 'cashback') base.type = ['cashback'];
         if (state.mode === 'travel') base.type = ['travel'];
+        if (state.mode === 'not-sure') {
+            // For not-sure mode, show all cards initially
+            updateActiveFilterChipsUI({});
+            updateResultsHeadline(allCards.length, total);
+            renderCards(allCards);
+            return;
+        }
         const merged = mergeFilters(base, state.mode === 'travel' ? state.travelFilters : state.cashbackFilters);
         const cards = applyFiltersTo(allCards, merged);
         updateActiveFilterChipsUI(merged);
