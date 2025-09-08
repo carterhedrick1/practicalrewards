@@ -88,6 +88,13 @@
             min-height: 44px; /* Minimum touch target size for mobile */
             position: relative;
         }
+        
+        /* Improve scrolling over options on mobile */
+        @media (max-width: 1024px) {
+            .option {
+                touch-action: pan-y; /* Allow vertical scrolling */
+            }
+        }
         .option input { 
             margin: 0; 
             pointer-events: none;
@@ -2483,27 +2490,51 @@
                 }
             };
 
-            // Use a unified approach that works on both mobile and desktop
-            const handleInteraction = (e) => {
-                // Only handle the event if it's not already processed
-                if (e.type === 'touchend' && !touchStarted) return;
+            // Track touch movement to distinguish between tap and scroll
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchMoved = false;
+
+            const handleTouchStart = (e) => {
+                touchStarted = true;
+                touchMoved = false;
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+            };
+
+            const handleTouchMove = (e) => {
+                if (!touchStarted) return;
                 
-                handleSelection(e);
+                const touch = e.touches[0];
+                const deltaX = Math.abs(touch.clientX - touchStartX);
+                const deltaY = Math.abs(touch.clientY - touchStartY);
                 
-                if (e.type === 'touchstart') {
-                    touchStarted = true;
-                } else if (e.type === 'touchend') {
-                    touchStarted = false;
+                // If moved more than 10px, consider it a scroll gesture
+                if (deltaX > 10 || deltaY > 10) {
+                    touchMoved = true;
                 }
             };
 
-            // Add both click and touch events, but handle them properly
-            option.addEventListener('click', handleInteraction);
-            option.addEventListener('touchstart', (e) => {
-                touchStarted = true;
-                // Don't prevent default on touchstart to allow proper touch handling
-            }, { passive: true });
-            option.addEventListener('touchend', handleInteraction, { passive: false });
+            const handleTouchEnd = (e) => {
+                if (!touchStarted) return;
+                
+                // Only trigger selection if it was a tap (no movement)
+                if (!touchMoved) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleSelection(e);
+                }
+                
+                touchStarted = false;
+                touchMoved = false;
+            };
+
+            // Add event listeners
+            option.addEventListener('click', handleSelection);
+            option.addEventListener('touchstart', handleTouchStart, { passive: true });
+            option.addEventListener('touchmove', handleTouchMove, { passive: true });
+            option.addEventListener('touchend', handleTouchEnd, { passive: false });
         });
     }
 
