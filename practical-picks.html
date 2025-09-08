@@ -68,10 +68,34 @@
         .step h3 { font-size: 1rem; color: #1e293b; margin-bottom: .5rem; }
         #steps-container { margin-bottom: .5rem; }
         .options { display: grid; grid-template-columns: 1fr; gap: .5rem; }
-        .option { border: 2px solid #e2e8f0; border-radius: 10px; padding: .75rem; background: white; cursor: pointer; display: flex; align-items: center; gap: .5rem; transition: all 0.3s ease; }
-        .option input { margin: 0; }
+        .option { 
+            border: 2px solid #e2e8f0; 
+            border-radius: 10px; 
+            padding: .75rem; 
+            background: white; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: .5rem; 
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .option input { 
+            margin: 0; 
+            pointer-events: none;
+        }
         .option.active { border-color: #059669; background: #f0fdf4; }
         .option:hover { border-color: #10b981; background: #f9fafb; }
+        .option:active { 
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
         .btn { padding: .6rem 1rem; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
         .btn-primary { background: #059669; color: white; }
         .btn-secondary { background: white; color: #059669; border: 1px solid #059669; }
@@ -2311,8 +2335,8 @@
         const tipHtml = step.tip ? `<div class="step-tip">${step.tip}</div>` : '';
         container.innerHTML = `${tipHtml}<div class="${optionsClass}">${optionsHtml}</div>`;
 
-        // Ensure no radio options are pre-selected for steps with no current answer
-        if (step.type === 'radio' && !selected) {
+        // Ensure no options are pre-selected for steps with no current answer
+        if (!selected || (step.type === 'checkbox' && Array.isArray(selected) && selected.length === 0)) {
             container.querySelectorAll('.option').forEach(option => {
                 option.classList.remove('active');
                 const input = option.querySelector('input');
@@ -2346,10 +2370,20 @@
         // Wire inputs and make entire options clickable
         container.querySelectorAll('.option').forEach(option => {
             const input = option.querySelector('input');
+            let isProcessing = false;
 
-            // Make entire option clickable and drive state transitions reliably
-            option.addEventListener('click', (e) => {
+            // Handle both click and touch events for better mobile support
+            const handleSelection = (e) => {
                 e.preventDefault();
+                e.stopPropagation();
+                
+                // Prevent double-tap issues
+                if (isProcessing) return;
+                isProcessing = true;
+                
+                // Small delay to prevent rapid successive taps
+                setTimeout(() => { isProcessing = false; }, 100);
+
                 if (step.type === 'radio') {
                     // Exclusive select
                     container.querySelectorAll('input').forEach(cb => cb.checked = false);
@@ -2382,7 +2416,11 @@
                     state.lastApplied = { key: stepToFilterKey(step.id), value: input.value };
                     recomputeAndRender();
                 }
-            });
+            };
+
+            // Add both click and touchstart events for better mobile support
+            option.addEventListener('click', handleSelection);
+            option.addEventListener('touchstart', handleSelection, { passive: false });
         });
     }
 
