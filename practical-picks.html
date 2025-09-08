@@ -46,12 +46,12 @@
                 gap: 0;
             }
             .results-bar {
-                margin-bottom: 0;
+                margin-bottom: 1.5rem;
                 padding: .5rem 1rem;
             }
             .cards-grid {
                 gap: 1rem;
-                margin: 1rem 0 0 0;
+                margin: 0;
             }
         }
 
@@ -254,6 +254,18 @@
 
         .card-item:hover::before { left: 100%; }
         .card-item:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); border-color: #059669; }
+        
+        /* Disable card hover effects on mobile devices */
+        @media (max-width: 1024px) {
+            .card-item:hover { 
+                transform: none; 
+                box-shadow: 0 2px 12px rgba(0,0,0,0.08); 
+                border-color: #e5e7eb; 
+            }
+            .card-item:hover .card-image { 
+                transform: none; 
+            }
+        }
 
         .card-image {
             width: 100%;
@@ -879,6 +891,18 @@
                 placeholder.innerHTML = cleanHtml;
                 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
                 scripts.forEach(s => { try { eval(s); } catch(e) { console.error(e); } });
+                
+                // Auto-scroll down past the header after it's loaded
+                setTimeout(() => {
+                    const header = document.querySelector('header');
+                    if (header) {
+                        const headerHeight = header.offsetHeight;
+                        window.scrollTo({
+                            top: headerHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 50);
             } else { placeholder.innerHTML = html; }
         }).catch(() => { placeholder.innerHTML = ''; });
     }
