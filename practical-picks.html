@@ -85,16 +85,22 @@
             -ms-user-select: none;
             user-select: none;
             touch-action: manipulation;
+            min-height: 44px; /* Minimum touch target size for mobile */
+            position: relative;
         }
         .option input { 
             margin: 0; 
             pointer-events: none;
         }
         .option.active { border-color: #059669; background: #f0fdf4; }
-        .option:hover { border-color: #10b981; background: #f9fafb; }
         .option:active { 
             transform: scale(0.98);
             transition: transform 0.1s ease;
+        }
+        
+        /* Only show hover effects on devices that support hover (not mobile) */
+        @media (hover: hover) and (pointer: fine) {
+            .option:hover { border-color: #10b981; background: #f9fafb; }
         }
         .btn { padding: .6rem 1rem; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
         .btn-primary { background: #059669; color: white; }
@@ -2371,8 +2377,9 @@
         container.querySelectorAll('.option').forEach(option => {
             const input = option.querySelector('input');
             let isProcessing = false;
+            let touchStarted = false;
 
-            // Handle both click and touch events for better mobile support
+            // Handle selection logic
             const handleSelection = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -2382,7 +2389,7 @@
                 isProcessing = true;
                 
                 // Small delay to prevent rapid successive taps
-                setTimeout(() => { isProcessing = false; }, 100);
+                setTimeout(() => { isProcessing = false; }, 150);
 
                 if (step.type === 'radio') {
                     // Exclusive select
@@ -2418,9 +2425,27 @@
                 }
             };
 
-            // Add both click and touchstart events for better mobile support
-            option.addEventListener('click', handleSelection);
-            option.addEventListener('touchstart', handleSelection, { passive: false });
+            // Use a unified approach that works on both mobile and desktop
+            const handleInteraction = (e) => {
+                // Only handle the event if it's not already processed
+                if (e.type === 'touchend' && !touchStarted) return;
+                
+                handleSelection(e);
+                
+                if (e.type === 'touchstart') {
+                    touchStarted = true;
+                } else if (e.type === 'touchend') {
+                    touchStarted = false;
+                }
+            };
+
+            // Add both click and touch events, but handle them properly
+            option.addEventListener('click', handleInteraction);
+            option.addEventListener('touchstart', (e) => {
+                touchStarted = true;
+                // Don't prevent default on touchstart to allow proper touch handling
+            }, { passive: true });
+            option.addEventListener('touchend', handleInteraction, { passive: false });
         });
     }
 
