@@ -1448,177 +1448,77 @@
 
         async function initializeCards() {
             try {
-                console.log('🔄 Attempting to fetch cards from database...');
+                console.log('📥 Fetching cards.json...');
+                const response = await fetch('cards.json', { cache: 'no-store' });
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch cards.json: ${response.status}`);
+                }
+                const databaseCards = await response.json();
+                console.log('✅ Static JSON fetch successful, received cards:', databaseCards);
+                console.log('🔍 First card details:', databaseCards[0]);
                 
-                // First try with status filter and explicit column selection
-                let response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,airline_hotels,earning_categories&status=eq.active', {
-                    headers: {
-                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    }
+                // Convert database format to match your existing code
+                let allCardsFromDB = databaseCards.map(card => {
+                    console.log('🔍 Processing card:', card);
+                    const parseArrayField = (field) => {
+                        if (!field || field === '0' || field === 0) return [];
+                        if (Array.isArray(field)) return field;
+                        if (typeof field === 'string') {
+                            try {
+                                let cleanField = field.trim();
+                                if (cleanField.startsWith('"') && cleanField.endsWith('"')) cleanField = cleanField.slice(1, -1);
+                                if (cleanField.startsWith('"[') && cleanField.endsWith(']"')) cleanField = cleanField.slice(1, -1);
+                                const parsed = JSON.parse(cleanField);
+                                if (Array.isArray(parsed)) {
+                                    return parsed.map(item => (typeof item === 'string' && item.startsWith('"') && item.endsWith('"')) ? item.slice(1, -1) : item);
+                                }
+                                return Array.isArray(parsed) ? parsed : [];
+                            } catch (_) { return []; }
+                        }
+                        return [];
+                    };
+                    return {
+                        id: card.id,
+                        name: card.name,
+                        type: card.type,
+                        annualFee: card.annual_fee,
+                        bankType: card.bank_type,
+                        rewards: card.rewards_type,
+                        image: card.image_url,
+                        welcomeBonus: card.welcome_bonus || card.welcomeBonus || 'None',
+                        practicalAdvice: card.practical_advice || card.practicalAdvice || '',
+                        features: Array.isArray(card.features) ? card.features : parseArrayField(card.features),
+                        perks: [],
+                        protections: [],
+                        featureCategories: card.feature_categories || [],
+                        perkCategories: parseArrayField(card.perk_categories),
+                        protectionCategories: parseArrayField(card.protection_categories),
+                        airline_hotels: parseArrayField(card.airline_hotels),
+                        earningCategories: parseArrayField(card.earning_categories),
+                        url: card.card_url,
+                        status: card.status || 'active'
+                    };
                 });
                 
-                // If that fails, try without status filter
-                if (!response.ok) {
-                    console.log('🔄 Status filter failed, trying without filter...');
-                    response = await fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,airline_hotels,earning_categories', {
-                        headers: {
-                            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=representation'
-                        }
-                    });
-                }
+                // Filter to only show active cards
+                allCards = allCardsFromDB.filter(card => card.status === 'active');
+                console.log(`✅ Filtered ${allCardsFromDB.length} total cards to ${allCards.length} active cards`);
                 
-                if (response.ok) {
-                    const databaseCards = await response.json();
-                    console.log('✅ Database fetch successful, received cards:', databaseCards);
-                    console.log('🔍 First card details:', databaseCards[0]);
-                    
-                    // Convert database format to match your existing code
-                    let allCardsFromDB = databaseCards.map(card => {
-                        console.log('🔍 Processing card:', card);
-                        return {
-                            id: card.id,
-                            name: card.name,
-                            type: card.type,
-                            annualFee: card.annual_fee,
-                            bankType: card.bank_type,
-                            rewards: card.rewards_type,
-                            image: card.image_url,
-                            welcomeBonus: card.welcome_bonus || card.welcomeBonus || 'None',
-                            practicalAdvice: card.practical_advice || card.practicalAdvice || '',
-                            features: card.features || [],
-                            perks: [], // We'll derive this from perk_categories
-                            protections: [], // We'll derive this from protection_categories
-                            featureCategories: card.feature_categories || [],
-                            perkCategories: card.perk_categories || [],
-                            protectionCategories: card.protection_categories || [],
-                            airline_hotels: card.airline_hotels || [],
-                            earningCategories: card.earning_categories || [],
-                            url: card.card_url,
-                            status: card.status || 'active'
-                        };
-                    });
-                    
-                    // Filter to only show active cards
-                    allCards = allCardsFromDB.filter(card => card.status === 'active');
-                    console.log(`✅ Filtered ${allCardsFromDB.length} total cards to ${allCards.length} active cards`);
-                    
-                    console.log('✅ Converted cards:', allCards);
-                    console.log('✅ Final allCards array length:', allCards.length);
-                    
-                    // Check if we have valid cards
-                    if (allCards.length === 0) {
-                        console.warn('⚠️ Warning: No active cards found in database');
-                    } else {
-                        console.log('✅ Successfully loaded cards from database, proceeding...');
-                    }
+                console.log('✅ Converted cards:', allCards);
+                console.log('✅ Final allCards array length:', allCards.length);
+                
+                if (allCards.length === 0) {
+                    console.warn('⚠️ Warning: No active cards found in static JSON');
                 } else {
-                    console.error('❌ Database fetch failed with status:', response.status);
-                    const errorText = await response.text();
-                    console.error('❌ Error response:', errorText);
-                    throw new Error(`Failed to load cards: ${response.status} - ${errorText}`);
+                    console.log('✅ Successfully loaded cards from static JSON, proceeding...');
                 }
             } catch (error) {
-                console.error('Error loading cards from database:', error);
-                
-                // Only fallback if we don't already have cards from the database
-                if (allCards.length === 0) {
-                    console.log('🔄 No cards loaded from database, using fallback cards...');
-                    // Fallback to sample cards if database fails
-                    allCards = [
-                    {
-                        id: 1,
-                        name: "Capital One Venture X",
-                        type: "travel",
-                        annualFee: 395,
-                        bankType: "capital-one",
-                        rewards: "miles",
-                        image: "images/venture-x.png",
-                        welcomeBonus: "75k miles",
-                        practicalAdvice: "High annual fee card. Carefully calculate if the benefits outweigh the cost for your specific spending patterns.",
-                        features: ["2x miles on everything", "3x travel & dining", "Priority Pass lounges", "TSA PreCheck credit"],
-                        perks: ["Lounge Access", "TSA Pre/Global Entry"],
-                        protections: ["Rental car CDW", "Trip delay"],
-                        featureCategories: ["lounge-access", "tsa-precheck", "global-entry"],
-                        perkCategories: ["lounge-access", "tsa-precheck", "no-foreign-fees"],
-                        protectionCategories: ["rental-car-insurance", "trip-delay-cancellation"],
-                        url: "card-pages/venture-x.html"
-                    },
-                    {
-                        id: 2,
-                        name: "Chase Sapphire Reserve",
-                        type: "travel",
-                        annualFee: 795,
-                        bankType: "chase",
-                        rewards: "points",
-                        image: "images/sapphire-reserve.jpg",
-                        welcomeBonus: "60k points",
-                        practicalAdvice: "At $795/year, this is Chase's premium offering. The $300 travel credit helps, but you need to travel frequently to justify this cost.",
-                        features: ["3x points on travel & dining", "1x everything else", "Priority Pass lounges", "TSA PreCheck credit"],
-                        perks: ["Lounge Access", "TSA Pre/Global Entry"],
-                        protections: ["Rental car CDW", "Trip delay", "Baggage delay"],
-                        featureCategories: ["lounge-access", "travel-insurance"],
-                        perkCategories: ["lounge-access", "tsa-precheck"],
-                        protectionCategories: ["rental-car-insurance", "trip-delay-cancellation", "lost-delayed-baggage"],
-                        url: "card-pages/sapphire-reserve.html"
-                    },
-                    {
-                        id: 3,
-                        name: "American Express Platinum",
-                        type: "travel",
-                        annualFee: 695,
-                        bankType: "amex",
-                        rewards: "points",
-                        image: "images/amex-platinum.jpg",
-                        welcomeBonus: "80k points",
-                        practicalAdvice: "The $695 fee is steep, but the credits add up quickly. Only get this if you'll use airline credits, hotel credits, and lounge access regularly.",
-                        features: ["5x flights & hotels", "1x everything else", "Centurion lounges", "Elite status benefits"],
-                        perks: ["Lounge Access", "CLEAR"],
-                        protections: ["Rental car CDW", "Trip delay", "Purchase protection"],
-                        featureCategories: ["lounge-access", "travel-insurance", "rental-car-insurance"],
-                        perkCategories: ["lounge-access", "clear", "metal-card"],
-                        protectionCategories: ["rental-car-insurance", "trip-delay-cancellation", "purchase-protection"],
-                        url: "card-pages/amex-platinum.html"
-                    },
-                    {
-                        id: 4,
-                        name: "Citi® / AAdvantage® Executive",
-                        type: "travel",
-                        annualFee: 595,
-                        bankType: "citi",
-                        rewards: "miles",
-                        image: "images/citi_aadavntage.png",
-                        welcomeBonus: "70k miles",
-                        practicalAdvice: "If you'll visit Admirals Clubs several times a year, it's a win; if not, the fee and monthly credits will feel like homework.",
-                        features: ["4x american airlines", "10x hotels via aadvantagehotels.com", "10x car rentals via aadvantagecars.com", "Admirals Club membership"],
-                        perks: ["Lounge Access", "Free Checked Bags", "Priority Boarding"],
-                        protections: ["Rental car CDW", "Trip delay", "Purchase protection"],
-                        featureCategories: ["lounge-access", "free-checked-bags", "priority-boarding"],
-                        perkCategories: ["lounge-access", "free-checked-bags", "priority-boarding", "metal-card"],
-                        protectionCategories: ["rental-car-insurance", "trip-delay-cancellation", "purchase-protection"],
-                        url: "card-pages/citi-aadvantage-executive.html"
-                    }
-                ];
-                }
+                console.error('Error loading cards from static JSON:', error);
+                throw error;
             }
-
-            filteredCards = [...allCards];
-            
-            // Read filters from URL if any exist
-            readFiltersFromURL();
-            
-            renderCards();
-            updateResultsCount();
-            
-
         }
 
-                function renderCards() {
+        function renderCards() {
             const grid = document.getElementById('cards-grid');
             const existingCards = grid.querySelectorAll('.card-item');
             

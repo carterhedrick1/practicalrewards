@@ -895,151 +895,92 @@
         isLoading = true;
         
         try {
-            console.log('🔄 Attempting to fetch cards from database...');
+            console.log('📥 Fetching cards.json...');
             
-            // Create a timeout promise that rejects after 10 seconds
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('Request timeout after 10 seconds')), 10000);
-            });
-            
-            // Retry logic with exponential backoff and timeout
-            let response = null;
-            let lastError = null;
-            
-            for (let attempt = 1; attempt <= 3; attempt++) {
-                try {
-                    console.log(`🔄 Attempt ${attempt}/3...`);
-                    
-                    // First try with status filter - optimized query
-                    const fetchPromise = fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,earning_categories,airline_hotels&status=eq.active&order=id.asc', {
-                        headers: {
-                            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=representation'
-                        }
-                    });
-                    
-                    response = await Promise.race([fetchPromise, timeoutPromise]);
-                    
-                    if (response.ok) break;
-                    
-                    // If status filter fails, try without it
-                    console.log('🔄 Status filter failed, trying without filter...');
-                    const fallbackPromise = fetch('https://zgfglwdjmpawuoxtbwcf.supabase.co/rest/v1/cards?select=id,name,type,annual_fee,bank_type,rewards_type,image_url,features,card_url,status,welcome_bonus,practical_advice,perk_categories,protection_categories,earning_categories,airline_hotels&order=id.asc', {
-                        headers: {
-                            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjI2MzUsImV4cCI6MjA3MTg5ODYzNX0.JZHCnLPXaKI-Y5DRQVj-E-iBsyHXoxecxcnweM9LwyE',
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=representation'
-                        }
-                    });
-                    
-                    response = await Promise.race([fallbackPromise, timeoutPromise]);
-                    
-                    if (response.ok) break;
-                    
-                    // If still failing, wait before retry
-                    if (attempt < 3) {
-                        const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
-                        console.log(`⏳ Request failed, waiting ${delay}ms before retry...`);
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                    }
-                    
-                } catch (error) {
-                    lastError = error;
-                    console.log(`❌ Attempt ${attempt} failed:`, error.message);
-                    if (attempt < 3) {
-                        const delay = Math.pow(2, attempt) * 1000;
-                        console.log(`⏳ Waiting ${delay}ms before retry...`);
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                    }
-                }
+            const response = await fetch('cards.json', { cache: 'no-store' });
+            if (!response.ok) {
+                throw new Error(`Failed to fetch cards.json: ${response.status}`);
             }
             
-            if (response && response.ok) {
-                const databaseCards = await response.json();
-                console.log('✅ Database fetch successful, received cards:', databaseCards);
-                
-                // Convert database format to match your existing code (same as cards.html)
-                let allCardsFromDB = databaseCards.map(card => {
-                    // Helper function to safely parse array data
-                    const parseArrayField = (field) => {
-                        if (!field || field === '0' || field === 0) {
+            const databaseCards = await response.json();
+            console.log('✅ Static JSON fetch successful, received cards:', databaseCards);
+            
+            // Convert database format to match your existing code (same as cards.html)
+            let allCardsFromDB = databaseCards.map(card => {
+                // Helper function to safely parse array data
+                const parseArrayField = (field) => {
+                    if (!field || field === '0' || field === 0) {
+                        return [];
+                    }
+                    if (Array.isArray(field)) {
+                        return field;
+                    }
+                    if (typeof field === 'string') {
+                        try {
+                            // Handle double-encoded JSON strings and malformed data
+                            let cleanField = field.trim();
+                            
+                            // Remove surrounding quotes if they exist
+                            if (cleanField.startsWith('"') && cleanField.endsWith('"')) {
+                                cleanField = cleanField.slice(1, -1);
+                            }
+                            
+                            // Handle cases where the inner content is still quoted
+                            if (cleanField.startsWith('"[') && cleanField.endsWith(']"')) {
+                                cleanField = cleanField.slice(1, -1);
+                            }
+                            
+                            const parsed = JSON.parse(cleanField);
+                            
+                            // Clean up any quoted strings within the array
+                            if (Array.isArray(parsed)) {
+                                return parsed.map(item => {
+                                    if (typeof item === 'string' && item.startsWith('"') && item.endsWith('"')) {
+                                        return item.slice(1, -1);
+                                    }
+                                    return item;
+                                });
+                            }
+                            
+                            return Array.isArray(parsed) ? parsed : [];
+                        } catch (e) {
+                            console.warn('Failed to parse array field:', field, e);
                             return [];
                         }
-                        if (Array.isArray(field)) {
-                            return field;
-                        }
-                        if (typeof field === 'string') {
-                            try {
-                                // Handle double-encoded JSON strings and malformed data
-                                let cleanField = field.trim();
-
-                                // Remove surrounding quotes if they exist
-                                if (cleanField.startsWith('"') && cleanField.endsWith('"')) {
-                                    cleanField = cleanField.slice(1, -1);
-                                }
-
-                                // Handle cases where the inner content is still quoted
-                                if (cleanField.startsWith('"[') && cleanField.endsWith(']"')) {
-                                    cleanField = cleanField.slice(1, -1);
-                                }
-
-                                const parsed = JSON.parse(cleanField);
-
-                                // Clean up any quoted strings within the array
-                                if (Array.isArray(parsed)) {
-                                    return parsed.map(item => {
-                                        if (typeof item === 'string' && item.startsWith('"') && item.endsWith('"')) {
-                                            return item.slice(1, -1);
-                                        }
-                                        return item;
-                                    });
-                                }
-
-                                return Array.isArray(parsed) ? parsed : [];
-                            } catch (e) {
-                                console.warn('Failed to parse array field:', field, e);
-                                return [];
-                            }
-                        }
-                        return [];
-                    };
-                    
-                    return {
-                        id: card.id,
-                        name: card.name,
-                        type: card.type,
-                        annualFee: card.annual_fee,
-                        bankType: card.bank_type,
-                        rewards: card.rewards_type,
-                        image: card.image_url,
-                        welcomeBonus: card.welcome_bonus || card.welcomeBonus || 'None',
-                        practicalAdvice: card.practical_advice || card.practicalAdvice || '',
-                        features: card.features || [],
-                        perkCategories: parseArrayField(card.perk_categories),
-                        protectionCategories: parseArrayField(card.protection_categories),
-                        earningCategories: parseArrayField(card.earning_categories),
-                        airlineHotel: parseArrayField(card.airline_hotels),
-                        url: card.card_url,
-                        status: card.status || 'active'
-                    };
-                });
-                
-                // Filter to only show active cards
-                allCards = allCardsFromDB.filter(card => card.status === 'active');
-                
-                // Cache the results
-                cardsCache = {
-                    data: allCards,
-                    timestamp: Date.now()
+                    }
+                    return [];
                 };
                 
-                console.log('✅ Loaded cards from database:', allCards.length);
-            } else {
-                throw lastError || new Error('Database fetch failed after all retries');
-            }
+                return {
+                    id: card.id,
+                    name: card.name,
+                    type: card.type,
+                    annualFee: card.annual_fee,
+                    bankType: card.bank_type,
+                    rewards: card.rewards_type,
+                    image: card.image_url,
+                    welcomeBonus: card.welcome_bonus || card.welcomeBonus || 'None',
+                    practicalAdvice: card.practical_advice || card.practicalAdvice || '',
+                    features: Array.isArray(card.features) ? card.features : parseArrayField(card.features),
+                    perkCategories: parseArrayField(card.perk_categories),
+                    protectionCategories: parseArrayField(card.protection_categories),
+                    earningCategories: parseArrayField(card.earning_categories),
+                    airlineHotel: parseArrayField(card.airline_hotels),
+                    url: card.card_url,
+                    status: card.status || 'active'
+                };
+            });
+            
+            // Filter to only show active cards
+            allCards = allCardsFromDB.filter(card => card.status === 'active');
+            
+            // Cache the results
+            cardsCache = {
+                data: allCards,
+                timestamp: Date.now()
+            };
+            
+            console.log('✅ Loaded cards from static JSON:', allCards.length);
         } catch (e) {
             console.warn('Failed to load cards from database:', e && e.message);
             
@@ -1614,7 +1555,7 @@
                 options: [
                     { label: '<div class="text-content"><strong>I want to earn cash back</strong></div>', value: 'cashback' },
                     { label: '<div class="text-content"><strong>I want to earn travel rewards</strong></div>', value: 'travel' },
-                    { label: '<div class="text-content"><strong>I\'m not sure</strong></div>', value: 'not-sure' }
+                    { label: '<div class="text-content"><strong>I\'m not sure, Help Me Decide</strong></div>', value: 'not-sure' }
                 ],
                 help: 'If you are new or undecided, start with Cash Back. It is simple, real money, and a great baseline.<br><br>If you\'re experienced, or okay putting in some additional work, you can get more value out of travel cards. Know your own personality, because it is more work.<br><br>If you really have no idea, we\'d recommend learning more about each option <a href="learning.html" style="color: #059669; text-decoration: underline;">here</a> and coming back.',
                 onAnswer: (val) => { 
@@ -1795,7 +1736,7 @@
                 options: [
                     { label: '<div class="text-content"><strong>Free checked bags & earlier boarding</strong></div>', value: 'airline' },
                     { label: '<div class="text-content"><strong>A free hotel night & status perks</strong></div>', value: 'hotel' },
-                    { label: '<div class="text-content"><strong>Not sure</strong></div>', value: 'not-sure' }
+                    { label: '<div class="text-content"><strong>I\'m not sure, Help Me Decide</strong></div>', value: 'not-sure' }
                 ],
                 help: 'Go with what sounds better for your trips this year. If it\'s a toss-up, Not sure is honest.',
                 onAnswer: (val) => {
@@ -1915,7 +1856,7 @@
                     { label: '<div class="text-content"><strong>Flexible Points</strong></div>', value: 'flex' },
                     { label: '<div class="text-content"><strong>Airline Perks</strong></div>', value: 'airline' },
                     { label: '<div class="text-content"><strong>Hotel Perks</strong></div>', value: 'hotel' },
-                    { label: '<div class="text-content"><strong>Not Sure</strong></div>', value: 'none' }
+                    { label: '<div class="text-content"><strong>I\'m not sure, Help Me Decide</strong></div>', value: 'none' }
                 ],
                 help: 'If you\'re just getting started, go with <strong>flexible points</strong> (also called bank points). This is what people mean by "Amex points" or "Capital One Miles." You earn on everyday spending, then use them to book on any airline or hotels.\n\n<strong>Airline and hotel cards</strong> are different. You\'re earning rewards tied to one brand, and the value shows up as that brand\'s perks—think a free night or a checked-bag benefit.\n\nFlexible points cards usually earn more on everyday spend, while airline or hotel cards are mostly about perks—so lean flexible unless your brand loyalty makes those extras a clear win.',
                 onAnswer: (val) => {
