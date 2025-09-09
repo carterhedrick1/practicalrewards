@@ -205,6 +205,11 @@
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
             margin: 0;
+            /* Performance optimizations for smooth animations */
+            contain: layout style paint;
+            transform: translateZ(0); /* Force hardware acceleration */
+            backface-visibility: hidden;
+            perspective: 1000px;
         }
 
         /* Override grid layout when showing intro text */
@@ -298,10 +303,24 @@
         .card-advice-label { font-weight: 600; color: #059669; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
         .card-advice-text { color: #475569; font-size: 0.75rem; line-height: 1.4; font-style: italic; text-align: center; max-width: 100%; }
 
-        /* Animations parity */
-        .card-item.fade-out { opacity: 0; transform: scale(0.95); }
-        .card-item.fade-in { animation: fadeInScale 0.3s ease-out forwards; }
-        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* Card transition animations - super smooth and simple */
+        .card-item {
+            transition: all 0.25s ease-out;
+            will-change: opacity, transform;
+        }
+        
+        .card-item.fade-out { 
+            opacity: 0; 
+            transform: translateY(-5px); 
+            pointer-events: none;
+        }
+        
+        .card-item.fade-in { 
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease-out;
+        }
+        
 
         /* Recommendation list styling (matching card pages) */
         .recommendation-list li strong {
@@ -1141,25 +1160,36 @@
         return currentStep && currentStep.type === 'completion';
     }
 
+    let currentCards = []; // Track currently displayed cards for animation
+
     function renderCards(cards) {
         const grid = document.getElementById('cards-grid');
         grid.classList.remove('showing-intro');
-        grid.innerHTML = '';
         
         const isCompletion = isCompletionStep();
         
-        cards.forEach(c => {
-            const cardElement = createCardElement(c);
-            
-            // Add special styling for completion step
-            if (isCompletion) {
-                cardElement.style.border = '3px solid #10b981';
-                cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
-                cardElement.classList.add('completion-card');
-            }
-            
-            grid.appendChild(cardElement);
-        });
+        // Get currently displayed card IDs
+        const currentCardIds = new Set(currentCards.map(c => c.id));
+        const newCardIds = new Set(cards.map(c => c.id));
+        
+        // Find cards to remove and cards to add
+        const cardsToRemove = currentCards.filter(c => !newCardIds.has(c.id));
+        const cardsToAdd = cards.filter(c => !currentCardIds.has(c.id));
+        const cardsToKeep = cards.filter(c => currentCardIds.has(c.id));
+        
+        // If this is the first render or a major change, just render immediately
+        if (currentCards.length === 0 || cards.length === 0) {
+            renderCardsImmediate(cards, isCompletion);
+            currentCards = [...cards];
+            return;
+        }
+        
+        // Handle animated transitions
+        if (cardsToRemove.length > 0 || cardsToAdd.length > 0) {
+            handleAnimatedCardTransition(cardsToRemove, cardsToAdd, cardsToKeep, isCompletion);
+        }
+        
+        currentCards = [...cards];
 
         // Update mobile scroll indicator (but not during completion)
         if (!isCompletion) {
@@ -1171,10 +1201,138 @@
             updateDesktopCardCount(cards);
         }
     }
+    
+    function renderCardsImmediate(cards, isCompletion) {
+        const grid = document.getElementById('cards-grid');
+        grid.innerHTML = '';
+        
+        cards.forEach((c, index) => {
+            const cardElement = createCardElement(c);
+            
+            // Add special styling for completion step
+            if (isCompletion) {
+                cardElement.style.border = '3px solid #10b981';
+                cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
+                cardElement.classList.add('completion-card');
+            } else {
+                // Add fade-in animation for new cards
+                cardElement.classList.add('fade-in');
+                // Remove the animation class after animation completes
+                setTimeout(() => {
+                    cardElement.classList.remove('fade-in');
+                }, 500 + (index * 50)); // Account for stagger delay
+            }
+            
+            grid.appendChild(cardElement);
+        });
+    }
+    
+    function handleAnimatedCardTransition(cardsToRemove, cardsToAdd, cardsToKeep, isCompletion) {
+        const grid = document.getElementById('cards-grid');
+        const totalNewCards = cardsToAdd.length;
+        
+        // Set adaptive stagger class based on number of cards
+        grid.className = grid.className.replace(/\b(fast|normal)-stagger\b/g, '');
+        if (totalNewCards > 8) {
+            grid.classList.add('fast-stagger');
+        } else {
+            grid.classList.add('normal-stagger');
+        }
+        
+        // Use requestAnimationFrame for smooth animations
+        if (cardsToRemove.length > 0) {
+            // Batch fade-out operations
+            requestAnimationFrame(() => {
+                const existingElements = Array.from(grid.children);
+                const elementsToFadeOut = [];
+                
+                existingElements.forEach(element => {
+                    const cardId = element.querySelector('.card-title')?.textContent;
+                    if (cardsToRemove.some(c => c.name === cardId)) {
+                        element.classList.add('fade-out');
+                        elementsToFadeOut.push(element);
+                    }
+                });
+                
+                // Wait for fade-out animation to complete
+                if (elementsToFadeOut.length > 0) {
+                    // Use transitionend event for better timing
+                    let completedTransitions = 0;
+                    const onTransitionEnd = () => {
+                        completedTransitions++;
+                        if (completedTransitions >= elementsToFadeOut.length) {
+                            updateGridWithNewCards(cardsToAdd, cardsToKeep, isCompletion);
+                        }
+                    };
+                    
+                    elementsToFadeOut.forEach(element => {
+                        element.addEventListener('transitionend', onTransitionEnd, { once: true });
+                    });
+                    
+                    // Fallback timeout in case transitionend doesn't fire
+                    setTimeout(() => {
+                        if (completedTransitions < elementsToFadeOut.length) {
+                            updateGridWithNewCards(cardsToAdd, cardsToKeep, isCompletion);
+                        }
+                    }, 300);
+                } else {
+                    updateGridWithNewCards(cardsToAdd, cardsToKeep, isCompletion);
+                }
+            });
+        } else {
+            // No cards to remove, add new ones immediately
+            updateGridWithNewCards(cardsToAdd, cardsToKeep, isCompletion);
+        }
+    }
+    
+    function updateGridWithNewCards(cardsToAdd, cardsToKeep, isCompletion) {
+        const grid = document.getElementById('cards-grid');
+        
+        // Batch DOM operations for better performance
+        requestAnimationFrame(() => {
+            // Remove faded out cards in one batch
+            const elementsToRemove = Array.from(grid.querySelectorAll('.fade-out'));
+            elementsToRemove.forEach(element => element.remove());
+            
+            // Create all new card elements before adding to DOM
+            const newElements = cardsToAdd.map((card, index) => {
+                const cardElement = createCardElement(card);
+                
+                if (isCompletion) {
+                    cardElement.style.border = '3px solid #10b981';
+                    cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
+                    cardElement.classList.add('completion-card');
+                } else {
+                    // Set initial invisible state for smooth fade-in
+                    cardElement.style.opacity = '0';
+                    cardElement.style.transform = 'translateY(10px)';
+                }
+                
+                return cardElement;
+            });
+            
+            // Add all elements to DOM in one batch operation
+            const fragment = document.createDocumentFragment();
+            newElements.forEach(element => fragment.appendChild(element));
+            grid.appendChild(fragment);
+            
+            // Trigger smooth staggered fade-in
+            if (!isCompletion && newElements.length > 0) {
+                newElements.forEach((element, index) => {
+                    setTimeout(() => {
+                        requestAnimationFrame(() => {
+                            element.classList.add('fade-in');
+                        });
+                    }, index * 50);
+                });
+            }
+        });
+    }
 
     function showIntroText() {
         const grid = document.getElementById('cards-grid');
         grid.classList.add('showing-intro');
+        currentCards = []; // Reset current cards state when showing intro
         grid.innerHTML = `
             <div style="width: 100%; margin: 0; padding: 2rem; text-align: center; background: #059669; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.15);">
                 <h2 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600;">We built Practical Picks to help you find the right card for your life.</h2>
@@ -1877,21 +2035,20 @@
             },
             {
                 id: 'tr2b', branch: 'travel',
-                title: 'Do you want airport lounge access?',
+                title: 'Do you need airport lounge access?',
                 type: 'radio',
                 options: [
                     { label: '<div class="text-content"><strong>Must Have</strong></div>', value: 'must' },
-                    { label: '<div class="text-content"><strong>Nice To Have</strong></div>', value: 'nice' },
-                    { label: '<div class="text-content"><strong>Do not Care</strong></div>', value: 'no' }
+                    { label: '<div class="text-content"><strong>Nice To Have</strong></div>', value: 'nice' }
                 ],
-                help: 'Make it Must Have only if you will fly a few times and actually use lounges—this narrows results fast.',
+                help: 'Lounge access usually comes with the most premium cards. Choose <strong>Must-have</strong> only if it\'s a dealbreaker—otherwise pick <strong>Nice to have</strong> to keep more options open.',
                 onAnswer: (val) => {
                     if (val === 'must') { 
                         // When lounge access is Must Have, ONLY filter for lounge access
                         state.travelFilters.perks = ['lounge-access'];
                         state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
-                    } else { 
-                        // When not must-have, remove lounge-access but keep other perks
+                    } else if (val === 'nice') { 
+                        // When nice to have, remove lounge-access but keep other perks
                         const arr = new Set(state.travelFilters.perks || []);
                         arr.delete('lounge-access'); 
                         state.travelFilters.perks = Array.from(arr);
@@ -1947,9 +2104,11 @@
             {
                 id: 'tr4', branch: 'travel',
                 title: 'Where do you want more rewards?',
-                tip: 'Choose your top category, then add others to find cards that hit multiple categories—results will match <u>all</u> categories you select.',
+                tip: 'Choose your top category, then add others to find cards that hit multiple categories—results will match all categories you select.',
                 type: 'checkbox',
                 options: [
+                    { label: 'Flat Rate', value: 'flat-rate' },
+                    { label: 'Rent', value: 'rent' },
                     { label: 'Dining / Bars', value: 'dining' },
                     { label: 'Groceries', value: 'groceries' },
                     { label: 'Gas/EV Charging', value: 'gas|ev-charging' },
@@ -1957,11 +2116,9 @@
                     { label: 'Rideshare/Transit', value: 'rideshare|transit' },
                     { label: 'Streaming', value: 'streaming' },
                     { label: 'Drugstores', value: 'drugstores' },
-                    { label: 'Entertainment', value: 'entertainment' },
-                    { label: 'Wholesale Clubs', value: 'wholesale-clubs' },
-                    { label: 'Amazon', value: 'amazon' }
+                    { label: 'Entertainment', value: 'entertainment' }
                 ],
-                help: 'Once you\'ve got a <strong>travel rewards card</strong> baseline, add cards that pay higher rates where you actually spend. Pick 1–2 to start; your travel rewards card covers the rest.\n\nCategory rules vary by card. We\'ll flag common quirks (exclusions, caps, portal-only rates) so there are no surprises.\n\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.\n• <strong>Wholesale clubs</strong> — Costco, Sam\'s Club (codes differently than groceries).\n• <strong>Amazon</strong> — The Amazon Credit card is amazing if you shop on Amazon. 5% back on everything!\n\nNot sure what to pick? Go with the categories you hit every month. Your travel rewards card backs up everything else.',
+                help: 'Trips start here. Want simple? Go flat-rate and stop thinking about it. Big on dining or groceries? Grab a food card and let dinner pay for flights. You know your spend—pick what actually matters to you.\n\n• <strong>Flat Rate</strong> — The glue. Works everywhere and you don\'t have to think.\n• <strong>Rent</strong> — Only one card offers points on rent, it\'s a pretty sweet setup.\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.',
                 onAnswer: (vals) => {
                     // Replace the earning_any array with the new selections (allows deselection)
                     state.travelFilters['earning_any'] = [...vals];
@@ -2038,11 +2195,15 @@
                 return state.stepIndex >= regularSteps.length - 1;
             }
             if (state.mode === 'travel') {
-                if (s.id === 'tr1b') {
+                if (s.id === 'tr2b') {
+                    const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
+                    return focus === 'flex' || focus === 'airline';
+                }
+                if (s.id === 'tr3') {
                     const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
                     return focus === 'airline' || focus === 'hotel';
                 }
-                if (s.id === 'tr3') {
+                if (s.id === 'tr4') {
                     const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
                     return focus !== 'airline' && focus !== 'hotel';
                 }
@@ -2083,8 +2244,8 @@
             return;
         }
         
-        // Clear filters from steps after the current one
-        for (let i = currentStepIndex; i < steps.length; i++) {
+        // Clear filters from steps after the current one (not including current step)
+        for (let i = currentStepIndex + 1; i < steps.length; i++) {
             const step = steps[i];
             const filterKey = stepToFilterKey(step.id);
             
@@ -2108,6 +2269,9 @@
             e.preventDefault();
             e.stopPropagation();
             console.log('Back button clicked, current stepIndex:', state.stepIndex, 'mode:', state.mode);
+            const steps = visibleSteps();
+            console.log('🔍 Visible steps:', steps.map((s, i) => `${i}: ${s.id}`));
+            console.log('🔍 Current step:', steps[state.stepIndex] ? steps[state.stepIndex].id : 'undefined');
             
             // Special case: if we're in travel mode but came from travel-mini-quiz, 
             // and we're at the end showing results, go back to tr2 (focus question)
@@ -2124,10 +2288,50 @@
             }
             
             if (state.stepIndex > 0) { 
-                // Clear filters from steps we're going back from
-                clearFiltersFromFutureSteps(state.stepIndex);
+                // Clear the selection from the current step before going back
+                const currentSteps = visibleSteps();
+                const currentStep = currentSteps[state.stepIndex];
+                if (currentStep) {
+                    const filterKey = stepToFilterKey(currentStep.id);
+                    if (filterKey) {
+                        // Determine which filter set to modify
+                        let targetFilters;
+                        if (state.mode === 'travel') {
+                            targetFilters = state.travelFilters;
+                        } else if (state.mode === 'cashback') {
+                            targetFilters = state.cashbackFilters;
+                        }
+                        
+                        if (targetFilters && targetFilters[filterKey]) {
+                            console.log(`Clearing current step filter: ${filterKey} from step ${currentStep.id}`);
+                            delete targetFilters[filterKey];
+                        }
+                    }
+                }
+                
                 state.stepIndex--; 
                 console.log('Going back to stepIndex:', state.stepIndex);
+                
+                // Special handling: if we're going back TO the lounge access question (tr2b),
+                // clear the lounge access filter so the question truly starts fresh
+                const newCurrentSteps = visibleSteps();
+                const newCurrentStep = newCurrentSteps[state.stepIndex];
+                if (newCurrentStep && newCurrentStep.id === 'tr2b' && state.mode === 'travel') {
+                    // Remove lounge-access from perks array but keep other perks
+                    if (state.travelFilters.perks) {
+                        const perksArray = new Set(state.travelFilters.perks);
+                        perksArray.delete('lounge-access');
+                        state.travelFilters.perks = Array.from(perksArray);
+                        // If perks array is now empty, delete the property entirely
+                        if (state.travelFilters.perks.length === 0) {
+                            delete state.travelFilters.perks;
+                        }
+                        console.log('Cleared lounge-access filter when returning to tr2b');
+                    }
+                }
+                
+                // Clear filters from future steps after we've moved back
+                clearFiltersFromFutureSteps(state.stepIndex);
                 
                 // If going back to the goal step (index 0), reset mode and filters
                 if (state.stepIndex === 0) {
@@ -2136,30 +2340,6 @@
                     state.cashbackFilters = {};
                     state.activeTab = null;
                     configureModeTabs();
-                }
-                
-                // Special handling: if we're going back to tr2 (focus question), ensure focus filter is cleared
-                const steps = visibleSteps();
-                const currentStep = steps[state.stepIndex];
-                if (currentStep && currentStep.id === 'tr2') {
-                    console.log('Going back to tr2, clearing focus filter to show all travel cards');
-                    console.log('Before clearing - travelFilters:', JSON.stringify(state.travelFilters));
-                    delete state.travelFilters.focus;
-                    delete state.travelMiniQuizAnswers; // Also clear any mini-quiz state
-                    console.log('After clearing - travelFilters:', JSON.stringify(state.travelFilters));
-                }
-                
-                // Additional safety: if in travel mode, ensure focus filter is cleared when going back to any question
-                if (state.mode === 'travel' && state.travelFilters.focus) {
-                    console.log('Additional safety: clearing focus filter when going back in travel mode');
-                    delete state.travelFilters.focus;
-                }
-                
-                // Even more explicit: clear focus from travelFilters to ensure it's not applied
-                if (state.mode === 'travel') {
-                    state.travelFilters.focus = undefined;
-                    delete state.travelFilters.focus;
-                    console.log('Explicitly cleared focus filter, travelFilters now:', JSON.stringify(state.travelFilters));
                 }
                 
                 renderStep(); 
@@ -2273,7 +2453,7 @@
         }
 
         // Apply grid layout for category steps that have many options
-        const shouldUseGrid = (step.id === 'cb2' || step.id === 'tr3' || step.id === 'tr1b' || step.id === 'tr5') && step.type === 'checkbox';
+        const shouldUseGrid = (step.id === 'cb2' || step.id === 'tr3' || step.id === 'tr4') && step.type === 'checkbox';
         const optionsClass = shouldUseGrid ? 'options grid-layout' : 'options';
         
         // Put the question in the header and options in the container
@@ -2436,11 +2616,11 @@
 
     function stepToFilterKey(stepId) {
         if (stepId.startsWith('cb')) return stepId === 'cb3' ? 'protections' : 'earning_any';
-        if (stepId === 'tr1b') return 'airline-hotel';
         if (stepId === 'tr2') return 'focus'; // This is the flexible/airline/hotel focus question
-        if (stepId === 'tr3') return 'earning_any';
-        if (stepId === 'tr4') return 'perks';
-        if (stepId === 'tr5') return 'protections';
+        if (stepId === 'tr2b') return 'perks'; // This is the lounge access question
+        if (stepId === 'tr3') return 'airline-hotel'; // This is the brand selection
+        if (stepId === 'tr4') return 'earning_any'; // This is the earning categories
+        if (stepId === 'tr5') return 'protections'; // This is the travel protections
         // Travel mini-quiz steps should clear the focus filter when going back
         if (stepId.startsWith('tmq')) return 'focus';
         return null;
@@ -2520,8 +2700,10 @@
         // Return current filter state for specific steps
         if (stepId === 'cb2') return state.cashbackFilters['earning_any'] || [];
         if (stepId === 'cb3') return state.cashbackFilters.protections || [];
-        if (stepId === 'tr1b') return state.travelFilters['airline-hotel'] || [];
-        if (stepId === 'tr3') return state.travelFilters['earning_any'] || [];
+        if (stepId === 'tr2') return state.travelFilters.focus ? state.travelFilters.focus[0] : null;
+        if (stepId === 'tr2b') return null; // Always reset - no pre-selection
+        if (stepId === 'tr3') return state.travelFilters['airline-hotel'] || [];
+        if (stepId === 'tr4') return state.travelFilters['earning_any'] || [];
         if (stepId === 'tr5') return state.travelFilters.protections || [];
 
         // For cb1 (Do you already have a Flat Rate Card?), return null to ensure no pre-selection
@@ -2750,6 +2932,7 @@
 
     function renderZeroState() {
         const grid = document.getElementById('cards-grid');
+        currentCards = []; // Reset current cards state when showing zero state
         const nameMap = {
             type:{travel:'Travel',cashback:'Cash back'},
             perks:{'lounge-access':'Lounge Access','no-foreign-fees':'No Foreign Transaction Fees'},
@@ -2763,11 +2946,6 @@
         grid.classList.add('showing-intro');
         grid.innerHTML = `
             <div style="width: 100%; margin: 0; padding: 2.5rem 2rem; text-align: center; background: #fff; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
-                <!-- Icon -->
-                <div style="width: 64px; height: 64px; background: #f0fdf4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem auto; font-size: 28px;">
-                    🔍
-                </div>
-                
                 <!-- Main message -->
                 <h3 style="color: #1e293b; font-weight: 600; font-size: 1.25rem; margin-bottom: 0.75rem; line-height: 1.3;">
                     No cards match your exact criteria
