@@ -1516,6 +1516,14 @@
                 console.error('Error loading cards from static JSON:', error);
                 throw error;
             }
+
+            // Initialize view with loaded data
+            filteredCards = [...allCards];
+            // Read filters from URL if any exist
+            readFiltersFromURL();
+            // Render and update counts
+            renderCards();
+            updateResultsCount();
         }
 
         function renderCards() {

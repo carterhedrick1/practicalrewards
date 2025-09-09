@@ -1555,7 +1555,7 @@
                 options: [
                     { label: '<div class="text-content"><strong>I want to earn cash back</strong></div>', value: 'cashback' },
                     { label: '<div class="text-content"><strong>I want to earn travel rewards</strong></div>', value: 'travel' },
-                    { label: '<div class="text-content"><strong>I\'m not sure, Help Me Decide</strong></div>', value: 'not-sure' }
+                    { label: '<div class="text-content"><strong>I\'m not sure, help me decide</strong></div>', value: 'not-sure' }
                 ],
                 help: 'If you are new or undecided, start with Cash Back. It is simple, real money, and a great baseline.<br><br>If you\'re experienced, or okay putting in some additional work, you can get more value out of travel cards. Know your own personality, because it is more work.<br><br>If you really have no idea, we\'d recommend learning more about each option <a href="learning.html" style="color: #059669; text-decoration: underline;">here</a> and coming back.',
                 onAnswer: (val) => { 
@@ -1736,7 +1736,7 @@
                 options: [
                     { label: '<div class="text-content"><strong>Free checked bags & earlier boarding</strong></div>', value: 'airline' },
                     { label: '<div class="text-content"><strong>A free hotel night & status perks</strong></div>', value: 'hotel' },
-                    { label: '<div class="text-content"><strong>I\'m not sure, Help Me Decide</strong></div>', value: 'not-sure' }
+                    { label: '<div class="text-content"><strong>I\'m not sure, help me decide</strong></div>', value: 'not-sure' }
                 ],
                 help: 'Go with what sounds better for your trips this year. If it\'s a toss-up, Not sure is honest.',
                 onAnswer: (val) => {
@@ -1856,7 +1856,7 @@
                     { label: '<div class="text-content"><strong>Flexible Points</strong></div>', value: 'flex' },
                     { label: '<div class="text-content"><strong>Airline Perks</strong></div>', value: 'airline' },
                     { label: '<div class="text-content"><strong>Hotel Perks</strong></div>', value: 'hotel' },
-                    { label: '<div class="text-content"><strong>I\'m not sure, Help Me Decide</strong></div>', value: 'none' }
+                    { label: '<div class="text-content"><strong>I\'m not sure, help me decide</strong></div>', value: 'none' }
                 ],
                 help: 'If you\'re just getting started, go with <strong>flexible points</strong> (also called bank points). This is what people mean by "Amex points" or "Capital One Miles." You earn on everyday spending, then use them to book on any airline or hotels.\n\n<strong>Airline and hotel cards</strong> are different. You\'re earning rewards tied to one brand, and the value shows up as that brand\'s perks—think a free night or a checked-bag benefit.\n\nFlexible points cards usually earn more on everyday spend, while airline or hotel cards are mostly about perks—so lean flexible unless your brand loyalty makes those extras a clear win.',
                 onAnswer: (val) => {
@@ -1876,7 +1876,31 @@
                 }
             },
             {
-                id: 'tr1b', branch: 'travel',
+                id: 'tr2b', branch: 'travel',
+                title: 'Do you want airport lounge access?',
+                type: 'radio',
+                options: [
+                    { label: '<div class="text-content"><strong>Must Have</strong></div>', value: 'must' },
+                    { label: '<div class="text-content"><strong>Nice To Have</strong></div>', value: 'nice' },
+                    { label: '<div class="text-content"><strong>Do not Care</strong></div>', value: 'no' }
+                ],
+                help: 'Make it Must Have only if you will fly a few times and actually use lounges—this narrows results fast.',
+                onAnswer: (val) => {
+                    if (val === 'must') { 
+                        // When lounge access is Must Have, ONLY filter for lounge access
+                        state.travelFilters.perks = ['lounge-access'];
+                        state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
+                    } else { 
+                        // When not must-have, remove lounge-access but keep other perks
+                        const arr = new Set(state.travelFilters.perks || []);
+                        arr.delete('lounge-access'); 
+                        state.travelFilters.perks = Array.from(arr);
+                        state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
+                    }
+                }
+            },
+            {
+                id: 'tr3', branch: 'travel',
                 title: 'Which brand? (check any)',
                 type: 'checkbox',
                 getOptions: () => {
@@ -1921,7 +1945,7 @@
                 onAnswer: (vals) => { state.travelFilters['airline-hotel'] = vals; }
             },
             {
-                id: 'tr3', branch: 'travel',
+                id: 'tr4', branch: 'travel',
                 title: 'Where do you want more rewards?',
                 tip: 'Choose your top category, then add others to find cards that hit multiple categories—results will match <u>all</u> categories you select.',
                 type: 'checkbox',
@@ -1950,30 +1974,6 @@
 
                     // Update toggle state when categories change
                     setTimeout(() => renderStep(), 0);
-                }
-            },
-            {
-                id: 'tr4', branch: 'travel',
-                title: 'Do you want airport lounge access?',
-                type: 'radio',
-                options: [
-                    { label: '<div class="text-content"><strong>Must-Have</strong></div>', value: 'must' },
-                    { label: '<div class="text-content"><strong>Nice to Have</strong></div>', value: 'nice' },
-                    { label: '<div class="text-content"><strong>Do not Care</strong></div>', value: 'no' }
-                ],
-                help: 'Make it Must-have only if you will fly a few times and actually use lounges—this narrows results fast.',
-                onAnswer: (val) => {
-                    if (val === 'must') { 
-                        // When lounge access is Must-have, ONLY filter for lounge access
-                        state.travelFilters.perks = ['lounge-access'];
-                        state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
-                    } else { 
-                        // When not must-have, remove lounge-access but keep other perks
-                        const arr = new Set(state.travelFilters.perks || []);
-                        arr.delete('lounge-access'); 
-                        state.travelFilters.perks = Array.from(arr);
-                        state.lastApplied = { key: 'perks', value: 'lounge-access' }; 
-                    }
                 }
             },
             {
@@ -2007,11 +2007,15 @@
                 const regularSteps = state.steps.filter(step => {
                     if (!step.branch) return true;
                     if (state.mode === 'travel') {
-                        if (step.id === 'tr1b') {
+                        if (step.id === 'tr2b') {
+                            const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
+                            return focus === 'flex' || focus === 'airline';
+                        }
+                        if (step.id === 'tr3') {
                             const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
                             return focus === 'airline' || focus === 'hotel';
                         }
-                        if (step.id === 'tr3') {
+                        if (step.id === 'tr4') {
                             const focus = Array.isArray(state.travelFilters.focus) ? state.travelFilters.focus[0] : null;
                             return focus !== 'airline' && focus !== 'hotel';
                         }
