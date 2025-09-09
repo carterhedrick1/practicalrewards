@@ -160,7 +160,7 @@
         
         /* Collapsible states - desktop version with fade and arrow like mobile */
         .help-box.collapsible .help-text {
-            max-height: 140px;
+            max-height: 112px;
             overflow: hidden;
             position: relative;
             transition: max-height 0.3s ease, margin-top 0.3s ease;
@@ -173,7 +173,7 @@
         }
         
         .help-box.collapsible.collapsed .help-text {
-            max-height: 140px;
+            max-height: 112px;
             overflow: hidden;
             position: relative;
         }
@@ -185,9 +185,9 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 70px;
-            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center 42px / 25px 25px no-repeat,
-                        linear-gradient(to bottom, rgba(248, 250, 252, 0), rgba(248, 250, 252, 0.2), rgba(248, 250, 252, 0.6), rgba(248, 250, 252, 0.9), #f8fafc);
+            height: 60px;
+            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center 85% / 20px 20px no-repeat,
+                        linear-gradient(to bottom, rgba(248, 250, 252, 0.15) 0%, rgba(248, 250, 252, 0.35) 30%, rgba(248, 250, 252, 0.65) 65%, #f8fafc 100%);
             pointer-events: none;
             z-index: 1;
         }
@@ -557,16 +557,27 @@
                 min-width: 60px;
             }
             
-            /* Mobile scroll indicator */
+            /* Mobile scroll indicator - pinned to bottom */
             .mobile-scroll-indicator {
                 background: white;
-                border-radius: 8px;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-                margin: 0 0 0.5rem 0;
-                padding: 0.25rem 0.75rem;
+                border-radius: 6px 6px 0 0;
+                box-shadow: 0 -1px 4px rgba(0,0,0,0.08);
+                margin: 0;
+                padding: 0.25rem 0.5rem;
                 text-align: center;
-                position: relative;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100vw;
+                z-index: 1000;
                 border: 1px solid #059669;
+                border-bottom: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                min-height: 40px;
             }
             
             /* Hide results bar and filter bar on mobile */
@@ -578,46 +589,32 @@
                 display: none !important;
             }
             
+            /* Add bottom padding to prevent content from being hidden behind fixed indicator */
+            .cards-grid {
+                padding-bottom: 80px !important;
+            }
+            
+            /* Also add padding to main content sections */
+            main, section {
+                padding-bottom: 80px !important;
+            }
+            
             .mobile-scroll-count {
-                font-size: 1.2rem;
+                font-size: 1rem;
                 font-weight: 700;
                 color: #059669;
                 line-height: 1;
-                margin-bottom: 0.1rem;
+                margin: 0;
             }
             
             .mobile-scroll-label {
-                font-size: 0.75rem;
+                font-size: 0.65rem;
                 color: #1e293b;
                 font-weight: 600;
-                margin-bottom: 0.25rem;
+                margin: 0;
+                white-space: nowrap;
             }
             
-            .mobile-scroll-hint {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.1rem;
-                color: #64748b;
-                font-size: 0.7rem;
-            }
-            
-            .mobile-scroll-arrow {
-                font-size: 1.1rem;
-                animation: bounce 2s infinite;
-            }
-            
-            @keyframes bounce {
-                0%, 20%, 50%, 80%, 100% {
-                    transform: translateY(0);
-                }
-                40% {
-                    transform: translateY(-10px);
-                }
-                60% {
-                    transform: translateY(-5px);
-                }
-            }
             
             /* Collapsible help box for mobile */
             .help-box {
@@ -682,7 +679,7 @@
             
             /* Collapsed state when content is too long */
             .help-box.collapsed .help-text {
-                max-height: 140px;
+                max-height: 50px;
                 overflow: hidden;
                 position: relative;
             }
@@ -693,10 +690,10 @@
                 bottom: 0;
                 left: 0;
                 right: 0;
-                height: 70px;
-                /* Very prominent chevron above the fade */
-                background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center 42px / 25px 25px no-repeat,
-                            linear-gradient(to bottom, rgba(248, 250, 252, 0), rgba(248, 250, 252, 0.2), rgba(248, 250, 252, 0.6), rgba(248, 250, 252, 0.9), #f8fafc);
+                height: 40px;
+                /* Smaller chevron and fade to take less space */
+                background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") center 18px / 20px 20px no-repeat,
+                            linear-gradient(to bottom, rgba(248, 250, 252, 0.15) 0%, rgba(248, 250, 252, 0.35) 30%, rgba(248, 250, 252, 0.65) 65%, #f8fafc 100%);
                 pointer-events: none;
                 z-index: 1;
             }
@@ -844,10 +841,6 @@
             <div class="mobile-scroll-indicator" id="mobile-scroll-indicator" style="display: none;">
                 <div class="mobile-scroll-count" id="mobile-scroll-count">0 Cards</div>
                 <div class="mobile-scroll-label">Fit Your Criteria So Far</div>
-                <div class="mobile-scroll-hint">
-                    <div>Scroll to your practical options</div>
-                    <div class="mobile-scroll-arrow">↓</div>
-                </div>
             </div>
 
             <!-- Results -->
