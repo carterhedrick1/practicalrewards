@@ -364,9 +364,9 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(250, 250, 249, 0.95);
+    background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid #e7e5e4;
+    border-bottom: 1px solid rgba(168, 230, 207, 0.3);
     z-index: 1000;
     transition: all 0.3s ease;
 }
@@ -384,13 +384,13 @@ nav {
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #059669;
+    color: #a8e6cf;
     text-decoration: none;
     transition: all 0.3s ease;
 }
 
 .logo:hover {
-    color: #047857;
+    color: #e8f4f8;
     transform: translateY(-1px);
 }
 
@@ -403,7 +403,7 @@ nav {
 
 .nav-links a {
     text-decoration: none;
-    color: #57534e;
+    color: #c2e9e0;
     font-weight: 500;
     font-size: 0.95rem;
     transition: all 0.3s ease;
@@ -423,7 +423,8 @@ nav {
 }
 
 .nav-links a:hover {
-    color: #059669;
+    color: #a8e6cf;
+    transform: translateX(4px);
 }
 
 .nav-links a:hover::after {
@@ -8199,10 +8200,10 @@ footer {
             if (header) {
                 window.addEventListener('scroll', () => {
                     if (window.scrollY > 100) {
-                        header.style.background = 'rgba(250, 250, 249, 0.98)';
-                        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                        header.style.background = 'linear-gradient(135deg, rgba(15, 32, 39, 0.98) 0%, rgba(32, 58, 67, 0.98) 70%, rgba(44, 83, 100, 0.98) 100%)';
+                        header.style.boxShadow = '0 4px 20px rgba(168, 230, 207, 0.2)';
                     } else {
-                        header.style.background = 'rgba(250, 250, 249, 0.95)';
+                        header.style.background = 'linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%)';
                         header.style.boxShadow = 'none';
                     }
                 });
@@ -8361,10 +8362,10 @@ footer {
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
             if (window.scrollY > 100) {
-                header.style.background = 'rgba(250, 250, 249, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                header.style.background = 'linear-gradient(135deg, rgba(15, 32, 39, 0.98) 0%, rgba(32, 58, 67, 0.98) 70%, rgba(44, 83, 100, 0.98) 100%)';
+                header.style.boxShadow = '0 4px 20px rgba(168, 230, 207, 0.2)';
             } else {
-                header.style.background = 'rgba(250, 250, 249, 0.95)';
+                header.style.background = 'linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%)';
                 header.style.boxShadow = 'none';
             }
         });
