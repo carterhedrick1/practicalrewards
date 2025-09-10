@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TXPB5KSTNP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TXPB5KSTNP');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Practical Picks - Practical Rewards</title>
@@ -869,15 +878,18 @@
                 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
                 scripts.forEach(s => { try { eval(s); } catch(e) { console.error(e); } });
                 
-                // Auto-scroll down past the header after it's loaded
+                // Auto-scroll down past the header after it's loaded (mobile only)
                 setTimeout(() => {
-                    const header = document.querySelector('header');
-                    if (header) {
-                        const headerHeight = header.offsetHeight;
-                        window.scrollTo({
-                            top: headerHeight,
-                            behavior: 'smooth'
-                        });
+                    // Only auto-scroll on mobile devices (viewport width <= 1024px)
+                    if (window.innerWidth <= 1024) {
+                        const header = document.querySelector('header');
+                        if (header) {
+                            const headerHeight = header.offsetHeight;
+                            window.scrollTo({
+                                top: headerHeight,
+                                behavior: 'smooth'
+                            });
+                        }
                     }
                 }, 50);
             } else { placeholder.innerHTML = html; }
