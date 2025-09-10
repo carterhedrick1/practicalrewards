@@ -22,6 +22,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0f2027">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Critical header styles - prevents loading flash -->
+    <link rel="stylesheet" href="/css/critical-header.css">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Practical Rewards">
     <meta name="msapplication-config" content="/favicons/browserconfig.xml">
@@ -159,12 +161,6 @@
 
         /* Header toggle and hamburger styles come from header.html to ensure consistency */
         
-        /* Ensure header placeholder is visible and properly positioned */
-        #header-placeholder {
-            position: relative;
-            z-index: 1000;
-            width: 100%;
-        }
         
         .loading-placeholder {
             background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);

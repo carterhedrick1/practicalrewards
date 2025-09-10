@@ -1,0 +1,67 @@
+/* Critical Header Styles - Prevents Loading Flash */
+/* This file should be linked in the <head> of every page to ensure instant header styling */
+
+/* Critical header placeholder styles */
+#header-placeholder {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
+    backdrop-filter: blur(20px);
+    border-bottom: none;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    margin-top: calc(-1 * env(safe-area-inset-top, 0));
+    padding-top: env(safe-area-inset-top, 0);
+    min-height: 80px;
+}
+
+/* Placeholder content styling while header loads */
+#header-placeholder::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'%3E%3Cg fill-opacity='0.035'%3E%3Crect x='20' y='15' width='80' height='50' rx='8' ry='8' fill='%23ffffff'/%3E%3Crect x='25' y='35' width='25' height='4' rx='2' fill='%23ffffff'/%3E%3Crect x='55' y='35' width='15' height='4' rx='2' fill='%23ffffff'/%3E%3Crect x='25' y='45' width='45' height='3' rx='1.5' fill='%23ffffff'/%3E%3C/g%3E%3C/svg%3E") center/140px 100px;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* Ensure loaded header styles take precedence */
+#header-placeholder header {
+    background: inherit;
+    position: static;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* Loading placeholder styling */
+.loading-placeholder {
+    background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
+    color: #a8e6cf;
+    padding: 1rem 2rem;
+    text-align: center;
+    font-weight: 500;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    #header-placeholder {
+        min-height: 70px;
+    }
+    
+    .loading-placeholder {
+        min-height: 70px;
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+}
