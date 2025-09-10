@@ -24,7 +24,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Practical Rewards">
-    <meta name="msapplication-TileColor" content="#047857">
     <meta name="msapplication-config" content="/favicons/browserconfig.xml">
     <title>Practical Rewards - Find Credit Cards That Actually Reward You</title>
     
@@ -159,108 +158,20 @@
         }
 
         /* Header toggle and hamburger styles come from header.html to ensure consistency */
-
-        /* Mobile Menu Styles - Ensure they work on home page */
-        .mobile-menu {
-            position: fixed !important;
-            top: 70px !important;
-            right: -320px !important;
-            width: 320px !important;
-            height: calc(100vh - 70px) !important;
-            background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%) !important;
-            z-index: 99999 !important;
-            box-shadow: -4px 0 20px rgba(5, 150, 105, 0.15) !important;
-            transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-            overflow-y: auto !important;
-            border-left: 2px solid #10b981 !important;
-            transform: none !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-
-        .mobile-menu.active {
-            right: 0 !important;
-        }
-
-        .mobile-menu-overlay {
-            position: fixed !important;
-            top: 70px !important;
-            left: 0 !important;
-            width: 100% !important;
-            height: calc(100vh - 70px) !important;
-            background: rgba(4, 120, 87, 0.15) !important;
-            backdrop-filter: blur(4px) !important;
-            z-index: 99998 !important;
-            opacity: 0 !important;
-            visibility: hidden !important;
-            transition-property: opacity, visibility !important;
-            transition-duration: 0.4s !important;
-            transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-        }
-
-        .mobile-menu-overlay.active {
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-
-        .mobile-menu-header {
-            padding: 0;
-            background: transparent;
+        
+        /* Ensure header placeholder is visible and properly positioned */
+        #header-placeholder {
             position: relative;
-            margin-bottom: 0;
-            height: 0;
+            z-index: 1000;
+            width: 100%;
         }
-
-        .mobile-nav-links {
-            list-style: none;
-            padding: 1rem 0 1rem 0;
-            margin: 0;
-        }
-
-        .mobile-nav-links li {
-            margin: 0.5rem 1rem;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-nav-links li:hover {
-            background: rgba(254, 243, 199, 0.4);
-            transform: translateX(4px);
-        }
-
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #57534e;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            position: relative;
-            border-radius: 12px;
-        }
-
-        .mobile-nav-links a:hover {
-            color: #047857;
-            background: rgba(5, 150, 105, 0.06);
-        }
-
-        .mobile-nav-links a::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-            border-radius: 0 2px 2px 0;
-        }
-
-        .mobile-nav-links a:hover::before {
-            transform: scaleY(1);
+        
+        .loading-placeholder {
+            background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
+            color: #a8e6cf;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-weight: 500;
         }
 
         /* Force smooth transitions and prevent aggressive popping */
@@ -902,22 +813,8 @@
             font-size: 0.875rem;
         }
 
-        /* Mobile Responsive */
+        /* Mobile Responsive - Basic layout only, header styles come from header.html */
         @media (max-width: 768px) {
-            /* Show mobile menu toggle */
-            .mobile-menu-toggle {
-                display: flex;
-            }
-
-            /* Hide desktop navigation */
-            .nav-links {
-                display: none;
-            }
-
-            nav {
-                padding: 0 1rem;
-                height: 70px;
-            }
 
             .hero {
                 padding: 50px 0 50px 0;
@@ -1081,11 +978,11 @@
 
                 <div class="hero-cta">
                     <a href="practical-picks.html" class="btn btn-primary">
-                        Find My Perfect Cards
+                        Try Practical Picks
                         <span>→</span>
                     </a>
                     <a href="learning.html" class="btn btn-secondary">
-                        Learn How Rewards Work
+                        How Rewards Work
                     </a>
                 </div>
                 
@@ -1098,62 +995,197 @@
 
 
     <!-- Real Value Section -->
-    <section style="padding: 100px 0; background: white;">
+    <section style="padding: 80px 0; background: white;">
         <div class="container">
-            <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-                <h2 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: #292524; margin-bottom: 1.5rem; line-height: 1.2;">What Credit Cards Can Do for You</h2>
-                <p style="font-size: 1.25rem; color: #57534e; margin-bottom: 3rem; line-height: 1.6;">From simple cash back to premium perks—here's what credit cards can offer beyond just earning rewards.</p>
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <!-- Header -->
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: #292524; margin-bottom: 1rem; line-height: 1.2;">What Credit Cards Can Do for You</h2>
+                    <p style="font-size: 1.15rem; color: #57534e; max-width: 600px; margin: 0 auto; line-height: 1.6;">From simple cash back to premium perks—here's what credit cards can offer beyond just earning rewards</p>
+                </div>
                 
-                <!-- Card Benefits Overview -->
-                <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%), url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27120%27 height=%2780%27 viewBox=%270 0 120 80%27%3E%3Cg fill-opacity=%270.1%27%3E%3Crect x=%2720%27 y=%2715%27 width=%2780%27 height=%2750%27 rx=%278%27 ry=%278%27 fill=%27%23ffffff%27/%3E%3Crect x=%2725%27 y=%2735%27 width=%2725%27 height=%274%27 rx=%272%27 fill=%27%23ffffff%27/%3E%3Crect x=%2755%27 y=%2735%27 width=%2715%27 height=%274%27 rx=%272%27 fill=%27%23ffffff%27/%3E%3Crect x=%2725%27 y=%2745%27 width=%2745%27 height=%273%27 rx=%271.5%27 fill=%27%23ffffff%27/%3E%3C/g%3E%3C/svg%3E'); background-size: 140px 100px; border-radius: 20px; padding: 3rem; margin: 3rem 0; position: relative; overflow: hidden;">
-                    
-                    <div style="position: relative; z-index: 2;">
-                        <!-- Benefits Grid -->
-                        <div class="benefits-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto;">
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Simple Value</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Money in your pocket on every single purchase. No complicated rules or bonus categories to chase.</p>
+                <!-- Benefits Sections -->
+                <div class="benefits-container">
+                    <!-- Everyday Value Section -->
+                    <div style="margin-bottom: 2.5rem;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div style="flex: 1; height: 1px; background: linear-gradient(to right, transparent, #e2e8f0, transparent);"></div>
+                            <div style="display: flex; align-items: center; gap: 1rem; justify-content: center; position: relative;">
+                                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #047857, #059669); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2v20m5-18H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <h3 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin: 0;">Everyday Value</h3>
+                                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #047857, #059669); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2v20m5-18H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <!-- Gradient underline -->
+                                <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 60%; height: 3px; background: linear-gradient(90deg, transparent 0%, #10b981 20%, #047857 50%, #059669 80%, transparent 100%); border-radius: 2px;"></div>
+                            </div>
+                            <div style="flex: 1; height: 1px; background: linear-gradient(to left, transparent, #e2e8f0, transparent);"></div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; max-width: 1300px; margin: 0 auto;">
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">Simple Value</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Money in your pocket on every single purchase. No complicated rules or bonus categories to chase.</p>
+                                </div>
                             </div>
 
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Statement Credits</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Free money back on monthly bills you pay anyway. Cancel expensive subscriptions and get cash back instead.</p>
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">Statement Credits</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Free money back on monthly bills you pay anyway. Cancel expensive subscriptions and get cash back instead.</p>
+                                </div>
                             </div>
 
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Cell Phone Insurance</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Coverage for theft or damage when you pay your bill with eligible cards. Ditch insurance or AppleCare+ you're already paying for.</p>
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">No Foreign Transaction Fees</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Some cards and debit cards charge a fee every time you swipe abroad. Avoid those unnecessary charges completely.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perks Section -->
+                    <div style="margin-bottom: 2.5rem;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div style="flex: 1; height: 1px; background: linear-gradient(to right, transparent, #e2e8f0, transparent);"></div>
+                            <div style="display: flex; align-items: center; gap: 1rem; justify-content: center; position: relative;">
+                                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #047857, #059669); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 4c-2 0-4 1.5-4 1.5L9 4 5 7c0 0 0 2 2 2l3.5 3.5 8.2 1.7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M10.5 9.5 9 4l-5 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M14.5 17.5 16 23l5-3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <h3 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin: 0;">Perks</h3>
+                                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #047857, #059669); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 4c-2 0-4 1.5-4 1.5L9 4 5 7c0 0 0 2 2 2l3.5 3.5 8.2 1.7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M10.5 9.5 9 4l-5 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M14.5 17.5 16 23l5-3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <!-- Gradient underline -->
+                                <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 60%; height: 3px; background: linear-gradient(90deg, transparent 0%, #10b981 20%, #047857 50%, #059669 80%, transparent 100%); border-radius: 2px;"></div>
+                            </div>
+                            <div style="flex: 1; height: 1px; background: linear-gradient(to left, transparent, #e2e8f0, transparent);"></div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; max-width: 1300px; margin: 0 auto;">
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">Free Checked Bags & Priority Boarding</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Save $30+ per bag on checked luggage fees. Board early to get your preferred seat.</p>
+                                </div>
                             </div>
 
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Purchase Protection</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Get your money back if something breaks or gets stolen. No deductibles or paperwork hassles.</p>
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">TSA PreCheck / Global Entry</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Save hours at the airport by skipping security lines. Get your money back on Global Entry fees.</p>
+                                </div>
                             </div>
 
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Rental Car Insurance</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Skip the rental company's $30/day insurance fee. Your card covers you with no extra cost.</p>
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">Airport Lounges</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Relax in luxury before your flight. Worth $50+ per visit in free food, drinks, and Wi-Fi.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Protections Section -->
+                    <div>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div style="flex: 1; height: 1px; background: linear-gradient(to right, transparent, #e2e8f0, transparent);"></div>
+                            <div style="display: flex; align-items: center; gap: 1rem; justify-content: center; position: relative;">
+                                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #047857, #059669); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <h3 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin: 0;">Protections</h3>
+                                <div style="width: 20px; height: 20px; background: linear-gradient(135deg, #047857, #059669); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <!-- Gradient underline -->
+                                <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 60%; height: 3px; background: linear-gradient(90deg, transparent 0%, #10b981 20%, #047857 50%, #059669 80%, transparent 100%); border-radius: 2px;"></div>
+                            </div>
+                            <div style="flex: 1; height: 1px; background: linear-gradient(to left, transparent, #e2e8f0, transparent);"></div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; max-width: 1300px; margin: 0 auto;">
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">Cell Phone Insurance</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Coverage for theft or damage when you pay your bill with eligible cards. Ditch insurance or AppleCare+ you're already paying for.</p>
+                                </div>
                             </div>
 
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Free Checked Bags & Priority Boarding</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Save $30+ per bag on checked luggage fees. Board early to get your preferred seat.</p>
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">Purchase Protection</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Get your money back if something breaks or gets stolen. No deductibles or paperwork hassles.</p>
+                                </div>
                             </div>
 
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">TSA PreCheck / Global Entry</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Save hours at the airport by skipping security lines. Get your money back on Global Entry fees.</p>
-                            </div>
-
-                            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(16, 185, 129, 0.1); text-align: center;">
-                                <h4 style="font-size: 1.1rem; font-weight: 600; color: #292524; margin: 0 0 0.75rem 0;">Airport Lounges</h4>
-                                <p style="color: #57534e; font-size: 0.9rem; line-height: 1.5; margin: 0;">Relax in luxury before your flight. Worth $50+ per visit in free food, drinks, and Wi-Fi.</p>
+                            <div class="benefit-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding: 1.75rem; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), 0 3px 10px rgba(0,0,0,0.05); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%); pointer-events: none;"></div>
+                                <div style="position: relative; z-index: 2;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.75rem 0; line-height: 1.3; text-align: center;">Rental Car Insurance</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin: 0;">Skip the rental company's $30/day insurance fee. Your card covers you with no extra cost.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <style>
+            .benefit-card:hover {
+                transform: translateY(-6px) scale(1.02);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.12), 0 8px 25px rgba(0,0,0,0.08) !important;
+                border-color: #047857;
+            }
+            
+            .benefit-card:hover h4 {
+                color: #047857;
+            }
+            
+            @media (max-width: 768px) {
+                .benefit-card {
+                    padding: 1.5rem !important;
+                }
+                
+                .benefit-card h4 {
+                    font-size: 1.05rem !important;
+                }
+                
+                .benefit-card p {
+                    font-size: 0.9rem !important;
+                }
+                
+                .benefits-container h3 {
+                    font-size: 1.2rem !important;
+                }
+            }
+        </style>
     </section>
 
     <!-- Tools Section -->
@@ -1195,10 +1227,6 @@
             </div>
         </div>
     </section>
-
-
-
-
 
     <!-- Footer placeholder -->
     <div id="footer-placeholder">
@@ -1357,7 +1385,7 @@
                 return '';
             } else if (filename === 'footer.html') {
                 return `
-                    <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 3rem;">
+                    <footer style="background: #292524; color: #a8a29e; padding: 3rem 0 1rem 0; margin-top: 0;">
                         <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
                             <div style="text-align: center;">
                                 <p>&copy; 2025 Practical Rewards. All rights reserved.</p>
