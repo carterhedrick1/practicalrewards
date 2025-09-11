@@ -337,16 +337,15 @@
             border-width: 1px !important;
         }
         
-        /* Keep image scaling and green border on mobile, disable other effects */
+        /* Disable hover effects on mobile to prevent confusion */
         @media (max-width: 768px) {
             .card-item:hover { 
-                transform: none; 
-                box-shadow: 0 2px 12px rgba(0,0,0,0.08); 
-                border-color: #059669; 
+                transform: none !important; 
+                box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important; 
+                border-color: #e5e7eb !important; 
             }
-            /* Keep image scaling on mobile devices */
             .card-item:hover .card-image { 
-                transform: scale(1.05); 
+                transform: none !important; 
             }
         }
 
@@ -545,9 +544,12 @@
             transform: scale(1.02);
         }
 
-        .options.grid-layout .option:hover {
-            border-color: #10b981;
-            background: #f9fafb;
+        /* Only show grid hover effects on devices that support hover (not mobile) */
+        @media (hover: hover) and (pointer: fine) {
+            .options.grid-layout .option:hover {
+                border-color: #10b981;
+                background: #f9fafb;
+            }
         }
 
         /* Responsive adjustments for grid */
@@ -969,16 +971,16 @@
             transition: transform 0.3s ease;
         }
         
-        /* Completion card hover effects only on mobile */
+        /* Disable completion card hover effects on mobile */
         @media (max-width: 768px) {
             .completion-card:hover {
                 transform: none !important;
                 box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
-                border: 2px solid #059669 !important;
+                border: 1px solid #059669 !important;
             }
             
             .completion-card:hover .card-image {
-                transform: scale(1.05);
+                transform: none !important;
             }
         }
 
@@ -1005,10 +1007,10 @@
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
         }
 
-        /* Single completion card hover effects only on mobile */
+        /* Disable single completion card hover effects on mobile */
         @media (max-width: 768px) {
             .completion-card.single-card:hover {
-                border: 2px solid #059669 !important;
+                border: 1px solid #059669 !important;
                 box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
             }
         }
