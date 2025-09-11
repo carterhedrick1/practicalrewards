@@ -1774,6 +1774,18 @@
             ${featuredCardsHTML}
         `;
 
+        // Re-add click handlers to featured cards since innerHTML strips them
+        if (featuredCards.length > 0) {
+            const featuredCardElements = grid.querySelectorAll('.card-item');
+            featuredCardElements.forEach((cardElement, index) => {
+                if (index < featuredCards.length) {
+                    const card = featuredCards[index];
+                    cardElement.onclick = () => window.location.href = card.url;
+                    cardElement.style.cursor = 'pointer';
+                }
+            });
+        }
+
         // Hide mobile scroll indicator when showing intro
         const mobileIndicator = document.getElementById('mobile-scroll-indicator');
         if (mobileIndicator) {
