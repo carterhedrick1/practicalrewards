@@ -1603,19 +1603,9 @@
             if (isCompletion) {
                 cardElement.classList.add('completion-card');
                 
-                // Force completion styling to ensure it shows
-                setTimeout(() => {
-                    cardElement.style.border = '3px solid #10b981';
-                    cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
-                }, 10);
-                
                 // Add extra emphasis if this is the single perfect card
                 if (cards.length === 1) {
                     cardElement.classList.add('single-card');
-                    setTimeout(() => {
-                        cardElement.style.border = '4px solid #10b981';
-                        cardElement.style.boxShadow = '0 12px 35px rgba(16, 185, 129, 0.25)';
-                    }, 10);
                 }
             } else {
                 // Add fade-in animation for new cards
@@ -1704,20 +1694,10 @@
             if (isCompletion) {
                 cardElement.classList.add('completion-card');
                 
-                // Force completion styling to ensure it shows
-                setTimeout(() => {
-                    cardElement.style.border = '3px solid #10b981';
-                    cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
-                }, 10);
-                
                 // Add extra emphasis if this is the single perfect card
                 const allCards = [...cardsToAdd, ...cardsToKeep];
                 if (allCards.length === 1) {
                     cardElement.classList.add('single-card');
-                    setTimeout(() => {
-                        cardElement.style.border = '4px solid #10b981';
-                        cardElement.style.boxShadow = '0 12px 35px rgba(16, 185, 129, 0.25)';
-                    }, 10);
                 }
             } else {
                     // Set initial invisible state for smooth fade-in
