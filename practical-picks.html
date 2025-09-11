@@ -75,7 +75,13 @@
 
         /* Wizard */
         .wizard { position: sticky; top: 100px; background: white; border: 1px solid #e5e7eb; border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 0.75rem; }
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 0.75rem; transition: all 0.3s ease; }
+        
+        .wizard.completion {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: 1px solid #059669;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
+        }
         .wizard-header { margin-bottom: .5rem; }
         .wizard-title { font-size: 1.1rem; font-weight: 700; color: #047857; }
         .wizard-title.question { font-size: 1.3rem; font-weight: 600; color: #047857; line-height: 1.3; }
@@ -739,21 +745,26 @@
         }
 
         .completion-title {
-            color: #10b981 !important;
+            color: white !important;
             font-weight: 700 !important;
             animation: celebration-bounce 0.6s ease-out;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .completion-content {
             text-align: center;
-            padding: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 12px;
+            margin: 0;
             animation: celebration-fade-in 0.8s ease-out;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
         }
 
         .celebration-icon {
             font-size: 4rem;
             margin-bottom: 1rem;
-            color: #10b981;
+            color: white;
             font-weight: bold;
             animation: celebration-scale 0.8s ease-out;
         }
@@ -761,14 +772,14 @@
         .completion-message {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #10b981;
+            color: white;
             margin-bottom: 0.5rem;
             animation: celebration-slide-up 0.8s ease-out 0.2s both;
         }
 
         .completion-subtitle {
             font-size: 1rem;
-            color: #6b7280;
+            color: rgba(255, 255, 255, 0.9);
             animation: celebration-slide-up 0.8s ease-out 0.4s both;
         }
 
@@ -798,6 +809,8 @@
         .completion-card {
             animation: completion-glow 0.8s ease-out;
             transition: all 0.3s ease !important;
+            border: 3px solid #10b981 !important;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15) !important;
         }
 
         .completion-card:hover {
@@ -813,6 +826,34 @@
             100% { 
                 border-color: #10b981;
                 box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+            }
+        }
+
+        /* Extra emphasis for the single perfect card */
+        .completion-card.single-card {
+            animation: perfect-card-glow 1.2s ease-out;
+            border: 4px solid #10b981 !important;
+            box-shadow: 0 12px 35px rgba(16, 185, 129, 0.25) !important;
+        }
+
+        .completion-card.single-card:hover {
+            transform: translateY(-16px) !important;
+            box-shadow: 0 16px 45px rgba(16, 185, 129, 0.35) !important;
+        }
+
+        @keyframes perfect-card-glow {
+            0% { 
+                border-color: #e5e7eb;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% { 
+                border-color: #10b981;
+                box-shadow: 0 12px 35px rgba(16, 185, 129, 0.25);
+                transform: scale(1);
             }
         }
 
@@ -1281,6 +1322,22 @@
         return currentStep && currentStep.type === 'completion';
     }
 
+    function forceCompletionStyling() {
+        // Force apply completion styling to all cards on the page
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(cardElement => {
+            if (cardElement.classList.contains('completion-card')) {
+                cardElement.style.border = '3px solid #10b981';
+                cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
+                
+                if (cardElement.classList.contains('single-card')) {
+                    cardElement.style.border = '4px solid #10b981';
+                    cardElement.style.boxShadow = '0 12px 35px rgba(16, 185, 129, 0.25)';
+                }
+            }
+        });
+    }
+
     let currentCards = []; // Track currently displayed cards for animation
 
     function renderCards(cards) {
@@ -1349,9 +1406,22 @@
             
             // Add special styling for completion step
             if (isCompletion) {
-                cardElement.style.border = '3px solid #10b981';
-                cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
                 cardElement.classList.add('completion-card');
+                
+                // Force completion styling to ensure it shows
+                setTimeout(() => {
+                    cardElement.style.border = '3px solid #10b981';
+                    cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
+                }, 10);
+                
+                // Add extra emphasis if this is the single perfect card
+                if (cards.length === 1) {
+                    cardElement.classList.add('single-card');
+                    setTimeout(() => {
+                        cardElement.style.border = '4px solid #10b981';
+                        cardElement.style.boxShadow = '0 12px 35px rgba(16, 185, 129, 0.25)';
+                    }, 10);
+                }
             } else {
                 // Add fade-in animation for new cards
                 cardElement.classList.add('fade-in');
@@ -1436,11 +1506,25 @@
             const newElements = cardsToAdd.map((card, index) => {
                 const cardElement = createCardElement(card);
                 
-                if (isCompletion) {
+            if (isCompletion) {
+                cardElement.classList.add('completion-card');
+                
+                // Force completion styling to ensure it shows
+                setTimeout(() => {
                     cardElement.style.border = '3px solid #10b981';
                     cardElement.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.15)';
-                    cardElement.classList.add('completion-card');
-                } else {
+                }, 10);
+                
+                // Add extra emphasis if this is the single perfect card
+                const allCards = [...cardsToAdd, ...cardsToKeep];
+                if (allCards.length === 1) {
+                    cardElement.classList.add('single-card');
+                    setTimeout(() => {
+                        cardElement.style.border = '4px solid #10b981';
+                        cardElement.style.boxShadow = '0 12px 35px rgba(16, 185, 129, 0.25)';
+                    }, 10);
+                }
+            } else {
                     // Set initial invisible state for smooth fade-in
                     cardElement.style.opacity = '0';
                     cardElement.style.transform = 'translateY(10px)';
@@ -1709,6 +1793,80 @@
         activeTab: 'cashback',
         lastApplied: null
     };
+
+    function generateFollowUpCategoryStep(mode, stepId, excludeCategory) {
+        // Get available categories excluding the one already selected
+        const allCategories = {
+            'flat-rate': { label: 'Flat Rate', value: 'flat-rate' },
+            'rent': { label: 'Rent', value: 'rent' },
+            'dining': { label: 'Dining / Bars', value: 'dining' },
+            'groceries': { label: 'Groceries', value: 'groceries' },
+            'gas|ev-charging': { label: 'Gas/EV Charging', value: 'gas|ev-charging' },
+            'travel|hotels|airlines': { label: 'Travel', value: 'travel|hotels|airlines' },
+            'rideshare|transit': { label: 'Rideshare/Transit', value: 'rideshare|transit' },
+            'streaming': { label: 'Streaming', value: 'streaming' },
+            'drugstores': { label: 'Drugstores', value: 'drugstores' },
+            'entertainment': { label: 'Entertainment', value: 'entertainment' },
+            'wholesale-clubs': { label: 'Wholesale Clubs', value: 'wholesale-clubs' },
+            'amazon': { label: 'Amazon', value: 'amazon' }
+        };
+        
+        // Get current filters and cards
+        const currentFilters = mode === 'travel' ? state.travelFilters : state.cashbackFilters;
+        const baseFilter = {};
+        if (mode === 'cashback') baseFilter.type = ['cashback'];
+        if (mode === 'travel') baseFilter.type = ['travel'];
+        const mergedFilters = mergeFilters(baseFilter, currentFilters);
+        const currentCards = applyFiltersTo(allCards, mergedFilters);
+        
+        // Only show this step if there are multiple cards
+        if (currentCards.length <= 1) return null;
+        
+        // Get available additional categories (excluding the already selected one)
+        const additionalCategories = [];
+        Object.entries(allCategories).forEach(([key, categoryInfo]) => {
+            // Skip the already selected category
+            if (key === excludeCategory || (excludeCategory && excludeCategory.includes(key))) return;
+            
+            // Skip categories that don't apply to this mode
+            if (mode === 'cashback' && key === 'rent') return;
+            if (mode === 'cashback' && (key === 'wholesale-clubs' || key === 'amazon')) {
+                // Include these for cashback
+            } else if (mode === 'travel' && (key === 'wholesale-clubs' || key === 'amazon')) {
+                return; // Skip these for travel mode
+            }
+            
+            // Test if adding this category would still leave us with cards
+            const testFilter = { ...mergedFilters };
+            const currentEarning = testFilter.earning_any || [];
+            testFilter.earning_any = [...currentEarning, key];
+            const cardsWithBothCategories = applyFiltersTo(allCards, testFilter);
+            
+            if (cardsWithBothCategories.length > 0) {
+                additionalCategories.push(categoryInfo);
+            }
+        });
+        
+        // Only create the step if we have additional categories
+        if (additionalCategories.length === 0) return null;
+        
+        return {
+            id: stepId,
+            branch: mode,
+            title: mode === 'cashback' ? 'Any other cash back categories?' : 'Any other rewards categories?',
+            tip: 'Pick an additional category to find cards that excel in multiple areas.',
+            type: 'radio',
+            options: additionalCategories,
+            help: 'Select an additional category where you want good earning rates. Cards that excel in multiple categories give you more flexibility.',
+            onAnswer: (val) => {
+                const currentFilters = mode === 'travel' ? state.travelFilters : state.cashbackFilters;
+                const currentEarning = currentFilters.earning_any || [];
+                const newEarning = [...currentEarning, val];
+                currentFilters.earning_any = Array.from(new Set(newEarning)); // Remove duplicates
+                state.lastApplied = { key: 'earning_any', value: val };
+            }
+        };
+    }
 
     function getAvailableEarningCategories(mode) {
         // Define all possible categories with their labels and values
@@ -2339,7 +2497,7 @@
     }
 
     function visibleSteps() {
-        const steps = state.steps.filter(s => {
+        let steps = state.steps.filter(s => {
             if (!s.branch) return true;
             if (s.id === 'completion') {
                 // Show completion step when we're on or past the last regular step
@@ -2406,6 +2564,41 @@
             }
             return false;
         });
+        
+        // Inject dynamic follow-up category steps
+        const dynamicSteps = [];
+        
+        // For cashback mode, inject follow-up after cb2 if there are multiple cards
+        if (state.mode === 'cashback' && state.cashbackFilters.earning_any && state.cashbackFilters.earning_any.length > 0) {
+            const selectedCategory = state.cashbackFilters.earning_any[0]; // First selected category
+            const followUpStep = generateFollowUpCategoryStep('cashback', 'cb2b', selectedCategory);
+            if (followUpStep) {
+                // Insert after cb2
+                const cb2Index = steps.findIndex(s => s.id === 'cb2');
+                if (cb2Index !== -1) {
+                    dynamicSteps.push({ step: followUpStep, insertAfter: cb2Index });
+                }
+            }
+        }
+        
+        // For travel mode, inject follow-up after tr4 if there are multiple cards
+        if (state.mode === 'travel' && state.travelFilters.earning_any && state.travelFilters.earning_any.length > 0) {
+            const selectedCategory = state.travelFilters.earning_any[0]; // First selected category
+            const followUpStep = generateFollowUpCategoryStep('travel', 'tr4b', selectedCategory);
+            if (followUpStep) {
+                // Insert after tr4
+                const tr4Index = steps.findIndex(s => s.id === 'tr4');
+                if (tr4Index !== -1) {
+                    dynamicSteps.push({ step: followUpStep, insertAfter: tr4Index });
+                }
+            }
+        }
+        
+        // Insert dynamic steps in reverse order to maintain correct indices
+        dynamicSteps.reverse().forEach(({ step, insertAfter }) => {
+            steps.splice(insertAfter + 1, 0, step);
+        });
+        
         return steps;
     }
 
@@ -2545,6 +2738,12 @@
 
         // Handle completion step with celebration
         if (step.type === 'completion') {
+            // Add completion styling to wizard
+            const wizard = document.querySelector('.wizard');
+            if (wizard) {
+                wizard.classList.add('completion');
+            }
+            
             const questionEl = document.getElementById('wizard-question');
             questionEl.textContent = step.title;
             questionEl.className = 'wizard-title completion-title';
@@ -2554,12 +2753,26 @@
             bar.style.backgroundColor = '#10b981';
             bar.classList.add('celebration-bar');
             
+            // Get current cards to customize message
+            const currentCards = getCurrentFilteredCards();
+            const cardCount = currentCards.length;
+            
+            // Customize message based on number of cards
+            let message, subtitle;
+            if (cardCount === 1) {
+                message = "We found the most practical card for you!";
+                subtitle = "This card matches all your preferences perfectly.";
+            } else {
+                message = "We've narrowed all the cards to ones that match you!";
+                subtitle = "Your personalized recommendations are ready.";
+            }
+            
             // Celebration content
             container.innerHTML = `
                 <div class="completion-content">
                     <div class="celebration-icon">✓</div>
-                    <h2 class="completion-message">We've narrowed all the cards to ones that match you!</h2>
-                    <p class="completion-subtitle">Your personalized recommendations are ready.</p>
+                    <h2 class="completion-message">${message}</h2>
+                    <p class="completion-subtitle">${subtitle}</p>
                 </div>
             `;
             
@@ -2581,7 +2794,16 @@
             
             // Re-render cards with completion styling and hide card count
             recomputeAndRender();
+            
+            // Force completion styling after a short delay to ensure it shows
+            setTimeout(forceCompletionStyling, 100);
             return;
+        } else {
+            // Remove completion styling for non-completion steps
+            const wizard = document.querySelector('.wizard');
+            if (wizard) {
+                wizard.classList.remove('completion');
+            }
         }
 
         const idx = current; bar.style.width = ((idx / total) * 100) + '%';
@@ -2607,7 +2829,7 @@
         }
 
         // Apply grid layout for category steps that have many options
-        const shouldUseGrid = (step.id === 'cb2' || step.id === 'tr3' || step.id === 'tr4');
+        const shouldUseGrid = (step.id === 'cb2' || step.id === 'cb2b' || step.id === 'tr3' || step.id === 'tr4' || step.id === 'tr4b');
         const optionsClass = shouldUseGrid ? 'options grid-layout' : 'options';
         
         // Put the question in the header and options in the container
@@ -2788,7 +3010,7 @@
         if (stepId === 'tr2') return 'focus'; // This is the flexible/airline/hotel focus question
         if (stepId === 'tr2b') return 'perks'; // This is the lounge access question
         if (stepId === 'tr3') return 'airline-hotel'; // This is the brand selection
-        if (stepId === 'tr4') return 'earning_any'; // This is the earning categories
+        if (stepId === 'tr4' || stepId === 'tr4b') return 'earning_any'; // Earning categories (including follow-up)
         if (stepId === 'tr5') return 'protections'; // This is the travel protections
         // Travel mini-quiz steps should clear the focus filter when going back
         if (stepId.startsWith('tmq')) return 'focus';
@@ -2968,11 +3190,38 @@
         const cards = applyFiltersTo(allCards, merged);
         updateActiveFilterChipsUI(merged);
         updateResultsHeadline(cards.length, total);
+        
         if (cards.length === 0) { 
             renderZeroState(); 
             // Hide Next button when no cards match
             const nextBtn = document.getElementById('next-btn');
             if (nextBtn) nextBtn.style.display = 'none';
+        } else if (cards.length === 1) {
+            // Auto-advance to completion step when we have exactly one card
+            const steps = visibleSteps();
+            const currentStep = steps[state.stepIndex];
+            
+            // Only auto-advance if we're not already on the completion step
+            if (currentStep && currentStep.id !== 'completion') {
+                console.log('🎯 Found exactly one card - auto-advancing to completion');
+                
+                // Jump to the completion step
+                const completionStepIndex = steps.findIndex(s => s.id === 'completion');
+                if (completionStepIndex !== -1) {
+                    state.stepIndex = completionStepIndex;
+                    renderStep();
+                    
+                    // Force completion styling by calling renderCardsImmediate directly
+                    renderCardsImmediate(cards, true); // true = isCompletion
+                    currentCards = [...cards];
+                    
+                    // Force completion styling after a short delay to ensure it shows
+                    setTimeout(forceCompletionStyling, 100);
+                    return;
+                }
+            }
+            
+            renderCards(cards);
         } else { 
             renderCards(cards); 
             // Show Next button if appropriate (for checkbox steps, excluding completion)
