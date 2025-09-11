@@ -13,7 +13,7 @@
     border-bottom: none;
     z-index: 1000;
     transition: all 0.3s ease;
-    overflow: hidden;
+    overflow: visible;
     margin-top: calc(-1 * env(safe-area-inset-top, 0));
     padding-top: env(safe-area-inset-top, 0);
     min-height: 80px;
@@ -38,6 +38,21 @@
     position: static;
     margin-top: 0;
     padding-top: 0;
+    overflow: visible;
+}
+
+/* Ensure mobile menu elements are not affected by placeholder styles */
+#header-placeholder .mobile-menu,
+#header-placeholder .mobile-menu-overlay {
+    position: fixed !important;
+    z-index: 999999 !important;
+}
+
+/* Ensure mobile menu toggle is clickable */
+#header-placeholder .mobile-menu-toggle {
+    position: relative !important;
+    z-index: 1001 !important;
+    pointer-events: auto !important;
 }
 
 /* Loading placeholder styling */
