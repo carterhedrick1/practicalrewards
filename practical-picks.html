@@ -1710,6 +1710,59 @@
         lastApplied: null
     };
 
+    function getAvailableEarningCategories(mode) {
+        // Define all possible categories with their labels and values
+        const allCategories = {
+            'flat-rate': { label: 'Flat Rate', value: 'flat-rate' },
+            'rent': { label: 'Rent', value: 'rent' },
+            'dining': { label: 'Dining / Bars', value: 'dining' },
+            'groceries': { label: 'Groceries', value: 'groceries' },
+            'gas|ev-charging': { label: 'Gas/EV Charging', value: 'gas|ev-charging' },
+            'travel|hotels|airlines': { label: 'Travel', value: 'travel|hotels|airlines' },
+            'rideshare|transit': { label: 'Rideshare/Transit', value: 'rideshare|transit' },
+            'streaming': { label: 'Streaming', value: 'streaming' },
+            'drugstores': { label: 'Drugstores', value: 'drugstores' },
+            'entertainment': { label: 'Entertainment', value: 'entertainment' },
+            'wholesale-clubs': { label: 'Wholesale Clubs', value: 'wholesale-clubs' },
+            'amazon': { label: 'Amazon', value: 'amazon' }
+        };
+        
+        // Get the base filter for the mode
+        const baseFilter = {};
+        if (mode === 'cashback') baseFilter.type = ['cashback'];
+        if (mode === 'travel') baseFilter.type = ['travel'];
+        
+        // Get current filters (without earning_any to test each category)
+        const currentFilters = mode === 'travel' ? state.travelFilters : state.cashbackFilters;
+        const testFilters = { ...currentFilters };
+        delete testFilters.earning_any; // Remove earning category filter to test each one
+        
+        const mergedBase = mergeFilters(baseFilter, testFilters);
+        
+        // Test each category to see if it has available cards
+        const availableCategories = [];
+        
+        Object.entries(allCategories).forEach(([key, categoryInfo]) => {
+            // Skip categories that don't apply to this mode
+            if (mode === 'cashback' && key === 'rent') return; // Rent only available for travel mode
+            if (mode === 'cashback' && (key === 'wholesale-clubs' || key === 'amazon')) {
+                // Include these for cashback
+            } else if (mode === 'travel' && (key === 'wholesale-clubs' || key === 'amazon')) {
+                return; // Skip these for travel mode
+            }
+            
+            // Test if this category has any cards
+            const testFilter = { ...mergedBase, earning_any: [key] };
+            const cardsWithCategory = applyFiltersTo(allCards, testFilter);
+            
+            if (cardsWithCategory.length > 0) {
+                availableCategories.push(categoryInfo);
+            }
+        });
+        
+        return availableCategories;
+    }
+
     function getCurrentFilteredCards() {
         if (!state.mode) return allCards;
         
@@ -2113,18 +2166,9 @@
                 title: 'Where do you want more cash back?',
                 tip: 'Pick your <strong>top priority</strong> category where you want the most cash back.',
                 type: 'radio',
-                options: [
-                    { label: 'Dining / Bars', value: 'dining' },
-                    { label: 'Groceries', value: 'groceries' },
-                    { label: 'Gas/EV Charging', value: 'gas|ev-charging' },
-                    { label: 'Travel', value: 'travel|hotels|airlines' },
-                    { label: 'Rideshare/Transit', value: 'rideshare|transit' },
-                    { label: 'Streaming', value: 'streaming' },
-                    { label: 'Drugstores', value: 'drugstores' },
-                    { label: 'Entertainment', value: 'entertainment' },
-                    { label: 'Wholesale Clubs', value: 'wholesale-clubs' },
-                    { label: 'Amazon', value: 'amazon' }
-                ],
+                get options() {
+                    return getAvailableEarningCategories('cashback');
+                },
                 help: 'Once you\'ve got a <strong>Flat Rate Card</strong> baseline, add cards that pay higher rates where you actually spend. Pick 1–2 to start; your Flat Rate Card covers the rest.\n\nCategory rules vary by card. We\'ll flag common quirks (exclusions, caps, portal-only rates) so there are no surprises.\n\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.\n• <strong>Wholesale clubs</strong> — Costco, Sam\'s Club (codes differently than groceries).\n• <strong>Amazon</strong> — The Amazon Credit card is amazing if you shop on Amazon. 5% back on everything!\n\nNot sure what to pick? Go with the categories you hit every month. Your Flat Rate Card backs up everything else.',
                 onAnswer: (val) => {
                     // Set single category selection (radio behavior)
@@ -2261,18 +2305,9 @@
                 title: 'Where do you want more rewards?',
                 tip: 'Pick your <strong>top priority</strong> category where you want the most rewards.',
                 type: 'radio',
-                options: [
-                    { label: 'Flat Rate', value: 'flat-rate' },
-                    { label: 'Rent', value: 'rent' },
-                    { label: 'Dining / Bars', value: 'dining' },
-                    { label: 'Groceries', value: 'groceries' },
-                    { label: 'Gas/EV Charging', value: 'gas|ev-charging' },
-                    { label: 'Travel', value: 'travel|hotels|airlines' },
-                    { label: 'Rideshare/Transit', value: 'rideshare|transit' },
-                    { label: 'Streaming', value: 'streaming' },
-                    { label: 'Drugstores', value: 'drugstores' },
-                    { label: 'Entertainment', value: 'entertainment' }
-                ],
+                get options() {
+                    return getAvailableEarningCategories('travel');
+                },
                 help: 'Trips start here. Want simple? Go flat-rate and stop thinking about it. Big on dining or groceries? Grab a food card and let dinner pay for flights. You know your spend—pick what actually matters to you.\n\n• <strong>Flat Rate</strong> — The glue. Works everywhere and you don\'t have to think.\n• <strong>Rent</strong> — Only one card offers points on rent, it\'s a pretty sweet setup.\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.',
                 onAnswer: (val) => {
                     // Set single category selection (radio behavior)
@@ -2462,6 +2497,14 @@
         document.getElementById('next-btn').addEventListener('click', () => {
             const steps = visibleSteps();
             if (state.stepIndex < steps.length - 1) { 
+                // Check if there are any cards available before advancing
+                const currentCards = getCurrentFilteredCards();
+                if (currentCards.length === 0) {
+                    // Don't advance if no cards match criteria
+                    // The zero state screen is already showing, so just return
+                    return;
+                }
+                
                 state.stepIndex++; 
                 renderStep(); 
                 recomputeAndRender(); // Re-render cards when advancing steps
@@ -2618,8 +2661,15 @@
         }
         
         if (step.type === 'checkbox' && step.id !== 'completion') {
-            // Show Next button for checkbox steps (except completion step)
-            nextBtn.style.display = 'inline-block';
+            // Check if there are cards available before showing Next button
+            const currentCards = getCurrentFilteredCards();
+            if (currentCards.length === 0) {
+                // Hide Next button when no cards match criteria
+                nextBtn.style.display = 'none';
+            } else {
+                // Show Next button for checkbox steps (except completion step)
+                nextBtn.style.display = 'inline-block';
+            }
         } else {
             // Hide Next button for radio steps (they auto-advance) and completion step
             nextBtn.style.display = 'none';
@@ -2659,6 +2709,14 @@
                         setTimeout(() => {
                             const steps = visibleSteps();
                             if (state.stepIndex < steps.length - 1) {
+                                // Check if there are any cards available before auto-advancing
+                                const currentCards = getCurrentFilteredCards();
+                                if (currentCards.length === 0) {
+                                    // Don't auto-advance if no cards match criteria
+                                    // The zero state screen will be showing after recomputeAndRender above
+                                    return;
+                                }
+                                
                                 state.stepIndex++;
                                 renderStep();
                                 recomputeAndRender(); // Re-render cards when auto-advancing
@@ -2876,6 +2934,14 @@
             updateActiveFilterChipsUI({});
             updateResultsHeadline(travelCards.length, total);
             renderCards(travelCards);
+            
+            // Handle Next button for travel mini-quiz
+            const steps = visibleSteps();
+            const currentStep = steps[state.stepIndex];
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn && currentStep && currentStep.type === 'checkbox' && currentStep.id !== 'completion') {
+                nextBtn.style.display = 'inline-block';
+            }
             return;
         }
 
@@ -2888,13 +2954,35 @@
             updateActiveFilterChipsUI({});
             updateResultsHeadline(allCards.length, total);
             renderCards(allCards);
+            
+            // Handle Next button for not-sure mode
+            const steps = visibleSteps();
+            const currentStep = steps[state.stepIndex];
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn && currentStep && currentStep.type === 'checkbox' && currentStep.id !== 'completion') {
+                nextBtn.style.display = 'inline-block';
+            }
             return;
         }
         const merged = mergeFilters(base, state.mode === 'travel' ? state.travelFilters : state.cashbackFilters);
         const cards = applyFiltersTo(allCards, merged);
         updateActiveFilterChipsUI(merged);
         updateResultsHeadline(cards.length, total);
-        if (cards.length === 0) { renderZeroState(); } else { renderCards(cards); }
+        if (cards.length === 0) { 
+            renderZeroState(); 
+            // Hide Next button when no cards match
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn) nextBtn.style.display = 'none';
+        } else { 
+            renderCards(cards); 
+            // Show Next button if appropriate (for checkbox steps, excluding completion)
+            const steps = visibleSteps();
+            const currentStep = steps[state.stepIndex];
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn && currentStep && currentStep.type === 'checkbox' && currentStep.id !== 'completion') {
+                nextBtn.style.display = 'inline-block';
+            }
+        }
     }
 
     function mergeFilters(a, b) {
@@ -3049,7 +3137,7 @@
             perks:{'lounge-access':'Lounge Access','no-foreign-fees':'No Foreign Transaction Fees'},
             protections:{'trip-delay-cancellation':'Trip Protections','rental-car-insurance':'Rental Car Insurance','cell-phone-protection':'Cell Phone Protection','lost-delayed-baggage':'Lost/Delayed Baggage'},
             'airline-hotel':{'delta':'Delta','united':'United','american':'American','southwest':'Southwest','jetblue':'JetBlue','alaska':'Alaska','marriott':'Marriott','hilton':'Hilton','hyatt':'Hyatt','ihg':'IHG','wyndham':'Wyndham','choice':'Choice'},
-            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','hotels':'Hotels','flights':'Flights','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment','amazon':'Amazon','gas|ev-charging':'Gas/EV Charging','rideshare|transit':'Rideshare/Transit','travel|hotels|airlines':'Travel','wholesale-clubs':'Wholesale Clubs'}
+            earning_any:{'flat-rate':'Flat Rate','dining':'Dining','groceries':'Groceries','gas':'Gas','transit':'Transit','travel':'Travel','hotels':'Hotels','flights':'Flights','drugstores':'Drugstores','online':'Online','streaming':'Streaming','telecom':'Telecom','entertainment':'Entertainment','amazon':'Amazon','gas|ev-charging':'Gas/EV Charging','rideshare|transit':'Rideshare/Transit','travel|hotels|airlines':'Travel','wholesale-clubs':'Wholesale Clubs','rent':'Rent'}
         };
         const last = state.lastApplied;
         const lastLabel = last && nameMap[last.key] ? (nameMap[last.key][last.value] || last.value) : 'the last filter';
@@ -3084,20 +3172,6 @@
                         Unselect ${lastLabel}
                     </button>
                     ` : ''}
-                    
-                    <button id="clear-current-step" style="
-                        background: white; 
-                        color: #059669; 
-                        border: 1px solid #059669; 
-                        padding: 0.75rem 1.5rem; 
-                        border-radius: 8px; 
-                        font-weight: 600; 
-                        cursor: pointer;
-                        font-size: 0.95rem;
-                        transition: all 0.2s ease;
-                    " onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='white'">
-                        Clear All Selections
-                    </button>
                 </div>
                 
                 <!-- Helpful tip -->
@@ -3118,11 +3192,6 @@
             removeBtn.addEventListener('click', () => removeFilter(last.key, last.value));
         }
         
-        // Wire up the clear current step button
-        const clearBtn = document.getElementById('clear-current-step');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => clearCurrentStepSelections());
-        }
         
         // Hide mobile scroll indicator when showing zero state
         const mobileIndicator = document.getElementById('mobile-scroll-indicator');
