@@ -676,20 +676,26 @@
                 border-radius: 6px 6px 0 0;
                 box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
                 margin: 0;
-                padding: 0.25rem 0.5rem;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                padding: 0.75rem 0;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
                 text-align: center;
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 right: 0;
-                width: 100vw;
+                width: 100vw !important;
+                max-width: none !important;
                 z-index: 1000;
                 border: none;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 gap: 0.5rem;
-                min-height: 40px;
+                min-height: 60px;
+                box-sizing: border-box;
             }
             
             /* Hide results bar and filter bar on mobile */
@@ -703,12 +709,12 @@
             
             /* Add bottom padding to prevent content from being hidden behind fixed indicator */
             .cards-grid {
-                padding-bottom: 80px !important;
+                padding-bottom: 100px !important;
             }
             
             /* Also add padding to main content sections */
             main, section {
-                padding-bottom: 80px !important;
+                padding-bottom: 100px !important;
             }
             
             .mobile-scroll-count {
