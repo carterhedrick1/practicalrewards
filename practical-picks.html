@@ -815,6 +815,46 @@
                 box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
             }
         }
+
+        /* Add padding above footer */
+        #footer-placeholder {
+            padding-top: 3rem;
+        }
+
+        /* Ensure minimum height on desktop for better visual balance */
+        @media (min-width: 768px) {
+            .coach-container {
+                min-height: 60vh;
+            }
+        }
+
+        .card-item {
+            position: relative;
+        }
+
+        /* Feature badge for special cards */
+        .feature-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0 0 6px 0;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            line-height: 1;
+            min-width: 80px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .card-item {
+            position: relative;
+        }
+
     </style>
 </head>
 <body>
@@ -1192,6 +1232,49 @@
         return div;
     }
 
+    function createFeaturedCardElement(card) {
+        const div = document.createElement('div');
+        div.className = 'card-item';
+        div.onclick = () => window.location.href = card.url;
+        const feeText = card.annualFee === 0 ? 'No AF' : `$${card.annualFee} AF`;
+        const welcomeBonus = card.welcomeBonus || 'None';
+        const earningRates = Array.isArray(card.features) ? card.features.slice(0,3).join(' • ') : '';
+        const advice = generatePracticalAdvice(card);
+
+        // Add feature badge for special cards in featured section only
+        let badgeHtml = '';
+        if (card.id === 1) { // Venture X
+            badgeHtml = '<div class="feature-badge">Travel</div>';
+        } else if (card.id === 6) { // Active Cash
+            badgeHtml = '<div class="feature-badge">Cash Back</div>';
+        }
+
+        div.innerHTML = `
+            ${badgeHtml}
+            <img src="${card.image}" alt="${card.name}" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="card-image-fallback" style="display: none;">${card.name}</div>
+            
+            <div class="card-header">
+                <h3 class="card-title">${card.name}</h3>
+            </div>
+            
+            <div class="card-meta-row">
+                <span class="meta-chip">${feeText}</span>
+                <span class="meta-chip">Welcome: ${welcomeBonus}</span>
+            </div>
+            
+            <div class="card-earning-rates">
+                <strong>Earning:</strong> ${earningRates || '1x on everything'}
+            </div>
+            
+            <div class="card-advice">
+                <div class="card-advice-label">Practical Advice</div>
+                <div class="card-advice-text">${advice}</div>
+            </div>
+        `;
+        return div;
+    }
+
     function isCompletionStep() {
         const steps = visibleSteps();
         const currentStep = steps[state.stepIndex];
@@ -1215,10 +1298,27 @@
         const cardsToAdd = cards.filter(c => !currentCardIds.has(c.id));
         const cardsToKeep = cards.filter(c => currentCardIds.has(c.id));
         
-        // If this is the first render or a major change, just render immediately
+        // If this is the first render, zero cards, or currentCards was reset, just render immediately
         if (currentCards.length === 0 || cards.length === 0) {
             renderCardsImmediate(cards, isCompletion);
             currentCards = [...cards];
+            // Ensure indicators update on immediate render paths
+            if (!isCompletion) {
+                updateMobileScrollIndicator(cards);
+                updateDesktopCardCount(cards);
+            }
+            return;
+        }
+        
+        // For filter changes (like going back), always do immediate render to avoid animation issues
+        if (cardsToAdd.length > 5 || cardsToRemove.length > 5) {
+            renderCardsImmediate(cards, isCompletion);
+            currentCards = [...cards];
+            // Ensure indicators update on immediate render paths
+            if (!isCompletion) {
+                updateMobileScrollIndicator(cards);
+                updateDesktopCardCount(cards);
+            }
             return;
         }
         
@@ -1371,6 +1471,29 @@
         const grid = document.getElementById('cards-grid');
         grid.classList.add('showing-intro');
         currentCards = []; // Reset current cards state when showing intro
+        
+        // Get featured cards data
+        const featuredCardIds = [1, 6]; // Venture X, Active Cash
+        const featuredCards = allCards.filter(card => featuredCardIds.includes(card.id));
+        
+        // Create featured cards HTML using special featured card elements (with badges)
+        let featuredCardsHTML = '';
+        if (featuredCards.length > 0) {
+            const featuredCardElements = featuredCards.map(card => {
+                const cardElement = createFeaturedCardElement(card);
+                return cardElement.outerHTML;
+            }).join('');
+            
+            featuredCardsHTML = `
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: #047857; font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; text-align: center;">Featured Picks</h3>
+                    <div class="cards-grid" style="margin-bottom: 0;">
+                        ${featuredCardElements}
+                    </div>
+                </div>
+            `;
+        }
+        
         grid.innerHTML = `
             <div style="width: 100%; margin: 0; padding: 2rem; text-align: center; background: #059669; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.15);">
                 <h2 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600;">We built Practical Picks to help you find the right card for your life.</h2>
@@ -1381,6 +1504,7 @@
                     The result? Clear, personalized options you can choose from.
                 </p>
             </div>
+            ${featuredCardsHTML}
         `;
 
         // Hide mobile scroll indicator when showing intro
@@ -1399,7 +1523,8 @@
     function updateResultsHeadline(count, total) {
         const c = document.getElementById('results-display-count');
         const t = document.getElementById('results-display-total');
-        if (c) c.textContent = count; if (t) t.textContent = total;
+        if (c) c.textContent = count; 
+        if (t) t.textContent = total;
     }
 
     function updateResultsHeadlineForQuiz() {
@@ -1986,8 +2111,8 @@
             {
                 id: 'cb2', branch: 'cashback',
                 title: 'Where do you want more cash back?',
-                tip: 'Choose your top category, then add others to find cards that hit multiple categories—results will match <u>all</u> categories you select.',
-                type: 'checkbox',
+                tip: 'Pick your <strong>top priority</strong> category where you want the most cash back.',
+                type: 'radio',
                 options: [
                     { label: 'Dining / Bars', value: 'dining' },
                     { label: 'Groceries', value: 'groceries' },
@@ -2001,18 +2126,10 @@
                     { label: 'Amazon', value: 'amazon' }
                 ],
                 help: 'Once you\'ve got a <strong>Flat Rate Card</strong> baseline, add cards that pay higher rates where you actually spend. Pick 1–2 to start; your Flat Rate Card covers the rest.\n\nCategory rules vary by card. We\'ll flag common quirks (exclusions, caps, portal-only rates) so there are no surprises.\n\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.\n• <strong>Wholesale clubs</strong> — Costco, Sam\'s Club (codes differently than groceries).\n• <strong>Amazon</strong> — The Amazon Credit card is amazing if you shop on Amazon. 5% back on everything!\n\nNot sure what to pick? Go with the categories you hit every month. Your Flat Rate Card backs up everything else.',
-                onAnswer: (vals) => {
-                    // Replace the earning_any array with the new selections (allows deselection)
-                    state.cashbackFilters['earning_any'] = [...vals];
-                    if (vals.length > 0) {
-                        state.lastApplied = { key: 'earning_any', value: vals[vals.length - 1] };
-                    } else {
-                        // Clear lastApplied if no categories are selected
-                        state.lastApplied = null;
-                    }
-
-                    // Update toggle state when categories change
-                    setTimeout(() => renderStep(), 0);
+                onAnswer: (val) => {
+                    // Set single category selection (radio behavior)
+                    state.cashbackFilters['earning_any'] = [val];
+                    state.lastApplied = { key: 'earning_any', value: val };
                 }
             },
             {
@@ -2142,8 +2259,8 @@
             {
                 id: 'tr4', branch: 'travel',
                 title: 'Where do you want more rewards?',
-                tip: 'Choose your top category, then add others to find cards that hit multiple categories—results will match all categories you select.',
-                type: 'checkbox',
+                tip: 'Pick your <strong>top priority</strong> category where you want the most rewards.',
+                type: 'radio',
                 options: [
                     { label: 'Flat Rate', value: 'flat-rate' },
                     { label: 'Rent', value: 'rent' },
@@ -2157,18 +2274,10 @@
                     { label: 'Entertainment', value: 'entertainment' }
                 ],
                 help: 'Trips start here. Want simple? Go flat-rate and stop thinking about it. Big on dining or groceries? Grab a food card and let dinner pay for flights. You know your spend—pick what actually matters to you.\n\n• <strong>Flat Rate</strong> — The glue. Works everywhere and you don\'t have to think.\n• <strong>Rent</strong> — Only one card offers points on rent, it\'s a pretty sweet setup.\n• <strong>Dining & bars</strong> — restaurants, fast food, delivery apps, coffee shops\n• <strong>Groceries</strong> — supermarkets; big-box/warehouse stores (Walmart, Target, Costco, Sam\'s Club) usually don\'t count as groceries.\n• <strong>Gas / EV charging</strong> — gas stations and many public chargers.\n• <strong>Travel</strong> — flights, hotels, and other travel. Terms vary by card—some require booking through the issuer\'s portal; others count direct bookings. Check the card\'s details.\n• <strong>Transit / rideshare</strong> — subways, buses, trains, parking, tolls, Uber/Lyft.\n• <strong>Drugstores</strong> — Walgreens, CVS, and many independents.\n• <strong>Entertainment</strong> — tickets for movies, concerts, sports, museums, zoos.',
-                onAnswer: (vals) => {
-                    // Replace the earning_any array with the new selections (allows deselection)
-                    state.travelFilters['earning_any'] = [...vals];
-                    if (vals.length > 0) {
-                        state.lastApplied = { key: 'earning_any', value: vals[vals.length - 1] };
-                    } else {
-                        // Clear lastApplied if no categories are selected
-                        state.lastApplied = null;
-                    }
-
-                    // Update toggle state when categories change
-                    setTimeout(() => renderStep(), 0);
+                onAnswer: (val) => {
+                    // Set single category selection (radio behavior)
+                    state.travelFilters['earning_any'] = [val];
+                    state.lastApplied = { key: 'earning_any', value: val };
                 }
             },
             {
@@ -2306,72 +2415,31 @@
         newBackBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('Back button clicked, current stepIndex:', state.stepIndex, 'mode:', state.mode);
-            const steps = visibleSteps();
-            console.log('🔍 Visible steps:', steps.map((s, i) => `${i}: ${s.id}`));
-            console.log('🔍 Current step:', steps[state.stepIndex] ? steps[state.stepIndex].id : 'undefined');
             
-            // Special case: if we're in travel mode but came from travel-mini-quiz, 
-            // and we're at the end showing results, go back to tr2 (focus question)
-            if (state.mode === 'travel' && state.travelFilters.focus && state.travelMiniQuizAnswers) {
-                console.log('Going back from travel mini-quiz results to tr2 (focus question)');
-                // Clear the focus filter and mini-quiz answers
-                delete state.travelFilters.focus;
-                delete state.travelMiniQuizAnswers;
-                // Go to tr2 step (flexible/airline/hotel question)
-                state.stepIndex = 1; // tr2 is at index 1 in travel mode
-                renderStep();
-                recomputeAndRender();
-                return;
-            }
-            
-            if (state.stepIndex > 0) { 
-                // Clear the selection from the current step before going back
-                const currentSteps = visibleSteps();
-                const currentStep = currentSteps[state.stepIndex];
-                if (currentStep) {
-                    const filterKey = stepToFilterKey(currentStep.id);
-                    if (filterKey) {
-                        // Determine which filter set to modify
-                        let targetFilters;
-                        if (state.mode === 'travel') {
-                            targetFilters = state.travelFilters;
-                        } else if (state.mode === 'cashback') {
-                            targetFilters = state.cashbackFilters;
-                        }
-                        
-                        if (targetFilters && targetFilters[filterKey]) {
-                            console.log(`Clearing current step filter: ${filterKey} from step ${currentStep.id}`);
-                            delete targetFilters[filterKey];
+            if (state.stepIndex > 0) {
+                console.log('🔙 Going back from step', state.stepIndex, 'to', state.stepIndex - 1);
+                
+                // Go back one step first
+                state.stepIndex--;
+
+                // After moving back, clear any selection associated with the step we have returned to
+                let steps = visibleSteps();
+                const stepNow = steps[state.stepIndex];
+                if (stepNow) {
+                    const currentFilterKey = stepToFilterKey(stepNow.id);
+                    if (currentFilterKey) {
+                        let targetFilters = state.mode === 'travel' ? state.travelFilters : state.cashbackFilters;
+                        if (targetFilters && targetFilters[currentFilterKey]) {
+                            console.log('🔙 Clearing current step filter', currentFilterKey, 'for step', stepNow.id);
+                            delete targetFilters[currentFilterKey];
                         }
                     }
                 }
-                
-                state.stepIndex--; 
-                console.log('Going back to stepIndex:', state.stepIndex);
-                
-                // Special handling: if we're going back TO the lounge access question (tr2b),
-                // clear the lounge access filter so the question truly starts fresh
-                const newCurrentSteps = visibleSteps();
-                const newCurrentStep = newCurrentSteps[state.stepIndex];
-                if (newCurrentStep && newCurrentStep.id === 'tr2b' && state.mode === 'travel') {
-                    // Remove lounge-access from perks array but keep other perks
-                    if (state.travelFilters.perks) {
-                        const perksArray = new Set(state.travelFilters.perks);
-                        perksArray.delete('lounge-access');
-                        state.travelFilters.perks = Array.from(perksArray);
-                        // If perks array is now empty, delete the property entirely
-                        if (state.travelFilters.perks.length === 0) {
-                            delete state.travelFilters.perks;
-                        }
-                        console.log('Cleared lounge-access filter when returning to tr2b');
-                    }
-                }
-                
-                // Clear filters from future steps after we've moved back
+
+                // Also clear any filters from steps after the current one to keep state consistent
                 clearFiltersFromFutureSteps(state.stepIndex);
                 
-                // If going back to the goal step (index 0), reset mode and filters
+                // If going back to the goal step, reset everything
                 if (state.stepIndex === 0) {
                     state.mode = null;
                     state.travelFilters = {};
@@ -2380,10 +2448,15 @@
                     configureModeTabs();
                 }
                 
-                renderStep(); 
+                // Force complete reset of card display
+                currentCards = [];
+                const cardsGrid = document.getElementById('cards-grid');
+                if (cardsGrid) {
+                    cardsGrid.innerHTML = '';
+                }
+                
+                renderStep();
                 recomputeAndRender();
-            } else {
-                console.log('Already at first step, cannot go back');
             }
         });
         document.getElementById('next-btn').addEventListener('click', () => {
@@ -2491,7 +2564,7 @@
         }
 
         // Apply grid layout for category steps that have many options
-        const shouldUseGrid = (step.id === 'cb2' || step.id === 'tr3' || step.id === 'tr4') && step.type === 'checkbox';
+        const shouldUseGrid = (step.id === 'cb2' || step.id === 'tr3' || step.id === 'tr4');
         const optionsClass = shouldUseGrid ? 'options grid-layout' : 'options';
         
         // Put the question in the header and options in the container
@@ -2736,12 +2809,12 @@
         if (stepId === 'goal') return state.mode;
 
         // Return current filter state for specific steps
-        if (stepId === 'cb2') return state.cashbackFilters['earning_any'] || [];
+        if (stepId === 'cb2') return state.cashbackFilters['earning_any'] ? state.cashbackFilters['earning_any'][0] : null;
         if (stepId === 'cb3') return state.cashbackFilters.protections || [];
         if (stepId === 'tr2') return state.travelFilters.focus ? state.travelFilters.focus[0] : null;
         if (stepId === 'tr2b') return null; // Always reset - no pre-selection
         if (stepId === 'tr3') return state.travelFilters['airline-hotel'] || [];
-        if (stepId === 'tr4') return state.travelFilters['earning_any'] || [];
+        if (stepId === 'tr4') return state.travelFilters['earning_any'] ? state.travelFilters['earning_any'][0] : null;
         if (stepId === 'tr5') return state.travelFilters.protections || [];
 
         // For cb1 (Do you already have a Flat Rate Card?), return null to ensure no pre-selection
