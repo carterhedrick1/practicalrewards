@@ -1,0 +1,3560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Admin - Credit Cards</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background: #f8fafc; 
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 20px;
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);    
+        }
+        
+        .header h1 { 
+            margin: 0 0 10px 0; 
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header p { 
+            margin: 0; 
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .status-bar {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            border: none;
+            text-align: center;
+        }
+        
+        .status-bar.success { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-bar.error { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .database-info {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .database-info h4 { 
+            margin: 0 0 15px 0; 
+            color: #1e293b;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .database-info p { 
+            margin: 8px 0; 
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+        
+        .controls-header {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .btn { 
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            margin: 8px; 
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-success { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-success:hover { 
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-danger { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-danger:hover { 
+            box-shadow: 0 6px 25px rgba(239, 68, 68, 0.4);
+        }
+        
+        .cards-table {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table-header h3 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .table th {
+            background: #f8fafc;
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        
+        .table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        
+        .table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .card-name {
+            font-weight: 600;
+            color: #1e293b;
+            min-width: 200px;
+        }
+        
+        .card-type {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+        
+        .card-fee {
+            font-weight: 600;
+            color: #059669;
+        }
+        
+        .card-fee.zero {
+            color: #10b981;
+        }
+        
+        .card-fee.high {
+            color: #dc2626;
+        }
+        
+        .card-bank {
+            color: #64748b;
+            font-size: 0.85rem;
+            text-transform: capitalize;
+        }
+        
+        .card-rewards {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+        
+        .card-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .card-status.active {
+            background: #dcfce7;
+            color: #059669;
+        }
+        
+        .card-status.inactive {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        
+        .card-status.coming-soon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        
+        .table-actions .btn {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+        
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; 
+            padding: 12px 16px; 
+            border: 2px solid #e5e7eb; 
+            border-radius: 12px; 
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.6); 
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content { 
+            background: white; 
+            padding: 30px; 
+            width: 90%; 
+            max-width: 800px; 
+            border-radius: 20px; 
+            max-height: 85vh;
+            overflow-y: auto;
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-sizing: border-box;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .close { 
+            float: right; 
+            font-size: 32px; 
+            font-weight: 300; 
+            cursor: pointer; 
+            color: #9ca3af;
+            transition: color 0.3s ease;
+            line-height: 1;
+        }
+        
+        .close:hover { 
+            color: #374151;
+        }
+        
+        .loading { 
+            text-align: center; 
+            padding: 60px; 
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        .error { 
+            color: #dc2626; 
+            background: #fef2f2; 
+            padding: 16px; 
+            border-radius: 12px; 
+            margin: 15px 0; 
+            border: 1px solid #fecaca;
+        }
+        
+        .success { 
+            color: #059669; 
+            background: #f0fdf4; 
+            padding: 16px; 
+            border-radius: 12px; 
+            margin: 15px 0; 
+            border: 1px solid #bbf7d0;
+        }
+        
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-grid label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-grid label:hover {
+            background: #f1f5f9;
+        }
+        
+        .checkbox-grid input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .modal h2 {
+            color: #1e293b;
+            margin-bottom: 25px;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+        
+        .form-submit {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .form-submit .btn {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Database Admin - Credit Cards</h1>
+            <p>Direct connection to your Supabase database - Real-time data management</p>
+        </div>
+
+        <div id="statusBar" class="status-bar">
+            <strong>Status:</strong> <span id="statusText">Initializing...</span>
+        </div>
+
+        <div class="database-info">
+            <h4>📊 Database Connection</h4>
+            <p><strong>URL:</strong> https://zgfglwdjmpawuoxtbwcf.supabase.com</p>
+            <p><strong>Table:</strong> cards</p>
+            <p><strong>Status:</strong> <span id="dbStatus">Checking...</span></p>
+        </div>
+
+        <div class="controls-header">
+            <button class="btn btn-success" onclick="openAddModal()">➕ Add New Card</button>
+            <button class="btn" onclick="refreshData()">🔄 Refresh Data</button>
+            <button class="btn" onclick="exportData()">📥 Export Data</button>
+            <button class="btn" onclick="importData()">📤 Import Data</button>
+            <button class="btn" onclick="setupDatabase()">🔧 Setup Database</button>
+            <button class="btn" onclick="addWellsFargoActiveCash()" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">🔧 Add Wells Fargo Card</button>
+            <button class="btn" onclick="addCitiDoubleCash()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Citi Double Cash</button>
+            <button class="btn" onclick="addAmazonPrimeVisa()" style="background: linear-gradient(135deg, #ff9500 0%, #ff6b35 100%);">🔧 Add Amazon Prime Visa</button>
+            <button class="btn" onclick="addDeltaSkyMilesReserve()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Delta Reserve</button>
+            <button class="btn" onclick="addDeltaSkyMilesGold()" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">🔧 Add Delta Gold</button>
+            <button class="btn" onclick="addAppleCard()" style="background: linear-gradient(135deg, #1d1d1f 0%, #86868b 100%);">🔧 Add Apple Card</button>
+            <button class="btn" onclick="addUnitedQuest()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add United Quest</button>
+            <button class="btn" onclick="addUnitedExplorer()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add United Explorer</button>
+            <button class="btn" onclick="addJetBluePlus()" style="background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);">🔧 Add JetBlue Plus</button>
+            <button class="btn" onclick="addSouthwestPremier()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Southwest Premier</button>
+            <button class="btn" onclick="addSouthwestPlus()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Southwest Plus</button>
+            <button class="btn" onclick="addAmexGreen()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Amex Green</button>
+            <button class="btn" onclick="addBlueCashPreferred()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Blue Cash Preferred</button>
+            <button class="btn" onclick="addCapitalOneVenture()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Capital One Venture</button>
+            <button class="btn" onclick="addBankOfAmericaUnlimitedCashRewards()" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">🔧 Add Bank of America Unlimited Cash Rewards</button>
+        <button class="btn" onclick="addUSBankSmartly()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add U.S. Bank Smartly</button>
+        <button class="btn" onclick="addCitiStrataElite()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Citi Strata Elite</button>
+        <button class="btn" onclick="addWorldOfHyatt()" style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);">🔧 Add World of Hyatt</button>
+        <button class="btn" onclick="updateWorldOfHyattImage()" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">🔧 Fix Hyatt Image</button>
+        <button class="btn" onclick="addIHGOneRewardsPremier()" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">🔧 Add IHG Premier</button>
+        </div>
+
+        <div id="cards-container">
+            <div class="loading">Loading cards from database...</div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Add New Card</h2>
+            <form id="cardForm">
+                <div class="form-group">
+                    <label>Card Name:</label>
+                    <input type="text" id="cardName" required>
+                </div>
+                <div class="form-group">
+                    <label>Type:</label>
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="cardTypes" value="travel">
+                            Travel
+                        </label>
+                        <label>
+                            <input type="checkbox" name="cardTypes" value="cashback">
+                            Cashback
+                        </label>
+                        <label>
+                            <input type="checkbox" name="cardTypes" value="hybrid">
+                            Hybrid
+                        </label>
+                        <label>
+                            <input type="checkbox" name="cardTypes" value="business">
+                            Business
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Annual Fee ($):</label>
+                    <input type="number" id="annualFee" required>
+                </div>
+                <div class="form-group">
+                    <label>Bank Type:</label>
+                    <select id="bankType" required>
+                        <option value="amex">American Express</option>
+                        <option value="chase">Chase</option>
+                        <option value="capital-one">Capital One</option>
+                        <option value="citi">Citi</option>
+                        <option value="discover">Discover</option>
+                        <option value="bilt">Bilt</option>
+                        <option value="wells-fargo">Wells Fargo</option>
+                        <option value="bank-of-america">Bank of America</option>
+                        <option value="us-bank">U.S. Bank</option>
+                        <option value="fidelity">Fidelity</option>
+                        <option value="airlines">Airlines</option>
+                        <option value="hotels">Hotels</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Rewards Type:</label>
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="rewardsTypes" value="points">
+                            Points
+                        </label>
+                        <label>
+                            <input type="checkbox" name="rewardsTypes" value="miles">
+                            Miles
+                        </label>
+                        <label>
+                            <input type="checkbox" name="rewardsTypes" value="cashback">
+                            Cashback
+                        </label>
+                        <label>
+                            <input type="checkbox" name="rewardsTypes" value="hybrid">
+                            Hybrid
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Image URL:</label>
+                    <input type="text" id="imageUrl" placeholder="images/card-name.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Earning Rate (one per line):</label>
+                    <textarea id="features" rows="4" required placeholder="5x flights & hotels&#10;3x dining&#10;1x everything else"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Welcome Bonus:</label>
+                    <input type="text" id="welcomeBonus" placeholder="80k points, 75k miles, etc.">
+                </div>
+                <div class="form-group">
+                    <label>Practical Advice:</label>
+                    <textarea id="practicalAdvice" rows="3" placeholder="Practical advice about when this card makes sense..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Card Page URL:</label>
+                    <input type="text" id="cardUrl" placeholder="card-pages/card-name.html">
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <select id="cardStatus" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="coming-soon">Coming Soon</option>
+                    </select>
+                </div>
+
+                
+                <!-- Perk Categories (exactly matching your filters) -->
+                <div class="form-group">
+                    <label>Perk Categories:</label>
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="lounge-access">
+                            Lounge Access
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="tsa-precheck">
+                            TSA Pre/Global Entry
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="clear">
+                            CLEAR
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="no-foreign-fees">
+                            No Foreign Transaction Fees
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="metal-card">
+                            Metal Card
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="free-checked-bags">
+                            Free Checked Bags
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="priority-boarding">
+                            Priority Boarding
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="annual-free-night">
+                            Annual Free Night
+                        </label>
+                        <label>
+                            <input type="checkbox" name="perkCategories" value="automatic-elite-status">
+                            Automatic Elite Status
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Airline/Hotel Categories -->
+                <div class="form-group">
+                    <label>Airline/Hotel Categories:</label>
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="delta">
+                            Delta
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="united">
+                            United
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="american">
+                            American Airlines
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="southwest">
+                            Southwest
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="jetblue">
+                            JetBlue
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="alaska">
+                            Alaska Airlines
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="marriott">
+                            Marriott
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="hilton">
+                            Hilton
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="hyatt">
+                            Hyatt
+                        </label>
+                        <label>
+                            <input type="checkbox" name="airlineHotel" value="ihg">
+                            IHG
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Earning Categories -->
+                <div class="form-group">
+                    <label>Earning Categories:</label>
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="dining">
+                            Dining
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="groceries">
+                            Groceries
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="rent">
+                            Rent
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="gas">
+                            Gas
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="ev-charging">
+                            EV Charging
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="travel">
+                            Travel
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="hotels">
+                            Hotels
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="flights">
+                            Flights
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="transit">
+                            Transit
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="rideshare">
+                            Rideshare
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="drugstores">
+                            Drugstores
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="online">
+                            Online
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="streaming">
+                            Streaming
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="telecom">
+                            Telecom
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="entertainment">
+                            Entertainment
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="wholesale-clubs">
+                            Wholesale Clubs
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="amazon">
+                            Amazon
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="rotating">
+                            Rotating
+                        </label>
+                        <label>
+                            <input type="checkbox" name="earningCategories" value="flat-rate">
+                            Flat Rate
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Protection Categories (exactly as you specified) -->
+                <div class="form-group">
+                    <label>Protection Categories:</label>
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="trip-delay-cancellation">
+                            Trip Delay & Cancellation
+                        </label>
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="lost-delayed-baggage">
+                            Lost or Delayed Baggage
+                        </label>
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="rental-car-insurance">
+                            Primary Rental Car Coverage
+                        </label>
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="cell-phone-protection">
+                            Cell Phone Protection
+                        </label>
+                        <label>
+                            <input type="checkbox" name="protectionCategories" value="purchase-protection">
+                            Purchase Protection
+                        </label>
+                    </div>
+                </div>
+                <div class="form-submit">
+                    <button type="submit" class="btn btn-success">💾 Save to Database</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Configuration with service role key (not committed to git)
+        const SUPABASE_URL = 'https://zgfglwdjmpawuoxtbwcf.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnZmdsd2RqbXBhd3VveHRid2NmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjMyMjYzNSwiZXhwIjoyMDcxODk4NjM1fQ.bdzJf-_H0wQZOj566y4ieMaRiHrt2PnEAhxUD5-jMgo';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Show that key was loaded successfully
+        console.log('✅ Service role key loaded from localStorage');
+
+        let cards = [];
+        let editingCardId = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin page loaded, checking database...');
+            checkDatabaseAndLoadCards();
+        });
+
+        async function checkDatabaseAndLoadCards() {
+            try {
+                updateStatus('Connecting to Supabase database...', 'info');
+                
+                // Force database connection - no fallback
+                await setupDatabase();
+                await loadCardsFromDatabase();
+                
+                // Try to add Wells Fargo Active Cash card after successful connection
+                if (typeof window.addWellsFargoActiveCash === 'function') {
+                    setTimeout(() => {
+                        window.addWellsFargoActiveCash();
+                    }, 1000);
+                }
+                
+                // Try to add Citi Double Cash card after successful connection
+                if (typeof window.addCitiDoubleCash === 'function') {
+                    setTimeout(() => {
+                        window.addCitiDoubleCash();
+                    }, 1500);
+                }
+                
+                // Try to add American Express Gold card after successful connection
+                if (typeof window.addAmexGold === 'function') {
+                    setTimeout(() => {
+                        window.addAmexGold();
+                    }, 2000);
+                }
+                
+                // Try to add Capital One Savor card after successful connection
+                if (typeof window.addCapitalOneSavor === 'function') {
+                    setTimeout(() => {
+                        window.addCapitalOneSavor();
+                    }, 2500);
+                }
+                
+                // Try to add American Express Green card after successful connection
+                if (typeof window.addAmexGreen === 'function') {
+                    setTimeout(() => {
+                        window.addAmexGreen();
+                    }, 3000);
+                }
+                
+                // Try to add Wells Fargo Autograph card after successful connection
+                if (typeof window.addWellsFargoAutograph === 'function') {
+                    setTimeout(() => {
+                        window.addWellsFargoAutograph();
+                    }, 3500);
+                }
+                
+                // Try to add U.S. Bank Altitude Go card after successful connection
+                if (typeof window.addUSBankAltitudeGo === 'function') {
+                    setTimeout(() => {
+                        window.addUSBankAltitudeGo();
+                    }, 4000);
+                }
+                
+                // Try to add Costco Anywhere Visa card after successful connection
+                if (typeof window.addCostcoAnywhereVisa === 'function') {
+                    setTimeout(() => {
+                        window.addCostcoAnywhereVisa();
+                    }, 4500);
+                }
+                
+                // Try to add Hilton Honors American Express Aspire card after successful connection
+                if (typeof window.addHiltonAspire === 'function') {
+                    setTimeout(() => {
+                        window.addHiltonAspire();
+                    }, 5000);
+                }
+                
+                // Try to add Citi Strata Premier card after successful connection
+                if (typeof window.addCitiStrataPremier === 'function') {
+                    setTimeout(() => {
+                        window.addCitiStrataPremier();
+                    }, 5500);
+                }
+                
+                updateStatus('✅ Connected to Supabase database successfully!', 'success');
+                updateDbStatus('Connected');
+                
+            } catch (error) {
+                console.error('Database connection failed:', error);
+                updateStatus('❌ Database connection failed: ' + error.message, 'error');
+                updateDbStatus('Connection Failed');
+                
+                // Show error details instead of fallback
+                document.getElementById('cards-container').innerHTML = `
+                    <div class="error" style="padding: 20px; text-align: center;">
+                        <h3>Database Connection Failed</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p>This admin page requires a working database connection.</p>
+                        <button class="btn" onclick="checkDatabaseAndLoadCards()">🔄 Retry Connection</button>
+                    </div>
+                `;
+            }
+        }
+
+        async function setupDatabase() {
+            try {
+                console.log('Setting up database table...');
+
+                // First, try to access the cards table to see if it exists
+                const testResponse = await supabase.from('cards').select('id').limit(1);
+
+                if (testResponse.error) {
+                    // If we get an RLS error, the table exists but we can't access it
+                    if (testResponse.error.message.includes('row-level security policy')) {
+                        console.log('✅ Cards table exists but has RLS restrictions');
+                        return true;
+                    }
+                    throw new Error(`Database access error: ${testResponse.error.message}`);
+                }
+
+                if (testResponse.data && testResponse.data.length > 0) {
+                    console.log('✅ Cards table exists and is accessible');
+                    return true;
+                } else {
+                    console.log('⚠️ Cards table exists but is empty - this is normal');
+                    return true;
+                }
+
+            } catch (error) {
+                console.error('Error setting up database:', error);
+
+                // Check if it's an RLS policy error
+                if (error.message.includes('row-level security policy')) {
+                    console.log('⚠️ RLS policy restriction detected - table exists but access is restricted');
+                    console.log('To fix this: Go to Supabase Dashboard > Table Editor > cards > RLS Policies');
+                    console.log('Either disable RLS or create policies that allow your operations');
+                    return true; // Don't throw error, just continue
+                }
+
+                throw new Error(`Database setup failed: ${error.message}`);
+            }
+        }
+
+        async function loadCardsFromDatabase() {
+            try {
+                console.log('Loading cards from database...');
+                updateStatus('Loading cards from database...', 'info');
+                
+                const { data, error } = await supabase.from('cards').select('id, name, type, annual_fee, bank_type, rewards_type, image_url, features, card_url, status, welcome_bonus, practical_advice, perk_categories, earning_categories, airline_hotels, protection_categories').order('name', { ascending: true });
+
+                if (error) {
+                    throw new Error(`Database error: ${error.message}`);
+                } else {
+                    console.log('Cards loaded from database:', data);
+                    console.log('🔍 First card raw data:', data[0]);
+                    if (data[0]) {
+                        console.log('🔍 First card features from DB:', data[0].features);
+                        console.log('🔍 First card features type:', typeof data[0].features);
+                    }
+                    
+                    // Map database fields to our expected format
+                    cards = data.map(card => ({
+                        id: card.id,
+                        name: card.name,
+                        type: card.type,
+                        annualFee: card.annual_fee || 0,
+                        bankType: card.bank_type,
+                        rewards: card.rewards_type,
+                        image: card.image_url || '',
+                        features: card.features || [],
+                        url: card.card_url || '',
+                        status: card.status || 'active',
+                        welcome_bonus: card.welcome_bonus || '',
+                        practical_advice: card.practical_advice || '',
+                        perk_categories: card.perk_categories || [],
+                        earning_categories: card.earning_categories || [],
+                        airline_hotels: card.airline_hotels || [],
+                        protection_categories: card.protection_categories || []
+                    }));
+                    
+                    renderCards();
+                    updateStatus(`Loaded ${cards.length} cards from database`, 'success');
+                    
+                    // If no cards, add some default ones
+                    if (cards.length === 0) {
+                        await addDefaultCards();
+                    }
+                    
+                }
+                
+            } catch (error) {
+                console.error('Error loading from database:', error);
+                throw error;
+            }
+        }
+
+        async function addDefaultCards() {
+            try {
+                console.log('Adding default cards to database...');
+                updateStatus('Adding default cards to database...', 'info');
+                
+                const defaultCards = [
+                    {
+                        name: "Capital One Venture X",
+                        type: "travel",
+                        annual_fee: 395,
+                        bank_type: "capital-one",
+                        rewards_type: "miles",
+                        image_url: "images/venture-x.png",
+                        features: ["2x miles on everything", "Priority Pass lounges", "TSA PreCheck credit"],
+                        welcome_bonus: "75k miles",
+                        card_url: "card-pages/venture-x.html",
+                        status: "active",
+                        practical_advice: "High annual fee card. Carefully calculate if the benefits outweigh the cost for your specific spending patterns.",
+                        perk_categories: ["lounge-access", "tsa-precheck"],
+                        protection_categories: ["trip-delay-cancellation", "rental-car-insurance"]
+                    },
+                    {
+                        name: "Chase Sapphire Reserve",
+                        type: "travel",
+                        annual_fee: 795,
+                        bank_type: "chase",
+                        rewards_type: "points",
+                        image_url: "images/sapphire-reserve.jpg",
+                        features: ["3x points on travel & dining", "Priority Pass lounges", "TSA PreCheck credit"],
+                        welcome_bonus: "60k points",
+                        card_url: "card-pages/sapphire-reserve.html",
+                        status: "active",
+                        practical_advice: "At $795/year, this is Chase's premium offering. The $300 travel credit helps, but you need to travel frequently to justify this cost.",
+                        perk_categories: ["lounge-access", "tsa-precheck"],
+                        protection_categories: ["trip-delay-cancellation", "rental-car-insurance"]
+                    }
+                ];
+
+                for (const card of defaultCards) {
+                    await saveCardToDatabase(card);
+                }
+                
+                // Reload cards after adding defaults
+                await loadCardsFromDatabase();
+                updateStatus('Default cards added successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error adding default cards:', error);
+                updateStatus('Error adding default cards: ' + error.message, 'error');
+            }
+        }
+
+        async function saveCardToDatabase(cardData) {
+            try {
+                console.log('💾 saveCardToDatabase called with:', cardData);
+                
+                // Use all the card data including welcome_bonus and practical_advice
+                const safeCardData = { ...cardData };
+                
+                let response;
+                if (editingCardId) {
+                    // Update existing card
+                    console.log('🔄 Attempting to update card with ID:', editingCardId);
+                    console.log('🔄 Update data:', safeCardData);
+                    const { data, error } = await supabase.from('cards').update(safeCardData).eq('id', editingCardId);
+                    console.log('🔄 Supabase update response:', { data, error });
+                    if (error) {
+                        console.error('❌ Supabase update error:', error);
+                        throw new Error(`Database error: ${error.message}`);
+                    } else {
+                        console.log('✅ Card updated to database successfully!', data);
+                        // Verify the update by fetching the updated record
+                        const { data: verifyData, error: verifyError } = await supabase
+                            .from('cards')
+                            .select('earning_categories')
+                            .eq('id', editingCardId)
+                            .single();
+                        console.log('🔍 Verification - updated card earning_categories:', verifyData?.earning_categories);
+
+                        if (verifyError) {
+                            console.error('❌ Verification query failed:', verifyError);
+                            console.error('This usually means RLS policies are blocking the UPDATE operation');
+                            console.log('🔧 SOLUTION: Add UPDATE policy in Supabase');
+                        } else if (verifyData?.earning_categories?.includes('groceries')) {
+                            console.error('❌ UPDATE FAILED: earning_categories still contains groceries!');
+                            console.log('Expected:', safeCardData.earning_categories);
+                            console.log('Actual:', verifyData.earning_categories);
+                            console.log('🔧 SOLUTION: Check RLS policies for UPDATE operations');
+                        } else {
+                            console.log('✅ UPDATE SUCCESS: earning_categories correctly updated!');
+                        }
+                        updateStatus('Card updated to database successfully!', 'success');
+                        return true;
+                    }
+                } else {
+                    // Add new card
+                    const { data, error } = await supabase.from('cards').insert([safeCardData]);
+                    if (error) {
+                        throw new Error(`Database error: ${error.message}`);
+                    } else {
+                        console.log('Card saved to database successfully!', data);
+                        updateStatus('Card saved to database successfully!', 'success');
+                        return true;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error saving to database:', error);
+                updateStatus('Error saving to database: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+
+
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            
+            if (cards.length === 0) {
+                container.innerHTML = '<div class="loading">No cards found in database</div>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="cards-table">
+                    <div class="table-header">
+                        <h3>📊 Credit Cards Database (${cards.length} cards)</h3>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Card Name</th>
+                                    <th>Type</th>
+                                    <th>Annual Fee</th>
+                                    <th>Bank</th>
+                                    <th>Rewards</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${cards.map(card => `
+                                    <tr>
+                                        <td class="card-name">${card.name}</td>
+                                        <td class="card-type">${Array.isArray(card.type) ? card.type.join(', ') : card.type || 'N/A'}</td>
+                                        <td class="card-fee ${card.annualFee === 0 ? 'zero' : card.annualFee >= 400 ? 'high' : ''}">$${card.annualFee || 0}</td>
+                                        <td class="card-bank">${card.bankType || 'N/A'}</td>
+                                        <td class="card-rewards">${Array.isArray(card.rewards) ? card.rewards.join(', ') : card.rewards || 'N/A'}</td>
+                                        <td><span class="card-status ${card.status || 'active'}">${card.status || 'active'}</span></td>
+                                        <td class="table-actions">
+                                            <button class="btn" onclick="editCard(${card.id})">✏️ Edit</button>
+                                            <button class="btn btn-danger" onclick="deleteCard(${card.id})">🗑️ Delete</button>
+                                            <button class="btn" onclick="viewCard(${card.id})">👁️ View</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openAddModal() {
+            editingCardId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Card to Database';
+            document.getElementById('cardForm').reset();
+            
+            // Clear all checkboxes
+            document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="earningCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="airlineHotel"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="rewardsTypes"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="cardTypes"]').forEach(checkbox => checkbox.checked = false);
+            
+            // Clear new fields
+            document.getElementById('welcomeBonus').value = '';
+            document.getElementById('practicalAdvice').value = '';
+            
+            document.getElementById('cardModal').style.display = 'block';
+        }
+
+        function editCard(cardId) {
+            console.log('🔧 editCard called with cardId:', cardId);
+            const card = cards.find(c => c.id === cardId);
+            if (!card) {
+                console.log('❌ Card not found with id:', cardId);
+                return;
+            }
+            console.log('✅ Found card to edit:', card.name);
+            
+            console.log('🔍 Editing card:', card);
+            console.log('🔍 Card type:', card.type);
+            console.log('🔍 Card rewards:', card.rewards);
+            console.log('🔍 Card welcome_bonus:', card.welcome_bonus);
+            console.log('🔍 Card practical_advice:', card.practical_advice);
+            
+            editingCardId = cardId;
+            document.getElementById('modalTitle').textContent = 'Edit Card in Database';
+            document.getElementById('cardName').value = card.name;
+            // Clear card type checkboxes first
+            document.querySelectorAll('input[name="cardTypes"]').forEach(checkbox => checkbox.checked = false);
+            
+            // Populate card types (handle both single string and array)
+            if (card.type) {
+                console.log('🔍 Processing card types:', card.type);
+                let typesToProcess = card.type;
+                
+                // If it's a string that looks like an array, try to parse it
+                if (typeof card.type === 'string' && card.type.includes('[') && card.type.includes(']')) {
+                    try {
+                        typesToProcess = JSON.parse(card.type);
+                        console.log('🔍 Parsed string array to:', typesToProcess);
+                    } catch (e) {
+                        console.log('🔍 Failed to parse as JSON, treating as comma-separated string');
+                        typesToProcess = card.type.replace(/[\[\]"]/g, '').split(',').map(s => s.trim());
+                    }
+                }
+                
+                if (Array.isArray(typesToProcess)) {
+                    typesToProcess.forEach(typeValue => {
+                        const cleanValue = typeValue.toString().trim();
+                        console.log('🔍 Looking for checkbox with value:', cleanValue);
+                        const checkbox = document.querySelector(`input[name="cardTypes"][value="${cleanValue}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            console.log('✅ Found and checked checkbox for:', cleanValue);
+                        } else {
+                            console.log('❌ No checkbox found for value:', cleanValue);
+                        }
+                    });
+                } else {
+                    // Handle single string value
+                    const cleanValue = typesToProcess.toString().trim();
+                    console.log('🔍 Looking for single type checkbox with value:', cleanValue);
+                    const checkbox = document.querySelector(`input[name="cardTypes"][value="${cleanValue}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        console.log('✅ Found and checked single type checkbox for:', cleanValue);
+                    } else {
+                        console.log('❌ No checkbox found for single type value:', cleanValue);
+                    }
+                }
+            }
+            document.getElementById('annualFee').value = card.annualFee;
+            document.getElementById('bankType').value = card.bankType;
+            // Clear rewards type checkboxes first
+            document.querySelectorAll('input[name="rewardsTypes"]').forEach(checkbox => checkbox.checked = false);
+            // Clear earning categories checkboxes first
+            document.querySelectorAll('input[name="earningCategories"]').forEach(checkbox => checkbox.checked = false);
+            // Clear perk categories checkboxes first
+            document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
+            // Clear airline/hotel checkboxes first
+            document.querySelectorAll('input[name="airlineHotel"]').forEach(checkbox => checkbox.checked = false);
+            // Clear protection categories checkboxes first
+            document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
+
+            // Populate rewards types (handle both single string and array)
+            if (card.rewards) {
+                console.log('🔍 Processing card rewards:', card.rewards);
+                let rewardsToProcess = card.rewards;
+                
+                // If it's a string that looks like an array, try to parse it
+                if (typeof card.rewards === 'string' && card.rewards.includes('[') && card.rewards.includes(']')) {
+                    try {
+                        rewardsToProcess = JSON.parse(card.rewards);
+                        console.log('🔍 Parsed rewards string array to:', rewardsToProcess);
+                    } catch (e) {
+                        console.log('🔍 Failed to parse rewards as JSON, treating as comma-separated string');
+                        rewardsToProcess = card.rewards.replace(/[\[\]"]/g, '').split(',').map(s => s.trim());
+                    }
+                }
+                
+                if (Array.isArray(rewardsToProcess)) {
+                    rewardsToProcess.forEach(rewardType => {
+                        const cleanValue = rewardType.toString().trim();
+                        console.log('🔍 Looking for rewards checkbox with value:', cleanValue);
+                        const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${cleanValue}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            console.log('✅ Found and checked rewards checkbox for:', cleanValue);
+                        } else {
+                            console.log('❌ No rewards checkbox found for value:', cleanValue);
+                        }
+                    });
+                } else {
+                    // Handle single string value
+                    const cleanValue = rewardsToProcess.toString().trim();
+                    console.log('🔍 Looking for single rewards checkbox with value:', cleanValue);
+                    const checkbox = document.querySelector(`input[name="rewardsTypes"][value="${cleanValue}"]`);
+                    if (checkbox) checkbox.checked = true;
+                }
+            }
+            document.getElementById('imageUrl').value = card.image || '';
+            
+            // Debug features data
+            console.log('🔍 Card features data:', card.features);
+            console.log('🔍 Features type:', typeof card.features);
+            console.log('🔍 Is features array?', Array.isArray(card.features));
+            
+            // Handle features data more robustly
+            let featuresValue = '';
+            if (Array.isArray(card.features)) {
+                featuresValue = card.features.join('\n');
+            } else if (typeof card.features === 'string') {
+                featuresValue = card.features;
+            } else if (card.features) {
+                featuresValue = String(card.features);
+            }
+            
+            console.log('🔍 Final features value:', featuresValue);
+            document.getElementById('features').value = featuresValue;
+            
+            document.getElementById('welcomeBonus').value = card.welcome_bonus || card.welcomeBonus || '';
+            document.getElementById('practicalAdvice').value = card.practical_advice || card.practicalAdvice || '';
+            document.getElementById('cardUrl').value = card.url || '';
+            document.getElementById('cardStatus').value = card.status || 'active';
+
+            
+            // Clear all checkboxes first
+            document.querySelectorAll('input[name="perkCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="earningCategories"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="airlineHotel"]').forEach(checkbox => checkbox.checked = false);
+            document.querySelectorAll('input[name="protectionCategories"]').forEach(checkbox => checkbox.checked = false);
+            
+            // Populate perk categories
+            if (card.perk_categories) {
+                card.perk_categories.forEach(category => {
+                    // Remove brackets and quotes from array values
+                    const cleanValue = category.replace(/[\[\]"]/g, '');
+                    const checkbox = document.querySelector(`input[name="perkCategories"][value="${cleanValue}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+            
+            // Populate earning categories
+            console.log('🔍 Card earning_categories data:', card.earning_categories);
+            if (card.earning_categories) {
+                card.earning_categories.forEach(category => {
+                    // Remove brackets and quotes from array values
+                    const cleanValue = category.replace(/[\[\]"]/g, '');
+                    console.log('🔍 Looking for earning category checkbox with value:', cleanValue);
+                    const checkbox = document.querySelector(`input[name="earningCategories"][value="${cleanValue}"]`);
+                    if (checkbox) {
+                        // Only check if this category is actually in the database data
+                        checkbox.checked = true;
+                        console.log('✅ Found and checked earning category checkbox for:', cleanValue);
+
+                        // Add event listener to track changes
+                        checkbox.addEventListener('change', function() {
+                            console.log('🔄 Checkbox changed:', cleanValue, 'checked:', this.checked);
+                        });
+                    } else {
+                        console.log('❌ No earning category checkbox found for value:', cleanValue);
+                    }
+                });
+            }
+            
+            // Populate airline/hotel categories
+            console.log('🔍 Card airline_hotels data:', card.airline_hotels);
+            if (card.airline_hotels) {
+                card.airline_hotels.forEach(category => {
+                    // Remove brackets and quotes from array values
+                    const cleanValue = category.replace(/[\[\]"]/g, '');
+                    console.log('🔍 Looking for airline/hotel checkbox with value:', cleanValue);
+                    const checkbox = document.querySelector(`input[name="airlineHotel"][value="${cleanValue}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        console.log('✅ Found and checked airline/hotel checkbox for:', cleanValue);
+                    } else {
+                        console.log('❌ No airline/hotel checkbox found for value:', cleanValue);
+                    }
+                });
+            }
+            
+            // Populate protection categories
+            if (card.protection_categories) {
+                card.protection_categories.forEach(category => {
+                    // Remove brackets and quotes from array values
+                    const cleanValue = category.replace(/[\[\]"]/g, '');
+                    const checkbox = document.querySelector(`input[name="protectionCategories"][value="${cleanValue}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+            
+            document.getElementById('cardModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('cardModal').style.display = 'none';
+            editingCardId = null;
+        }
+
+        async function deleteCard(cardId) {
+            if (confirm('Are you sure you want to delete this card from the database?')) {
+                try {
+                    const { error } = await supabase.from('cards').delete().eq('id', cardId);
+
+                    if (error) {
+                        throw new Error(`Delete failed: ${error.message}`);
+                    } else {
+                        cards = cards.filter(c => c.id !== cardId);
+                        renderCards();
+                        updateStatus('Card deleted from database successfully!', 'success');
+                    }
+                } catch (error) {
+                    console.error('Error deleting card:', error);
+                    updateStatus('Error deleting card: ' + error.message, 'error');
+                }
+            }
+        }
+
+        function viewCard(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            const cardInfo = [
+                `📋 ${card.name}`,
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                `Type: ${Array.isArray(card.type) ? card.type.join(', ') : card.type}`,
+                `Annual Fee: $${card.annualFee}`,
+                `Bank: ${card.bankType}`,
+                `Status: ${card.status || 'active'}`,
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                `Rewards: ${Array.isArray(card.rewards) ? card.rewards.join(', ') : card.rewards}`,
+                `Features: ${Array.isArray(card.features) ? card.features.join(' | ') : 'None'}`,
+                `Welcome Bonus: ${card.welcome_bonus || 'None'}`,
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                `Practical Advice: ${card.practical_advice || 'None'}`,
+                `Card URL: ${card.card_url || 'None'}`,
+                `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+                `Perks: ${Array.isArray(card.perk_categories) && card.perk_categories.length > 0 ? card.perk_categories.join(', ') : 'None'}`,
+                `Earning Categories: ${Array.isArray(card.earning_categories) && card.earning_categories.length > 0 ? card.earning_categories.join(', ') : 'None'}`,
+                `Airline/Hotel: ${Array.isArray(card.airline_hotels) && card.airline_hotels.length > 0 ? card.airline_hotels.join(', ') : 'None'}`,
+                `Protections: ${Array.isArray(card.protection_categories) && card.protection_categories.length > 0 ? card.protection_categories.join(', ') : 'None'}`
+            ].join('\n');
+
+            alert(cardInfo);
+        }
+
+        // Form submission
+        document.getElementById('cardForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate that at least one card type is selected
+            const selectedCardTypes = document.querySelectorAll('input[name="cardTypes"]:checked');
+            if (selectedCardTypes.length === 0) {
+                alert('Please select at least one card type.');
+                return;
+            }
+            
+            // Validate that at least one rewards type is selected
+            const selectedRewardsTypes = document.querySelectorAll('input[name="rewardsTypes"]:checked');
+            if (selectedRewardsTypes.length === 0) {
+                alert('Please select at least one rewards type.');
+                return;
+            }
+            
+            // Debug form data before submission
+            const featuresText = document.getElementById('features').value;
+            const featuresArray = featuresText.split('\n').filter(f => f.trim());
+            console.log('🔍 Features text from form:', featuresText);
+            console.log('🔍 Features array from form:', featuresArray);
+            
+            const cardData = {
+                name: document.getElementById('cardName').value,
+                type: Array.from(document.querySelectorAll('input[name="cardTypes"]:checked')).map(cb => cb.value),
+                annual_fee: parseInt(document.getElementById('annualFee').value),
+                bank_type: document.getElementById('bankType').value,
+                rewards_type: Array.from(document.querySelectorAll('input[name="rewardsTypes"]:checked')).map(cb => cb.value),
+                image_url: document.getElementById('imageUrl').value || '',
+                features: featuresArray,
+                welcome_bonus: document.getElementById('welcomeBonus').value || '',
+                practical_advice: document.getElementById('practicalAdvice').value || '',
+                card_url: document.getElementById('cardUrl').value || '',
+                status: document.getElementById('cardStatus').value,
+
+                perk_categories: Array.from(document.querySelectorAll('input[name="perkCategories"]:checked')).map(cb => cb.value),
+                earning_categories: (() => {
+                    const checked = Array.from(document.querySelectorAll('input[name="earningCategories"]:checked')).map(cb => cb.value);
+                    console.log('🔍 Earning categories checked at submission:', checked);
+                    return checked;
+                })(),
+                airline_hotels: Array.from(document.querySelectorAll('input[name="airlineHotel"]:checked')).map(cb => cb.value),
+                protection_categories: Array.from(document.querySelectorAll('input[name="protectionCategories"]:checked')).map(cb => cb.value)
+            };
+
+            if (editingCardId) {
+                cardData.id = editingCardId;
+            }
+
+            console.log('📝 Form submission triggered!');
+            console.log('📝 Form data being submitted:', cardData);
+
+            // Double-check earning categories right before saving
+            const finalEarningCats = Array.from(document.querySelectorAll('input[name="earningCategories"]:checked')).map(cb => cb.value);
+            console.log('🔍 Final earning categories check:', finalEarningCats);
+            cardData.earning_categories = finalEarningCats;
+
+            const saved = await saveCardToDatabase(cardData);
+            if (saved) {
+                // Reload cards from database to get updated data
+                await loadCardsFromDatabase();
+                closeModal();
+            } else {
+                console.error('❌ Failed to save card');
+            }
+        });
+
+        function refreshData() {
+            checkDatabaseAndLoadCards();
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(cards, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'cards-database-export.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedCards = JSON.parse(e.target.result);
+                            if (Array.isArray(importedCards)) {
+                                // Import directly to database - no localStorage
+                                importCardsToDatabase(importedCards);
+                            } else {
+                                alert('Invalid file format. Please select a valid JSON file.');
+                            }
+                        } catch (error) {
+                            alert('Error parsing file. Please check the file format.');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        async function importCardsToDatabase(cardsToImport) {
+            try {
+                updateStatus('Importing cards to database...', 'info');
+                let successCount = 0;
+                
+                for (const card of cardsToImport) {
+                    // Map the imported data to database format
+                    const dbCard = {
+                        name: card.name,
+                        type: card.type,
+                        annual_fee: card.annualFee || card.annual_fee || 0,
+                        bank_type: card.bankType || card.bank_type,
+                        rewards_type: card.rewards || card.rewards_type,
+                        image_url: card.image || card.image_url || '',
+                        features: card.features || [],
+                        card_url: card.url || card.card_url || '',
+                        status: card.status || 'active'
+                    };
+                    
+                    const saved = await saveCardToDatabase(dbCard);
+                    if (saved) successCount++;
+                }
+                
+                updateStatus(`Successfully imported ${successCount} cards to database!`, 'success');
+                await loadCardsFromDatabase(); // Reload to show imported cards
+                
+            } catch (error) {
+                console.error('Error importing cards:', error);
+                updateStatus('Error importing cards: ' + error.message, 'error');
+            }
+        }
+
+        function updateStatus(message, type) {
+            const statusBar = document.getElementById('statusBar');
+            const statusText = document.getElementById('statusText');
+            
+            statusText.textContent = message;
+            statusBar.className = `status-bar ${type}`;
+            
+            console.log(`Status: ${message}`);
+        }
+
+        function updateDbStatus(status) {
+            document.getElementById('dbStatus').textContent = status;
+        }
+
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cardModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Auto-add Wells Fargo Active Cash card
+        async function addWellsFargoActiveCash() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Wells Fargo Active Cash®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Wells Fargo Active Cash already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Wells Fargo Active Cash®",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "wells-fargo",
+                    rewards_type: "cashback",
+                    image_url: "images/active-cash.png",
+                    features: ["Unlimited 2% cash rewards on purchases (no categories or caps)"],
+                    welcome_bonus: "$200 cash rewards after $500 spend in the first 3 months",
+                    card_url: "card-pages/wells-fargo-active-cash.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["flat-rate"],
+                    protection_categories: ["rental-car-insurance", "cell-phone-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Wells Fargo Active Cash:', error);
+                } else {
+                    console.log('✅ Wells Fargo Active Cash added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addWellsFargoActiveCash:', error);
+            }
+        }
+
+        // Auto-add Citi Double Cash card
+        async function addCitiDoubleCash() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi Double Cash® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi Double Cash® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi Double Cash® Card",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "citi",
+                    rewards_type: "cashback",
+                    image_url: "images/citi-double-cash.png",
+                    features: ["2% back on everything (1% buy + 1% pay)", "5% total on hotels, car rentals & attractions via Citi Travel"],
+                    welcome_bonus: "$200 after $1,500 spend in 6 months",
+                    practical_advice: "Best for a simple $0-fee 2% card. Set it as your default for everyday spend; you can earn 5% total on hotels, car rentals & attractions only when booked through Citi Travel. Not ideal for international use due to a 3% foreign transaction fee.",
+                    card_url: "card-pages/citi-double-cash.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["flat-rate"],
+                    protection_categories: ["purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi Double Cash® Card:', error);
+                } else {
+                    console.log('✅ Citi Double Cash® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiDoubleCash:', error);
+            }
+        }
+
+        // Auto-add American Express Gold Card
+        async function addAmexGold() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'American Express® Gold Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('American Express® Gold Card already exists, updating with correct data...');
+                    // Update the existing card to ensure it has the correct perk categories
+                    const updateData = {
+                        perk_categories: ["no-foreign-fees", "metal-card"],
+                        earning_categories: ["dining", "groceries", "travel"],
+                        protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                    };
+                    
+                    const { data: updateResult, error: updateError } = await supabase
+                        .from('cards')
+                        .update(updateData)
+                        .eq('name', 'American Express® Gold Card');
+                    
+                    if (updateError) {
+                        console.error('Error updating American Express® Gold Card:', updateError);
+                    } else {
+                        console.log('✅ American Express® Gold Card updated successfully - removed lounge access!');
+                    }
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "American Express® Gold Card",
+                    type: "travel",
+                    annual_fee: 325,
+                    bank_type: "amex",
+                    rewards_type: "points",
+                    image_url: "images/amex-gold.png",
+                    features: ["4x points at restaurants worldwide", "4x points at U.S. supermarkets (up to $25k/year)", "3x points on flights booked directly with airlines", "1x points on everything else"],
+                    welcome_bonus: "60,000 Membership Rewards® Points after you spend $6,000 on eligible purchases with your Card within the first 6 months of Card Membership",
+                    practical_advice: "The Gold Card makes sense if you spend real money on food—think groceries at U.S. supermarkets and eating out—and you don't mind juggling a few monthly dining credits. The annual fee is on the higher side, so you want to actually use the credits and the strong earning rates to come out ahead.",
+                    card_url: "card-pages/amex-gold.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "metal-card"],
+                    earning_categories: ["dining", "groceries", "travel"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding American Express® Gold Card:', error);
+                } else {
+                    console.log('✅ American Express® Gold Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAmexGold:', error);
+            }
+        }
+
+        // Auto-add Capital One Savor card
+        async function addCapitalOneSavor() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Capital One Savor');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Capital One Savor already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Capital One Savor",
+                    type: ["cashback", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "capital-one",
+                    rewards_type: ["cashback", "hybrid"],
+                    image_url: "images/savor.png",
+                    features: ["3% back on dining, entertainment, grocery stores, and streaming", "5% back on hotels and rental cars through Capital One Travel", "1% back on everything else"],
+                    welcome_bonus: "None currently",
+                    practical_advice: "If your spending leans heavily toward groceries, dining out, concerts, movies, and streaming, the Capital One Savor is a delightfully low-effort way to stop earning nothing with a debit card and start getting solid cash back—without an annual fee and no foreign transaction fees.",
+                    card_url: "card-pages/capital-one-savor.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["dining", "entertainment", "groceries", "streaming", "travel"],
+                    protection_categories: ["rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Capital One Savor:', error);
+                } else {
+                    console.log('✅ Capital One Savor added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCapitalOneSavor:', error);
+            }
+        }
+
+        // Auto-add Chase Sapphire Preferred card
+        async function addChaseSapphirePreferred() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Chase Sapphire Preferred');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Chase Sapphire Preferred already exists, updating with correct data...');
+                    // Update the existing card to ensure it has the correct perk categories (NO lounge access)
+                    const updateData = {
+                        perk_categories: ["no-foreign-fees"],
+                        earning_categories: ["dining", "travel", "groceries", "streaming"],
+                        protection_categories: ["trip-cancellation-interruption", "trip-delay", "baggage-delay", "lost-damaged-luggage", "rental-car-insurance", "travel-accident-insurance", "purchase-protection", "extended-warranty"]
+                    };
+                    
+                    const { data: updateResult, error: updateError } = await supabase
+                        .from('cards')
+                        .update(updateData)
+                        .eq('name', 'Chase Sapphire Preferred');
+                    
+                    if (updateError) {
+                        console.error('Error updating Chase Sapphire Preferred:', updateError);
+                    } else {
+                        console.log('✅ Chase Sapphire Preferred updated successfully - confirmed NO lounge access!');
+                    }
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Chase Sapphire Preferred",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "chase",
+                    rewards_type: ["points"],
+                    image_url: "images/sapphire_preferred_card.png",
+                    features: ["3x points on dining worldwide", "2x points on travel", "1x points on everything else", "5x on travel purchased through Chase Travel", "3x on online grocery purchases", "3x on select streaming services"],
+                    welcome_bonus: "60,000 points after you spend $4,000 on purchases in the first 3 months from account opening",
+                    practical_advice: "Best starter travel card: $95 fee, 3x dining and easy partner transfers; worth it if you'll use the $50 hotel credit and book travel yearly.",
+                    card_url: "card-pages/chase-sapphire-preferred.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["dining", "travel", "groceries", "streaming"],
+                    protection_categories: ["trip-cancellation-interruption", "trip-delay", "baggage-delay", "lost-damaged-luggage", "rental-car-insurance", "travel-accident-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Chase Sapphire Preferred:', error);
+                } else {
+                    console.log('✅ Chase Sapphire Preferred added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addChaseSapphirePreferred:', error);
+            }
+        }
+
+        // Auto-add Chase Freedom Unlimited card
+        async function addChaseFreedomUnlimited() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Chase Freedom Unlimited®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Chase Freedom Unlimited® already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Chase Freedom Unlimited®",
+                    type: ["cashback", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "chase",
+                    rewards_type: ["cashback", "hybrid"],
+                    image_url: "images/freedom_unlimited.png",
+                    features: ["5x travel via Chase Travel", "3x dining (including takeout and eligible delivery)", "3x drugstore purchases", "1.5x all other purchases", "+2% on paid Lyft rides through 9/30/2027"],
+                    welcome_bonus: "$200 bonus after $500 spend in 3 months",
+                    practical_advice: "Great $0-fee starter: 5x travel, 3x dining/drugstores, 1.5x elsewhere; pair with a Sapphire for better travel value.",
+                    card_url: "card-pages/chase-freedom-unlimited.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee"],
+                    earning_categories: ["travel", "dining", "drugstores"],
+                    protection_categories: ["purchase-protection", "extended-warranty", "trip-cancellation-interruption", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Chase Freedom Unlimited®:', error);
+                } else {
+                    console.log('✅ Chase Freedom Unlimited® added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addChaseFreedomUnlimited:', error);
+            }
+        }
+
+        // Auto-add Wells Fargo Autograph Journey card
+        async function addWellsFargoAutographJourney() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Wells Fargo Autograph Journey®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Wells Fargo Autograph Journey® already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Wells Fargo Autograph Journey®",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "wells-fargo",
+                    rewards_type: ["points"],
+                    image_url: "images/autograph-journey.png",
+                    features: ["5x points on hotels", "4x points on airlines", "3x points on dining and other travel", "1x points on everything else"],
+                    welcome_bonus: "60,000 points after $4,000 spend in 3 months",
+                    practical_advice: "Great mid-tier travel card—$50 annual airline credit helps offset the $95 fee if you book at least one flight a year.",
+                    card_url: "card-pages/wells-fargo-autograph-journey.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "airline-hotel-transfers"],
+                    earning_categories: ["travel", "dining"],
+                    protection_categories: ["trip-cancellation-interruption", "trip-delay", "lost-damaged-luggage", "rental-car-insurance", "cell-phone-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Wells Fargo Autograph Journey®:', error);
+                } else {
+                    console.log('✅ Wells Fargo Autograph Journey® added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addWellsFargoAutographJourney:', error);
+            }
+        }
+
+        // Auto-add Wells Fargo Autograph card
+        async function addWellsFargoAutograph() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Wells Fargo Autograph®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Wells Fargo Autograph® already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Wells Fargo Autograph®",
+                    type: ["travel"],
+                    annual_fee: 0,
+                    bank_type: "wells-fargo",
+                    rewards_type: ["points"],
+                    image_url: "images/autograph.png",
+                    features: ["3x dining", "3x travel", "3x gas", "3x transit", "3x phone plans", "3x streaming", "1x everything else"],
+                    welcome_bonus: "20k Points",
+                    practical_advice: "Simple $0 travel card: 3x travel & dining, no credits to juggle. Upgrade to Autograph Journey if you'll use the $50 airline credit.",
+                    card_url: "card-pages/wells-fargo-autograph.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["dining", "travel", "gas", "transit", "streaming", "telecom"],
+                    protection_categories: ["cell-phone-protection", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Wells Fargo Autograph®:', error);
+                } else {
+                    console.log('✅ Wells Fargo Autograph® added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addWellsFargoAutograph:', error);
+            }
+        }
+
+        // Auto-add American Express Blue Business Plus card
+        async function addAmexBlueBusinessPlus() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'American Express Blue Business® Plus (BBP)');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('American Express Blue Business® Plus (BBP) already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "American Express Blue Business® Plus (BBP)",
+                    type: ["business", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "amex",
+                    rewards_type: ["points"],
+                    image_url: "images/blue-business-plus.png",
+                    features: ["2x points on everything (up to $50,000 per calendar year)", "1x points on everything after that", "0% intro APR on purchases for 12 months"],
+                    welcome_bonus: "15,000 points after $3,000 spend in 3 months",
+                    practical_advice: "Use this for all non-bonus spend up to $50k a year; skip abroad (2.7% fee). Great pairing with other AMEX cards.",
+                    card_url: "card-pages/amex-blue-business-plus.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "amex-offers"],
+                    earning_categories: ["flat-rate"],
+                    protection_categories: ["purchase-protection", "extended-warranty", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding American Express Blue Business® Plus (BBP):', error);
+                } else {
+                    console.log('✅ American Express Blue Business® Plus (BBP) added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAmexBlueBusinessPlus:', error);
+            }
+        }
+
+        // Auto-add Bilt Mastercard
+        async function addBiltMastercard() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Bilt Mastercard');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Bilt Mastercard already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Bilt Mastercard",
+                    type: ["travel", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "bilt",
+                    rewards_type: ["points"],
+                    image_url: "images/bilt-mastercard.png",
+                    features: ["3x points on dining", "2x points on travel", "1x points on rent via Bilt app", "Rent Day: 6x dining, 4x travel, 2x other on 1st of month"],
+                    welcome_bonus: "None",
+                    practical_advice: "This is the only card that earns points of rent. It's somewhat confusing to setup, but if you are okay with figuring it out it's awesome to earn points on rent!",
+                    card_url: "card-pages/bilt-mastercard.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "no-foreign-fees", "point-transfers"],
+                    earning_categories: ["dining", "travel"],
+                    protection_categories: ["cell-phone-protection", "trip-cancellation-interruption", "trip-delay", "rental-car-insurance", "purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Bilt Mastercard:', error);
+                } else {
+                    console.log('✅ Bilt Mastercard added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addBiltMastercard:', error);
+            }
+        }
+
+        // Auto-add Citi Custom Cash
+        async function addCitiCustomCash() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi Custom Cash® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi Custom Cash® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi Custom Cash® Card",
+                    type: ["cashback", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "citi",
+                    rewards_type: ["cashback", "points"],
+                    image_url: "images/citi-custom-cash.png",
+                    features: ["5x in your top eligible category each billing cycle (to $500; then 1x)", "1x all other purchases", "+4% additional cash back on hotels, car rentals, and attractions via Citi Travel"],
+                    welcome_bonus: "20k Points",
+                    practical_advice: "Set it and forget it—5x the first $500 each cycle, then switch cards; pair with Citi Strata Premier if you want point transfers.",
+                    card_url: "card-pages/citi-custom-cash.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "citi-entertainment"],
+                    earning_categories: ["entertainment", "travel"],
+                    protection_categories: ["purchase-protection", "extended-warranty", "id-theft-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi Custom Cash® Card:', error);
+                } else {
+                    console.log('✅ Citi Custom Cash® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiCustomCash:', error);
+            }
+        }
+
+        // Auto-add Discover it Cash Back
+        async function addDiscoverItCashBack() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Discover it® Cash Back');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Discover it® Cash Back already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Discover it® Cash Back",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "discover",
+                    rewards_type: ["cashback"],
+                    image_url: "images/discover-it.png",
+                    features: ["5% rotating categories", "1% everything else"],
+                    welcome_bonus: "Cashback Match",
+                    practical_advice: "Activate 5% each quarter, cap $1,500; year-one Match doubles earnings if you actually use it.",
+                    card_url: "card-pages/discover-it-cash-back.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "no-foreign-fees"],
+                    earning_categories: ["rotating"],
+                    protection_categories: ["fraud-liability"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Discover it® Cash Back:', error);
+                } else {
+                    console.log('✅ Discover it® Cash Back added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addDiscoverItCashBack:', error);
+            }
+        }
+
+        // Auto-add Delta SkyMiles Reserve American Express Card
+        async function addDeltaSkyMilesReserve() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Delta SkyMiles® Reserve American Express Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Delta SkyMiles® Reserve American Express Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Delta SkyMiles® Reserve American Express Card",
+                    type: ["travel"],
+                    annual_fee: 650,
+                    bank_type: "amex",
+                    rewards_type: ["miles"],
+                    image_url: "images/delta-reserve.avif",
+                    features: ["3x flights (Delta)", "1x everything else"],
+                    welcome_bonus: "70k Miles",
+                    practical_advice: "Great if you fly Delta often and will actually use the lounges, the companion ticket, and the monthly credits; otherwise the $650 hurts.",
+                    card_url: "card-pages/delta-reserve.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "free-checked-bags", "priority-boarding", "automatic-elite-status", "metal-card", "no-foreign-fees"],
+                    earning_categories: ["flights"],
+                    airline_hotels: ["delta"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "cell-phone-protection", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Delta SkyMiles® Reserve American Express Card:', error);
+                } else {
+                    console.log('✅ Delta SkyMiles® Reserve American Express Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addDeltaSkyMilesReserve:', error);
+            }
+        }
+
+        // Auto-add United Club Infinite Card
+        async function addUnitedClubInfinite() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'United Club℠ Infinite');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('United Club℠ Infinite already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "United Club℠ Infinite",
+                    type: ["travel"],
+                    annual_fee: 695,
+                    bank_type: "chase",
+                    rewards_type: ["miles"],
+                    image_url: "images/united_club_infinite_card.png",
+                    features: ["4x united purchases", "2x travel", "2x dining"],
+                    welcome_bonus: "80k Miles",
+                    practical_advice: "Fly United a lot? The lounge, 2 bags, Premier Access, and credits can offset $695; if you rarely use clubs, this will feel expensive.",
+                    card_url: "card-pages/united-club-infinite.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "free-checked-bags", "priority-boarding", "automatic-elite-status", "metal-card", "no-foreign-fees"],
+                    earning_categories: ["dining", "travel", "united-purchases"],
+                    airline_hotels: ["united"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding United Club℠ Infinite:', error);
+                } else {
+                    console.log('✅ United Club℠ Infinite added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUnitedClubInfinite:', error);
+            }
+        }
+
+        // Auto-add Citi AAdvantage Executive Card
+        async function addCitiAAdvantageExecutive() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi® / AAdvantage® Executive');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi® / AAdvantage® Executive already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi® / AAdvantage® Executive",
+                    type: ["travel"],
+                    annual_fee: 595,
+                    bank_type: "citi",
+                    rewards_type: ["miles"],
+                    image_url: "images/citi_aadavntage.png",
+                    features: ["4x american airlines", "10x hotels via aadvantagehotels.com", "10x car rentals via aadvantagecars.com"],
+                    welcome_bonus: "70k Miles",
+                    practical_advice: "If you'll visit Admirals Clubs several times a year, it's a win; if not, the fee and monthly credits will feel like homework.",
+                    card_url: "card-pages/citi-aadvantage-executive.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "free-checked-bags", "priority-boarding", "automatic-elite-status", "metal-card", "no-foreign-fees"],
+                    earning_categories: ["american-airlines", "hotels", "car-rentals"],
+                    airline_hotels: ["american-airlines"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi® / AAdvantage® Executive:', error);
+                } else {
+                    console.log('✅ Citi® / AAdvantage® Executive added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiAAdvantageExecutive:', error);
+            }
+        }
+
+        // Auto-add Capital One Venture Rewards Card
+        async function addCapitalOneVenture() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Capital One Venture Rewards');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Capital One Venture Rewards already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Capital One Venture Rewards",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "capital-one",
+                    rewards_type: ["miles"],
+                    image_url: "images/venture.png",
+                    features: ["2x miles on everything", "5x hotels (portal)", "5x rental cars (portal)"],
+                    welcome_bonus: "75k Miles",
+                    practical_advice: "Simple 2x + 5x portal; travel often? pick Venture X—the $300 credit + 10k miles usually wipe out its $395 fee.",
+                    card_url: "card-pages/capital-one-venture.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "tsa-precheck"],
+                    earning_categories: ["flat-rate", "travel"],
+                    protection_categories: ["trip-delay-cancellation", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Capital One Venture Rewards:', error);
+                } else {
+                    console.log('✅ Capital One Venture Rewards added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCapitalOneVenture:', error);
+            }
+        }
+
+        // Auto-add American Express Green Card
+        async function addAmexGreen() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'American Express® Green Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('American Express® Green Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "American Express® Green Card",
+                    type: ["travel"],
+                    annual_fee: 150,
+                    bank_type: "amex",
+                    rewards_type: ["points"],
+                    image_url: "images/amex-green.png",
+                    features: ["3x restaurants worldwide", "3x transit (U.S. rideshare, taxis, subways, buses, trains, tolls, parking)", "3x travel (flights, hotels, cruises, tours, car rentals)"],
+                    welcome_bonus: "40k Points",
+                    practical_advice: "Easy 3x on dining, travel, and transit; use the $209 Clear Plus credit or the $150 fee won't pencil out.",
+                    card_url: "card-pages/amex-green.html",
+                    status: "active",
+                    perk_categories: ["clear", "no-foreign-fees"],
+                    earning_categories: ["dining", "travel", "transit"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding American Express® Green Card:', error);
+                } else {
+                    console.log('✅ American Express® Green Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAmexGreen:', error);
+            }
+        }
+
+        // Auto-add Southwest Rapid Rewards Priority Credit Card
+        async function addSouthwestPriority() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Southwest Rapid Rewards Priority Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Southwest Rapid Rewards Priority Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Southwest Rapid Rewards Priority Credit Card",
+                    type: ["travel"],
+                    annual_fee: 229,
+                    bank_type: "chase",
+                    rewards_type: ["points"],
+                    image_url: "images/southwest-priority.png",
+                    features: ["4x southwest", "2x gas", "2x dining"],
+                    welcome_bonus: "100k Points",
+                    practical_advice: "Best for Southwest regulars who want bag + seat perks; if you rarely fly Southwest, the $229 annual fee will feel heavy.",
+                    card_url: "card-pages/southwest-priority.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees"],
+                    earning_categories: ["flights", "gas", "dining"],
+                    airline_hotels: ["southwest"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Southwest Rapid Rewards Priority Credit Card:', error);
+                } else {
+                    console.log('✅ Southwest Rapid Rewards Priority Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addSouthwestPriority:', error);
+            }
+        }
+
+        // Auto-add Amazon Prime Visa card
+        async function addAmazonPrimeVisa() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Amazon Prime Visa');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Amazon Prime Visa already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Amazon Prime Visa",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "chase",
+                    rewards_type: ["cashback"],
+                    image_url: "images/amazon.png",
+                    features: ["5x amazon.com, amazon fresh & whole foods", "5x chase travel", "2x gas, restaurants & U.S. transit/commuting", "1x everything else"],
+                    welcome_bonus: "$150 Amazon Gift Card",
+                    practical_advice: "If you already pay for Prime, this is easy 5% back on Amazon—no annual fee, no brain space required.",
+                    card_url: "card-pages/amazon-prime-visa.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["online", "groceries", "dining", "gas", "transit"],
+                    protection_categories: ["purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Amazon Prime Visa:', error);
+                } else {
+                    console.log('✅ Amazon Prime Visa added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAmazonPrimeVisa:', error);
+            }
+        }
+
+        // Auto-add Blue Cash Preferred Card from American Express
+        async function addBlueCashPreferred() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Blue Cash Preferred® Card from American Express');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Blue Cash Preferred® Card from American Express already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Blue Cash Preferred® Card from American Express",
+                    type: ["cashback"],
+                    annual_fee: 95,
+                    bank_type: "amex",
+                    rewards_type: ["cashback"],
+                    image_url: "images/blue-cash-preferred.png",
+                    features: ["6% U.S. supermarkets (up to $6,000/year, then 1%)", "6% select U.S. streaming services", "3% U.S. gas stations", "3% transit (rideshare, taxis, buses, trains, tolls, parking)", "1% everything else"],
+                    welcome_bonus: "$250 statement credit after $3,000 spend in 6 months",
+                    practical_advice: "Big on groceries and streaming? 6% cash back beats the $95 fee fast—just watch the $6,000 grocery cap.",
+                    card_url: "card-pages/amex-blue-cash-preferred.html",
+                    status: "active",
+                    perk_categories: ["amex-offers"],
+                    earning_categories: ["groceries", "streaming", "gas", "transit"],
+                    protection_categories: ["purchase-protection", "extended-warranty", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Blue Cash Preferred® Card from American Express:', error);
+                } else {
+                    console.log('✅ Blue Cash Preferred® Card from American Express added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addBlueCashPreferred:', error);
+            }
+        }
+
+        // Auto-add Bank of America Unlimited Cash Rewards
+        async function addBankOfAmericaUnlimitedCashRewards() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Bank of America® Unlimited Cash Rewards');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Bank of America® Unlimited Cash Rewards already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Bank of America® Unlimited Cash Rewards",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "bank-of-america",
+                    rewards_type: ["cashback"],
+                    image_url: "images/bank-of-america-unlimited-cash-rewards-credit-card.png.webp",
+                    features: ["2% everything (year 1)", "1.5% everything else"],
+                    welcome_bonus: "$200 Bonus",
+                    practical_advice: "Simple 1.5% everywhere (2% year 1). Best if you have Preferred Rewards; otherwise a flat 2% card is easier math.",
+                    card_url: "card-pages/bank-of-america-unlimited-cash-rewards.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee"],
+                    earning_categories: ["everything"],
+                    protection_categories: ["fraud-liability", "purchase-protection", "extended-warranty", "rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Bank of America® Unlimited Cash Rewards:', error);
+                } else {
+                    console.log('✅ Bank of America® Unlimited Cash Rewards added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addBankOfAmericaUnlimitedCashRewards:', error);
+            }
+        }
+
+        // Auto-add U.S. Bank Smartly™ Visa Signature® Card
+        async function addUSBankSmartly() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'U.S. Bank Smartly™ Visa Signature® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('U.S. Bank Smartly™ Visa Signature® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "U.S. Bank Smartly™ Visa Signature® Card",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "us-bank",
+                    rewards_type: ["cashback"],
+                    image_url: "images/us-bank-smartly.png",
+                    features: ["2% everything", "up to 4% with smartly balances", "+4% hotels & car rentals via u.s. bank travel"],
+                    welcome_bonus: "—",
+                    practical_advice: "Best if you bank with U.S. Bank—2% base; up to 4% needs large balances and deposit redemption. Otherwise, pick a simpler 2% card.",
+                    card_url: "card-pages/us-bank-smartly.html",
+                    status: "active",
+                    perk_categories: ["no-annual-fee", "intro-apr"],
+                    earning_categories: ["everything", "hotels", "car-rentals"],
+                    protection_categories: ["fraud-liability", "rental-car-insurance", "travel-assistance", "roadside-dispatch"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding U.S. Bank Smartly™ Visa Signature® Card:', error);
+                } else {
+                    console.log('✅ U.S. Bank Smartly™ Visa Signature® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUSBankSmartly:', error);
+            }
+        }
+
+        // Auto-add Fidelity Rewards Visa Signature
+        async function addFidelityRewardsVisaSignature() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Fidelity® Rewards Visa Signature® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Fidelity® Rewards Visa Signature® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Fidelity® Rewards Visa Signature® Card",
+                    type: ["cashback", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "fidelity",
+                    rewards_type: ["cashback", "hybrid"],
+                    image_url: "images/cardArt_Fidelity-Rewards-Signature-card.png",
+                    features: ["2x everything else"],
+                    welcome_bonus: "$0 Bonus",
+                    practical_advice: "Simple 2% everywhere, no fee. Best if you redeem into a Fidelity account; otherwise it's just another flat-2% card.",
+                    card_url: "card-pages/fidelity-rewards-visa-signature.html",
+                    status: "active",
+                    perk_categories: ["tsa-precheck", "no-foreign-fees"],
+                    earning_categories: ["flat-rate"],
+                    protection_categories: ["purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Fidelity® Rewards Visa Signature® Card:', error);
+                } else {
+                    console.log('✅ Fidelity® Rewards Visa Signature® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addFidelityRewardsVisaSignature:', error);
+            }
+        }
+
+        // Auto-add Citi Strata Elite card
+        async function addCitiStrataElite() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi Strata Elite℠ Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi Strata Elite℠ Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi Strata Elite℠ Card",
+                    type: "travel",
+                    annual_fee: 595,
+                    bank_type: "citi",
+                    rewards_type: "points",
+                    image_url: "images/Strata-Elite.png",
+                    features: ["12x hotels, car rentals & attractions via cititravel.com", "6x air via cititravel.com", "6x restaurants on Friday & Saturday 6 p.m.–6 a.m. ET (Citi Nights)", "3x restaurants other times", "1.5x everything else"],
+                    welcome_bonus: "80k Points",
+                    practical_advice: "Portal bookers and weekend diners win here; the $595 fee pays only if you use the hotel credit, Splurge picks, Blacklane, and lounges.",
+                    card_url: "card-pages/citi-strata-elite.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "tsa-precheck", "no-foreign-fees", "metal-card"],
+                    earning_categories: ["dining", "travel", "hotels"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi Strata Elite℠ Card:', error);
+                } else {
+                    console.log('✅ Citi Strata Elite℠ Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiStrataElite:', error);
+            }
+        }
+
+        // Auto-add U.S. Bank Altitude Go card
+        async function addUSBankAltitudeGo() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'U.S. Bank Altitude® Go Visa Signature®');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('U.S. Bank Altitude® Go Visa Signature® already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "U.S. Bank Altitude® Go Visa Signature®",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "us-bank",
+                    rewards_type: "points",
+                    image_url: "images/altitude-go.png",
+                    features: ["4x restaurants, takeout & delivery (first $2,000 each quarter)", "2x groceries", "2x gas & EV charging", "2x streaming services", "1x everything else"],
+                    welcome_bonus: "20k Points",
+                    practical_advice: "Great $0 dining card. 4x is capped each quarter; $15 streaming credit helps. A 3% foreign fee means leave it home abroad.",
+                    card_url: "card-pages/us-bank-altitude-go.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["dining", "groceries", "gas", "streaming"],
+                    protection_categories: []
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding U.S. Bank Altitude® Go Visa Signature®:', error);
+                } else {
+                    console.log('✅ U.S. Bank Altitude® Go Visa Signature® added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUSBankAltitudeGo:', error);
+            }
+        }
+
+        // Auto-add Costco Anywhere Visa card
+        async function addCostcoAnywhereVisa() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Costco Anywhere Visa® Card by Citi');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Costco Anywhere Visa® Card by Citi already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Costco Anywhere Visa® Card by Citi",
+                    type: "cashback",
+                    annual_fee: 0,
+                    bank_type: "citi",
+                    rewards_type: "cashback",
+                    image_url: "images/costco-anywhere.png",
+                    features: ["5% gas at Costco (with 4% other gas & EV charging on a combined $7,000/year cap; then 1%)", "3% restaurants", "3% eligible travel (incl. Costco Travel)", "2% Costco & Costco.com", "1% everything else"],
+                    welcome_bonus: "$0 Bonus",
+                    practical_advice: "Great Costco card if you buy gas and shop there; rewards arrive once a year as a certificate, not monthly cash. No foreign fees helps.",
+                    card_url: "card-pages/costco-anywhere-visa.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["gas", "dining", "travel"],
+                    protection_categories: ["rental-car-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Costco Anywhere Visa® Card by Citi:', error);
+                } else {
+                    console.log('✅ Costco Anywhere Visa® Card by Citi added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCostcoAnywhereVisa:', error);
+            }
+        }
+
+        // Auto-add Hilton Honors American Express Aspire card
+        async function addHiltonAspire() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Hilton Honors American Express Aspire Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Hilton Honors American Express Aspire Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Hilton Honors American Express Aspire Card",
+                    type: "travel",
+                    annual_fee: 550,
+                    bank_type: "amex",
+                    rewards_type: "points",
+                    image_url: "images/AspireCard.png",
+                    features: ["14x hotels & resorts booked direct with Hilton", "7x flights booked direct or via amex travel", "7x U.S. restaurants & car rentals booked direct with select companies", "3x everything else"],
+                    welcome_bonus: "150k Points",
+                    practical_advice: "Get it if you'll use the resort credits, flight credits, and yearly free nights; otherwise the $550 fee will sting.",
+                    card_url: "card-pages/hilton-aspire.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "tsa-precheck", "clear", "no-foreign-fees", "metal-card", "automatic-elite-status"],
+                    earning_categories: ["hotels", "flights", "dining", "car-rentals"],
+                    protection_categories: ["trip-delay-cancellation", "trip-cancellation-interruption", "rental-car-insurance", "baggage-insurance", "purchase-protection", "extended-warranty", "cell-phone-protection"],
+                    airline_hotels: ["hilton"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Hilton Honors American Express Aspire Card:', error);
+                } else {
+                    console.log('✅ Hilton Honors American Express Aspire Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addHiltonAspire:', error);
+            }
+        }
+
+        // Auto-add Marriott Bonvoy Brilliant card
+        async function addMarriottBonvoyBrilliant() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Marriott Bonvoy Brilliant® (Amex)');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Marriott Bonvoy Brilliant® (Amex) already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Marriott Bonvoy Brilliant® (Amex)",
+                    type: "travel",
+                    annual_fee: 650,
+                    bank_type: "amex",
+                    rewards_type: "points",
+                    image_url: "images/marriotbonvoy.avif",
+                    features: ["6x hotels", "3x dining", "3x flights"],
+                    welcome_bonus: "185k Points",
+                    practical_advice: "If you sleep at Marriott even a handful of nights a year, this card makes the math pretty easy. The free night certificate (worth up to 85,000 points) plus the monthly dining credits can wipe out most of the annual fee, and Platinum Elite status gets you upgrades, breakfast at many brands, and late checkout.",
+                    card_url: "card-pages/marriott-bonvoy-brilliant.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "tsa-precheck", "no-foreign-fees", "metal-card", "annual-free-night", "automatic-elite-status"],
+                    earning_categories: ["hotels", "flights", "dining"],
+                    protection_categories: ["trip-delay-cancellation", "trip-cancellation-interruption", "rental-car-insurance", "baggage-insurance", "purchase-protection", "extended-warranty", "cell-phone-protection"],
+                    airline_hotels: ["marriott"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Marriott Bonvoy Brilliant® (Amex):', error);
+                } else {
+                    console.log('✅ Marriott Bonvoy Brilliant® (Amex) added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addMarriottBonvoyBrilliant:', error);
+            }
+        }
+
+        // Auto-add World of Hyatt Credit Card
+        async function addWorldOfHyatt() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'World of Hyatt® Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('World of Hyatt® Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "World of Hyatt® Credit Card",
+                    type: "travel",
+                    annual_fee: 95,
+                    bank_type: "chase",
+                    rewards_type: "points",
+                    image_url: "images/world_of_hyatt_card.png",
+                    features: ["4x hyatt hotels & resorts", "2x restaurants", "2x airline tickets purchased direct", "2x local transit & fitness clubs"],
+                    welcome_bonus: "60k Points",
+                    practical_advice: "An easy keeper if you use the annual Category 1–4 free night and eat out monthly; otherwise it is just a $95 souvenir.",
+                    card_url: "card-pages/world-of-hyatt.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "annual-free-night", "automatic-elite-status"],
+                    earning_categories: ["hotels", "flights", "dining", "transit"],
+                    protection_categories: ["trip-delay-cancellation", "trip-cancellation-interruption", "rental-car-insurance", "baggage-insurance", "purchase-protection", "extended-warranty"],
+                    airline_hotels: ["hyatt"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding World of Hyatt® Credit Card:', error);
+                } else {
+                    console.log('✅ World of Hyatt® Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addWorldOfHyatt:', error);
+            }
+        }
+
+        // Update World of Hyatt card image
+        async function updateWorldOfHyattImage() {
+            try {
+                const { data, error } = await supabase
+                    .from('cards')
+                    .update({ image_url: "images/world_of_hyatt_card.png" })
+                    .eq('name', 'World of Hyatt® Credit Card');
+
+                if (error) {
+                    console.error('Error updating World of Hyatt image:', error);
+                } else {
+                    console.log('✅ World of Hyatt image updated successfully!');
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in updateWorldOfHyattImage:', error);
+            }
+        }
+
+        // Auto-add IHG One Rewards Premier Credit Card
+        async function addIHGOneRewardsPremier() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'IHG® One Rewards Premier Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('IHG® One Rewards Premier Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "IHG® One Rewards Premier Credit Card",
+                    type: "travel",
+                    annual_fee: 99,
+                    bank_type: "chase",
+                    rewards_type: "points",
+                    image_url: "images/ihg_premier_card.png",
+                    features: ["10x hotels", "5x travel", "5x dining"],
+                    welcome_bonus: "165k Points",
+                    practical_advice: "Book IHG at least once a year? The 40k free night plus the 4th-night-free perk can more than cover the $99 fee.",
+                    card_url: "card-pages/ihg-one-rewards-premier.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "annual-free-night", "automatic-elite-status"],
+                    earning_categories: ["hotels", "flights", "dining", "gas"],
+                    protection_categories: ["trip-delay-cancellation", "trip-cancellation-interruption", "baggage-insurance", "purchase-protection"],
+                    airline_hotels: ["ihg"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding IHG® One Rewards Premier Credit Card:', error);
+                } else {
+                    console.log('✅ IHG® One Rewards Premier Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addIHGOneRewardsPremier:', error);
+            }
+        }
+
+        // Auto-add Citi Strata Premier Credit Card
+        async function addCitiStrataPremier() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi Strata Premier');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi Strata Premier already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi Strata Premier",
+                    type: "travel",
+                    annual_fee: 95,
+                    bank_type: "citi",
+                    rewards_type: "points",
+                    image_url: "images/citi-strata-premier-credit-card_306x192.webp",
+                    features: ["3x dining", "3x groceries", "3x flights", "10x hotels via Citi Travel", "3x gas & EV charging", "1x everything else"],
+                    welcome_bonus: "60k Points",
+                    practical_advice: "3x on dining, groceries, flights + easy $100 hotel discount. Best if you'll transfer points; cash-back purists may want a simpler card.",
+                    card_url: "card-pages/citi-strata-premier.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["dining", "groceries", "flights", "hotels", "gas", "ev-charging"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi Strata Premier:', error);
+                } else {
+                    console.log('✅ Citi Strata Premier added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiStrataPremier:', error);
+            }
+        }
+
+        // Auto-add Delta SkyMiles Gold American Express Card
+        async function addDeltaSkyMilesGold() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Delta SkyMiles Gold American Express Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Delta SkyMiles Gold American Express Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Delta SkyMiles Gold American Express Card",
+                    type: ["travel"],
+                    annual_fee: 150,
+                    bank_type: "amex",
+                    rewards_type: ["miles"],
+                    image_url: "images/delta gold.avif",
+                    features: ["2x flights (Delta)", "2x dining", "2x groceries", "1x everything else"],
+                    welcome_bonus: "80k Miles",
+                    practical_advice: "Starter Delta pick: free first bag, 15% off award tickets, and a simple $100 hotel credit. Worth it if you fly Delta a couple times a year.",
+                    card_url: "card-pages/delta-skymiles-gold.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "award-discount"],
+                    earning_categories: ["flights", "dining", "groceries"],
+                    airline_hotels: ["delta"],
+                    protection_categories: ["lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Delta SkyMiles Gold American Express Card:', error);
+                } else {
+                    console.log('✅ Delta SkyMiles Gold American Express Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addDeltaSkyMilesGold:', error);
+            }
+        }
+
+        // Auto-add Apple Card
+        async function addAppleCard() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Apple Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Apple Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Apple Card",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "goldman-sachs",
+                    rewards_type: ["cashback"],
+                    image_url: "images/Apple_Card.png",
+                    features: ["3% Apple & partners", "2% Apple Pay", "1% everything else"],
+                    welcome_bonus: "No welcome bonus",
+                    practical_advice: "Best if you use Apple Pay a lot: 3% at Apple/partners and 2% elsewhere. If you rarely tap to pay, a flat 2% card is simpler.",
+                    card_url: "card-pages/apple-card.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "daily-cash", "installments"],
+                    earning_categories: ["apple", "apple-pay", "general"],
+                    protection_categories: ["zero-liability", "id-theft-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Apple Card:', error);
+                } else {
+                    console.log('✅ Apple Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAppleCard:', error);
+            }
+        }
+
+        // Auto-add United Quest Card
+        async function addUnitedQuest() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'United Quest Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('United Quest Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "United Quest Card",
+                    type: ["travel"],
+                    annual_fee: 350,
+                    bank_type: "chase",
+                    rewards_type: ["miles"],
+                    image_url: "images/united_quest_card_tilted.png",
+                    features: ["3x United", "2x travel", "2x dining", "2x streaming", "1x everything else"],
+                    welcome_bonus: "70k Miles",
+                    practical_advice: "Fly United yearly? The $200 TravelBank, two free bags, and 2x travel/dining make this easy to keep—just use at least one credit on purpose.",
+                    card_url: "card-pages/united-quest.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees", "award-discount"],
+                    earning_categories: ["united", "travel", "dining", "streaming"],
+                    airline_hotels: ["united"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding United Quest Card:', error);
+                } else {
+                    console.log('✅ United Quest Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUnitedQuest:', error);
+            }
+        }
+
+        // Auto-add United Explorer Card
+        async function addUnitedExplorer() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'United Explorer Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('United Explorer Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "United Explorer Card",
+                    type: ["travel"],
+                    annual_fee: 150,
+                    bank_type: "chase",
+                    rewards_type: ["miles"],
+                    image_url: "images/united_explorer_card_tilted.png",
+                    features: ["2x United", "2x dining", "2x hotels", "3x prepaid hotels via United Hotels", "1x everything else"],
+                    welcome_bonus: "60k Miles",
+                    practical_advice: "Fly United yearly? Free bag, two lounge passes, and $500+ in partner credits can beat the $150 fee—if you actually use them.",
+                    card_url: "card-pages/united-explorer.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees", "lounge-passes", "award-discount"],
+                    earning_categories: ["united", "dining", "hotels"],
+                    airline_hotels: ["united"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding United Explorer Card:', error);
+                } else {
+                    console.log('✅ United Explorer Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUnitedExplorer:', error);
+            }
+        }
+
+        // Auto-add JetBlue Plus Card
+        async function addJetBluePlus() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'JetBlue Plus Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('JetBlue Plus Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "JetBlue Plus Card",
+                    type: ["travel"],
+                    annual_fee: 99,
+                    bank_type: "barclays",
+                    rewards_type: ["points"],
+                    image_url: "images/jet-blue-plus.png",
+                    features: ["6x JetBlue & Paisly", "2x dining", "2x groceries", "1x everything else"],
+                    welcome_bonus: "80k Points",
+                    practical_advice: "Best for JetBlue regulars: free bag for 4, 5,000 anniversary points, and a simple $100 Vacations credit—easy win if you fly JetBlue yearly.",
+                    card_url: "card-pages/jetblue-plus.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "no-foreign-fees", "award-discount", "anniversary-bonus"],
+                    earning_categories: ["jetblue", "dining", "groceries"],
+                    airline_hotels: ["jetblue"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding JetBlue Plus Card:', error);
+                } else {
+                    console.log('✅ JetBlue Plus Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addJetBluePlus:', error);
+            }
+        }
+
+        // Auto-add Southwest Rapid Rewards Premier Card
+        async function addSouthwestPremier() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Southwest Rapid Rewards Premier Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Southwest Rapid Rewards Premier Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Southwest Rapid Rewards Premier Card",
+                    type: ["travel"],
+                    annual_fee: 149,
+                    bank_type: "chase",
+                    rewards_type: ["points"],
+                    image_url: "images/CREDIT_CARD__PREMIER.png",
+                    features: ["3x Southwest", "2x dining", "2x groceries", "2x transit", "2x streaming", "1x everything else"],
+                    welcome_bonus: "100k Points",
+                    practical_advice: "Fly Southwest? 6,000 anniversary points, 2 EarlyBirds, and a 15% code can beat the $149 fee with one or two trips.",
+                    card_url: "card-pages/southwest-premier.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees", "anniversary-bonus", "earlybird-checkin"],
+                    earning_categories: ["southwest", "dining", "groceries", "transit", "streaming"],
+                    airline_hotels: ["southwest"],
+                    protection_categories: ["lost-delayed-baggage", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Southwest Rapid Rewards Premier Card:', error);
+                } else {
+                    console.log('✅ Southwest Rapid Rewards Premier Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addSouthwestPremier:', error);
+            }
+        }
+
+        // Auto-add Southwest Rapid Rewards Plus Card
+        async function addSouthwestPlus() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Southwest Rapid Rewards Plus Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Southwest Rapid Rewards Plus Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Southwest Rapid Rewards Plus Card",
+                    type: ["travel"],
+                    annual_fee: 99,
+                    bank_type: "chase",
+                    rewards_type: ["points"],
+                    image_url: "images/CREDIT_CARD__PLUS.png",
+                    features: ["2x Southwest", "2x gas", "2x groceries", "2x transit", "2x streaming", "1x everything else"],
+                    welcome_bonus: "100k Points",
+                    practical_advice: "Free first bag, 3k anniversary points, and a 10% code—one Southwest trip a year can cover the $99 fee.",
+                    card_url: "card-pages/southwest-plus.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees", "anniversary-bonus", "earlybird-checkin"],
+                    earning_categories: ["southwest", "gas", "groceries", "transit", "streaming"],
+                    airline_hotels: ["southwest"],
+                    protection_categories: ["lost-delayed-baggage", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Southwest Rapid Rewards Plus Card:', error);
+                } else {
+                    console.log('✅ Southwest Rapid Rewards Plus Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addSouthwestPlus:', error);
+            }
+        }
+
+        // Call this function after database is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add a delay to ensure database is fully loaded
+            setTimeout(addWellsFargoActiveCash, 2000);
+            setTimeout(addCitiDoubleCash, 2500);
+            setTimeout(addAmexGold, 3000);
+            setTimeout(addCapitalOneSavor, 3500);
+            setTimeout(addChaseSapphirePreferred, 4000);
+            setTimeout(addChaseFreedomUnlimited, 4500);
+            setTimeout(addWellsFargoAutographJourney, 5000);
+            setTimeout(addWellsFargoAutograph, 5500);
+            setTimeout(addAmexBlueBusinessPlus, 6000);
+            setTimeout(addBiltMastercard, 6500);
+            setTimeout(addCitiCustomCash, 7000);
+            setTimeout(addDiscoverItCashBack, 7500);
+            setTimeout(addDeltaSkyMilesReserve, 8000);
+            setTimeout(addUnitedClubInfinite, 8500);
+            setTimeout(addCitiAAdvantageExecutive, 9000);
+            setTimeout(addSouthwestPriority, 9500);
+            setTimeout(addAmazonPrimeVisa, 10000);
+            setTimeout(addBlueCashPreferred, 10500);
+            setTimeout(addBankOfAmericaUnlimitedCashRewards, 11000);
+            setTimeout(addUSBankSmartly, 11500);
+            setTimeout(addFidelityRewardsVisaSignature, 12000);
+            setTimeout(addCitiStrataElite, 12500);
+            setTimeout(addUSBankAltitudeGo, 13000);
+            setTimeout(addCostcoAnywhereVisa, 13500);
+            setTimeout(addHiltonAspire, 14000);
+            setTimeout(addMarriottBonvoyBrilliant, 14500);
+            setTimeout(addWorldOfHyatt, 15000);
+            setTimeout(addIHGOneRewardsPremier, 15500);
+            setTimeout(addCitiStrataPremier, 16000);
+        });
+
+        // Also try to add the card when database connection is successful
+        // This will be called from checkDatabaseAndLoadCards
+        window.addWellsFargoActiveCash = addWellsFargoActiveCash;
+        window.addCitiDoubleCash = addCitiDoubleCash;
+        window.addAmexGold = addAmexGold;
+        window.addCapitalOneSavor = addCapitalOneSavor;
+        window.addChaseSapphirePreferred = addChaseSapphirePreferred;
+        
+        // Helper function to fix lounge access data
+        window.fixLoungeAccessData = async function() {
+            console.log('🔧 Fixing lounge access data...');
+            await addAmexGold(); // This will update Gold Card to remove lounge access
+            await addChaseSapphirePreferred(); // This will update Sapphire Preferred to remove lounge access
+            console.log('✅ Lounge access data fix completed!');
+        };
+        window.addChaseFreedomUnlimited = addChaseFreedomUnlimited;
+        window.addWellsFargoAutographJourney = addWellsFargoAutographJourney;
+        window.addWellsFargoAutograph = addWellsFargoAutograph;
+        window.addAmexBlueBusinessPlus = addAmexBlueBusinessPlus;
+        window.addBiltMastercard = addBiltMastercard;
+        window.addCitiCustomCash = addCitiCustomCash;
+        window.addDiscoverItCashBack = addDiscoverItCashBack;
+        window.addDeltaSkyMilesReserve = addDeltaSkyMilesReserve;
+        window.addUnitedClubInfinite = addUnitedClubInfinite;
+        window.addCitiAAdvantageExecutive = addCitiAAdvantageExecutive;
+        window.addSouthwestPriority = addSouthwestPriority;
+        window.addAmazonPrimeVisa = addAmazonPrimeVisa;
+        window.addBlueCashPreferred = addBlueCashPreferred;
+        window.addBankOfAmericaUnlimitedCashRewards = addBankOfAmericaUnlimitedCashRewards;
+        window.addUSBankSmartly = addUSBankSmartly;
+        window.addFidelityRewardsVisaSignature = addFidelityRewardsVisaSignature;
+        window.addCitiStrataElite = addCitiStrataElite;
+        window.addUSBankAltitudeGo = addUSBankAltitudeGo;
+        window.addCostcoAnywhereVisa = addCostcoAnywhereVisa;
+        window.addHiltonAspire = addHiltonAspire;
+        window.addMarriottBonvoyBrilliant = addMarriottBonvoyBrilliant;
+        window.addWorldOfHyatt = addWorldOfHyatt;
+        window.updateWorldOfHyattImage = updateWorldOfHyattImage;
+        window.addIHGOneRewardsPremier = addIHGOneRewardsPremier;
+        window.addCitiStrataPremier = addCitiStrataPremier;
+        window.addDeltaSkyMilesGold = addDeltaSkyMilesGold;
+        window.addAppleCard = addAppleCard;
+        window.addUnitedQuest = addUnitedQuest;
+        window.addUnitedExplorer = addUnitedExplorer;
+        window.addJetBluePlus = addJetBluePlus;
+        window.addSouthwestPremier = addSouthwestPremier;
+        window.addSouthwestPlus = addSouthwestPlus;
+    </script>
+</body>
+</html> 
