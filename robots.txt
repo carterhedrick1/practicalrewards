@@ -1,0 +1,37 @@
+# Robots.txt for Practical Rewards
+# https://practicalrewards.com/robots.txt
+
+User-agent: *
+
+# Allow access to main content areas
+Allow: /
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /favicons/
+Allow: /card-pages/
+
+# Block crawling of component files (not standalone pages)
+Disallow: /header.html
+Disallow: /footer.html
+
+# Block any temp/backup files
+Disallow: /*.bak
+Disallow: /*.tmp
+Disallow: /*~
+
+# Block common admin/system files if they exist
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /.env
+Disallow: /node_modules/
+
+# Crawl-delay for respectful crawling (optional)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://practicalrewards.com/sitemap.xml
+
+# Additional sitemaps if needed in the future
+# Sitemap: https://practicalrewards.com/sitemap-images.xml
+# Sitemap: https://practicalrewards.com/sitemap-news.xml
