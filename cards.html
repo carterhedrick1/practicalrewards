@@ -1089,6 +1089,8 @@
                 <label><input type="checkbox" name="issuer" value="bank-of-america" onchange="autoApplyFilters()"> Bank of America</label>
                 <label><input type="checkbox" name="issuer" value="us-bank" onchange="autoApplyFilters()"> U.S. Bank</label>
                 <label><input type="checkbox" name="issuer" value="fidelity" onchange="autoApplyFilters()"> Fidelity</label>
+                <label><input type="checkbox" name="issuer" value="synchrony" onchange="autoApplyFilters()"> Synchrony</label>
+                <label><input type="checkbox" name="issuer" value="robinhood" onchange="autoApplyFilters()"> Robinhood</label>
                         </div>
                         <div class="dropdown-footer">
                             <button class="reset-btn" onclick="resetFilter('issuer')">Reset</button>
@@ -1267,6 +1269,8 @@
                 <label><input type="checkbox" name="mobile-issuer" value="bank-of-america" onchange="autoApplyMobileFilters()"> Bank of America</label>
                 <label><input type="checkbox" name="mobile-issuer" value="us-bank" onchange="autoApplyMobileFilters()"> U.S. Bank</label>
                 <label><input type="checkbox" name="mobile-issuer" value="fidelity" onchange="autoApplyMobileFilters()"> Fidelity</label>
+                <label><input type="checkbox" name="mobile-issuer" value="synchrony" onchange="autoApplyMobileFilters()"> Synchrony</label>
+                <label><input type="checkbox" name="mobile-issuer" value="robinhood" onchange="autoApplyMobileFilters()"> Robinhood</label>
                         </div>
                     </div>
 
@@ -1799,6 +1803,8 @@
             if (bankType === 'bank-of-america') return 'bank-of-america';
             if (bankType === 'us-bank') return 'us-bank';
             if (bankType === 'fidelity') return 'fidelity';
+            if (bankType === 'synchrony') return 'synchrony';
+            if (bankType === 'robinhood') return 'robinhood';
             
             // Check by card name if bankType doesn't match
             if (name.includes('amex') || name.includes('american express')) return 'amex';
@@ -1811,6 +1817,8 @@
             if (name.includes('bank of america') || name.includes('boa')) return 'bank-of-america';
             if (name.includes('us bank') || name.includes('u.s. bank')) return 'us-bank';
             if (name.includes('fidelity')) return 'fidelity';
+            if (name.includes('synchrony') || name.includes('venmo') || name.includes('sam\'s club')) return 'synchrony';
+            if (name.includes('robinhood')) return 'robinhood';
             if (name.includes('airline') || name.includes('delta') || name.includes('united') || name.includes('american airlines')) return 'airlines';
             if (name.includes('hotel') || name.includes('marriott') || name.includes('hilton') || name.includes('hyatt')) return 'hotels';
             
@@ -1934,7 +1942,9 @@
                     'bilt': 'Bilt',
                     'bank-of-america': 'Bank of America',
                     'us-bank': 'U.S. Bank',
-                    'fidelity': 'Fidelity'
+                    'fidelity': 'Fidelity',
+                    'synchrony': 'Synchrony',
+                    'robinhood': 'Robinhood'
                 },
                 'fee': {
                     '0-100': '$0-$100',

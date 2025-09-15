@@ -8,3 +8,6 @@ config.js
 secrets.js
 *.key
 *.pem
+
+# Admin/Development files (not for public)
+database.html
