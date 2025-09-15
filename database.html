@@ -442,6 +442,14 @@
             <button class="btn" onclick="addJetBluePlus()" style="background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);">🔧 Add JetBlue Plus</button>
             <button class="btn" onclick="addSouthwestPremier()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Southwest Premier</button>
             <button class="btn" onclick="addSouthwestPlus()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Southwest Plus</button>
+            <button class="btn" onclick="addDeltaPlatinum()" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);">🔧 Add Delta Platinum</button>
+            <button class="btn" onclick="addAtmosSummit()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Atmos Summit</button>
+            <button class="btn" onclick="addAtmosAscent()" style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);">🔧 Add Atmos Ascent</button>
+            <button class="btn" onclick="addIHGTraveler()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add IHG Traveler</button>
+            <button class="btn" onclick="addMarriottBoundless()" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">🔧 Add Marriott Boundless</button>
+            <button class="btn" onclick="addCitiAAdvantagePlatinum()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Citi AAdvantage Platinum</button>
+            <button class="btn" onclick="addAAMileUp()" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">🔧 Add AA MileUp</button>
+            <button class="btn" onclick="addHiltonSurpass()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Hilton Surpass</button>
             <button class="btn" onclick="addAmexGreen()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Amex Green</button>
             <button class="btn" onclick="addBlueCashPreferred()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Blue Cash Preferred</button>
             <button class="btn" onclick="addCapitalOneVenture()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Capital One Venture</button>
@@ -3476,6 +3484,398 @@
             }
         }
 
+        // Auto-add Delta SkyMiles Platinum Card
+        async function addDeltaPlatinum() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Delta SkyMiles Platinum American Express Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Delta SkyMiles Platinum American Express Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Delta SkyMiles Platinum American Express Card",
+                    type: ["travel"],
+                    annual_fee: 350,
+                    bank_type: "amex",
+                    rewards_type: ["miles"],
+                    image_url: "images/delta-platnium.jpeg",
+                    features: ["3x Delta flights", "3x hotels", "2x dining", "2x groceries", "1x everything else"],
+                    welcome_bonus: "90k Miles",
+                    practical_advice: "Great if you fly Delta and will use the companion pass and monthly credits; skip it if you want lounge access.",
+                    card_url: "card-pages/delta-platinum.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees", "companion-pass", "award-discount"],
+                    earning_categories: ["delta", "hotels", "dining", "groceries"],
+                    airline_hotels: ["delta"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty", "cell-phone-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Delta SkyMiles Platinum American Express Card:', error);
+                } else {
+                    console.log('✅ Delta SkyMiles Platinum American Express Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addDeltaPlatinum:', error);
+            }
+        }
+
+        // Auto-add Atmos Rewards Summit Visa Infinite Card
+        async function addAtmosSummit() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Atmos Rewards Summit Visa Infinite Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Atmos Rewards Summit Visa Infinite Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Atmos Rewards Summit Visa Infinite Credit Card",
+                    type: ["travel"],
+                    annual_fee: 395,
+                    bank_type: "bank-of-america",
+                    rewards_type: ["points"],
+                    image_url: "images/atmos-summit.webp",
+                    features: ["3x foreign purchases", "3x dining", "3x Alaska & Hawaiian", "1x everything else"],
+                    welcome_bonus: "100k Points",
+                    practical_advice: "Fly Alaska or Hawaiian or spend abroad? The companion award and 8 lounge passes can outpace the $395—otherwise the fee likely feels heavy.",
+                    card_url: "card-pages/atmos-summit.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees", "companion-pass", "lounge-passes"],
+                    earning_categories: ["alaska", "hawaiian", "dining", "foreign"],
+                    airline_hotels: ["alaska", "hawaiian"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Atmos Rewards Summit Visa Infinite Credit Card:', error);
+                } else {
+                    console.log('✅ Atmos Rewards Summit Visa Infinite Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAtmosSummit:', error);
+            }
+        }
+
+        // Auto-add Atmos Rewards Ascent Visa Signature Card
+        async function addAtmosAscent() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Atmos Rewards Ascent Visa Signature Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Atmos Rewards Ascent Visa Signature Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Atmos Rewards Ascent Visa Signature Credit Card",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "bank-of-america",
+                    rewards_type: ["points"],
+                    image_url: "images/atmos-ascent.png",
+                    features: ["3x Alaska & Hawaiian", "2x gas & transit", "2x streaming", "1x everything else"],
+                    welcome_bonus: "80k Points",
+                    practical_advice: "Fly Alaska or Hawaiian yearly? The $99 companion fare and free bags can outweigh $95; skip it if you want lounges or rich credits.",
+                    card_url: "card-pages/atmos-ascent.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees", "companion-pass"],
+                    earning_categories: ["alaska", "hawaiian", "gas", "transit", "streaming"],
+                    airline_hotels: ["alaska", "hawaiian"],
+                    protection_categories: ["rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Atmos Rewards Ascent Visa Signature Credit Card:', error);
+                } else {
+                    console.log('✅ Atmos Rewards Ascent Visa Signature Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAtmosAscent:', error);
+            }
+        }
+
+        // Auto-add IHG One Rewards Traveler Credit Card
+        async function addIHGTraveler() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'IHG One Rewards Traveler Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('IHG One Rewards Traveler Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "IHG One Rewards Traveler Credit Card",
+                    type: ["travel"],
+                    annual_fee: 0,
+                    bank_type: "chase",
+                    rewards_type: ["points"],
+                    image_url: "images/ihg-traveler-card.png",
+                    features: ["5x IHG hotels", "3x dining", "3x gas", "3x utilities & streaming", "2x everything else"],
+                    welcome_bonus: "2 Free Nights + 40k Points",
+                    practical_advice: "No fee, Silver status, and 4th night free: great if you book IHG awards; want an annual free night? Choose Premier instead.",
+                    card_url: "card-pages/ihg-traveler.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "elite-status", "award-discount"],
+                    earning_categories: ["ihg", "dining", "gas", "utilities", "streaming"],
+                    airline_hotels: ["ihg"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding IHG One Rewards Traveler Credit Card:', error);
+                } else {
+                    console.log('✅ IHG One Rewards Traveler Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addIHGTraveler:', error);
+            }
+        }
+
+        // Auto-add Marriott Bonvoy Boundless Credit Card
+        async function addMarriottBoundless() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Marriott Bonvoy Boundless Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Marriott Bonvoy Boundless Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Marriott Bonvoy Boundless Credit Card",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "chase",
+                    rewards_type: ["points"],
+                    image_url: "images/marriott_bonvoy_boundless_card.png",
+                    features: ["6x Marriott hotels", "3x dining/grocery/gas", "2x everything else"],
+                    welcome_bonus: "3 Free Nights",
+                    practical_advice: "Easy $95 keeper if you use the 35k free night; good for regular Marriott stays, not great if you rarely touch the brand.",
+                    card_url: "card-pages/marriott-boundless.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "elite-status", "free-night-certificate"],
+                    earning_categories: ["marriott", "dining", "gas", "groceries"],
+                    airline_hotels: ["marriott"],
+                    protection_categories: ["trip-delay-cancellation", "lost-delayed-baggage", "purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Marriott Bonvoy Boundless Credit Card:', error);
+                } else {
+                    console.log('✅ Marriott Bonvoy Boundless Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addMarriottBoundless:', error);
+            }
+        }
+
+        // Auto-add Citi AAdvantage Platinum Select World Elite Mastercard
+        async function addCitiAAdvantagePlatinum() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Citi AAdvantage Platinum Select World Elite Mastercard');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Citi AAdvantage Platinum Select World Elite Mastercard already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Citi AAdvantage Platinum Select World Elite Mastercard",
+                    type: ["travel"],
+                    annual_fee: 99,
+                    bank_type: "citi",
+                    rewards_type: ["miles"],
+                    image_url: "images/Citi® : AAdvantage® Platinum Select® World Elite Mastercard®.webp",
+                    features: ["2x American Airlines", "2x dining", "2x gas", "1x everything else"],
+                    welcome_bonus: "80k Miles",
+                    practical_advice: "Best for American flyers: free bag, early boarding, and a $125 flight discount after $20k; no lounge access and few frills.",
+                    card_url: "card-pages/citi-aadvantage-platinum.html",
+                    status: "active",
+                    perk_categories: ["free-checked-bags", "priority-boarding", "no-foreign-fees"],
+                    earning_categories: ["american-airlines", "dining", "gas"],
+                    airline_hotels: ["american-airlines"],
+                    protection_categories: []
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Citi AAdvantage Platinum Select World Elite Mastercard:', error);
+                } else {
+                    console.log('✅ Citi AAdvantage Platinum Select World Elite Mastercard added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCitiAAdvantagePlatinum:', error);
+            }
+        }
+
+        // Auto-add American Airlines AAdvantage MileUp Card
+        async function addAAMileUp() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'American Airlines AAdvantage MileUp Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('American Airlines AAdvantage MileUp Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "American Airlines AAdvantage MileUp Card",
+                    type: ["travel"],
+                    annual_fee: 0,
+                    bank_type: "citi",
+                    rewards_type: ["miles"],
+                    image_url: "images/American Airlines AAdvantage® MileUp® Card (Citi) .webp",
+                    features: ["2x groceries", "2x American Airlines", "1x everything else"],
+                    welcome_bonus: "15k Miles",
+                    practical_advice: "Easy no-fee AA miles at groceries; solid starter, but foreign fees apply and there's no bag, boarding, or lounge perks.",
+                    card_url: "card-pages/aa-mileup.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["american-airlines", "groceries"],
+                    airline_hotels: ["american-airlines"],
+                    protection_categories: []
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding American Airlines AAdvantage MileUp Card:', error);
+                } else {
+                    console.log('✅ American Airlines AAdvantage MileUp Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addAAMileUp:', error);
+            }
+        }
+
+        // Auto-add Hilton Honors American Express Surpass Card
+        async function addHiltonSurpass() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Hilton Honors American Express Surpass Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Hilton Honors American Express Surpass Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Hilton Honors American Express Surpass Card",
+                    type: ["travel"],
+                    annual_fee: 150,
+                    bank_type: "amex",
+                    rewards_type: ["points"],
+                    image_url: "images/hilton-surpass.avif",
+                    features: ["12x Hilton hotels", "6x dining", "6x groceries", "6x gas", "4x online retail", "3x everything else"],
+                    welcome_bonus: "130k Points",
+                    practical_advice: "Great if you hit Hilton a few times yearly—the $200 credits and Gold perks can easily beat the fee.",
+                    card_url: "card-pages/hilton-surpass.html",
+                    status: "active",
+                    perk_categories: ["elite-status", "no-foreign-fees", "free-night-certificate"],
+                    earning_categories: ["hilton", "dining", "groceries", "gas", "online-retail"],
+                    airline_hotels: ["hilton"],
+                    protection_categories: ["rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Hilton Honors American Express Surpass Card:', error);
+                } else {
+                    console.log('✅ Hilton Honors American Express Surpass Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addHiltonSurpass:', error);
+            }
+        }
+
         // Call this function after database is loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Add a delay to ensure database is fully loaded
@@ -3557,6 +3957,14 @@
         window.addJetBluePlus = addJetBluePlus;
         window.addSouthwestPremier = addSouthwestPremier;
         window.addSouthwestPlus = addSouthwestPlus;
+        window.addDeltaPlatinum = addDeltaPlatinum;
+        window.addAtmosSummit = addAtmosSummit;
+        window.addAtmosAscent = addAtmosAscent;
+        window.addIHGTraveler = addIHGTraveler;
+        window.addMarriottBoundless = addMarriottBoundless;
+        window.addCitiAAdvantagePlatinum = addCitiAAdvantagePlatinum;
+        window.addAAMileUp = addAAMileUp;
+        window.addHiltonSurpass = addHiltonSurpass;
     </script>
 </body>
 </html> 
