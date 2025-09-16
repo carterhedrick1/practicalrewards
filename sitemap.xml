@@ -3,28 +3,28 @@
   <!-- Main Pages - Highest Priority -->
   <url>
     <loc>https://practicalrewards.com/</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/practical-picks.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/learning.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/cards.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32,35 +32,29 @@
   <!-- Secondary Pages -->
   <url>
     <loc>https://practicalrewards.com/about.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://practicalrewards.com/database.html</loc>
-    <lastmod>2025-09-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
   
   <url>
     <loc>https://practicalrewards.com/contact.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/privacy.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/terms.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -68,182 +62,287 @@
   <!-- Credit Card Pages - High Priority for Content -->
   <url>
     <loc>https://practicalrewards.com/card-pages/amex-platinum.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/chase-sapphire-preferred.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/sapphire-reserve.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/amex-gold.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/venture-x.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/capital-one-venture.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/amex-green.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/chase-freedom-unlimited.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/citi-double-cash.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/discover-it-cash-back.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/wells-fargo-active-cash.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/capital-one-savor.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/amex-blue-cash-preferred.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/citi-custom-cash.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/amazon-prime-visa.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/apple-card.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/bilt-mastercard.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/bank-of-america-customized-cash-rewards.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/bank-of-america-unlimited-cash-rewards.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/fidelity-rewards-visa-signature.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/wells-fargo-autograph.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/wells-fargo-autograph-journey.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/costco-anywhere-visa.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/us-bank-altitude-go.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/us-bank-smartly.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/amex-blue-business-plus.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/blue-cash-everyday.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/capital-one-quicksilver-cash-rewards.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/capital-one-ventureone.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/chase-freedom-flex.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/bank-of-america-premium-rewards.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/bank-of-america-premium-rewards-elite.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/bank-of-america-travel-rewards.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/us-bank-altitude-connect.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/us-bank-cash-plus.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/us-bank-shopper-cash-rewards.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/paypal-cashback-mastercard.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/venmo-credit-card.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/doordash-rewards-mastercard.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/robinhood-gold-card.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/sams-club-mastercard.html</loc>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -251,35 +350,77 @@
   <!-- Travel/Hotel Cards -->
   <url>
     <loc>https://practicalrewards.com/card-pages/marriott-bonvoy-brilliant.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/hilton-aspire.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/world-of-hyatt.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/ihg-one-rewards-premier.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/choice-privileges-select.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/hilton-honors.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/hilton-surpass.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/ihg-traveler.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/marriott-bold.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/marriott-boundless.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/marriott-bountiful.html</loc>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -287,70 +428,98 @@
   <!-- Airline Cards -->
   <url>
     <loc>https://practicalrewards.com/card-pages/delta-reserve.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/delta-skymiles-gold.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/united-club-infinite.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/united-explorer.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/united-quest.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/southwest-priority.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/southwest-premier.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/southwest-plus.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/jetblue-plus.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/citi-aadvantage-executive.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/citi-aadvantage-platinum.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/delta-platinum.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/united-gateway.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/aa-mileup.html</loc>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -358,14 +527,29 @@
   <!-- Citi Strata Cards -->
   <url>
     <loc>https://practicalrewards.com/card-pages/citi-strata-premier.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://practicalrewards.com/card-pages/citi-strata-elite.html</loc>
-    <lastmod>2025-09-14</lastmod>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- Atmos Cards -->
+  <url>
+    <loc>https://practicalrewards.com/card-pages/atmos-ascent.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://practicalrewards.com/card-pages/atmos-summit.html</loc>
+    <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
