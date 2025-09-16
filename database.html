@@ -472,6 +472,14 @@
         <button class="btn" onclick="addVenmoCreditCard()" style="background: linear-gradient(135deg, #3d95ce 0%, #0070ba 100%);">🔧 Add Venmo Credit Card</button>
         <button class="btn" onclick="addSamsClubMastercard()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add Sam's Club Mastercard</button>
         <button class="btn" onclick="addRobinhoodGoldCard()" style="background: linear-gradient(135deg, #00c805 0%, #ff6b35 100%);">🔧 Add Robinhood Gold Card</button>
+        <button class="btn" onclick="addBankOfAmericaPremiumRewardsElite()" style="background: linear-gradient(135deg, #e11d48 0%, #dc2626 100%);">🔧 Add Bank of America Premium Rewards Elite</button>
+        <button class="btn" onclick="addCapitalOneQuicksilver()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add Capital One Quicksilver</button>
+        <button class="btn" onclick="addCapitalOneVentureOne()" style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);">🔧 Add Capital One VentureOne</button>
+        <button class="btn" onclick="addUSBankAltitudeConnect()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add U.S. Bank Altitude Connect</button>
+        <button class="btn" onclick="addUSBankShopperCashRewards()" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">🔧 Add U.S. Bank Shopper Cash Rewards</button>
+        <button class="btn" onclick="addUSBankCashPlus()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">🔧 Add U.S. Bank Cash+</button>
+        <button class="btn" onclick="addUnitedGateway()" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);">🔧 Add United Gateway</button>
+        <button class="btn" onclick="addBankOfAmericaPremiumRewards()" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">🔧 Add Bank of America Premium Rewards</button>
         </div>
 
         <div id="cards-container">
@@ -4375,6 +4383,59 @@
             }
         }
 
+        // Auto-add Bank of America Premium Rewards Elite Card
+        async function addBankOfAmericaPremiumRewardsElite() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Bank of America® Premium Rewards® Elite');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Bank of America® Premium Rewards® Elite already exists in database');
+                    updateStatus('Bank of America® Premium Rewards® Elite already exists in database', 'info');
+                    return;
+                }
+
+                const cardData = {
+                    name: 'Bank of America® Premium Rewards® Elite',
+                    type: ['travel'],
+                    annual_fee: 550,
+                    bank_type: 'bank-of-america',
+                    rewards_type: ['points'],
+                    image_url: 'images/permium-rewards-elite.png',
+                    features: [
+                        '3x travel via Bank of America Travel',
+                        '2x travel & dining',
+                        '1.5x everything else'
+                    ],
+                    welcome_bonus: '75k Points',
+                    practical_advice: '$300 airline + $150 lifestyle credits plus lounges can offset the $550 fee; if you barely fly, simpler cards win.',
+                    card_url: 'card-pages/bank-of-america-premium-rewards-elite.html',
+                    status: 'active',
+                    perk_categories: ['priority-pass', 'no-foreign-fees', 'concierge'],
+                    earning_categories: ['travel', 'dining'],
+                    airline_hotels: [],
+                    protection_categories: ['trip-delay-cancellation', 'lost-delayed-baggage', 'rental-car-insurance', 'purchase-protection', 'extended-warranty', 'return-protection']
+                };
+
+                // Add the card
+                const saved = await saveCardToDatabase(cardData);
+                if (saved) {
+                    console.log('✅ Bank of America® Premium Rewards® Elite added to database successfully!');
+                    updateStatus('Bank of America® Premium Rewards® Elite added to database successfully!', 'success');
+                    await loadCardsFromDatabase();
+                } else {
+                    console.error('❌ Failed to add Bank of America® Premium Rewards® Elite to database');
+                    updateStatus('Failed to add Bank of America® Premium Rewards® Elite to database', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding Bank of America® Premium Rewards® Elite:', error);
+                updateStatus('Error adding Bank of America® Premium Rewards® Elite: ' + error.message, 'error');
+            }
+        }
+
         // Auto-add Robinhood Gold Card
         async function addRobinhoodGoldCard() {
             try {
@@ -4421,6 +4482,349 @@
                 }
             } catch (error) {
                 console.error('Error in addRobinhoodGoldCard:', error);
+            }
+        }
+
+        // Auto-add Capital One Quicksilver Cash Rewards card
+        async function addCapitalOneQuicksilver() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Capital One Quicksilver Cash Rewards Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Capital One Quicksilver Cash Rewards Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Capital One Quicksilver Cash Rewards Credit Card",
+                    type: ["cashback", "hybrid"],
+                    annual_fee: 0,
+                    bank_type: "capital-one",
+                    rewards_type: ["cashback"],
+                    image_url: "images/quicksilver_cardart.png.avif",
+                    features: ["1.5% cash back on every purchase", "5% cash back on hotels and rental cars booked through Capital One Travel"],
+                    welcome_bonus: "$200 cash bonus after you spend $500 on purchases within 3 months from account opening",
+                    practical_advice: "Quicksilver is for people who want cash back without homework. You'll earn a flat 1.5% everywhere and 5% on hotels and rental cars when you book through Capital One Travel. Redemptions are simple: take statement credits or deposit to a bank account. If you want airport lounges, airline transfers, or chunky travel credits, this isn't that. Pair it with a travel card later, or enjoy the $0 annual fee and keep it simple.",
+                    card_url: "card-pages/capital-one-quicksilver-cash-rewards.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["flat-rate", "hotels", "car-rentals"],
+                    airline_hotels: [],
+                    protection_categories: ["rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Capital One Quicksilver Cash Rewards Credit Card:', error);
+                } else {
+                    console.log('✅ Capital One Quicksilver Cash Rewards Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCapitalOneQuicksilver:', error);
+            }
+        }
+
+        // Auto-add Capital One VentureOne Rewards card
+        async function addCapitalOneVentureOne() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Capital One VentureOne Rewards Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Capital One VentureOne Rewards Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Capital One VentureOne Rewards Credit Card",
+                    type: ["travel"],
+                    annual_fee: 0,
+                    bank_type: "capital-one",
+                    rewards_type: ["miles"],
+                    image_url: "images/venture-one.avif",
+                    features: ["1.25x miles on every purchase", "5x miles on hotels and rental cars booked through Capital One Travel", "5x miles on Capital One Entertainment purchases"],
+                    welcome_bonus: "20,000 miles after $500 spend in 3 months",
+                    practical_advice: "VentureOne is the no-fee \"learn the ropes\" travel card: flat 1.25x everywhere, plus 5x when you book hotels and rental cars through Capital One Travel. Redemptions are easy (erase recent travel at 1¢ per mile) and you can graduate to transfers when you're ready. If you want faster earning, Venture or Venture X will outpace it. If you want simple value with no annual fee and no foreign fees, this is a painless starter.",
+                    card_url: "card-pages/capital-one-ventureone.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "travel-credit"],
+                    earning_categories: ["flat-rate", "hotels", "car-rentals", "entertainment"],
+                    airline_hotels: [],
+                    protection_categories: ["rental-car-insurance", "travel-accident-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Capital One VentureOne Rewards Credit Card:', error);
+                } else {
+                    console.log('✅ Capital One VentureOne Rewards Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addCapitalOneVentureOne:', error);
+            }
+        }
+
+        // Auto-add U.S. Bank Altitude Connect Visa Signature card
+        async function addUSBankAltitudeConnect() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'U.S. Bank Altitude® Connect Visa Signature® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('U.S. Bank Altitude® Connect Visa Signature® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "U.S. Bank Altitude® Connect Visa Signature® Card",
+                    type: ["travel"],
+                    annual_fee: 0,
+                    bank_type: "us-bank",
+                    rewards_type: ["points"],
+                    image_url: "images/us-bank-altitude-connect-visa-signature-card-17223339c.webp",
+                    features: ["5x prepaid hotels & car rentals via Altitude Rewards Center", "4x travel", "4x gas & ev charging (first $1,000 per quarter)", "2x dining, streaming, groceries", "1x everything else"],
+                    welcome_bonus: "30,000 points after $1,000 spend in 3 months",
+                    practical_advice: "Altitude Connect is a rare no-fee travel card with real multipliers: 4x on broad travel and gas, plus 5x on hotels and car rentals if you book through the bank's portal. Redemptions are simple (cash or travel), and you get a small taste of premium perks without paying a premium fee. If you're fine booking portal hotels to chase 5x and you'll actually use the four Priority Pass lounge visits and the TSA PreCheck or Global Entry credit, this is easy value. If you avoid portals on principle, treat it like a solid 4x travel/4x gas card and call it a day.",
+                    card_url: "card-pages/us-bank-altitude-connect.html",
+                    status: "active",
+                    perk_categories: ["lounge-access", "tsa-precheck", "no-foreign-fees"],
+                    earning_categories: ["travel", "hotels", "car-rentals", "gas", "ev-charging", "dining", "streaming", "groceries"],
+                    airline_hotels: [],
+                    protection_categories: ["trip-cancellation-interruption", "trip-delay", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding U.S. Bank Altitude® Connect Visa Signature® Card:', error);
+                } else {
+                    console.log('✅ U.S. Bank Altitude® Connect Visa Signature® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUSBankAltitudeConnect:', error);
+            }
+        }
+
+        // Auto-add U.S. Bank Shopper Cash Rewards Visa Signature card
+        async function addUSBankShopperCashRewards() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'U.S. Bank Shopper Cash Rewards® Visa Signature® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('U.S. Bank Shopper Cash Rewards® Visa Signature® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "U.S. Bank Shopper Cash Rewards® Visa Signature® Card",
+                    type: ["cashback"],
+                    annual_fee: 95,
+                    bank_type: "us-bank",
+                    rewards_type: ["cashback"],
+                    image_url: "images/us-bank-shopper-cash-rewards-visa-signature-card_4f162a.png.webp",
+                    features: ["6% at two selected retailers (from a 24-store list) up to $1,500/quarter combined", "3% in one category (gas & ev charging, wholesale clubs, or bills & utilities) up to $1,500/quarter", "1.5% everything else", "5.5% hotels & car rentals via U.S. Bank Rewards Travel Center (prepaid)"],
+                    welcome_bonus: "$250 after $2,000 spend in 4 months",
+                    practical_advice: "This card is built for people who spend a lot at the big boxes. Pick two retailers for 6% and one everyday category for 3%, then set a reminder to re-confirm choices each quarter. There's a $0 intro annual fee for the first year, then $95, so make sure your 6% categories actually see ~$1,600+/year to clear the fee. If you don't like tracking quarter caps or changing retailers, a flat-rate 2% card is easier. If you're okay with mild upkeep and shop Amazon/Target/Walmart regularly, the 6% buckets can add up fast.",
+                    card_url: "card-pages/us-bank-shopper-cash-rewards.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["retailers", "gas", "ev-charging", "wholesale-clubs", "utilities", "hotels", "car-rentals"],
+                    airline_hotels: [],
+                    protection_categories: ["rental-car-insurance", "purchase-protection", "extended-warranty", "travel-accident-insurance"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding U.S. Bank Shopper Cash Rewards® Visa Signature® Card:', error);
+                } else {
+                    console.log('✅ U.S. Bank Shopper Cash Rewards® Visa Signature® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUSBankShopperCashRewards:', error);
+            }
+        }
+
+        // Auto-add U.S. Bank Cash+ Visa Signature card
+        async function addUSBankCashPlus() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'U.S. Bank Cash+® Visa Signature® Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('U.S. Bank Cash+® Visa Signature® Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "U.S. Bank Cash+® Visa Signature® Card",
+                    type: ["cashback"],
+                    annual_fee: 0,
+                    bank_type: "us-bank",
+                    rewards_type: ["cashback"],
+                    image_url: "images/us-cash+.png",
+                    features: ["5% on two categories you choose each quarter (first $2,000 combined)", "2% on one category (gas & ev charging, restaurants, grocery stores)", "5% prepaid air, hotels & car rentals via U.S. Bank Rewards Center", "1% everything else"],
+                    welcome_bonus: "$200 after $1,000 spend in 3 months",
+                    practical_advice: "Cash+ is great if you're willing to set (and reset) categories. Two 5% picks per quarter can be powerful, and the 2% lane covers a daily spend area. Add the portal-only 5% for prepaid travel when prices match booking direct. If you don't want quarterly homework or you'll miss activations, a simple 2% card is safer. If you'll hit the $2,000 quarterly cap often at useful categories, this can beat most flat-rate cards.",
+                    card_url: "card-pages/us-bank-cash-plus.html",
+                    status: "active",
+                    perk_categories: [],
+                    earning_categories: ["rotating", "gas", "ev-charging", "dining", "groceries", "hotels", "car-rentals", "flights"],
+                    airline_hotels: [],
+                    protection_categories: ["rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding U.S. Bank Cash+® Visa Signature® Card:', error);
+                } else {
+                    console.log('✅ U.S. Bank Cash+® Visa Signature® Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUSBankCashPlus:', error);
+            }
+        }
+
+        // Auto-add United Gateway Credit Card
+        async function addUnitedGateway() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'United Gateway℠ Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('United Gateway℠ Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "United Gateway℠ Credit Card",
+                    type: ["travel"],
+                    annual_fee: 0,
+                    bank_type: "chase",
+                    rewards_type: ["miles"],
+                    image_url: "images/united_gateway_card_tilted.png",
+                    features: ["2x united purchases", "2x gas stations", "2x local transit & commuting", "1x everything else"],
+                    welcome_bonus: "30,000 miles after $1,000 spend in 3 months",
+                    practical_advice: "This is the no-annual-fee way to earn United miles on everyday spending. You get 2x on United purchases, gas, and local transit/commuting, plus a small in-flight discount. No free checked bags, no priority boarding, no lounge days—so treat it as an earn card, not a perks card. If you mainly want free bags and better travel bennies, look at United Explorer or higher. If you just want to rack up miles without paying a fee (or need a United keeper card), Gateway is painless.",
+                    card_url: "card-pages/united-gateway.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees"],
+                    earning_categories: ["united-purchases", "gas", "transit"],
+                    airline_hotels: ["united"],
+                    protection_categories: ["trip-cancellation-interruption", "rental-car-insurance", "purchase-protection"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding United Gateway℠ Credit Card:', error);
+                } else {
+                    console.log('✅ United Gateway℠ Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addUnitedGateway:', error);
+            }
+        }
+
+        // Auto-add Bank of America Premium Rewards Credit Card
+        async function addBankOfAmericaPremiumRewards() {
+            try {
+                // Check if card already exists
+                const { data: existingCards } = await supabase
+                    .from('cards')
+                    .select('id')
+                    .eq('name', 'Bank of America® Premium Rewards® Credit Card');
+
+                if (existingCards && existingCards.length > 0) {
+                    console.log('Bank of America® Premium Rewards® Credit Card already exists in database');
+                    return;
+                }
+
+                // Add the card
+                const cardData = {
+                    name: "Bank of America® Premium Rewards® Credit Card",
+                    type: ["travel"],
+                    annual_fee: 95,
+                    bank_type: "bank-of-america",
+                    rewards_type: ["points"],
+                    image_url: "images/premium-rewards.png",
+                    features: ["2x travel", "2x dining", "1.5x everything else", "Preferred Rewards bonus: 25%–75% on base earnings"],
+                    welcome_bonus: "60,000 points after $4,000 spend in 3 months",
+                    practical_advice: "Want a simple travel card that actually pays for itself? This is it. You get clean earn rates (2x on travel and dining, 1.5x everywhere else), easy redemptions at a flat 1¢ per point, and two useful credits that can wipe out the annual fee if you fly even once a year. It's good out of the box; it's great if you bank with Bank of America. Enroll in Preferred Rewards and the 25%–75% boost quietly turns 2x into up to 3.5x and 1.5x into up to 2.625x. If you want transfer partners or lounges, look elsewhere. If you want easy value, this is low-maintenance.",
+                    card_url: "card-pages/bank-of-america-premium-rewards.html",
+                    status: "active",
+                    perk_categories: ["no-foreign-fees", "preferred-rewards"],
+                    earning_categories: ["travel", "dining", "flat-rate"],
+                    airline_hotels: [],
+                    protection_categories: ["trip-delay", "trip-cancellation-interruption", "baggage-delay", "lost-damaged-luggage", "rental-car-insurance", "purchase-protection", "extended-warranty"]
+                };
+
+                const { data, error } = await supabase
+                    .from('cards')
+                    .insert([cardData]);
+
+                if (error) {
+                    console.error('Error adding Bank of America® Premium Rewards® Credit Card:', error);
+                } else {
+                    console.log('✅ Bank of America® Premium Rewards® Credit Card added to database successfully!');
+                    // Reload cards to show the new addition
+                    await loadCardsFromDatabase();
+                }
+            } catch (error) {
+                console.error('Error in addBankOfAmericaPremiumRewards:', error);
             }
         }
 
@@ -4523,6 +4927,13 @@
         window.addVenmoCreditCard = addVenmoCreditCard;
         window.addSamsClubMastercard = addSamsClubMastercard;
         window.addRobinhoodGoldCard = addRobinhoodGoldCard;
+        window.addCapitalOneQuicksilver = addCapitalOneQuicksilver;
+        window.addCapitalOneVentureOne = addCapitalOneVentureOne;
+        window.addUSBankAltitudeConnect = addUSBankAltitudeConnect;
+        window.addUSBankShopperCashRewards = addUSBankShopperCashRewards;
+        window.addUSBankCashPlus = addUSBankCashPlus;
+        window.addUnitedGateway = addUnitedGateway;
+        window.addBankOfAmericaPremiumRewards = addBankOfAmericaPremiumRewards;
         window.updateCardsJson = updateCardsJson;
     </script>
 </body>
