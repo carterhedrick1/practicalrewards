@@ -1473,6 +1473,21 @@
                 console.error('Failed to initialize cards:', error);
                 initializeFilters(); // Still initialize filters even if cards fail
             });
+
+            // After loading components, initialize mobile menu robustly
+            setTimeout(() => {
+                console.log('cards.html: Setting up mobile menu...');
+                if (typeof window.setupMobileMenu === 'function') {
+                    console.log('cards.html: Calling setupMobileMenu...');
+                    window.setupMobileMenu();
+                } else {
+                    console.log('cards.html: setupMobileMenu not found, using local setup...');
+                    setupLocalMobileMenu();
+                }
+                
+                // As a final safety, bind basic handlers if nothing attached yet
+                bindBasicMobileMenuHandlers();
+            }, 200);
         });
 
         function loadComponent(filename, placeholderId, fallbackId) {
@@ -2557,6 +2572,139 @@
         });
 
         // Mobile menu functionality is handled by the dynamic header
+
+        // Add these functions (copied/adapted from card-scripts.js)
+
+        function setupLocalMobileMenu() {
+            console.log('setupLocalMobileMenu called, checking for elements...');
+            
+            const toggle = document.getElementById('mobile-menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            
+            console.log('Found elements:', {
+                toggle: toggle ? 'YES' : 'NO',
+                menu: menu ? 'YES' : 'NO',
+                overlay: overlay ? 'YES' : 'NO'
+            });
+            
+            if (!toggle || !menu || !overlay) {
+                console.log('Missing mobile menu elements, cannot setup');
+                return false;
+            }
+            
+            function openMenu() {
+                console.log('OPENING MENU');
+                overlay.classList.add('active');
+                menu.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                // Prevent iOS scroll bleed and ensure no sliver remains
+                menu.style.borderLeft = '2px solid #a8e6cf';
+                menu.style.boxShadow = '-4px 0 20px rgba(168, 230, 207, 0.3)';
+            }
+            
+            function closeMenu() {
+                console.log('CLOSING MENU');
+                overlay.classList.remove('active');
+                menu.classList.remove('active');
+                document.body.style.overflow = '';
+                // Remove any residual visual line when hidden
+                menu.style.borderLeft = '0';
+                menu.style.boxShadow = 'none';
+            }
+            
+            // Add click handlers
+            toggle.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('HAMBURGER CLICKED!');
+                if (menu.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            };
+            
+            console.log('Click handler attached to toggle button');
+            
+            // Close on overlay click
+            overlay.onclick = function(e) {
+                if (e.target === overlay) {
+                    console.log('Overlay clicked - closing menu');
+                    closeMenu();
+                }
+            };
+            
+            // Close on escape
+            document.onkeydown = function(e) {
+                if (e.key === 'Escape') {
+                    closeMenu();
+                }
+            };
+            
+            console.log('Local mobile menu setup complete!');
+            return true;
+        }
+
+        function bindBasicMobileMenuHandlers() {
+            const toggle = document.getElementById('mobile-menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+
+            if (!toggle || !menu || !overlay) return;
+
+            // Avoid double-binding: skip if header assigned onclick or we've bound already
+            if (toggle.onclick || toggle.dataset.bound === 'true') return;
+
+            function openMenu() {
+                overlay.classList.add('active');
+                menu.classList.add('active');
+                overlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                menu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(() => {
+                    if (!overlay.classList.contains('active')) {
+                        overlay.style.display = 'none';
+                    }
+                }, 300);
+            }
+
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (menu.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            }, { passive: false });
+
+            toggle.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (menu.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            }, { passive: false });
+
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) closeMenu();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeMenu();
+            });
+
+            // Mark as bound
+            toggle.dataset.bound = 'true';
+        }
     </script>
     <script src="js/scripts.js"></script>
 </body>
