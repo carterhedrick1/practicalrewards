@@ -706,41 +706,33 @@
             text-align: center;
         }
 
-        /* iOS 26 Safari Footer Overlap Prevention - WORK WITH FOOTER'S BUILT-IN FIXES */
+        /* iOS 26 Safari Footer Overlap Fix - RESET BODY FLEXBOX LIKE CARD PAGES */
         @media screen and (max-width: 768px) {
-            /* DON'T override body flexbox - footer.html handles this */
+            /* CRITICAL: Reset body to match working card pages */
+            body {
+                display: block !important; /* Remove flexbox that's causing overlay */
+                min-height: auto !important; /* Remove conflicting height constraints */
+            }
             
-            /* Critical: Add massive spacing before footer appears */
+            /* Ensure main content doesn't interfere with footer */
             .cards-page-content {
-                /* HUGE bottom spacing to prevent any possible overlap */
-                padding-bottom: 10rem !important; /* Massive fixed spacing */
-                margin-bottom: 5rem !important; /* Additional margin */
+                display: block !important; /* Remove flexbox */
+                flex: none !important; /* Remove flex properties */
+                padding-bottom: 4rem !important; /* Standard bottom padding */
+                margin-bottom: 2rem !important; /* Standard margin */
             }
             
             .cards-container {
-                /* Additional container bottom spacing */
-                padding-bottom: 8rem !important; /* Huge bottom padding */
-                margin-bottom: 4rem !important; /* Additional margin */
+                padding-bottom: 3rem !important; /* Standard bottom padding */
+                margin-bottom: 2rem !important; /* Standard margin */
             }
             
-            .cards-grid {
-                /* Even the grid itself needs spacing */
-                margin-bottom: 6rem !important;
-                padding-bottom: 4rem !important;
-            }
-            
-            /* Force visible gap before footer */
+            /* Ensure footer placement like card pages */
             #footer-placeholder {
-                margin-top: 8rem !important; /* HUGE top margin */
-                clear: both !important;
-                position: relative !important;
-                z-index: 999 !important;
-            }
-            
-            /* Ensure last card has extra space */
-            .card-item:last-child {
-                margin-bottom: 6rem !important;
-                padding-bottom: 4rem !important;
+                margin-top: 2rem !important; /* Standard spacing */
+                position: relative !important; /* Ensure normal flow */
+                z-index: 1 !important; /* Normal stacking */
+                clear: both !important; /* Clear any floated content */
             }
         }
 
@@ -1042,9 +1034,8 @@
             }
 
             .cards-container {
-                padding: 100px 1rem 1rem 1rem; /* Reset to smaller top/side padding */
-                padding-bottom: 12rem !important; /* ABSOLUTELY MASSIVE bottom padding for iOS 26 */
-                margin-bottom: 8rem !important; /* HUGE additional margin */
+                padding: 100px 1rem 2rem 1rem; /* Match card pages: normal bottom padding */
+                margin-bottom: 2rem !important; /* Normal margin like card pages */
                 contain: layout; /* iOS 26 Safari fix: prevent layout overflow */
                 width: 100%;
                 max-width: 100%;
