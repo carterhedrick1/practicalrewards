@@ -709,6 +709,7 @@
             body {
                 display: block !important; /* Remove flexbox that's causing overlay */
                 min-height: auto !important; /* Remove conflicting height constraints */
+                padding-bottom: env(safe-area-inset-bottom, 0px);
             }
             
             /* Ensure main content doesn't interfere with footer */
@@ -720,8 +721,8 @@
             }
             
             .cards-container {
-                padding-bottom: 3rem !important; /* Standard bottom padding */
-                margin-bottom: 2rem !important; /* Standard margin */
+                padding: 100px 1rem 6rem 1rem !important; /* Increased bottom padding */
+                margin-bottom: 4rem !important; /* Increased margin */
             }
             
             /* Ensure footer placement like card pages */
@@ -730,6 +731,7 @@
                 position: relative !important; /* Ensure normal flow */
                 z-index: 1 !important; /* Normal stacking */
                 clear: both !important; /* Clear any floated content */
+                padding-bottom: env(safe-area-inset-bottom, 20px) !important;
             }
         }
 
