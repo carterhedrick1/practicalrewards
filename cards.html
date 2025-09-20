@@ -706,16 +706,34 @@
             text-align: center;
         }
 
-        /* iOS 26 Safari Footer Overlap Prevention */
+        /* iOS 26 Safari Footer Overlap Prevention - COMPREHENSIVE FIX */
         @media screen and (max-width: 768px) {
+            /* Critical: Force minimum height and flex layout like working card pages */
+            body {
+                min-height: 100vh;
+                min-height: 100dvh;
+                min-height: 100svh;
+                display: flex;
+                flex-direction: column;
+            }
+            
             .cards-page-content {
                 /* Ensure sufficient bottom spacing on iOS Safari */
-                padding-bottom: env(safe-area-inset-bottom, 2rem);
+                flex: 1;
+                padding-bottom: calc(6rem + env(safe-area-inset-bottom, 2rem)); /* Increased significantly */
+                min-height: 0; /* Critical for flexbox */
             }
             
             .cards-container {
                 /* Additional bottom padding for iOS Safari footer overlap */
-                padding-bottom: calc(4rem + env(safe-area-inset-bottom, 1rem));
+                padding-bottom: calc(6rem + env(safe-area-inset-bottom, 2rem)); /* Much larger bottom padding */
+                margin-bottom: calc(2rem + env(safe-area-inset-bottom, 1rem)); /* Add margin as well */
+            }
+            
+            /* Critical: Ensure footer is at bottom and visible */
+            #footer-placeholder {
+                margin-top: auto; /* Push footer to bottom */
+                padding-bottom: calc(2rem + env(safe-area-inset-bottom, 1rem)) !important;
             }
         }
 
@@ -1017,8 +1035,9 @@
             }
 
             .cards-container {
-                padding: 100px 1rem 4rem 1rem; /* iOS 26 Safari fix: increased bottom padding */
-                padding-bottom: calc(4rem + env(safe-area-inset-bottom, 1rem)); /* iOS 26 Safari fix: safe area padding */
+                padding: 100px 1rem 1rem 1rem; /* Reset to smaller top/side padding */
+                padding-bottom: calc(8rem + env(safe-area-inset-bottom, 2rem)) !important; /* MASSIVE bottom padding for iOS 26 */
+                margin-bottom: calc(3rem + env(safe-area-inset-bottom, 1rem)) !important; /* Additional margin */
                 contain: layout; /* iOS 26 Safari fix: prevent layout overflow */
                 width: 100%;
                 max-width: 100%;
