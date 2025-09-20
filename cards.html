@@ -216,6 +216,9 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 120px 2rem 4rem 2rem; /* iOS 26 Safari fix: increased bottom padding */
+            contain: layout; /* iOS 26 Safari fix: prevent layout overflow */
+            width: 100%;
+            max-width: 100%;
         }
 
         /* Main content wrapper for iOS Safari flexbox layout */
@@ -224,6 +227,7 @@
             display: flex;
             flex-direction: column;
             min-height: 0; /* Allow flex child to shrink */
+            contain: layout; /* iOS 26 Safari fix: prevent layout issues */
         }
 
         .hero-section {
@@ -715,6 +719,44 @@
             }
         }
 
+        /* iPhone specific fixes for notch and home indicator */
+        @media (max-width: 480px) {
+            body {
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+            
+            /* Ensure content doesn't get hidden behind home indicator */
+            .navigation-buttons, .button-container {
+                margin-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+            }
+            
+            /* Extra bottom padding for footer on iPhone */
+            footer, #footer-placeholder {
+                padding-bottom: calc(1rem + env(safe-area-inset-bottom, 20px)) !important;
+            }
+        }
+
+        /* iOS 26 specific viewport stability fixes */
+        @media screen and (max-width: 768px) {
+            /* Use the most stable viewport units */
+            html {
+                height: 100vh;
+                height: 100svh; /* Small viewport height - most stable on iOS */
+            }
+            
+            body {
+                min-height: 100vh;
+                min-height: 100svh;
+            }
+            
+            /* Prevent dynamic viewport changes from causing layout shifts */
+            .hero, .hero-section {
+                height: auto;
+                min-height: 40vh;
+                min-height: 40svh;
+            }
+        }
+
         .mobile-show-results-btn {
             width: 100%;
             padding: 1rem;
@@ -976,6 +1018,10 @@
 
             .cards-container {
                 padding: 100px 1rem 4rem 1rem; /* iOS 26 Safari fix: increased bottom padding */
+                padding-bottom: calc(4rem + env(safe-area-inset-bottom, 1rem)); /* iOS 26 Safari fix: safe area padding */
+                contain: layout; /* iOS 26 Safari fix: prevent layout overflow */
+                width: 100%;
+                max-width: 100%;
             }
 
             .hero-section {
