@@ -209,17 +209,21 @@
         transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
         overflow-y: auto !important;
         border-left: 0 !important; /* No border when hidden to avoid blue line */
-        transform: translateX(100%); /* Fully off-screen by default */
-        pointer-events: none; /* Do not intercept touches when hidden */
+        transform: translateX(100%) !important; /* Fully off-screen by default */
+        opacity: 0 !important; /* Hidden on load to prevent flash */
+        visibility: hidden !important; /* Completely hidden */
+        pointer-events: none !important; /* Do not intercept touches when hidden */
         will-change: transform;
         contain: layout paint;
     }
 
     .mobile-menu.active {
-        transform: translateX(0);
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
         border-left: 2px solid #a8e6cf !important;
         box-shadow: -4px 0 20px rgba(168, 230, 207, 0.3) !important;
-        pointer-events: auto;
+        pointer-events: auto !important;
     }
 
     /* Mobile Menu Overlay - Beautiful Darkening Effect */
