@@ -3275,17 +3275,35 @@ span.positive {
         margin-right: -50dvw;
     }
     
-    /* Fix footer clearance on iOS Safari */
+    /* Fix footer clearance on iOS Safari - iOS 26 enhanced */
     body {
         min-height: 100vh;
         min-height: 100dvh; /* Dynamic viewport height */
+        min-height: 100svh; /* Small viewport height for iOS 26 stability */
         display: flex;
         flex-direction: column;
+        position: relative;
+        overflow-x: hidden;
     }
     
     .card-container {
-        flex: 1;
+        flex: 1 0 auto;
         min-height: 0; /* Allow flex shrinking */
+        position: relative;
+        width: 100%;
+        max-width: 100vw;
+        max-width: 100dvw;
+    }
+    
+    /* iOS 26 specific footer fixes for card pages */
+    footer, #footer-placeholder {
+        flex-shrink: 0;
+        margin-top: auto;
+        position: relative !important;
+        z-index: 100;
+        width: 100%;
+        max-width: 100vw;
+        max-width: 100dvw;
     }
     
     /* Prevent content from overlapping footer */

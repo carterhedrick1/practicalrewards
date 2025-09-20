@@ -62,6 +62,12 @@
             background: #fafaf9;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            /* iOS 26 Safari flexbox layout fix */
+            min-height: 100vh;
+            min-height: 100dvh;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Header - Modern Desktop Navigation */
@@ -1045,12 +1051,14 @@
         <div class="loading-placeholder">Loading navigation...</div>
     </div>
 
-    <div class="cards-container">
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <h1>Build your card lineup.</h1>
-            <p class="hero-subtitle">Set your filters, weigh the perks, and pick what actually earns for you.</p>
-        </div>
+    <!-- Main content wrapper for iOS Safari flexbox layout -->
+    <main class="cards-page-content">
+        <div class="cards-container">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <h1>Build your card lineup.</h1>
+                <p class="hero-subtitle">Set your filters, weigh the perks, and pick what actually earns for you.</p>
+            </div>
 
         <!-- Filter Pills Section -->
         <div class="filter-pills-section">
@@ -1354,7 +1362,8 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
+    </main>
 
     <!-- Footer placeholder -->
     <div id="footer-placeholder">
