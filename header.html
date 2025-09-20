@@ -200,19 +200,26 @@
     .mobile-menu {
         position: fixed !important;
         top: 70px !important;
-        right: -320px !important;
+        right: 0 !important; /* Keep anchored, use transform to hide */
         width: 320px !important;
         height: calc(100vh - 70px) !important;
         background: linear-gradient(135deg, #0f2027 0%, #203a43 70%, #2c5364 100%) !important;
         z-index: 999999 !important;
-        box-shadow: -4px 0 20px rgba(168, 230, 207, 0.3) !important;
-        transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        box-shadow: none !important; /* No shadow when hidden to avoid sliver */
+        transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
         overflow-y: auto !important;
-        border-left: 2px solid #a8e6cf !important;
+        border-left: 0 !important; /* No border when hidden to avoid blue line */
+        transform: translateX(100%); /* Fully off-screen by default */
+        pointer-events: none; /* Do not intercept touches when hidden */
+        will-change: transform;
+        contain: layout paint;
     }
 
     .mobile-menu.active {
-        right: 0 !important;
+        transform: translateX(0);
+        border-left: 2px solid #a8e6cf !important;
+        box-shadow: -4px 0 20px rgba(168, 230, 207, 0.3) !important;
+        pointer-events: auto;
     }
 
     /* Mobile Menu Overlay - Beautiful Darkening Effect */
@@ -228,11 +235,13 @@
         opacity: 0 !important;
         visibility: hidden !important;
         transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        pointer-events: none !important; /* Do not block touches when hidden */
     }
 
     .mobile-menu-overlay.active {
         opacity: 1 !important;
         visibility: visible !important;
+        pointer-events: auto !important;
     }
 
     .mobile-menu-header {
@@ -445,6 +454,9 @@
             overlay.classList.add('active');
             menu.classList.add('active');
             document.body.style.overflow = 'hidden';
+            // Prevent iOS scroll bleed and ensure no sliver remains
+            menu.style.borderLeft = '2px solid #a8e6cf';
+            menu.style.boxShadow = '-4px 0 20px rgba(168, 230, 207, 0.3)';
         }
         
         // Close menu
@@ -453,6 +465,9 @@
             overlay.classList.remove('active');
             menu.classList.remove('active');
             document.body.style.overflow = '';
+            // Remove any residual visual line when hidden
+            menu.style.borderLeft = '0';
+            menu.style.boxShadow = 'none';
         }
         
                     // Add click handlers
