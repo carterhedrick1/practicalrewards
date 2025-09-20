@@ -69,10 +69,11 @@
 
         /* Header - Modern Desktop Navigation */
         header {
-            position: fixed;
+            position: sticky; /* Match universal header behavior to avoid iOS layout bugs */
             top: 0;
             left: 0;
             right: 0;
+            width: 100%;
             background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
             backdrop-filter: blur(20px);
             border-bottom: none;
@@ -695,8 +696,7 @@
         }
 
         .mobile-filters-footer {
-            position: sticky;
-            bottom: 0;
+            position: static; /* Prevent sticky element from overlapping footer */
             background: white;
             padding: 1rem;
             border-top: 1px solid #e2e8f0;
