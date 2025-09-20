@@ -57,12 +57,13 @@
     color: white;
     margin: -1rem -2rem 1.5rem -2rem;
     overflow: hidden;
-    width: 100vw;
+    width: 100dvw; /* iOS 26 Safari fix: use dynamic viewport width */
     position: relative;
     left: 50%;
     right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
+    margin-left: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
+    margin-right: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
+    contain: layout style; /* Prevent layout overflow on iOS Safari */
 }
 
 /* TIP BOX STYLES */
@@ -821,12 +822,13 @@ input:checked + .toggle-slider:before {
     .hero-section {
         margin: 0 -1rem 1.5rem -1rem;
         padding: 2rem 1rem;
-        width: 100vw;
+        width: 100dvw; /* iOS 26 Safari fix: use dynamic viewport width */
         position: relative;
         left: 50%;
         right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
+        margin-left: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
+        margin-right: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
+        contain: layout style; /* Prevent layout overflow on iOS Safari */
     }
     
     .credit-item {
@@ -3246,6 +3248,87 @@ span.positive {
     border: 2px solid #059669;
     border-radius: 16px;
     margin-top: 2rem;
+}
+
+/* ==========================================================================
+   iOS 26 SAFARI SPECIFIC FIXES
+   ========================================================================== */
+
+/* Fix for iOS Safari dynamic viewport and card overlay issues */
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari-specific fixes */
+    .card-container {
+        contain: layout; /* Prevent content overflow */
+        isolation: isolate; /* Create new stacking context */
+        padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px)); /* Add safe area padding */
+    }
+    
+    .hero-section {
+        contain: layout style paint; /* Stronger containment for hero sections */
+        /* Fallback for browsers that don't support dvw */
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        /* Dynamic viewport units for iOS Safari */
+        width: 100dvw;
+        margin-left: -50dvw;
+        margin-right: -50dvw;
+    }
+    
+    /* Fix footer clearance on iOS Safari */
+    body {
+        min-height: 100vh;
+        min-height: 100dvh; /* Dynamic viewport height */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .card-container {
+        flex: 1;
+        min-height: 0; /* Allow flex shrinking */
+    }
+    
+    /* Prevent content from overlapping footer */
+    #footer-placeholder {
+        margin-top: auto;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 10;
+        clear: both;
+    }
+    
+    /* Fix for calculator sections that might overflow */
+    .calculator-section,
+    .recommendation-section {
+        contain: layout;
+        margin-bottom: 2rem;
+    }
+    
+    /* iOS Safari viewport height fix for mobile */
+    @media (max-width: 768px) {
+        .hero-section {
+            /* Force recalculation on viewport change */
+            height: auto;
+            min-height: auto;
+        }
+        
+        /* Add extra bottom spacing on mobile iOS */
+        .card-container {
+            padding-bottom: calc(3rem + env(safe-area-inset-bottom, 20px));
+        }
+        
+        /* Ensure proper stacking context */
+        .calculator-section {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Prevent any positioned elements from escaping container */
+        .table-row {
+            contain: layout;
+            position: relative;
+        }
+    }
 }
 
 .apply-button-container {

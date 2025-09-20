@@ -218,14 +218,15 @@
             color: white;
             margin: 0 -2rem 3rem -2rem;
             overflow: hidden;
-            width: 100vw;
+            width: 100dvw; /* iOS 26 Safari fix: use dynamic viewport width */
             position: relative;
             left: 50%;
             right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
+            margin-left: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
+            margin-right: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
             text-align: center;
             margin-top: -130px;
+            contain: layout style; /* Prevent layout overflow on iOS Safari */
         }
 
         .hero-section h1 {

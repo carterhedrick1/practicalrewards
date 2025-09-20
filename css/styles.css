@@ -100,6 +100,7 @@ html {
     width: 100%;
     overflow: hidden;
     position: relative;
+    contain: layout style; /* iOS 26 Safari fix: prevent layout overflow */
 }
 
 /* Update hero pattern overlay */
@@ -1454,5 +1455,133 @@ footer {
     .credit-breakdown .credit-row:last-child .credit-label,
     .credit-breakdown .credit-row:last-child .credit-detail {
         border-bottom: none !important;
+    }
+}
+
+/* ==========================================================================
+   iOS 26 SAFARI COMPREHENSIVE FIXES
+   ========================================================================== */
+
+/* iOS Safari Detection and Global Fixes */
+@supports (-webkit-touch-callout: none) {
+    /* Global iOS Safari layout fixes */
+    html {
+        /* Fix viewport units on iOS Safari */
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height for iOS Safari */
+    }
+    
+    body {
+        /* Create proper flex container for iOS Safari */
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        contain: layout;
+    }
+    
+    /* Main content should grow to fill space */
+    main, .main-content, .content-wrapper {
+        flex: 1;
+        min-height: 0; /* Allow flex shrinking */
+        contain: layout;
+    }
+    
+    /* Footer should stick to bottom without overlay */
+    footer, #footer-placeholder {
+        flex-shrink: 0;
+        margin-top: auto;
+        position: relative;
+        z-index: 100;
+        clear: both;
+        contain: layout;
+    }
+    
+    /* Container fixes for all pages */
+    .container {
+        contain: layout;
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    }
+    
+    /* Hero section fixes across all pages */
+    .hero, .hero-section {
+        contain: layout style paint;
+        /* Ensure proper viewport calculation */
+        width: 100%;
+        max-width: 100vw;
+        max-width: 100dvw;
+    }
+    
+    /* Content section fixes */
+    .content-section, .calculator-section {
+        contain: layout;
+        position: relative;
+        margin-bottom: 2rem;
+    }
+    
+    /* Card and grid fixes */
+    .options-grid, .features-grid, .cards-grid,
+    .option-card, .feature-card, .card-option {
+        contain: layout;
+    }
+    
+    /* Navigation and button fixes */
+    .navigation-buttons {
+        contain: layout;
+        margin-bottom: 2rem;
+    }
+    
+    /* iOS Safari mobile-specific fixes */
+    @media (max-width: 768px) {
+        /* More aggressive mobile fixes */
+        html {
+            overflow-x: hidden;
+        }
+        
+        body {
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Add extra safe area padding on mobile */
+        .container {
+            padding-bottom: calc(2rem + env(safe-area-inset-bottom, 20px));
+        }
+        
+        /* Prevent any content from escaping */
+        .hero, .hero-section {
+            max-width: 100vw;
+            max-width: 100dvw;
+            overflow-x: hidden;
+        }
+        
+        /* Fix footer positioning on mobile iOS */
+        footer, #footer-placeholder {
+            width: 100%;
+            max-width: 100vw;
+            max-width: 100dvw;
+            position: relative;
+            z-index: 1000;
+        }
+        
+        /* Ensure proper stacking context for all content */
+        .content-section, .calculator-section,
+        .recommendation-section, .features, .how-it-works {
+            position: relative;
+            z-index: 1;
+            contain: layout;
+        }
+    }
+    
+    /* iPhone specific fixes for notch and home indicator */
+    @media (max-width: 480px) {
+        body {
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        
+        /* Ensure content doesn't get hidden behind home indicator */
+        .navigation-buttons, .button-container {
+            margin-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+        }
     }
 }
