@@ -215,7 +215,15 @@
         .cards-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 120px 2rem 2rem 2rem;
+            padding: 120px 2rem 4rem 2rem; /* iOS 26 Safari fix: increased bottom padding */
+        }
+
+        /* Main content wrapper for iOS Safari flexbox layout */
+        .cards-page-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0; /* Allow flex child to shrink */
         }
 
         .hero-section {
@@ -694,6 +702,19 @@
             text-align: center;
         }
 
+        /* iOS 26 Safari Footer Overlap Prevention */
+        @media screen and (max-width: 768px) {
+            .cards-page-content {
+                /* Ensure sufficient bottom spacing on iOS Safari */
+                padding-bottom: env(safe-area-inset-bottom, 2rem);
+            }
+            
+            .cards-container {
+                /* Additional bottom padding for iOS Safari footer overlap */
+                padding-bottom: calc(4rem + env(safe-area-inset-bottom, 1rem));
+            }
+        }
+
         .mobile-show-results-btn {
             width: 100%;
             padding: 1rem;
@@ -954,18 +975,22 @@
             }
 
             .cards-container {
-                padding: 100px 1rem 2rem 1rem;
+                padding: 100px 1rem 4rem 1rem; /* iOS 26 Safari fix: increased bottom padding */
             }
 
             .hero-section {
                 margin: -125px -1rem 3rem -1rem;
                 padding: 2rem 1rem;
                 width: 100vw;
+                width: 100dvw; /* iOS 26 Safari fix: use dynamic viewport width */
                 position: relative;
                 left: 50%;
                 right: 50%;
                 margin-left: -50vw;
+                margin-left: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
                 margin-right: -50vw;
+                margin-right: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
+                contain: layout style; /* Prevent layout overflow on iOS Safari */
             }
 
             .hero-section h1 {
