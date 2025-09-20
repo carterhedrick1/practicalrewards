@@ -62,12 +62,9 @@
             background: #fafaf9;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            /* iOS 26 Safari flexbox layout fix */
-            min-height: 100vh;
-            min-height: 100dvh;
-            min-height: 100svh;
-            display: flex;
-            flex-direction: column;
+            /* Remove global flex/min-height which caused footer overlay on iOS */
+            min-height: auto;
+            display: block;
         }
 
         /* Header - Modern Desktop Navigation */
