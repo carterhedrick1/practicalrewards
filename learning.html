@@ -19,7 +19,7 @@
         })(window, document, "clarity", "script", "t8qvj4h0gj");
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="theme-color" content="#0f2027">
     <!-- Critical header styles - prevents loading flash -->
     <link rel="stylesheet" href="/css/critical-header.css">
@@ -365,88 +365,7 @@ body {
 }
 
 
-nav {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #a8e6cf;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.logo:hover {
-    color: #e8f4f8;
-    transform: translateY(-1px);
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 3rem;
-    align-items: center;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #c2e9e0;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    position: relative;
-    padding: 0.5rem 0;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #059669, #10b981);
-    transition: width 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #a8e6cf;
-    transform: translateX(4px);
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-.cta-nav {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    color: #047857 !important;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
-    transition: all 0.3s ease;
-    font-weight: 600;
-}
-
-.cta-nav::after {
-    display: none;
-}
-
-.cta-nav:hover {
-    color: #047857 !important;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
-    background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
-}
-
-/* Mobile menu styles are handled by the dynamic header */
+/* Header styles are handled by the universal header */
 
 /* Hero Section */
 .hero-wrapper {
@@ -1227,20 +1146,7 @@ footer {
                 margin: 1.5rem 1rem;
                 padding: 1.25rem;
             }
-            /* Show mobile menu toggle */
-            .mobile-menu-toggle {
-                display: flex;
-            }
-
-            /* Hide desktop navigation */
-            .nav-links {
-                display: none;
-            }
-
-            nav {
-                padding: 0 1rem;
-                height: 70px;
-            }
+            /* Mobile header styles are handled by the universal header */
             .navigation-buttons {
                 flex-direction: column;
                 margin: 2rem 1rem;
@@ -1363,13 +1269,7 @@ footer {
 
 /* Tablet Responsive */
 @media (min-width: 768px) and (max-width: 1023px) {
-    .nav-links {
-        gap: 2rem;
-    }
-
-    nav {
-        padding: 0 1.5rem;
-    }
+    /* Tablet header styles are handled by the universal header */
     .hero-content {
         padding: 6rem 1.5rem 5rem 1.5rem;
     }

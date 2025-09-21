@@ -247,6 +247,40 @@
         visibility: visible !important;
         pointer-events: auto !important;
     }
+    
+    /* Prevent scrolling when mobile menu is active */
+    body.mobile-menu-open {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+        touch-action: none !important;
+        -webkit-overflow-scrolling: auto !important;
+        overscroll-behavior: none !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        user-select: none !important;
+    }
+    
+    html.mobile-menu-open {
+        overflow: hidden !important;
+        touch-action: none !important;
+        -webkit-overflow-scrolling: auto !important;
+        overscroll-behavior: none !important;
+        height: 100% !important;
+    }
+    
+    /* Ensure all children respect the no-scroll rule */
+    body.mobile-menu-open * {
+        -webkit-overflow-scrolling: auto !important;
+        overscroll-behavior: none !important;
+    }
+    
+    /* Specifically target the mobile menu to allow its own scrolling */
+    .mobile-menu.active {
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+    }
 
     .mobile-menu-header {
         padding: 0;
@@ -452,26 +486,108 @@
             return false;
         }
         
+        // Store scroll position for restoration
+        let scrollPosition = 0;
+        let scrollLockActive = false;
+        
         // Open menu
         function openMenu() {
             console.log('OPENING MENU');
+            
+            // Store current scroll position
+            scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            scrollLockActive = true;
+            
+            // Add CSS classes for scroll prevention
+            document.body.classList.add('mobile-menu-open');
+            document.documentElement.classList.add('mobile-menu-open');
+            
+            // Prevent scrolling with multiple methods for maximum compatibility
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollPosition}px`;
+            document.body.style.width = '100%';
+            document.body.style.height = '100%';
+            document.documentElement.style.overflow = 'hidden';
+            document.documentElement.style.height = '100%';
+            
+            // Add classes
             overlay.classList.add('active');
             menu.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            // Prevent iOS scroll bleed and ensure no sliver remains
+            
+            // Visual effects
             menu.style.borderLeft = '2px solid #a8e6cf';
             menu.style.boxShadow = '-4px 0 20px rgba(168, 230, 207, 0.3)';
+            
+            // Prevent touch events on background - multiple event types for maximum coverage
+            document.addEventListener('touchmove', preventScroll, { passive: false });
+            document.addEventListener('wheel', preventScroll, { passive: false });
+            document.addEventListener('scroll', preventScroll, { passive: false });
+            window.addEventListener('scroll', preventWindowScroll, { passive: false });
+            
+            // Continuously enforce scroll position
+            const scrollChecker = setInterval(() => {
+                if (scrollLockActive) {
+                    window.scrollTo(0, scrollPosition);
+                } else {
+                    clearInterval(scrollChecker);
+                }
+            }, 16); // ~60fps checking
         }
         
         // Close menu
         function closeMenu() {
             console.log('CLOSING MENU');
+            
+            // Disable scroll lock
+            scrollLockActive = false;
+            
+            // Remove classes
             overlay.classList.remove('active');
             menu.classList.remove('active');
+            
+            // Remove CSS classes for scroll prevention
+            document.body.classList.remove('mobile-menu-open');
+            document.documentElement.classList.remove('mobile-menu-open');
+            
+            // Restore scrolling
             document.body.style.overflow = '';
-            // Remove any residual visual line when hidden
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            document.body.style.height = '';
+            document.documentElement.style.overflow = '';
+            document.documentElement.style.height = '';
+            
+            // Restore scroll position
+            window.scrollTo(0, scrollPosition);
+            
+            // Remove visual effects
             menu.style.borderLeft = '0';
             menu.style.boxShadow = 'none';
+            
+            // Remove all event listeners
+            document.removeEventListener('touchmove', preventScroll);
+            document.removeEventListener('wheel', preventScroll);
+            document.removeEventListener('scroll', preventScroll);
+            window.removeEventListener('scroll', preventWindowScroll);
+        }
+        
+        // Prevent scroll function for touch devices
+        function preventScroll(e) {
+            // Allow scrolling within the mobile menu itself
+            if (menu && menu.contains(e.target)) {
+                return;
+            }
+            e.preventDefault();
+        }
+        
+        // Prevent window scroll completely
+        function preventWindowScroll(e) {
+            if (document.body.classList.contains('mobile-menu-open')) {
+                e.preventDefault();
+                window.scrollTo(0, scrollPosition);
+            }
         }
         
                     // Add click handlers

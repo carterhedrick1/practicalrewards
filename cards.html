@@ -553,28 +553,7 @@
                 touch-action: manipulation;
             }
             
-            /* Header adjustments for mobile */
-            header {
-                position: fixed;
-                height: 70px;
-                background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
-                -webkit-backdrop-filter: blur(20px);
-                backdrop-filter: blur(20px);
-            }
-
-            /* Eliminate extra top gap by neutralizing the placeholder's height on mobile */
-            #header-placeholder {
-                min-height: 0 !important;
-                height: 0 !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: transparent !important;
-            }
-
-            /* Hide placeholder decoration */
-            #header-placeholder::before {
-                display: none !important;
-            }
+            /* Header adjustments for mobile - let critical-header.css handle the styling */
 
             /* Ensure the real header is fixed even inside the placeholder */
             #header-placeholder header {
@@ -596,28 +575,14 @@
             }
             
             .cards-container {
-                padding: 0.5rem 1rem 2rem 1rem; /* Further reduced top padding for better mobile spacing */
+                padding: 0 1rem 2rem 1rem; /* Remove top padding since cards-page-content handles header spacing */
                 margin-bottom: 0;
             }
             
-            /* Footer with proper safe area handling */
+            /* Footer positioning */
             #footer-placeholder {
                 position: relative;
                 margin-top: 2rem;
-                padding-bottom: env(safe-area-inset-bottom, 20px);
-                background: #292524; /* Ensure no blue leak */
-            }
-            
-            /* Prevent any blue overflow at bottom */
-            #footer-placeholder::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: env(safe-area-inset-bottom, 20px);
-                background: #292524;
-                z-index: -1;
             }
         }
 
@@ -626,11 +591,6 @@
             /* Ensure proper safe area handling */
             body {
                 padding-bottom: 0; /* Let individual components handle safe area */
-            }
-            
-            /* Header height adjustment for smaller screens */
-            header {
-                height: 60px;
             }
             
             .cards-page-content {
@@ -642,10 +602,9 @@
                 margin-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
             }
             
-            /* Proper footer safe area handling */
+            /* Footer positioning */
             footer, #footer-placeholder {
-                background: #292524 !important; /* Prevent blue leak */
-                padding-bottom: calc(1rem + env(safe-area-inset-bottom, 20px)) !important;
+                position: relative;
             }
         }
 
@@ -900,17 +859,58 @@
             margin-bottom: 1rem;
         }
 
-        /* Mobile Menu Responsive Adjustments */
-        @media (max-width: 480px) {
-            #mobile-menu {
-                width: 100vw;
-                right: -100vw;
-            }
-            
-            #mobile-menu.active {
-                right: 0;
-            }
+        /* Cards Loading Indicator */
+        .cards-loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--warm-gray-200);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
         }
+
+        .cards-loading-indicator.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cards-grid {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1.5rem auto;
+            border: 4px solid var(--warm-gray-200);
+            border-top: 4px solid var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--warm-gray-600);
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtext {
+            color: var(--warm-gray-500);
+            font-size: 0.9rem;
+        }
+
         
         /* Tablet Responsive */
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -927,38 +927,9 @@
                 justify-content: center;
             }
             
-            /* Hide mobile menu on tablet+ */
-            #mobile-menu-overlay,
-            #mobile-menu {
-                display: none !important;
-            }
         }
 
         @media (max-width: 768px) {
-            /* Show mobile menu toggle */
-            .mobile-menu-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: none;
-                border: none;
-                color: #c2e9e0;
-                cursor: pointer;
-                font-size: 1.5rem;
-                padding: 0.5rem;
-                z-index: 1001;
-                transition: all 0.3s ease;
-            }
-
-            .mobile-menu-toggle:hover {
-                color: #a8e6cf;
-                transform: scale(1.1);
-            }
-
-            /* Hide desktop navigation */
-            .nav-links {
-                display: none;
-            }
 
             nav {
                 padding: 0 1rem;
@@ -966,7 +937,7 @@
             }
 
             .cards-container {
-                padding: 0.5rem 1rem 2rem 1rem; /* Further reduced top padding for better mobile spacing */
+                padding: 0 1rem 2rem 1rem; /* Remove top padding since cards-page-content handles header spacing */
                 margin-bottom: 0;
                 width: 100%;
                 max-width: 100%;
@@ -1048,8 +1019,8 @@
         <div class="loading-placeholder">Loading navigation...</div>
     </div>
 
-    <!-- Main content wrapper for iOS Safari flexbox layout -->
-    <main class="cards-page-content">
+    <!-- Main content section -->
+    <section class="cards-section">
         <div class="cards-container">
 
         <!-- Filter Pills Section -->
@@ -1224,6 +1195,13 @@
             <!-- Cards will be dynamically loaded here -->
         </div>
 
+        <!-- Loading Indicator -->
+        <div class="cards-loading-indicator" id="cards-loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Credit Cards...</div>
+            <div class="loading-subtext">Finding the best cards for you</div>
+        </div>
+
         <!-- Mobile Filters Overlay -->
         <div class="mobile-filters-overlay" id="mobile-filters-overlay">
             <div class="mobile-filters-content">
@@ -1355,24 +1333,7 @@
             </div>
         </div>
         </div>
-    </main>
-
-    <!-- Mobile Menu Overlay and Menu -->
-    <div id="mobile-menu-overlay"></div>
-    <div id="mobile-menu">
-        <div class="mobile-menu-header">
-            <span class="logo">Practical Rewards</span>
-            <button class="mobile-menu-close" onclick="document.getElementById('mobile-menu-overlay').click()">&times;</button>
-        </div>
-        <nav class="mobile-menu-nav">
-            <a href="/">Home</a>
-            <a href="/cards.html">Cards</a>
-            <a href="/learning.html">Learning</a>
-            <a href="/practical-picks.html">Practical Picks</a>
-            <a href="/about.html">About</a>
-            <a href="/contact.html">Contact</a>
-        </nav>
-    </div>
+    </section>
 
     <!-- Footer placeholder -->
     <div id="footer-placeholder">
@@ -1382,6 +1343,9 @@
     <script>
         // Smart header and footer loading with fallbacks
         document.addEventListener('DOMContentLoaded', function() {
+            // Show loading indicator immediately
+            showCardsLoading();
+            
             // Load header
             loadComponent('header.html', 'header-placeholder', 'header-fallback');
             
@@ -1393,6 +1357,7 @@
                 initializeFilters();
             }).catch(error => {
                 console.error('Failed to initialize cards:', error);
+                hideCardsLoading(); // Hide loading on error
                 initializeFilters(); // Still initialize filters even if cards fail
             });
 
@@ -1511,6 +1476,35 @@
         let allCards = [];
         let filteredCards = [];
 
+        // Loading indicator functions
+        function showCardsLoading() {
+            const loadingIndicator = document.getElementById('cards-loading');
+            const cardsGrid = document.getElementById('cards-grid');
+            if (loadingIndicator && cardsGrid) {
+                loadingIndicator.style.display = 'block';
+                // Use setTimeout to ensure the element is displayed before adding the show class
+                setTimeout(() => {
+                    loadingIndicator.classList.add('show');
+                }, 10);
+                cardsGrid.style.opacity = '0.3';
+            }
+        }
+
+        function hideCardsLoading() {
+            const loadingIndicator = document.getElementById('cards-loading');
+            const cardsGrid = document.getElementById('cards-grid');
+            console.log('🔄 Hiding cards loading indicator...');
+            if (loadingIndicator && cardsGrid) {
+                loadingIndicator.classList.remove('show');
+                cardsGrid.style.opacity = '1';
+                // Force hide the element immediately and after animation
+                loadingIndicator.style.display = 'none';
+                console.log('✅ Cards loading indicator hidden');
+            } else {
+                console.warn('⚠️ Could not find loading indicator or cards grid');
+            }
+        }
+
         async function initializeCards() {
             try {
                 console.log('📥 Fetching cards.json...');
@@ -1579,6 +1573,7 @@
                 }
             } catch (error) {
                 console.error('Error loading cards from static JSON:', error);
+                hideCardsLoading();
                 throw error;
             }
 
@@ -1589,6 +1584,7 @@
             // Render and update counts
             renderCards();
             updateResultsCount();
+            hideCardsLoading();
         }
 
         function renderCards() {
@@ -1850,6 +1846,9 @@
         }
 
         function applyNewFilters() {
+            // Show loading indicator for filter changes
+            showCardsLoading();
+            
             // Apply the new filter system
             console.log('🔍 Starting filter process with activeFilters:', activeFilters);
             console.log('🔍 Available cards:', allCards.map(c => ({ name: c.name, type: c.type })));
@@ -1918,6 +1917,11 @@
 
             renderCards();
             updateResultsCount();
+            
+            // Hide loading indicator after filters are applied
+            setTimeout(() => {
+                hideCardsLoading();
+            }, 100);
         }
 
         function updateActiveFilterChips() {
