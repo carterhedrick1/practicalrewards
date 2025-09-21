@@ -24,8 +24,20 @@
         z-index: 1000;
         transition: all 0.3s ease;
         overflow: hidden;
-        margin-top: calc(-1 * env(safe-area-inset-top, 0));
         padding-top: env(safe-area-inset-top, 0);
+    }
+    
+    /* iOS Safari - Extend header background to cover status bar area */
+    header::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: env(safe-area-inset-top, 0);
+        background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
+        z-index: -1;
+        pointer-events: none;
     }
     
     header::before {

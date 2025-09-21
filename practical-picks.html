@@ -630,6 +630,13 @@
             }
         }
 
+        /* Hide mobile card count indicator on desktop */
+        @media (min-width: 769px) {
+            .card-count-indicator {
+                display: none !important;
+            }
+        }
+
         /* Mobile tweaks */
         @media (max-width: 768px) {
 
@@ -638,7 +645,7 @@
             /* Additional mobile improvements for wizard */
             .wizard {
                 position: static;
-                margin-bottom: 1rem;
+                margin-bottom: 0.375rem; /* Slightly increased bottom margin for better spacing */
                 margin-top: 0;
             }
             
@@ -665,32 +672,36 @@
                 min-width: 60px;
             }
             
-            /* Mobile scroll indicator - pinned to bottom */
-            .mobile-scroll-indicator {
+            /* Mobile card count indicator - positioned right under wizard, optimized for space */
+            .card-count-indicator {
                 background: #059669;
-                border-radius: 6px 6px 0 0;
-                box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
-                margin: 0;
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-                padding: 0.75rem 0;
-                padding-left: 0 !important;
-                padding-right: 0 !important;
+                border-radius: 8px;
+                margin: 0.375rem 0 0.75rem 0; /* Slightly increased top margin for better spacing with wizard */
+                padding: 0.5rem 0.75rem; /* Reduced padding for space optimization */
                 text-align: center;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                width: 100vw !important;
-                max-width: none !important;
-                z-index: 1000;
-                border: none;
+                width: 100%;
+                box-sizing: border-box;
+                color: white;
+                font-weight: 600;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
                 display: flex;
+                flex-direction: column; /* Stack number and text vertically */
                 align-items: center;
                 justify-content: center;
-                gap: 0.5rem;
-                min-height: 60px;
-                box-sizing: border-box;
+                gap: 0.15rem; /* Small gap between number and text */
+            }
+
+            .card-count-number {
+                font-size: 1rem; /* Slightly smaller for space optimization */
+                font-weight: 700;
+                color: white;
+                line-height: 1;
+            }
+
+            .card-count-label {
+                font-size: 0.8rem; /* Slightly smaller for space optimization */
+                color: rgba(255, 255, 255, 0.9);
+                font-weight: 600;
             }
             
             /* Hide results bar and filter bar on mobile */
@@ -700,33 +711,6 @@
             
             #active-filters-line {
                 display: none !important;
-            }
-            
-            /* Add bottom padding to prevent content from being hidden behind fixed indicator */
-            .cards-grid {
-                padding-bottom: 100px !important;
-            }
-            
-            /* Also add padding to main content sections */
-            main, section {
-                padding-bottom: 100px !important;
-            }
-            
-            .mobile-scroll-count {
-                font-size: 1rem;
-                font-weight: 700;
-                color: white;
-                line-height: 1;
-                margin: 0;
-            }
-            
-            .mobile-scroll-label {
-                font-size: 0.65rem;
-                color: white;
-                font-weight: 600;
-                margin: 0;
-                white-space: nowrap;
-                opacity: 0.9;
             }
             
             
@@ -936,7 +920,7 @@
                 display: none !important;
             }
             
-            .coach-layout .wizard.completion ~ .mobile-scroll-indicator {
+            .coach-layout .wizard.completion ~ .card-count-indicator {
                 display: none !important;
             }
             
@@ -1131,10 +1115,10 @@
                 </div>
             </aside>
 
-            <!-- Mobile scroll indicator (only visible on mobile) -->
-            <div class="mobile-scroll-indicator" id="mobile-scroll-indicator" style="display: none;">
-                <div class="mobile-scroll-count" id="mobile-scroll-count">0 Cards</div>
-                <div class="mobile-scroll-label">Fit Your Criteria So Far</div>
+            <!-- Card count indicator (positioned in document flow) -->
+            <div class="card-count-indicator" id="card-count-indicator" style="display: none;">
+                <div class="card-count-number" id="card-count-number">0 Cards</div>
+                <div class="card-count-label">Fit Your Criteria So Far</div>
             </div>
 
             <!-- Results -->
@@ -1559,7 +1543,7 @@
             currentCards = [...cards];
             // Ensure indicators update on immediate render paths
             if (!isCompletion) {
-                updateMobileScrollIndicator(cards);
+                updateCardCountIndicator(cards);
                 updateDesktopCardCount(cards);
             }
             return;
@@ -1571,7 +1555,7 @@
             currentCards = [...cards];
             // Ensure indicators update on immediate render paths
             if (!isCompletion) {
-                updateMobileScrollIndicator(cards);
+                updateCardCountIndicator(cards);
                 updateDesktopCardCount(cards);
             }
             return;
@@ -1584,9 +1568,9 @@
         
         currentCards = [...cards];
 
-        // Update mobile scroll indicator (but not during completion)
+        // Update mobile card count indicator (but not during completion)
         if (!isCompletion) {
-            updateMobileScrollIndicator(cards);
+            updateCardCountIndicator(cards);
         }
 
         // Update desktop card count (but not during completion)
@@ -1781,10 +1765,10 @@
             });
         }
 
-        // Hide mobile scroll indicator when showing intro
-        const mobileIndicator = document.getElementById('mobile-scroll-indicator');
-        if (mobileIndicator) {
-            mobileIndicator.style.display = 'none';
+        // Hide card count indicator when showing intro
+        const cardIndicator = document.getElementById('card-count-indicator');
+        if (cardIndicator) {
+            cardIndicator.style.display = 'none';
         }
 
         // Hide desktop card count when showing intro
@@ -2293,24 +2277,27 @@
         return applyFiltersTo(allCards, merged);
     }
 
-    function updateMobileScrollIndicator(cards) {
-        const mobileIndicator = document.getElementById('mobile-scroll-indicator');
-        const mobileCount = document.getElementById('mobile-scroll-count');
+    function updateCardCountIndicator(cards) {
+        const cardIndicator = document.getElementById('card-count-indicator');
+        const cardCount = document.getElementById('card-count-number');
 
-        if (!mobileIndicator || !mobileCount) return;
+        if (!cardIndicator || !cardCount) return;
 
         // Hide during completion step
         if (isCompletionStep()) {
-            mobileIndicator.style.display = 'none';
+            cardIndicator.style.display = 'none';
             return;
         }
 
-        // Only show on mobile and when there are cards to show
-        if (window.innerWidth <= 768 && cards.length > 0) {
-            mobileIndicator.style.display = 'block';
-            mobileCount.textContent = cards.length + ' Cards';
+        const cardCountNumber = cards.length;
+        const countText = cardCountNumber === 1 ? '1 Card' : `${cardCountNumber} Cards`;
+        cardCount.textContent = countText;
+
+        // Show when there are cards to display
+        if (cardCountNumber > 0) {
+            cardIndicator.style.display = 'flex';
         } else {
-            mobileIndicator.style.display = 'none';
+            cardIndicator.style.display = 'none';
         }
     }
 
@@ -2399,11 +2386,11 @@
         // Re-setup on resize
         window.addEventListener('resize', checkMobileAndSetup);
         
-        // Also update mobile scroll indicator on resize
+        // Also update card count indicators on resize
         window.addEventListener('resize', () => {
             if (state.mode && allCards.length > 0) {
                 const currentCards = getCurrentFilteredCards();
-                updateMobileScrollIndicator(currentCards);
+                updateCardCountIndicator(currentCards);
                 updateDesktopCardCount(currentCards);
             }
         });
@@ -3162,13 +3149,13 @@
             
             // Hide all card count indicators during completion
             const desktopIndicator = document.getElementById('desktop-card-count');
-            const mobileIndicator = document.getElementById('mobile-scroll-indicator');
+            const cardIndicator = document.getElementById('card-count-indicator');
             
             if (desktopIndicator) {
                 desktopIndicator.style.display = 'none';
             }
-            if (mobileIndicator) {
-                mobileIndicator.style.display = 'none';
+            if (cardIndicator) {
+                cardIndicator.style.display = 'none';
             }
             
             updateHelp(null);
@@ -3860,10 +3847,10 @@
         }
         
         
-        // Hide mobile scroll indicator when showing zero state
-        const mobileIndicator = document.getElementById('mobile-scroll-indicator');
-        if (mobileIndicator) {
-            mobileIndicator.style.display = 'none';
+        // Hide card count indicator when showing zero state
+        const cardIndicator = document.getElementById('card-count-indicator');
+        if (cardIndicator) {
+            cardIndicator.style.display = 'none';
         }
 
         // Hide desktop card count when showing zero state
