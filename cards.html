@@ -19,8 +19,11 @@
         })(window, document, "clarity", "script", "t8qvj4h0gj");
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="theme-color" content="#0f2027">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
     <!-- Critical header styles - prevents loading flash -->
     <link rel="stylesheet" href="/css/critical-header.css">
     <title>Credit Cards - Practical Rewards</title>
@@ -66,153 +69,11 @@
             padding: 0;
         }
 
-        /* Header - Modern Desktop Navigation */
-        header {
-            position: sticky; /* Match universal header behavior to avoid iOS layout bugs */
-            top: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
-            backdrop-filter: blur(20px);
-            border-bottom: none;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        nav {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #a8e6cf;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .logo:hover {
-            color: #e8f4f8;
-            transform: translateY(-1px);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #c2e9e0;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #059669, #10b981);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #a8e6cf;
-            transform: translateX(4px);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .cta-nav {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            color: #047857 !important;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(254, 243, 199, 0.4);
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .cta-nav::after {
-            display: none;
-        }
-
-        .cta-nav:hover {
-            color: #047857 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(254, 243, 199, 0.6);
-            background: linear-gradient(135deg, #fde68a 0%, #fef3c7 100%);
-        }
-
-        /* Header toggle and hamburger styles come from header.html to ensure consistency */
-
-        /* Footer */
-        footer {
-            background: #292524;
-            color: #a8a29e;
-            padding: 3rem 0 1rem 0;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 1.125rem;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-section ul li a {
-            color: #a8a29e;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section ul li a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #44403c;
-            padding-top: 1rem;
-            text-align: center;
-            font-size: 0.875rem;
-        }
-
         /* Cards Grid Page Styles */
         .cards-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 120px 2rem 4rem 2rem; /* iOS 26 Safari fix: increased bottom padding */
+            padding: 1.5rem 2rem 4rem 2rem; /* Further reduced top padding */
             contain: layout; /* iOS 26 Safari fix: prevent layout overflow */
             width: 100%;
             max-width: 100%;
@@ -227,45 +88,6 @@
             contain: layout; /* iOS 26 Safari fix: prevent layout issues */
         }
 
-        .hero-section {
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, #047857 0%, #059669 100%);
-            color: white;
-            margin: 0 -2rem 3rem -2rem;
-            overflow: hidden;
-            width: 100dvw; /* iOS 26 Safari fix: use dynamic viewport width */
-            position: relative;
-            left: 50%;
-            right: 50%;
-            margin-left: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
-            margin-right: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
-            text-align: center;
-            margin-top: -130px;
-            contain: layout style; /* Prevent layout overflow on iOS Safari */
-        }
-
-        .hero-section h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 800;
-        }
-
-        .hero-subtitle {
-            font-size: 1.4rem;
-            font-weight: 500;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto 1rem auto;
-        }
-
-        .hero-description {
-            font-size: 1.1rem;
-            font-weight: 400;
-            opacity: 0.85;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
 
         /* Filter Pills Section */
         .filter-pills-section {
@@ -554,13 +376,18 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 10; /* Keep behind footer/header to avoid overlay issues */
+            z-index: 1003; /* Above mobile menu */
             display: none;
             overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
         }
 
         .mobile-filters-overlay.active {
             display: block;
+            opacity: 1;
         }
 
         .mobile-filters-content {
@@ -571,8 +398,10 @@
             background: white;
             border-radius: 20px 20px 0 0;
             max-height: 90vh;
+            max-height: 90dvh;
             overflow-y: auto;
             animation: slideUp 0.3s ease-out;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         @keyframes slideUp {
@@ -702,42 +531,110 @@
             text-align: center;
         }
 
-        /* iOS 26 Safari Footer Overlap Fix - RESET BODY FLEXBOX LIKE CARD PAGES */
+        /* Modern Mobile Layout - iOS 18+ Compatible */
         @media screen and (max-width: 768px) {
-            /* CRITICAL: Reset body to match working card pages */
+            /* Clean body setup for modern iOS */
             body {
-                display: block !important; /* Remove flexbox that's causing overlay */
-                min-height: auto !important; /* Remove conflicting height constraints */
-                padding-bottom: env(safe-area-inset-bottom, 0px);
+                display: block !important;
+                min-height: 100vh;
+                min-height: 100dvh; /* Dynamic viewport height */
+                padding-bottom: 0; /* Let individual components handle safe area */
+                background: #fafaf9;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+                /* Prevent blue leak on iOS */
+                position: relative;
+                overflow-x: hidden;
             }
             
-            /* Ensure main content doesn't interfere with footer */
+            /* Ensure viewport meta tag behavior */
+            html {
+                -webkit-text-size-adjust: 100%;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+            
+            /* Header adjustments for mobile */
+            header {
+                position: fixed;
+                height: 70px;
+                background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
+                -webkit-backdrop-filter: blur(20px);
+                backdrop-filter: blur(20px);
+            }
+
+            /* Eliminate extra top gap by neutralizing the placeholder's height on mobile */
+            #header-placeholder {
+                min-height: 0 !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+
+            /* Hide placeholder decoration */
+            #header-placeholder::before {
+                display: none !important;
+            }
+
+            /* Ensure the real header is fixed even inside the placeholder */
+            #header-placeholder header {
+                position: fixed !important;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin: 0;
+                padding-top: env(safe-area-inset-top, 0);
+            }
+            
+            /* Content wrapper with proper spacing */
             .cards-page-content {
-                display: block !important; /* Remove flexbox */
-                flex: none !important; /* Remove flex properties */
-                padding-bottom: 4rem !important; /* Standard bottom padding */
-                margin-bottom: 2rem !important; /* Standard margin */
+                display: block !important;
+                padding-top: 70px; /* Account for fixed header */
+                padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+                min-height: calc(100vh - 70px);
+                min-height: calc(100dvh - 70px);
             }
             
             .cards-container {
-                padding: 100px 1rem 6rem 1rem !important; /* Increased bottom padding */
-                margin-bottom: 4rem !important; /* Increased margin */
+                padding: 0.5rem 1rem 2rem 1rem; /* Further reduced top padding for better mobile spacing */
+                margin-bottom: 0;
             }
             
-            /* Ensure footer placement like card pages */
+            /* Footer with proper safe area handling */
             #footer-placeholder {
-                margin-top: 2rem !important; /* Standard spacing */
-                position: relative !important; /* Ensure normal flow */
-                z-index: 1 !important; /* Normal stacking */
-                clear: both !important; /* Clear any floated content */
-                padding-bottom: env(safe-area-inset-bottom, 20px) !important;
+                position: relative;
+                margin-top: 2rem;
+                padding-bottom: env(safe-area-inset-bottom, 20px);
+                background: #292524; /* Ensure no blue leak */
+            }
+            
+            /* Prevent any blue overflow at bottom */
+            #footer-placeholder::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: env(safe-area-inset-bottom, 20px);
+                background: #292524;
+                z-index: -1;
             }
         }
 
         /* iPhone specific fixes for notch and home indicator */
         @media (max-width: 480px) {
+            /* Ensure proper safe area handling */
             body {
-                padding-bottom: env(safe-area-inset-bottom, 0px);
+                padding-bottom: 0; /* Let individual components handle safe area */
+            }
+            
+            /* Header height adjustment for smaller screens */
+            header {
+                height: 60px;
+            }
+            
+            .cards-page-content {
+                padding-top: 60px;
             }
             
             /* Ensure content doesn't get hidden behind home indicator */
@@ -745,30 +642,37 @@
                 margin-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
             }
             
-            /* Extra bottom padding for footer on iPhone */
+            /* Proper footer safe area handling */
             footer, #footer-placeholder {
+                background: #292524 !important; /* Prevent blue leak */
                 padding-bottom: calc(1rem + env(safe-area-inset-bottom, 20px)) !important;
             }
         }
 
-        /* iOS 26 specific viewport stability fixes */
+        /* Modern iOS viewport handling and optimization */
         @media screen and (max-width: 768px) {
-            /* Use the most stable viewport units */
+            /* Use stable viewport units */
             html {
-                height: 100vh;
-                height: 100svh; /* Small viewport height - most stable on iOS */
+                height: 100%;
+                overflow-x: hidden;
             }
             
-            body {
-                min-height: 100vh;
-                min-height: 100svh;
+            
+            /* Optimize touch interactions */
+            .pill-button,
+            .mobile-quick-pill,
+            .card-item {
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
             }
             
-            /* Prevent dynamic viewport changes from causing layout shifts */
-            .hero, .hero-section {
-                height: auto;
-                min-height: 40vh;
-                min-height: 40svh;
+            /* Prevent zoom on form inputs */
+            input[type="text"],
+            input[type="email"],
+            input[type="search"],
+            textarea,
+            select {
+                font-size: 16px;
             }
         }
 
@@ -806,9 +710,10 @@
         /* Cards Grid */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 400px));
             gap: 1.5rem;
             margin: 2rem 0;
+            justify-content: center;
         }
 
         .card-item {
@@ -986,12 +891,7 @@
 
         /* Loading states */
         .loading-placeholder {
-            background: #f3f4f6;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            color: #6b7280;
-            margin: 1rem 0;
+            display: none; /* Hide loading placeholder to prevent white space */
         }
 
         .loading-placeholder::before {
@@ -1000,6 +900,18 @@
             margin-bottom: 1rem;
         }
 
+        /* Mobile Menu Responsive Adjustments */
+        @media (max-width: 480px) {
+            #mobile-menu {
+                width: 100vw;
+                right: -100vw;
+            }
+            
+            #mobile-menu.active {
+                right: 0;
+            }
+        }
+        
         /* Tablet Responsive */
         @media (min-width: 769px) and (max-width: 1024px) {
             .nav-links {
@@ -1011,7 +923,14 @@
             }
 
             .cards-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(300px, 350px));
+                justify-content: center;
+            }
+            
+            /* Hide mobile menu on tablet+ */
+            #mobile-menu-overlay,
+            #mobile-menu {
+                display: none !important;
             }
         }
 
@@ -1019,6 +938,21 @@
             /* Show mobile menu toggle */
             .mobile-menu-toggle {
                 display: flex;
+                align-items: center;
+                justify-content: center;
+                background: none;
+                border: none;
+                color: #c2e9e0;
+                cursor: pointer;
+                font-size: 1.5rem;
+                padding: 0.5rem;
+                z-index: 1001;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-menu-toggle:hover {
+                color: #a8e6cf;
+                transform: scale(1.1);
             }
 
             /* Hide desktop navigation */
@@ -1032,35 +966,12 @@
             }
 
             .cards-container {
-                padding: 100px 1rem 2rem 1rem; /* Match card pages: normal bottom padding */
-                margin-bottom: 2rem !important; /* Normal margin like card pages */
-                contain: layout; /* iOS 26 Safari fix: prevent layout overflow */
+                padding: 0.5rem 1rem 2rem 1rem; /* Further reduced top padding for better mobile spacing */
+                margin-bottom: 0;
                 width: 100%;
                 max-width: 100%;
             }
 
-            .hero-section {
-                margin: -125px -1rem 3rem -1rem;
-                padding: 2rem 1rem;
-                width: 100vw;
-                width: 100dvw; /* iOS 26 Safari fix: use dynamic viewport width */
-                position: relative;
-                left: 50%;
-                right: 50%;
-                margin-left: -50vw;
-                margin-left: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
-                margin-right: -50vw;
-                margin-right: -50dvw; /* iOS 26 Safari fix: use dynamic viewport width */
-                contain: layout style; /* Prevent layout overflow on iOS Safari */
-            }
-
-            .hero-section h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
 
             .cards-grid {
                 grid-template-columns: 1fr;
@@ -1140,11 +1051,6 @@
     <!-- Main content wrapper for iOS Safari flexbox layout -->
     <main class="cards-page-content">
         <div class="cards-container">
-            <!-- Hero Section -->
-            <div class="hero-section">
-                <h1>Build your card lineup.</h1>
-                <p class="hero-subtitle">Set your filters, weigh the perks, and pick what actually earns for you.</p>
-            </div>
 
         <!-- Filter Pills Section -->
         <div class="filter-pills-section">
@@ -1451,6 +1357,23 @@
         </div>
     </main>
 
+    <!-- Mobile Menu Overlay and Menu -->
+    <div id="mobile-menu-overlay"></div>
+    <div id="mobile-menu">
+        <div class="mobile-menu-header">
+            <span class="logo">Practical Rewards</span>
+            <button class="mobile-menu-close" onclick="document.getElementById('mobile-menu-overlay').click()">&times;</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="/">Home</a>
+            <a href="/cards.html">Cards</a>
+            <a href="/learning.html">Learning</a>
+            <a href="/practical-picks.html">Practical Picks</a>
+            <a href="/about.html">About</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </div>
+
     <!-- Footer placeholder -->
     <div id="footer-placeholder">
         <div class="loading-placeholder">Loading footer...</div>
@@ -1473,19 +1396,9 @@
                 initializeFilters(); // Still initialize filters even if cards fail
             });
 
-            // After loading components, initialize mobile menu robustly
+            // Initialize modern mobile menu
             setTimeout(() => {
-                console.log('cards.html: Setting up mobile menu...');
-                if (typeof window.setupMobileMenu === 'function') {
-                    console.log('cards.html: Calling setupMobileMenu...');
-                    window.setupMobileMenu();
-                } else {
-                    console.log('cards.html: setupMobileMenu not found, using local setup...');
-                    setupLocalMobileMenu();
-                }
-                
-                // As a final safety, bind basic handlers if nothing attached yet
-                bindBasicMobileMenuHandlers();
+                initializeModernMobileMenu();
             }, 200);
         });
 
@@ -2570,139 +2483,112 @@
             }
         });
 
-        // Mobile menu functionality is handled by the dynamic header
-
-        // Add these functions (copied/adapted from card-scripts.js)
-
-        function setupLocalMobileMenu() {
-            console.log('setupLocalMobileMenu called, checking for elements...');
+        // Modern Mobile Menu Implementation
+        function initializeModernMobileMenu() {
+            console.log('Initializing modern mobile menu...');
             
             const toggle = document.getElementById('mobile-menu-toggle');
             const menu = document.getElementById('mobile-menu');
             const overlay = document.getElementById('mobile-menu-overlay');
-            
-            console.log('Found elements:', {
-                toggle: toggle ? 'YES' : 'NO',
-                menu: menu ? 'YES' : 'NO',
-                overlay: overlay ? 'YES' : 'NO'
-            });
             
             if (!toggle || !menu || !overlay) {
-                console.log('Missing mobile menu elements, cannot setup');
-                return false;
+                console.log('Mobile menu elements not found, skipping setup');
+                return;
             }
+            
+            // Remove any existing event listeners
+            const newToggle = toggle.cloneNode(true);
+            toggle.parentNode.replaceChild(newToggle, toggle);
+            
+            let isMenuOpen = false;
             
             function openMenu() {
-                console.log('OPENING MENU');
-                overlay.classList.add('active');
-                menu.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                // Prevent iOS scroll bleed and ensure no sliver remains
-                menu.style.borderLeft = '2px solid #a8e6cf';
-                menu.style.boxShadow = '-4px 0 20px rgba(168, 230, 207, 0.3)';
-            }
-            
-            function closeMenu() {
-                console.log('CLOSING MENU');
-                overlay.classList.remove('active');
-                menu.classList.remove('active');
-                document.body.style.overflow = '';
-                // Remove any residual visual line when hidden
-                menu.style.borderLeft = '0';
-                menu.style.boxShadow = 'none';
-            }
-            
-            // Add click handlers
-            toggle.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('HAMBURGER CLICKED!');
-                if (menu.classList.contains('active')) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            };
-            
-            console.log('Click handler attached to toggle button');
-            
-            // Close on overlay click
-            overlay.onclick = function(e) {
-                if (e.target === overlay) {
-                    console.log('Overlay clicked - closing menu');
-                    closeMenu();
-                }
-            };
-            
-            // Close on escape
-            document.onkeydown = function(e) {
-                if (e.key === 'Escape') {
-                    closeMenu();
-                }
-            };
-            
-            console.log('Local mobile menu setup complete!');
-            return true;
-        }
-
-        function bindBasicMobileMenuHandlers() {
-            const toggle = document.getElementById('mobile-menu-toggle');
-            const menu = document.getElementById('mobile-menu');
-            const overlay = document.getElementById('mobile-menu-overlay');
-
-            if (!toggle || !menu || !overlay) return;
-
-            // Avoid double-binding: skip if header assigned onclick or we've bound already
-            if (toggle.onclick || toggle.dataset.bound === 'true') return;
-
-            function openMenu() {
-                overlay.classList.add('active');
-                menu.classList.add('active');
+                if (isMenuOpen) return;
+                
+                console.log('Opening mobile menu');
+                isMenuOpen = true;
+                
+                // Show overlay
                 overlay.style.display = 'block';
+                overlay.style.opacity = '0';
+                
+                // Force reflow
+                overlay.offsetHeight;
+                
+                // Animate in
+                overlay.style.transition = 'opacity 0.3s ease';
+                overlay.style.opacity = '1';
+                
+                // Show menu
+                menu.classList.add('active');
+                
+                // Prevent body scroll
                 document.body.style.overflow = 'hidden';
+                document.body.style.position = 'fixed';
+                document.body.style.width = '100%';
             }
-
+            
             function closeMenu() {
+                if (!isMenuOpen) return;
+                
+                console.log('Closing mobile menu');
+                isMenuOpen = false;
+                
+                // Hide menu
                 menu.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
+                
+                // Animate out overlay
+                overlay.style.transition = 'opacity 0.3s ease';
+                overlay.style.opacity = '0';
+                
+                // Hide overlay after animation
                 setTimeout(() => {
-                    if (!overlay.classList.contains('active')) {
+                    if (!isMenuOpen) {
                         overlay.style.display = 'none';
                     }
                 }, 300);
+                
+                // Restore body scroll
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                document.body.style.width = '';
             }
-
-            toggle.addEventListener('click', function(e) {
+            
+            // Toggle menu on button click
+            newToggle.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if (menu.classList.contains('active')) {
+                
+                if (isMenuOpen) {
                     closeMenu();
                 } else {
                     openMenu();
                 }
-            }, { passive: false });
-
-            toggle.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (menu.classList.contains('active')) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            }, { passive: false });
-
+            });
+            
+            // Close menu on overlay click
             overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) closeMenu();
+                if (e.target === overlay) {
+                    closeMenu();
+                }
             });
-
+            
+            // Close menu on escape key
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') closeMenu();
+                if (e.key === 'Escape' && isMenuOpen) {
+                    closeMenu();
+                }
             });
-
-            // Mark as bound
-            toggle.dataset.bound = 'true';
+            
+            // Close menu on navigation link click
+            const menuLinks = menu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    closeMenu();
+                });
+            });
+            
+            console.log('Modern mobile menu initialized successfully');
         }
     </script>
     <script src="js/scripts.js"></script>

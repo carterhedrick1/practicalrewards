@@ -364,18 +364,6 @@ body {
     }
 }
 
-/* Header - Modern Desktop Navigation */
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
-    backdrop-filter: blur(20px);
-    border-bottom: none;
-    z-index: 1000;
-    transition: all 0.3s ease;
-}
 
 nav {
     max-width: 1400px;
@@ -964,21 +952,16 @@ footer {
     font-size: 0.875rem;
 }
 
-/* Loading states */
-.loading-placeholder {
-    background: #f5f5f4;
-    border-radius: 8px;
-    padding: 2rem;
-    text-align: center;
-    color: #78716c;
-    margin: 1rem 0;
-}
+        /* Loading states */
+        .loading-placeholder {
+            display: none; /* Hide loading placeholder to prevent white space */
+        }
 
-.loading-placeholder::before {
-    content: "Loading...";
-    display: block;
-    margin-bottom: 1rem;
-}
+        .loading-placeholder::before {
+            content: "Loading...";
+            display: block;
+            margin-bottom: 1rem;
+        }
 
 /* Card Grid Styles for Lounge Comparison */
 .cards-grid.three-columns {

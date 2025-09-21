@@ -55,28 +55,14 @@
     pointer-events: auto !important;
 }
 
-/* Loading placeholder styling */
+/* Loading placeholder styling - Hidden to prevent white space */
 .loading-placeholder {
-    background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
-    color: #a8e6cf;
-    padding: 1rem 2rem;
-    text-align: center;
-    font-weight: 500;
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: none; /* Hide to prevent white space before header loads */
 }
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
     #header-placeholder {
         min-height: 70px;
-    }
-    
-    .loading-placeholder {
-        min-height: 70px;
-        padding: 1rem;
-        font-size: 0.9rem;
     }
 }
