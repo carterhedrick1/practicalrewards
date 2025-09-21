@@ -555,28 +555,20 @@
             
             /* Header adjustments for mobile - let critical-header.css handle the styling */
 
-            /* Ensure the real header is fixed even inside the placeholder */
-            #header-placeholder header {
-                position: fixed !important;
-                top: 0;
-                left: 0;
-                right: 0;
-                margin: 0;
-                padding-top: env(safe-area-inset-top, 0);
-            }
+            /* Let critical-header.css and header.html handle all header positioning */
             
             /* Content wrapper with proper spacing */
             .cards-page-content {
                 display: block !important;
-                padding-top: 70px; /* Account for fixed header */
+                padding-top: 0; /* No extra padding needed with sticky header */
                 padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
-                min-height: calc(100vh - 70px);
-                min-height: calc(100dvh - 70px);
+                min-height: 100vh;
+                min-height: 100dvh;
             }
             
             .cards-container {
-                padding: 0 1rem 2rem 1rem; /* Remove top padding since cards-page-content handles header spacing */
-                margin-bottom: 0;
+                padding: 1rem 1rem 2rem 1rem; /* Minimal top padding for content spacing */
+                margin: 0;
             }
             
             /* Footer positioning */
@@ -1018,7 +1010,6 @@
     <div id="header-placeholder">
         <div class="loading-placeholder">Loading navigation...</div>
     </div>
-
     <!-- Main content section -->
     <section class="cards-section">
         <div class="cards-container">
@@ -1448,19 +1439,7 @@
         }
 
         function initializeLoadedContent() {
-            // Initialize header scroll effects
-            const header = document.querySelector('header');
-            if (header) {
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 100) {
-                        header.style.background = 'linear-gradient(135deg, rgba(15, 32, 39, 0.98) 0%, rgba(32, 58, 67, 0.98) 70%, rgba(44, 83, 100, 0.98) 100%)';
-                        header.style.boxShadow = '0 4px 20px rgba(168, 230, 207, 0.2)';
-                    } else {
-                        header.style.background = 'linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%)';
-                        header.style.boxShadow = 'none';
-                    }
-                });
-            }
+            // Header scroll effects are handled by the standalone function at the end of the file
 
             // Initialize mobile menu functionality
             const mobileToggle = document.querySelector('.mobile-menu-toggle');
@@ -2475,7 +2454,7 @@
             applyNewFilters();
         }
 
-        // Header background on scroll
+        // Header background on scroll - single implementation to avoid conflicts
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
             if (header && window.scrollY > 100) {
