@@ -1695,7 +1695,7 @@
             cardDiv.onclick = () => window.location.href = card.url;
 
             // Format annual fee text (not red, not big)
-            const feeText = card.annualFee === 0 ? 'No AF' : `$${card.annualFee} AF`;
+            const feeText = card.annualFee === 0 ? 'Annual Fee: $0' : `Annual Fee: $${card.annualFee}`;
 
             // Format welcome bonus (if available)
             const welcomeBonus = card.welcomeBonus || 'None';

@@ -1442,7 +1442,7 @@
         const div = document.createElement('div');
         div.className = 'card-item';
         div.onclick = () => window.location.href = card.url;
-        const feeText = card.annualFee === 0 ? 'No AF' : `$${card.annualFee} AF`;
+        const feeText = card.annualFee === 0 ? 'Annual Fee: $0' : `Annual Fee: $${card.annualFee}`;
         const welcomeBonus = card.welcomeBonus || 'None';
         const earningRates = Array.isArray(card.features) ? card.features.slice(0,3).join(' • ') : '';
         // Intentionally do not render filter tags on the card in Card Coach
@@ -1477,7 +1477,7 @@
         const div = document.createElement('div');
         div.className = 'card-item';
         div.onclick = () => window.location.href = card.url;
-        const feeText = card.annualFee === 0 ? 'No AF' : `$${card.annualFee} AF`;
+        const feeText = card.annualFee === 0 ? 'Annual Fee: $0' : `Annual Fee: $${card.annualFee}`;
         const welcomeBonus = card.welcomeBonus || 'None';
         const earningRates = Array.isArray(card.features) ? card.features.slice(0,3).join(' • ') : '';
         const advice = generatePracticalAdvice(card);
