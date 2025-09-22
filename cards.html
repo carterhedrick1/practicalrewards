@@ -667,6 +667,15 @@
             justify-content: center;
         }
 
+        /* Limit to 4 cards per row on very large screens */
+        @media (min-width: 1800px) {
+            .cards-grid {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 1800px;
+                margin: 2rem auto;
+            }
+        }
+
         .card-item {
             background: white;
             border-radius: 12px;
