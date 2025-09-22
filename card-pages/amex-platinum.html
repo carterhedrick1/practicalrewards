@@ -115,6 +115,7 @@
                                 <li><strong>$200 Airline Fee Credit</strong> – Choose one U.S. airline; incidental fees reimbursed up to $200/year. Airfare and most gift cards don’t count. Enrollment/selection required.</li>
                                 <li><strong>$200 Uber Cash</strong> – $15/month ($35 in December) in Uber Cash for U.S. rides or Uber Eats after adding your card to Uber. Use-it-or-lose-it monthly.</li>
                                 <li><strong>$300 lululemon Credit</strong> – $75 per quarter at U.S. lululemon stores or online. Enrollment required; quarterly buckets don’t roll.</li>
+                                <li><strong>$300 Equinox Credit</strong> – $25/month back on eligible Equinox or Equinox+ memberships when billed directly to your Platinum. Enrollment required; use-it-or-lose-it monthly.</li>
                                 <li><strong>$200 Oura Ring Credit</strong> – Up to $200/year for eligible purchases at ouraring.com. Enrollment required; see terms.</li>
                                 <li><strong>$120 Uber One Membership</strong> – Reimburses an auto-renewing U.S. Uber One membership. Enrollment required. Separate from Uber Cash.</li>
                                 <li><strong>$155 Walmart+ Credit</strong> – Covers monthly Walmart+ membership when billed monthly to your Platinum. Annual plans don’t qualify.</li>
@@ -491,6 +492,68 @@
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
                                         <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">Worth $300 if you shop there; otherwise $0.</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="300">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important; transition: none !important;">
+                                <span class="currency" style="transition: none !important;">$</span>
+                                <input type="number" value="0" min="0" max="300" onchange="syncInputValues(this)" data-max="300">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important; transition: none !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="300">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important; transition: none !important;">
+                                    <span class="currency" style="transition: none !important;">$</span>
+                                    <input type="number" value="0" min="0" max="300" onchange="syncInputValues(this)" data-max="300">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important; transition: none !important;">$0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                Equinox Credit
+                            </div>
+                            <div class="credit-description">
+                                <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">$300/year as $25 per month back on eligible Equinox or Equinox+ memberships when billed directly to your Platinum.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Enroll in benefits; set Platinum as the payment method for your monthly Equinox/Equinox+ membership; credits post after eligible charges.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Use-it-or-lose-it monthly; only direct-billed U.S. memberships qualify; not valid on gift cards or third-party billing.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Members who already pay for Equinox or Equinox+ monthly and can keep billing on this card.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">Worth up to $300 if you keep and use the membership monthly.</td>
                                     </tr>
                                 </table>
                             </div>
