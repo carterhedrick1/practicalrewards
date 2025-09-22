@@ -1,16 +1,27 @@
 /* Critical Header Styles - Prevents Loading Flash */
 /* This file should be linked in the <head> of every page to ensure instant header styling */
 
+/* Ensure warm grey background everywhere including safe areas */
+html {
+    background: #f5f5f4 !important;
+    background-color: #f5f5f4 !important;
+}
+
+body {
+    background: #f5f5f4 !important;
+    background-color: #f5f5f4 !important;
+}
+
 /* Critical header placeholder styles */
 #header-placeholder {
-    position: sticky;
-    top: 0;
+    position: relative;
     left: 0;
     right: 0;
     width: 100%;
-    background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
+    background: #f5f5f4;
     backdrop-filter: blur(20px);
-    border-bottom: none;
+    border-bottom: 1px solid #e7e5e4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     z-index: 1000;
     transition: all 0.3s ease;
     overflow: visible;

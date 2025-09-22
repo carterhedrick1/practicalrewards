@@ -1,44 +1,35 @@
 <!-- Universal Header -->
 <!-- Navigation now uses absolute paths from root - no JavaScript needed -->
 <style>
-    /* Page background - avoid fixed pseudo-element seams at the bottom */
+    /* Page background - ensure warm grey everywhere including safe areas */
     html {
-        background: var(--warm-gray-50, #fafaf9);
+        background: #f5f5f4 !important;
+        background-color: #f5f5f4 !important;
     }
     
     body {
-        background: var(--warm-gray-50, #fafaf9);
-        padding-top: env(safe-area-inset-top);
+        background: #f5f5f4 !important;
+        background-color: #f5f5f4 !important;
     }
     
-    /* Header - Modern Desktop Navigation with Beautiful Footer Colors */
+    /* Header - Modern Desktop Navigation with Warm Grey Background */
     header {
-        position: sticky;
+        position: relative;
         top: 0;
         left: 0;
         right: 0;
         width: 100%;
-        background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
+        background: #f5f5f4;
         backdrop-filter: blur(20px);
-        border-bottom: none;
+        border-bottom: 1px solid #e7e5e4;
         z-index: 1000;
-        transition: all 0.3s ease;
         overflow: hidden;
         padding-top: env(safe-area-inset-top, 0);
+        padding-bottom: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
     
-    /* iOS Safari - Extend header background to cover status bar area */
-    header::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: env(safe-area-inset-top, 0);
-        background: linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%);
-        z-index: -1;
-        pointer-events: none;
-    }
+    /* iOS Safari - Header extends into safe area naturally */
     
     header::before {
         content: '';
@@ -67,7 +58,7 @@
     .logo {
         font-size: 1.5rem;
         font-weight: 700;
-        color: #a8e6cf;
+        color: #059669;
         text-decoration: none;
         transition: all 0.3s ease;
         display: flex;
@@ -88,7 +79,7 @@
     }
 
     .logo:hover {
-        color: #e8f4f8;
+        color: #047857;
         transform: translateY(-1px);
     }
     
@@ -107,7 +98,7 @@
 
     .nav-links a {
         text-decoration: none;
-        color: #c2e9e0;
+        color: #44403c;
         font-weight: 500;
         font-size: 0.95rem;
         transition: all 0.3s ease;
@@ -127,7 +118,7 @@
     }
 
     .nav-links a:hover {
-        color: #a8e6cf;
+        color: #059669;
         transform: translateX(4px);
     }
 
@@ -180,7 +171,7 @@
     .hamburger span {
         width: 20px;
         height: 3px;
-        background: #a8e6cf;
+        background: #059669;
         border-radius: 2px;
         position: absolute;
         left: 0;
@@ -202,11 +193,11 @@
     /* Mobile Menu - Beautiful Slide Out from Right */
     .mobile-menu {
         position: fixed !important;
-        top: 70px !important;
+        top: calc(70px + env(safe-area-inset-top, 0px)) !important;
         right: 0 !important; /* Keep anchored, use transform to hide */
         width: 320px !important;
-        height: calc(100vh - 70px - env(safe-area-inset-bottom, 0px)) !important;
-        background: linear-gradient(135deg, #0f2027 0%, #203a43 70%, #2c5364 100%) !important;
+        height: calc(100vh - 70px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+        background: #f5f5f4 !important;
         z-index: 999999 !important;
         box-shadow: none !important; /* No shadow when hidden to avoid sliver */
         transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
@@ -224,20 +215,20 @@
         transform: translateX(0) !important;
         opacity: 1 !important;
         visibility: visible !important;
-        border-left: 2px solid #a8e6cf !important;
-        box-shadow: -4px 0 20px rgba(168, 230, 207, 0.3) !important;
+        border-left: 3px solid #059669 !important;
+        box-shadow: -8px 0 32px rgba(5, 150, 105, 0.2) !important;
         pointer-events: auto !important;
     }
 
     /* Mobile Menu Overlay - Beautiful Darkening Effect */
     .mobile-menu-overlay {
         position: fixed !important;
-        top: 70px !important;
+        top: calc(70px + env(safe-area-inset-top, 0px)) !important;
         left: 0 !important;
         width: 100% !important;
-        height: calc(100vh - 70px - env(safe-area-inset-bottom, 0px)) !important;
-        background: rgba(15, 32, 39, 0.8) !important;
-        backdrop-filter: blur(4px) !important;
+        height: calc(100vh - 70px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+        background: rgba(68, 64, 60, 0.6) !important;
+        backdrop-filter: blur(8px) !important;
         z-index: 999998 !important;
         opacity: 0 !important;
         visibility: hidden !important;
@@ -337,14 +328,14 @@
     }
 
     .mobile-nav-links li:hover {
-        background: rgba(168, 230, 207, 0.1);
+        background: rgba(5, 150, 105, 0.1);
         transform: translateX(4px);
     }
 
     .mobile-nav-links a {
         display: block;
         padding: 1rem 1.5rem;
-        color: #c2e9e0;
+        color: #44403c;
         text-decoration: none;
         font-weight: 600;
         font-size: 1.1rem;
@@ -354,8 +345,8 @@
     }
 
     .mobile-nav-links a:hover {
-        color: #a8e6cf;
-        background: rgba(168, 230, 207, 0.1);
+        color: #059669;
+        background: rgba(5, 150, 105, 0.1);
         transform: translateX(4px);
     }
 
@@ -379,10 +370,10 @@
     /* Close button */
     .mobile-menu-close {
         position: relative;
-        background: rgba(168, 230, 207, 0.1);
-        border: 2px solid #a8e6cf;
+        background: rgba(5, 150, 105, 0.1);
+        border: 2px solid #059669;
         font-size: 1.5rem;
-        color: #a8e6cf;
+        color: #059669;
         cursor: pointer;
         padding: 0.5rem;
         z-index: 1001;
@@ -396,8 +387,8 @@
     }
 
     .mobile-menu-close:hover {
-        background: rgba(168, 230, 207, 0.2);
-        color: #e8f4f8;
+        background: rgba(5, 150, 105, 0.2);
+        color: #047857;
         transform: scale(1.1);
     }
 
@@ -419,7 +410,7 @@
         }
         
         header {
-            position: sticky !important;
+            position: relative !important;
             top: 0 !important;
             z-index: 1001 !important;
         }
@@ -519,8 +510,8 @@
             menu.classList.add('active');
             
             // Visual effects
-            menu.style.borderLeft = '2px solid #a8e6cf';
-            menu.style.boxShadow = '-4px 0 20px rgba(168, 230, 207, 0.3)';
+            menu.style.borderLeft = '3px solid #059669';
+            menu.style.boxShadow = '-8px 0 32px rgba(5, 150, 105, 0.2)';
             
             // Prevent touch events on background - multiple event types for maximum coverage
             document.addEventListener('touchmove', preventScroll, { passive: false });
@@ -651,24 +642,10 @@
         });
     }
 
-    // Universal header scroll behavior
+    // Universal header scroll behavior - removed pinned header behavior
     function attachHeaderScrollBehavior() {
-        if (window.__headerScrollAttached) return;
-        window.__headerScrollAttached = true;
-        const headerEl = document.querySelector('header');
-        if (!headerEl) return;
-        function onScroll() {
-            if (window.scrollY > 100) {
-                headerEl.style.background = 'linear-gradient(135deg, rgba(15, 32, 39, 0.98) 0%, rgba(32, 58, 67, 0.98) 70%, rgba(44, 83, 100, 0.98) 100%)';
-                headerEl.style.boxShadow = '0 4px 20px rgba(168, 230, 207, 0.2)';
-            } else {
-                headerEl.style.background = 'linear-gradient(135deg, #0f2027 0%, #0f2027 30%, #203a43 70%, #2c5364 100%)';
-                headerEl.style.boxShadow = 'none';
-            }
-        }
-        window.addEventListener('scroll', onScroll);
-        // Initialize state
-        onScroll();
+        // No scroll behavior needed - header is now normal flow
+        console.log('Header scroll behavior disabled - using normal flow');
     }
     
     // Try to setup immediately
