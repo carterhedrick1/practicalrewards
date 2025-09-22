@@ -1361,10 +1361,7 @@
                 initializeFilters(); // Still initialize filters even if cards fail
             });
 
-            // Initialize modern mobile menu
-            setTimeout(() => {
-                initializeModernMobileMenu();
-            }, 200);
+            // Mobile menu is handled by header.html - no need to override
         });
 
         function loadComponent(filename, placeholderId, fallbackId) {
@@ -2475,113 +2472,6 @@
             }
         });
 
-        // Modern Mobile Menu Implementation
-        function initializeModernMobileMenu() {
-            console.log('Initializing modern mobile menu...');
-            
-            const toggle = document.getElementById('mobile-menu-toggle');
-            const menu = document.getElementById('mobile-menu');
-            const overlay = document.getElementById('mobile-menu-overlay');
-            
-            if (!toggle || !menu || !overlay) {
-                console.log('Mobile menu elements not found, skipping setup');
-                return;
-            }
-            
-            // Remove any existing event listeners
-            const newToggle = toggle.cloneNode(true);
-            toggle.parentNode.replaceChild(newToggle, toggle);
-            
-            let isMenuOpen = false;
-            
-            function openMenu() {
-                if (isMenuOpen) return;
-                
-                console.log('Opening mobile menu');
-                isMenuOpen = true;
-                
-                // Show overlay
-                overlay.style.display = 'block';
-                overlay.style.opacity = '0';
-                
-                // Force reflow
-                overlay.offsetHeight;
-                
-                // Animate in
-                overlay.style.transition = 'opacity 0.3s ease';
-                overlay.style.opacity = '1';
-                
-                // Show menu
-                menu.classList.add('active');
-                
-                // Prevent body scroll
-                document.body.style.overflow = 'hidden';
-                document.body.style.position = 'fixed';
-                document.body.style.width = '100%';
-            }
-            
-            function closeMenu() {
-                if (!isMenuOpen) return;
-                
-                console.log('Closing mobile menu');
-                isMenuOpen = false;
-                
-                // Hide menu
-                menu.classList.remove('active');
-                
-                // Animate out overlay
-                overlay.style.transition = 'opacity 0.3s ease';
-                overlay.style.opacity = '0';
-                
-                // Hide overlay after animation
-                setTimeout(() => {
-                    if (!isMenuOpen) {
-                        overlay.style.display = 'none';
-                    }
-                }, 300);
-                
-                // Restore body scroll
-                document.body.style.overflow = '';
-                document.body.style.position = '';
-                document.body.style.width = '';
-            }
-            
-            // Toggle menu on button click
-            newToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                if (isMenuOpen) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            });
-            
-            // Close menu on overlay click
-            overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) {
-                    closeMenu();
-                }
-            });
-            
-            // Close menu on escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && isMenuOpen) {
-                    closeMenu();
-                }
-            });
-            
-            // Close menu on navigation link click
-            const menuLinks = menu.querySelectorAll('a');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    closeMenu();
-                });
-            });
-            
-            console.log('Modern mobile menu initialized successfully');
-        }
     </script>
     <script src="js/scripts.js"></script>
 </body>
