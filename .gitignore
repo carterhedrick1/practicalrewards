@@ -11,3 +11,8 @@ secrets.js
 
 # Admin/Development files (not for public)
 database.html
+
+# Local development server files
+package.json
+dev-server.js
+node_modules/

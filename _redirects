@@ -1,0 +1,6 @@
+# Redirect index.html to root to fix canonical URL issues
+/index.html / 301
+
+# Optional: Redirect www to non-www (if you want to enforce non-www)
+# https://www.practicalrewards.com/* https://practicalrewards.com/:splat 301
+
