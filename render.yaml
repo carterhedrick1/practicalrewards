@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: practicalrewards
+    env: static
+    buildCommand: echo "No build needed for static site"
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /index.html
+        destination: /
+        statusCode: 301

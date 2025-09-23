@@ -13,6 +13,5 @@ secrets.js
 database.html
 
 # Local development server files
-package.json
 dev-server.js
 node_modules/
