@@ -65,7 +65,7 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Welcome Bonus</span>
-                            <span class="info-value">As high as 175,000 points after $8,000 spend in 6 months</span>
+                            <span class="info-value">As high as 175,000 points after $12,000 spend in 6 months</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Card Material</span>
@@ -120,9 +120,8 @@
                                 <li><strong>$200 Oura Ring Credit</strong> – Up to $200/year for eligible purchases at ouraring.com. Enrollment required; see terms.</li>
                                 <li><strong>$120 Uber One Membership</strong> – Reimburses an auto-renewing U.S. Uber One membership. Enrollment required. Separate from Uber Cash.</li>
                                 <li><strong>$155 Walmart+ Credit</strong> – Covers monthly Walmart+ membership when billed monthly to your Platinum. Annual plans don’t qualify.</li>
-                                <li><strong>$209 CLEAR® Plus Credit</strong> – Covers CLEAR Plus membership up to $209/year. Useful only where CLEAR operates.</li>
-                                <li><strong>$100 Saks Fifth Avenue Credit</strong> – $50 Jan–Jun and $50 Jul–Dec (in-store or online). Enrollment required.</li>
-                                <li><strong>Global Entry/TSA PreCheck Fee Credit</strong> – Reimburses the application fee on its cadence (roughly ~$25/year averaged).</li>
+                                <li><strong>$219 CLEAR® Plus Credit</strong> – Covers CLEAR Plus membership up to $219/year (Amex raised this from $209 when CLEAR's price went to $219 on July 1, 2026). Useful only where CLEAR operates.</li>
+                                <li><strong>Global Entry/TSA PreCheck Fee Credit</strong> – Reimburses the application fee on its cadence (roughly ~$30/year averaged).</li>
                             </ul>
                         </div>
                         <div class="calculator-toggle-container">
@@ -786,7 +785,7 @@
                                 <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Up to $209/year back on CLEAR Plus membership.</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Up to $219/year back on CLEAR Plus membership (raised from $209 when CLEAR's price rose to $219 on July 1, 2026).</td>
                                     </tr>
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
@@ -809,14 +808,14 @@
                         </div>
                         <div class="toggle-container">
                             <label class="credit-toggle">
-                                <input type="checkbox" onchange="toggleCredit(this)" data-max="209">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="219">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
                         <div class="value-column">
                             <div class="value-input" style="display: none !important; transition: none !important;">
                                 <span class="currency" style="transition: none !important;">$</span>
-                                <input type="number" value="0" min="0" max="209" onchange="syncInputValues(this)" data-max="209">
+                                <input type="number" value="0" min="0" max="219" onchange="syncInputValues(this)" data-max="219">
                             </div>
                             <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important; transition: none !important;">$0</div>
                         </div>
@@ -825,76 +824,14 @@
                             <div class="mobile-label-value">Your Value:</div>
                             <div class="toggle-container">
                                 <label class="credit-toggle">
-                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="209">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="219">
                                     <span class="toggle-slider"></span>
                                 </label>
                             </div>
                             <div class="value-column">
                                 <div class="value-input" style="display: none !important; transition: none !important;">
                                     <span class="currency" style="transition: none !important;">$</span>
-                                    <input type="number" value="0" min="0" max="209" onchange="syncInputValues(this)" data-max="209">
-                                </div>
-                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important; transition: none !important;">$0</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-row">
-                        <div class="credit-info">
-                            <div class="credit-name">
-                                Saks Fifth Avenue Credit
-                            </div>
-                            <div class="credit-description">
-                                <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
-                                    <tr class="credit-row">
-                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">$50 Jan–Jun + $50 Jul–Dec at Saks (in-store or online).</td>
-                                    </tr>
-                                    <tr class="credit-row">
-                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Enroll; pay with your card; credits post after eligible purchases.</td>
-                                    </tr>
-                                    <tr class="credit-row">
-                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Split into two halves; unused half doesn't carry.</td>
-                                    </tr>
-                                    <tr class="credit-row">
-                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">People who already buy at Saks (or can snag small essentials/gifts).</td>
-                                    </tr>
-                                    <tr class="credit-row">
-                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">I mean it's there but unless you shop at Saks already we'd say pretty low.</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="toggle-container">
-                            <label class="credit-toggle">
-                                <input type="checkbox" onchange="toggleCredit(this)" data-max="100">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="value-column">
-                            <div class="value-input" style="display: none !important; transition: none !important;">
-                                <span class="currency" style="transition: none !important;">$</span>
-                                <input type="number" value="0" min="0" max="100" onchange="syncInputValues(this)" data-max="100">
-                            </div>
-                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important; transition: none !important;">$0</div>
-                        </div>
-                        <div class="mobile-controls-table">
-                            <div class="mobile-label-include">Include:</div>
-                            <div class="mobile-label-value">Your Value:</div>
-                            <div class="toggle-container">
-                                <label class="credit-toggle">
-                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="100">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="value-column">
-                                <div class="value-input" style="display: none !important; transition: none !important;">
-                                    <span class="currency" style="transition: none !important;">$</span>
-                                    <input type="number" value="0" min="0" max="100" onchange="syncInputValues(this)" data-max="100">
+                                    <input type="number" value="0" min="0" max="219" onchange="syncInputValues(this)" data-max="219">
                                 </div>
                                 <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important; transition: none !important;">$0</div>
                             </div>
@@ -910,7 +847,7 @@
                                 <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Reimbursement for Global Entry ($100) every 4 years (or TSA PreCheck fee on its cadence).</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Reimbursement for Global Entry ($120) every 4 years (or TSA PreCheck fee, up to $85, on its cadence).</td>
                                     </tr>
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
@@ -933,14 +870,14 @@
                         </div>
                         <div class="toggle-container">
                             <label class="credit-toggle">
-                                <input type="checkbox" onchange="toggleCredit(this)" data-max="25">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="30">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
                         <div class="value-column">
                             <div class="value-input" style="display: none !important; transition: none !important;">
                                 <span class="currency" style="transition: none !important;">$</span>
-                                <input type="number" value="0" min="0" max="25" onchange="syncInputValues(this)" data-max="25">
+                                <input type="number" value="0" min="0" max="30" onchange="syncInputValues(this)" data-max="30">
                             </div>
                             <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important; transition: none !important;">$0</div>
                         </div>
@@ -949,14 +886,14 @@
                             <div class="mobile-label-value">Your Value:</div>
                             <div class="toggle-container">
                                 <label class="credit-toggle">
-                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="25">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="30">
                                     <span class="toggle-slider"></span>
                                 </label>
                             </div>
                             <div class="value-column">
                                 <div class="value-input" style="display: none !important; transition: none !important;">
                                     <span class="currency" style="transition: none !important;">$</span>
-                                    <input type="number" value="0" min="0" max="25" onchange="syncInputValues(this)" data-max="25">
+                                    <input type="number" value="0" min="0" max="30" onchange="syncInputValues(this)" data-max="30">
                                 </div>
                                 <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important; transition: none !important;">$0</div>
                             </div>
@@ -1001,8 +938,10 @@
                             <li><strong>Delta Sky Club (when flying Delta)</strong> – Enter Sky Clubs the day you fly Delta. As of the new rules, 10 visits per program year for Platinum; guest access is paid if allowed by Delta. This is excellent if you're a Delta flyer; useless if you never touch Delta. - <a href="https://global.americanexpress.com/card-benefits/detail/delta-sky-club-access/morgan-stanley-platinum-card#:~:text=Platinum%20Card%C2%AE%20Members%20receive,purchases%20in%20a%20calendar%20year." target="_blank">See access rules</a></li>
                             <li><strong>Priority Pass (lounges only)</strong> – Enroll to access Priority Pass lounges (no restaurants). Good backup when there's no Centurion or Sky Club. Up to two guests free at most lounges, then a fee. - <a href="https://www.prioritypass.com/lounges/usa" target="_blank">See lounge list</a></li>
                             <li><strong>Escape Lounges – The Centurion Studio Partner</strong> – Walk-in access at U.S. Escape Lounges, typically with two guests included. Nice when flying non-Delta and no Centurion is nearby. - <a href="https://escapelounges.com/us/access/" target="_blank">See locations</a></li>
-                            <li><strong>Lufthansa Lounges (FRA/MUC)</strong> – When flying Lufthansa Group same day, Platinum can access certain Lufthansa Business or Senator lounges depending on cabin. Handy on Europe trips routed via Frankfurt/Munich. Guesting rules vary; always check specifics. - <a href="https://www.americanexpress.com/us/campaigns/lufthansa/" target="_blank">See details</a></li>
+                            <li><strong>Lufthansa Lounges (FRA/MUC) — ending October 1, 2026</strong> – Amex is dropping this perk. Through September 30, 2026 a same-day Lufthansa Group flight still gets you into certain Business or Senator lounges depending on cabin; after that the card alone won't get you in. Don't factor it into the fee math going forward. - <a href="https://www.americanexpress.com/us/campaigns/lufthansa/" target="_blank">See details</a></li>
                             <li><strong>Hilton Gold & Marriott Gold Status (enrollment required)</strong> – Useful for breakfast/room upgrade potential (property-dependent). Nice cherry on top if you stay with these chains a few times a year.</li>
+                            <li><strong>Leaders Club Sterling status (added in the refresh)</strong> – Leading Hotels of the World status with breakfast, upgrade priority, and a stay bonus. Only matters if you book LHW properties, which most people never do.</li>
+                            <li><strong>Rental car status (enrollment required)</strong> – Hertz President's Circle, Avis Preferred, and National Emerald Club Executive. Mostly means a free class upgrade and skipping the counter—small but real if you rent a few times a year.</li>
                         </ul>
                             </div>
                         </div>
@@ -1041,7 +980,7 @@
                         <li><strong>Delta Sky Club (effective Feb 1, 2025 rules)</strong> – Platinum includes 10 visits per Medallion Year (Feb 1–Jan 31) while flying Delta (or Delta-marketed WestJet). Unlimited visits unlock with $75,000 calendar-year spend. Guesting costs $50 per person (or $25 for Grab & Go), up to 2 guests or immediate family; under 2 free. Basic Economy passengers are not eligible. One "Visit" covers 24 hours of entries on the same trip.</li>
                         <li><strong>Escape Lounges — The Centurion Studio Partner (U.S.)</strong> – Show your Platinum card, ID, and same-day boarding pass. You may bring 2 guests free; under 2 free; access is capacity-controlled.</li>
                         <li><strong>Priority Pass</strong> – Platinum includes Priority Pass Select (enrollment required) with lounge access only (no airport restaurants/experiences). Up to 2 guests complimentary at lounges that allow guests; policies can vary by lounge.</li>
-                        <li><strong>Lufthansa lounges (FRA/MUC only)</strong> – Platinum cardholders can access select Lufthansa Business Lounges (any cabin) and Senator Lounges (when flying business class) only in Frankfurt and Munich on same-day Lufthansa Group flights; no complimentary guests (some locations may sell guest access).</li>
+                        <li><strong>Lufthansa lounges (FRA/MUC only) — goes away October 1, 2026</strong> – Until September 30, 2026, Platinum cardholders can access select Lufthansa Business Lounges (any cabin) and Senator Lounges (when flying business class) in Frankfurt and Munich on same-day Lufthansa Group flights; no complimentary guests (some locations may sell guest access). From October 1, 2026 the card no longer opens those doors—you'll need the premium cabin ticket or status. Centurion and Priority Pass access are unaffected.</li>
                     </ul>
                     
                     <h3>American Express Centurion Lounges (U.S.)</h3>

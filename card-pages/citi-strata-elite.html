@@ -65,7 +65,7 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Welcome Bonus</span>
-                            <span class="info-value">80,000 points after $4,000 spend in 3 months</span>
+                            <span class="info-value">75,000 points after $6,000 spend in 3 months</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Card Material</span>
@@ -106,7 +106,7 @@
                             </div>
                             <ul class="recommendation-list">
                                 <li><strong>$300 Annual Hotel Benefit</strong> – $300 off one booking of 2+ consecutive nights each calendar year through Citi Travel; taken instantly at checkout. Rates and availability are portal-dependent; taxes/fees excluded. Compare prices before you book. — <a href="https://cititravel.com" target="_blank">Citi Travel</a></li>
-                                <li><strong>$200 Annual Splurge Credit</strong> – Up to $200 per calendar year across up to two brands you choose: 1stDibs, American Airlines, Best Buy, ESPN+, Future Personal Training, or Live Nation. Auto statement credits after eligible charges; some categories may be excluded. Don't force it—use on spend you already make. — <a href="https://www.citi.com/credit-cards/credit-card-rewards/citi-strata-elite-benefits" target="_blank">See eligible brands</a></li>
+                                <li><strong>$200 Annual Splurge Credit</strong> – Up to $200 per calendar year across up to two brands you choose: 1stDibs, American Airlines, Best Buy, Future Personal Training, or Live Nation (ESPN+ was dropped from the list). You can change your two picks at any time. Auto statement credits after eligible charges; some categories may be excluded. Don't force it—use on spend you already make. — <a href="https://www.citi.com/credit-cards/credit-card-rewards/citi-strata-elite-benefits" target="_blank">See eligible brands</a></li>
                                 <li><strong>$200 Annual Blacklane Credit</strong> – $100 Jan–Jun + $100 Jul–Dec for Blacklane chauffeur rides paid with the card. No rollover; use it or lose it each half. Great for airport transfers; prices vary by city. — <a href="https://www.blacklane.com" target="_blank">Blacklane</a></li>
                                 <li><strong>Global Entry / TSA PreCheck Credit (up to $120)</strong> – Reimburses one application fee every 4 years when paid with the card. Global Entry includes TSA PreCheck; pick the bigger one and be done. — <a href="https://www.cbp.gov/travel/trusted-traveler-programs/global-entry" target="_blank">Global Entry</a></li>
 
@@ -215,7 +215,7 @@
                                 <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Up to $200 in statement credits per calendar year across up to two brands (1stDibs, American Airlines, Best Buy, ESPN+, Future, Live Nation).</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Up to $200 in statement credits per calendar year across up to two brands (1stDibs, American Airlines, Best Buy, Future Personal Training, Live Nation).</td>
                                     </tr>
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
@@ -227,7 +227,7 @@
                                     </tr>
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">People who already spend at Best Buy, fly American, stream ESPN+, or buy Live Nation tickets.</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">People who already spend at Best Buy, fly American, or buy Live Nation tickets.</td>
                                     </tr>
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
@@ -362,14 +362,14 @@
                         </div>
                         <div class="toggle-container">
                             <label class="credit-toggle">
-                                <input type="checkbox" onchange="toggleCredit(this)" data-max="25">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="30">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
                         <div class="value-column">
                             <div class="value-input" style="display: none !important;">
                                 <span class="currency">$</span>
-                                <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                <input type="number" value="0" min="0" max="30" onchange="syncInputValues(this)" data-max="30">
                             </div>
                             <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
                         </div>
@@ -378,14 +378,14 @@
                             <div class="mobile-label-value">Your Value:</div>
                             <div class="toggle-container">
                                 <label class="credit-toggle">
-                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="25">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="30">
                                     <span class="toggle-slider"></span>
                                 </label>
                             </div>
                             <div class="value-column">
                                 <div class="value-input" style="display: none !important;">
                                     <span class="currency">$</span>
-                                    <input type="number" value="0" min="0" max="25" onchange="syncInputValues(this)" data-max="25">
+                                    <input type="number" value="0" min="0" max="30" onchange="syncInputValues(this)" data-max="30">
                                 </div>
                                 <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
                             </div>
@@ -427,7 +427,7 @@
                             <li><strong>Priority Pass lounges</strong> – Complimentary Priority Pass Select for the primary cardmember (authorized users eligible) with up to 2 complimentary guests where allowed. No restaurants/experiences. Show your card or enroll for a digital pass. — <a href="https://www.prioritypass.com/en/lounges" target="_blank">See lounge list</a></li>
                             <li><strong>American Airlines Admirals Club passes</strong> – Four digital passes per calendar year in your AAdvantage wallet. Each pass admits one adult (18+) plus up to three children under 18 for 24 hours, with same-day boarding pass on American or oneworld. Capacity controls apply; some clubs turn away day-pass users at peak times. — <a href="https://www.aa.com/i18n/travel-info/clubs/admirals-club-locations.jsp" target="_blank">See lounge list</a></li>
                             <li><strong>The Reserve by Citi Travel (hotel collection)</strong> – Book select 4.5–5-star properties via Citi Travel for perks like breakfast for two, property credit, and potential upgrade/late checkout; always compare rates. — <a href="https://www.citi.com/credit-cards/citi-strata-elite-credit-card" target="_blank">See details</a></li>
-                            <li><strong>Points transfer</strong> – Transfer ThankYou points to partners including American Airlines, JetBlue, Virgin Atlantic, Cathay Pacific, EVA Air, Choice Hotels, and The Leading Hotels of the World. Good value if you can find saver awards.</li>
+                            <li><strong>Points transfer</strong> – Transfer ThankYou points to partners including American Airlines, JetBlue, Virgin Atlantic, Cathay Pacific, EVA Air, Choice Hotels, and The Leading Hotels of the World. Good value if you can find saver awards. Two 2026 downgrades to know: Choice Privileges dropped from 1:2 to 1:1.5 and Preferred Hotels I Prefer from 1:4 to 1:2 on April 19, 2026, and Citi ended point sharing between accounts on May 17, 2026—so you can no longer pool points with another person.</li>
                             <li><strong>No foreign transaction fees</strong> – Use abroad without the extra skim.</li>
                         </ul>
                     </div>

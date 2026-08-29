@@ -65,7 +65,7 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Welcome Bonus</span>
-                            <span class="info-value">100,000 points after $6,000 spend in 3 months + 25,000-point Global Companion Award</span>
+                            <span class="info-value">80,000 points + 25,000-point Global Companion Award after $4,000 spend in 90 days</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Card Material</span>
@@ -87,7 +87,8 @@
             <div class="recommendation-content">
                 <h2>Practical Recommendation</h2>
                 <div class="recommendation-text">
-                    <p>If you fly Alaska or Hawaiian or travel abroad a lot, this is the rare airline card that earns well on your overseas spending and hands you useful perks (8 lounge passes, free checked bags, waived partner award fees). The Global Companion Award can be a huge discount on a second award seat.</p>
+                    <p>If you fly Alaska or Hawaiian or travel abroad a lot, this is the rare airline card that earns well on your overseas spending and hands you useful perks (8 lounge passes, free checked bags, waived partner award fees). The Global Companion Award can be a huge discount on a second award seat, and you get one every anniversary without a spending requirement.</p>
+                    <p>The current public offer is 80,000 points plus a 25,000-point companion award after $4,000 in 90 days. Bank of America ran a bigger 100,000-point version in spring 2026, so if you are not in a hurry it may be worth waiting to see whether that comes back.</p>
                     <p>If you do not touch those airlines or you hate tracking airline perks, the $395 will feel like a lot. Bottom line: regular Alaska/Hawaiian flyers or frequent international spenders can make this pay; casual travelers should look cheaper.</p>
                 </div>
             </div>
@@ -107,7 +108,7 @@
                             <ul class="recommendation-list">
                                 <li><strong>Global Entry / TSA PreCheck</strong> – Up to $120 back every 4 years when you pay the application fee with the card (choose Global Entry for broader coverage; it includes TSA PreCheck). Automatic after the charge posts; one credit per window.</li>
                                 <li><strong>Instant $50 Travel Delay Voucher</strong> – If an Alaska flight is delayed 2+ hours or canceled within 24 hours of departure, you get a $50 voucher to your card, valid for 48 hours. Handy for meals or incidentals; short validity means use it quickly.</li>
-                                <li><strong>Eight In-Flight Wi-Fi Vouchers (transitional)</strong> – 8 codes per year until the fleet gets free Starlink. Good for occasional connectivity without paying cash; unused codes do not help once free Wi-Fi arrives.</li>
+                                <li><strong>Eight In-Flight Wi-Fi Vouchers</strong> – 8 codes per year, issued two per quarter, still active as of August 2026. Good for occasional connectivity without paying cash; the perk shrinks in value as Alaska expands free Starlink Wi-Fi across the fleet.</li>
                                 <li><strong>Waived Partner Award Ticket Fees</strong> – Saves up to $25 per person on round-trip partner award bookings. Small but automatic; worth the most if you book partners often.</li>
                             </ul>
                         </div>
@@ -175,14 +176,14 @@
                         </div>
                         <div class="toggle-container">
                             <label class="credit-toggle">
-                                <input type="checkbox" onchange="toggleCredit(this)" data-max="25">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="30">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
                         <div class="value-column">
                             <div class="value-input" style="display: none !important;">
                                 <span class="currency">$</span>
-                                <input type="number" value="0" min="0" max="25" onchange="syncInputValues(this)" data-max="25">
+                                <input type="number" value="0" min="0" max="30" onchange="syncInputValues(this)" data-max="30">
                             </div>
                             <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
                         </div>
@@ -191,14 +192,14 @@
                             <div class="mobile-label-value">Your Value:</div>
                             <div class="toggle-container">
                                 <label class="credit-toggle">
-                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="25">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="30">
                                     <span class="toggle-slider"></span>
                                 </label>
                             </div>
                             <div class="value-column">
                                 <div class="value-input" style="display: none !important;">
                                     <span class="currency">$</span>
-                                    <input type="number" value="0" min="0" max="25" onchange="syncInputValues(this)" data-max="25">
+                                    <input type="number" value="0" min="0" max="30" onchange="syncInputValues(this)" data-max="30">
                                 </div>
                                 <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
                             </div>
@@ -276,7 +277,7 @@
                                 <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
-                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">8 single-use Wi-Fi vouchers per year on Alaska flights, until free Starlink rolls out fleet-wide.</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">8 single-use Wi-Fi vouchers per year on Alaska flights, issued two per quarter.</td>
                                     </tr>
                                     <tr class="credit-row">
                                         <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
@@ -422,12 +423,13 @@
                     <h2>Perks</h2>
                     <div class="recommendation-text">
                         <ul class="recommendation-list">
-                            <li><strong>Earning details (in plain English)</strong> – 3x on Alaska & Hawaiian purchases, 3x on dining, 3x on foreign purchases, 1x on everything else; +10% rewards bonus with eligible Bank of America banking. Simple to use, especially abroad.</li>
+                            <li><strong>Earning details (in plain English)</strong> – 3x on Alaska & Hawaiian purchases, 3x on dining, 3x on foreign purchases, 1x on everything else; +10% rewards bonus if you have a Bank of America checking account (through BofA Rewards). Simple to use, especially abroad.</li>
                             <li><strong>Global Companion Awards</strong> – Every anniversary you get a 25,000-point companion award; spend $60,000 in an anniversary year for an extra 100,000-point companion award. Works on Alaska, Hawaiian, and partners, any cabin; pay taxes/fees with the card.</li>
                             <li><strong>Status boosts</strong> – 1 status point per $2 in purchases, plus 10,000 status points every anniversary; meaningful progress toward elite tiers without flying.</li>
-                            <li><strong>Free Checked Bag & Preferred Boarding</strong> – You and up to 6 companions on the same reservation get one checked bag free and early group boarding (Alaska now; Hawaiian boarding coming later). Real savings for families.</li>
+                            <li><strong>Free Checked Bag & Preferred Boarding</strong> – You and up to 6 companions on the same reservation get one checked bag free and early group boarding on both Alaska and Hawaiian when the tickets are charged to the card. Real savings for families.</li>
                             <li><strong>Points pooling</strong> – Share points with up to 10 Atmos members for free; great for households to combine balances.</li>
-                            <li><strong>Alaska Lounge passes (8/yr)</strong> – Eight passes per year (generally issued two per quarter). Same-day ticket required; a pass typically covers one adult (kids rules vary by lounge), and cardholders get a premium bar experience through 2026.</li>
+                            <li><strong>Alaska Lounge passes (8/yr)</strong> – Eight passes per year, issued two per quarter. Same-day ticket required; a pass typically covers one adult (kids rules vary by lounge). Passes do not roll over, so use them or lose them each quarter.</li>
+                            <li><strong>Same-day change & inflight savings</strong> – Free same-day confirmed flight changes on Alaska, plus 20% back on inflight food, drinks, and Wi-Fi when you pay with the card. Small, but they show up on nearly every trip.</li>
                         </ul>
                     </div>
                 </div>
@@ -440,7 +442,7 @@
                     <div class="recommendation-text">
                         <ul class="recommendation-list">
                             <li><strong>Trip disruption voucher</strong> – $50 automatic voucher when an Alaska flight is delayed 2+ hours or canceled within 24 hours; good for quick meals and essentials.</li>
-                            <li><strong>Rental car collision damage waiver</strong> – Coverage for theft/damage when you decline the agency's collision damage waiver and pay with the card; useful if you rent a few times a year.</li>
+                            <li><strong>Rental car collision damage waiver (primary)</strong> – Primary coverage for theft/damage when you decline the agency's collision damage waiver and pay with the card, so you can skip filing with your own auto insurer; useful if you rent a few times a year.</li>
                             <li><strong>Lost/delayed baggage</strong> – Reimbursement if your checked bags go missing or arrive late; helpful for replacing essentials.</li>
                             <li><strong>Extended warranty</strong> – Adds up to an extra year on eligible U.S. manufacturer warranties of 5 years or less; good back-up on electronics and appliances.</li>
                             <li><strong>Purchase protection</strong> – Covers eligible new purchases against theft or accidental damage for a limited time after purchase.</li>

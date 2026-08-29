@@ -57,15 +57,15 @@
                     <div class="info-section">
                         <div class="info-row">
                             <span class="info-label">Annual Fee</span>
-                            <span class="info-value">$150</span>
+                            <span class="info-value">$0 intro first year, then $150</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Earning Rate</span>
-                            <span class="info-value">2x United • 2x dining • 2x hotels • 3x prepaid hotels via United Hotels • 1x everything else</span>
+                            <span class="info-value">3x United purchases • 2x dining • 2x hotels booked direct • 1x everything else</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Welcome Bonus</span>
-                            <span class="info-value">60,000 miles after $3,000 spend in 3 months + 10,000 miles after adding an authorized user</span>
+                            <span class="info-value">Up to 60,000 miles: 50,000 after $3,000 spend in 3 months, plus 10,000 for adding an authorized user in 3 months</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Card Material</span>
@@ -87,8 +87,8 @@
             <div class="recommendation-content">
                 <h2>Practical Recommendation</h2>
                 <div class="recommendation-text">
-                    <p>If you fly United a couple times a year, this card is the "make economy less annoying" pick: first checked bag free for you and a companion, priority boarding, and two United Club one-time passes. The new partner credits (rideshare, hotels, Instacart, car rental, JSX) are real money—but only if you'll actually use them.</p>
-                    <p>Do not overthink it: hit one or two credits and book at least one United trip and the math works. If you never touch the credits and do not check bags, a no-fee card or United Gateway will feel simpler. Bottom line: good value for casual United flyers who can plan around a couple credits.</p>
+                    <p>If you fly United a couple times a year, this card is the "make economy less annoying" pick: first checked bag free for you and a companion, priority boarding, and two United Club one-time passes. The partner credits (rideshare, hotels, Instacart, car rental, JSX) are real money—but only if you'll actually use them, and there are enough of them now that ignoring them changes the math.</p>
+                    <p>The fee is $150 after a $0 intro first year, up from $95, so the bar is higher than it used to be. Do not overthink it: hit one or two credits and book at least one United trip and it still works. If you never touch the credits and do not check bags, a no-fee card or United Gateway will feel simpler. Bottom line: good value for casual United flyers who can plan around a couple credits.</p>
                 </div>
             </div>
         </div>
@@ -332,6 +332,254 @@
                         </div>
                     </div>
 
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                Avis/Budget United Travel Credits
+                            </div>
+                            <div class="credit-description">
+                                <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;"><strong>$25 in United TravelBank</strong> for each of your first <strong>two</strong> Avis or Budget rentals each <strong>anniversary year</strong> (max <strong>$50</strong>).</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Book at cars.united.com, pay with the card, and the TravelBank cash lands in your MileagePlus wallet after the rental.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Portal-only booking; Avis and Budget only; you get TravelBank cash, not a statement credit, so it only spends on United airfare.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">People who rent cars twice a year and do not mind booking through United.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">$50 if you rent twice and fly United; $0 if you are loyal to another rental brand.</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="50">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="50" onchange="syncInputValues(this)" data-max="50">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="50">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="50" onchange="syncInputValues(this)" data-max="50">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                Instacart Credits (through 12/31/27)
+                            </div>
+                            <div class="credit-description">
+                                <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;"><strong>$10 per month</strong> in Instacart credits (up to <strong>$120 per calendar year</strong>), plus a 3-month Instacart+ membership.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Add the card to your Instacart account and activate the offer; the credit applies at checkout on Instacart.com or in the app.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Monthly credits do not roll over; the whole benefit ends <strong>12/31/2027</strong>; Instacart+ auto-renews at the going rate after the trial unless you cancel.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Anyone already ordering groceries through Instacart at least monthly.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">Close to $120 if Instacart is already part of your routine; near $0 if it is not.</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                JSX Credit
+                            </div>
+                            <div class="credit-description">
+                                <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Up to <strong>$100</strong> in statement credits each <strong>anniversary year</strong> on flights booked directly with JSX.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Book at jsx.com or in the JSX app and pay with the card; the credit posts automatically against the charge.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">JSX flies a small set of routes out of private terminals, mostly in the West and Texas. If you do not live near one, this is a zero.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">People who already fly JSX routes; almost nobody else.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">$100 if JSX serves your city; $0 for most people. Be honest with yourself here.</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="100">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="100" onchange="syncInputValues(this)" data-max="100">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="100">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="100" onchange="syncInputValues(this)" data-max="100">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-row">
+                        <div class="credit-info">
+                            <div class="credit-name">
+                                TSA PreCheck / Global Entry Credit
+                            </div>
+                            <div class="credit-description">
+                                <table class="credit-breakdown" style="width: 100%; border-collapse: collapse; font-size: inherit; color: inherit;">
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">What It Is:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Up to <strong>$120</strong> statement credit for a Global Entry, TSA PreCheck, or NEXUS application fee, once every <strong>4 years</strong>.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">How It Works:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Charge the application fee to this card and the credit posts automatically. You can use it to pay for someone else's application.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Gotchas:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Only once every four years, and most people already have one of these from another card.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em; border-bottom: 1px solid #f0f0f0;">Who Actually Benefits:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit; border-bottom: 1px solid #f0f0f0;">Anyone without PreCheck or Global Entry yet, or renewing this year.</td>
+                                    </tr>
+                                    <tr class="credit-row">
+                                        <td class="credit-label" style="width: 120px; vertical-align: middle; padding: 2px 8px 2px 0; font-weight: bold; color: inherit; font-size: 0.9em;">Practical Value:</td>
+                                        <td class="credit-detail" style="vertical-align: middle; padding: 2px 0; color: inherit;">$120 the year you use it, $0 the other three. Pick Global Entry — it includes PreCheck.</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="toggle-container">
+                            <label class="credit-toggle">
+                                <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="value-column">
+                            <div class="value-input" style="display: none !important;">
+                                <span class="currency">$</span>
+                                <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                            </div>
+                            <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                        </div>
+                        <div class="mobile-controls-table">
+                            <div class="mobile-label-include">Include:</div>
+                            <div class="mobile-label-value">Your Value:</div>
+                            <div class="toggle-container">
+                                <label class="credit-toggle">
+                                    <input type="checkbox" onchange="toggleCredit(this)" data-max="120">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="value-column">
+                                <div class="value-input" style="display: none !important;">
+                                    <span class="currency">$</span>
+                                    <input type="number" value="0" min="0" max="120" onchange="syncInputValues(this)" data-max="120">
+                                </div>
+                                <div class="value-placeholder" style="display: block !important; color: #9ca3af !important; font-weight: 600 !important; font-size: 1rem !important; text-align: center !important; padding: 0.875rem 1rem !important; width: 90px !important;">$0</div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="calculator-results">
@@ -363,11 +611,12 @@
                     <h2>Perks</h2>
                     <div class="recommendation-text">
                         <ul class="recommendation-list">
-                            <li><strong>Earning structure (full detail)</strong> – 2x united purchases; 2x dining (including delivery); 2x hotel stays; <strong>3x on prepaid stays via United Hotels</strong>; 1x everything else. Also, <strong>earn up to 1,000 Premier qualifying points</strong> per year at <strong>1 PQP per $20</strong> spend.</li>
+                            <li><strong>Earning structure (full detail)</strong> – <strong>3x</strong> on United purchases (<strong>9x total</strong> on eligible United flights once you add the 6x MileagePlus base); 2x dining (including eligible delivery); 2x hotel stays booked directly with the hotel; 1x everything else. Also, <strong>earn up to 1,000 Premier qualifying points</strong> per year at <strong>1 PQP per $20</strong> spend.</li>
                             <li><strong>Free first checked bag</strong> – Primary cardmember and <strong>one</strong> companion on the same reservation get the first standard bag free on United-operated flights (purchase with the card; requirement waived for first 90 days after opening). Saves up to <strong>$160 round trip</strong> for two.</li>
                             <li><strong>Priority boarding</strong> – Board before general boarding so your carry-on finds overhead space. Applies to cardmember and companions on the same reservation.</li>
                             <li><strong>United Club one-time passes (2/year)</strong> – Two digital passes deposit after opening and each anniversary; subject to lounge capacity and access rules. Handy for one or two trips a year.</li>
-                            <li><strong>Award flight savings</strong> – Special award pricing on some United-operated flights when available (United says cardmembers "save an average of 30%" in miles).</li>
+                            <li><strong>10,000-mile award flight discount (after $20,000 spend)</strong> – Spend $20,000 in a calendar year and United hands you a 10,000-mile discount to use on an award booking. Real money if you're already putting that much on the card.</li>
+                            <li><strong>Award booking discount</strong> – Save <strong>10%</strong> in miles on eligible United and United Express award flights (<strong>15%</strong> if you hold Premier status), plus expanded award availability that non-cardmembers don't see.</li>
                             <li><strong>In-flight savings</strong> – <strong>25% back</strong> as a statement credit on United-operated onboard purchases and premium drinks in United Club when you pay with the card.</li>
                             <li><strong>No foreign transaction fees</strong> – Use abroad without extra percentage fees.</li>
                         </ul>
