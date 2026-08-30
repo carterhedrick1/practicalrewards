@@ -770,11 +770,12 @@
             display: flex;
             gap: 0.5rem;
             margin-bottom: 0.75rem;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: center;
-            min-height: 32px;
+            height: 32px;
             align-items: center;
             flex-shrink: 0;
+            overflow: hidden;
         }
 
         .meta-chip {
@@ -785,6 +786,13 @@
             font-size: 0.75rem;
             font-weight: 500;
             white-space: nowrap;
+            flex: 0 0 auto;
+        }
+
+        .card-meta-row.meta-row-truncated .meta-chip {
+            flex: 0 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card-earning-rates {
@@ -792,7 +800,11 @@
             margin-bottom: 0.5rem;
             font-size: 0.8rem;
             line-height: 1.3;
+            height: 1.3em;
             text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card-perks {
@@ -845,6 +857,11 @@
             font-style: italic;
             text-align: center;
             max-width: 100%;
+            min-height: 5.6em;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
 
@@ -1740,6 +1757,7 @@
                         cardElement.style.animationDelay = `${index * 50}ms`; // Stagger animation
                         grid.appendChild(cardElement);
                     });
+                    scheduleCardMetaRowFit(grid);
                 });
             } else {
                 console.log('Initial load, adding cards with fade-in...');
@@ -1750,8 +1768,74 @@
                     cardElement.style.animationDelay = `${index * 50}ms`; // Stagger animation
                     grid.appendChild(cardElement);
                 });
+                scheduleCardMetaRowFit(grid);
             }
         }
+
+        function fitCardEarningRates(root = document) {
+            root.querySelectorAll('.card-earning-rates').forEach(row => {
+                let fullSegments;
+
+                try {
+                    fullSegments = JSON.parse(row.dataset.earningSegments);
+                } catch (error) {
+                    fullSegments = [];
+                }
+
+                if (!Array.isArray(fullSegments) || fullSegments.length === 0) {
+                    fullSegments = ['1x on everything'];
+                }
+
+                const visibleSegments = fullSegments.slice();
+                const renderSegments = () => {
+                    const label = document.createElement('strong');
+                    label.textContent = 'Earning:';
+                    row.replaceChildren(label, document.createTextNode(` ${visibleSegments.join(' • ')}`));
+                };
+
+                renderSegments();
+                while (row.scrollWidth > row.clientWidth && visibleSegments.length > 1) {
+                    visibleSegments.pop();
+                    renderSegments();
+                }
+            });
+        }
+
+        function fitCardMetaRows(root = document) {
+            root.querySelectorAll('.card-meta-row').forEach(row => {
+                const chips = Array.from(row.querySelectorAll('.meta-chip'));
+                let fontSize = 0.75;
+
+                row.classList.remove('meta-row-truncated');
+                chips.forEach(chip => {
+                    chip.style.fontSize = `${fontSize}rem`;
+                });
+
+                while (row.scrollWidth > row.clientWidth && fontSize > 0.55) {
+                    fontSize = Math.max(0.55, fontSize - 0.05);
+                    chips.forEach(chip => {
+                        chip.style.fontSize = `${fontSize}rem`;
+                    });
+                }
+
+                if (row.scrollWidth > row.clientWidth) {
+                    row.classList.add('meta-row-truncated');
+                }
+            });
+        }
+
+        function scheduleCardMetaRowFit(root = document) {
+            requestAnimationFrame(() => {
+                fitCardMetaRows(root);
+                fitCardEarningRates(root);
+            });
+        }
+
+        let cardMetaRowResizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(cardMetaRowResizeTimer);
+            cardMetaRowResizeTimer = setTimeout(() => scheduleCardMetaRowFit(), 120);
+        });
 
         function generatePracticalAdvice(card) {
             // Use database practical advice if available, otherwise generate it
@@ -1803,7 +1887,10 @@
             const welcomeBonus = card.welcomeBonus || 'None';
 
             // Format earning rates (condensed)
-            const earningRates = card.features ? card.features.slice(0, 3).join(' • ') : '';
+            const earningSegments = Array.isArray(card.features) && card.features.length > 0
+                ? card.features.slice(0, 3)
+                : ['1x on everything'];
+            const earningRates = earningSegments.join(' • ');
 
             // Format perks using dedicated perks array
             const perks = card.perks ? card.perks.join(' • ') : '';
@@ -1828,7 +1915,7 @@
                 </div>
                 
                 <div class="card-earning-rates">
-                    <strong>Earning:</strong> ${earningRates || '1x on everything'}
+                    <strong>Earning:</strong> ${earningRates}
                 </div>
                 
                 ${perks ? `<div class="card-perks">${perks}</div>` : ''}
@@ -1838,6 +1925,8 @@
                     <div class="card-advice-text">${advice}</div>
                 </div>
             `;
+
+            cardDiv.querySelector('.card-earning-rates').dataset.earningSegments = JSON.stringify(earningSegments);
 
             return cardDiv;
         }
