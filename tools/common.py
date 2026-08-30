@@ -27,6 +27,21 @@ FETCH_TIMEOUT = 15
 MAX_RESPONSE_BYTES = 5 * 1024 * 1024
 MAX_REDIRECTS = 5
 
+BLOG_COMPONENT_CLASS_WHITELIST = frozenset({
+    "pr-verdict",
+    "pr-math",
+    "pr-math-row",
+    "pr-math-label",
+    "pr-math-amount",
+    "pr-math-total",
+    "pr-steps",
+    "pr-step",
+    "pr-step-number",
+    "pr-step-body",
+    "pr-catch",
+    "pr-compare",
+})
+
 
 ISSUER_ALIASES = {
     "amex": ("american express", "amex"),
@@ -239,6 +254,7 @@ class ContentHTMLValidator(HTMLParser):
     ALLOWED_TAGS = {
         "h2", "h3", "p", "strong", "ul", "ol", "li",
         "table", "thead", "tbody", "tfoot", "tr", "th", "td",
+        "div", "section", "span",
     }
 
     def __init__(self) -> None:
@@ -250,7 +266,24 @@ class ContentHTMLValidator(HTMLParser):
         lower = tag.lower()
         if lower not in self.ALLOWED_TAGS:
             self.problems.append(f"tag <{tag}> is not allowed")
-        if attrs:
+        if lower in {"div", "section", "span"}:
+            if len(attrs) != 1 or attrs[0][0].casefold() != "class":
+                self.problems.append(
+                    f"<{tag}> requires class as its sole attribute"
+                )
+            else:
+                class_names = (attrs[0][1] or "").split()
+                invalid_classes = sorted({
+                    name for name in class_names
+                    if name not in BLOG_COMPONENT_CLASS_WHITELIST
+                })
+                if not class_names:
+                    self.problems.append(f"<{tag}> requires a non-empty class value")
+                elif invalid_classes:
+                    self.problems.append(
+                        f"classes are not allowed on <{tag}>: {', '.join(invalid_classes)}"
+                    )
+        elif attrs:
             names = ", ".join(name for name, _ in attrs)
             self.problems.append(f"attributes are not allowed on <{tag}>: {names}")
         self.stack.append(lower)

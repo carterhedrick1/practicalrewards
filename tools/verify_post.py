@@ -21,7 +21,14 @@ from common import (
 )
 
 
-MONEY_OR_MULTIPLIER_RE = re.compile(r"\$\s*\d[\d,]*(?:\.\d+)?\+?|\b\d+(?:\.\d+)?x\b", re.IGNORECASE)
+SIGNED_MONEY_PATTERN = (
+    r"(?:(?<![^\s(])-\$|\u2212\$|\$[-\u2212]?)\s*"
+    r"\d[\d,]*(?:\.\d+)?"
+)
+MONEY_OR_MULTIPLIER_RE = re.compile(
+    rf"{SIGNED_MONEY_PATTERN}\+?|\b\d+(?:\.\d+)?x\b",
+    re.IGNORECASE,
+)
 RANGE_SEPARATOR_RE = r"(?:[-–—]|\bto\b)"
 REWARDS_UNIT_RE = r"(?:points?|pts?|miles?|mi)"
 CPP_UNIT_RE = (
@@ -29,7 +36,7 @@ CPP_UNIT_RE = (
     r"cpp|cpm|cents?\s+per\s+(?:point|mile))"
 )
 KEY_NUMBER_RE = re.compile(
-    r"\$\s*\d[\d,]*(?:\.\d+)?\+?|"
+    rf"{SIGNED_MONEY_PATTERN}\+?|"
     r"\b\d+(?:\.\d+)?(?:x\b|%(?![a-z0-9])|[\s-]+percent(?:age)?s?\b)|"
     r"\b\d[\d,]*(?:\.\d+)?[kK]?(?:[\s®™℠-]+[A-Za-z]+){0,3}"
     rf"[\s®™℠-]+{REWARDS_UNIT_RE}\b|"
@@ -86,7 +93,19 @@ DEADLINE_YEAR_RE = re.compile(
 
 
 def normalize_number(value: str) -> str:
-    compact = re.sub(r"[\s,-]", "", value).casefold().rstrip("+")
+    compact = re.sub(r"[\s,]", "", value).casefold().replace("\u2212", "-").rstrip("+")
+    negative = False
+    if compact.startswith("-$"):
+        negative = True
+        compact = "$" + compact[2:]
+    elif compact.startswith("$-"):
+        negative = True
+        compact = "$" + compact[2:]
+    elif compact.startswith("-"):
+        negative = True
+        compact = compact[1:]
+    # Preserve the previous treatment of hyphens inside unit-bearing forms.
+    compact = compact.replace("-", "")
     cpp = re.fullmatch(
         r"(\d+(?:\.\d+)?)(?:cpp|cpm|"
         r"¢(?:/(?:pt|point|mi|mile)|per(?:point|mile))?|"
@@ -117,7 +136,8 @@ def normalize_number(value: str) -> str:
         suffix = simple.group(3) or ""
         if suffix.startswith("percent"):
             suffix = "%"
-        return simple.group(1) + number + suffix
+        sign = "-" if negative else ""
+        return simple.group(1) + sign + number + suffix
     return compact
 
 
@@ -215,7 +235,7 @@ def numeric_tokens(value: str, key_numbers: bool = False) -> set[str]:
 
 
 class ContentBlockParser(HTMLParser):
-    """Collect paragraph/list blocks and table rows with cell boundaries intact."""
+    """Collect text blocks, math rows, and table rows with boundaries intact."""
 
     TEXT_BLOCKS = {"h2", "h3", "p", "li"}
 
@@ -223,24 +243,52 @@ class ContentBlockParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.blocks: list[tuple[str, list[str]]] = []
         self._block_tag: str | None = None
+        self._block_kind: str | None = None
+        self._block_depth = 0
         self._block_parts: list[str] = []
         self._row_cells: list[str] | None = None
         self._cell_parts: list[str] | None = None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         lower = tag.lower()
+        class_names = set((dict(attrs).get("class") or "").split())
+        if self._block_tag is not None:
+            self._block_depth += 1
+            return
         if lower == "tr":
             self._row_cells = []
             self._cell_parts = None
         elif lower in {"td", "th"} and self._row_cells is not None:
             self._cell_parts = []
-        elif lower in self.TEXT_BLOCKS and self._row_cells is None and self._block_tag is None:
+        elif (
+            "pr-math-row" in class_names
+            and self._row_cells is None
+        ):
             self._block_tag = lower
+            self._block_kind = (
+                "pr-math-total" if "pr-math-total" in class_names else "pr-math-row"
+            )
+            self._block_depth = 1
+            self._block_parts = []
+        elif lower in self.TEXT_BLOCKS and self._row_cells is None:
+            self._block_tag = lower
+            self._block_kind = lower
+            self._block_depth = 1
             self._block_parts = []
 
     def handle_endtag(self, tag: str) -> None:
         lower = tag.lower()
-        if lower in {"td", "th"} and self._row_cells is not None and self._cell_parts is not None:
+        if self._block_tag is not None:
+            self._block_depth -= 1
+            if self._block_depth:
+                return
+            text = re.sub(r"\s+", " ", "".join(self._block_parts)).strip()
+            if text:
+                self.blocks.append((self._block_kind or self._block_tag, [text]))
+            self._block_tag = None
+            self._block_kind = None
+            self._block_parts = []
+        elif lower in {"td", "th"} and self._row_cells is not None and self._cell_parts is not None:
             self._row_cells.append(re.sub(r"\s+", " ", "".join(self._cell_parts)).strip())
             self._cell_parts = None
         elif lower == "tr" and self._row_cells is not None:
@@ -248,12 +296,6 @@ class ContentBlockParser(HTMLParser):
                 self.blocks.append(("tr", self._row_cells))
             self._row_cells = None
             self._cell_parts = None
-        elif lower == self._block_tag:
-            text = re.sub(r"\s+", " ", "".join(self._block_parts)).strip()
-            if text:
-                self.blocks.append((lower, [text]))
-            self._block_tag = None
-            self._block_parts = []
 
     def handle_data(self, data: str) -> None:
         if self._cell_parts is not None:
@@ -274,6 +316,50 @@ def structured_content_blocks(content_html: str) -> list[tuple[str, list[str]]]:
     parser.feed(content_html or "")
     parser.close()
     return parser.blocks
+
+
+def math_subtraction_operand_tokens(content_html: str) -> set[str]:
+    """Return signed money tokens used exclusively as non-total math line items."""
+    operands: set[str] = set()
+    non_operands: set[str] = set()
+    for kind, cells in structured_content_blocks(content_html):
+        signed_money = {
+            token
+            for cell in cells
+            for token in numeric_tokens(cell, key_numbers=True)
+            if re.fullmatch(r"\$-\d+(?:\.\d+)?", token)
+        }
+        if kind == "pr-math-row":
+            operands.update(signed_money)
+        else:
+            non_operands.update(signed_money)
+    return operands - non_operands
+
+
+def signed_math_total_tokens(content_html: str) -> set[str]:
+    """Return signed money tokens displayed as worked-math totals."""
+    return {
+        token
+        for kind, cells in structured_content_blocks(content_html)
+        if kind == "pr-math-total"
+        for cell in cells
+        for token in numeric_tokens(cell, key_numbers=True)
+        if re.fullmatch(r"\$-\d+(?:\.\d+)?", token)
+    }
+
+
+def signed_math_operand_is_supported(
+    token: str,
+    math_operands: set[str],
+    supported_numbers: set[str],
+) -> bool:
+    """Allow −$300 as display syntax only when positive $300 is supported."""
+    match = re.fullmatch(r"\$-(\d+(?:\.\d+)?)", token)
+    return bool(
+        match
+        and token in math_operands
+        and f"${match.group(1)}" in supported_numbers
+    )
 
 
 def _span_distance(first_start: int, first_end: int, second_start: int, second_end: int) -> int:
@@ -454,9 +540,19 @@ def check_card_number_findings(
     calculated, _calculation_failures = calculation_evidence(
         calculations if calculations is not None else [], all_known, sourced,
     )
+    math_operands = math_subtraction_operand_tokens(content_html)
+    math_totals = signed_math_total_tokens(content_html)
     associated, unassociated, illustrative, named_claims_present = scan_card_numeric_claims(content_html, cards)
     for card, raw, token, _block in associated:
-        if token in known_by_id.get(card.get("id"), set()) or token in sourced or token in calculated:
+        supported_for_card = known_by_id.get(card.get("id"), set()) | sourced | calculated
+        if token in math_totals:
+            token_is_supported = token in calculated
+        else:
+            token_is_supported = (
+                token in supported_for_card
+                or signed_math_operand_is_supported(token, math_operands, supported_for_card)
+            )
+        if token_is_supported:
             continue
         failures.append(
             f"{card.get('name', '')}: {raw.strip()} is associated with this card but does not match cards.json or fetched source text"
@@ -664,6 +760,28 @@ def card_key_numbers(card: dict[str, Any]) -> set[str]:
     return known
 
 
+def bare_count_matches_unit_quantity(
+    input_tokens: set[str],
+    supported_inputs: set[str],
+) -> bool:
+    """Match a bare count such as 4 to a sourced token such as 4year."""
+    bare_counts = {
+        token for token in input_tokens
+        if re.fullmatch(r"[+-]?\d+(?:\.\d+)?", token)
+    }
+    if not bare_counts:
+        return False
+    for supported in supported_inputs:
+        quantity = re.fullmatch(
+            r"([+-]?\d+(?:\.\d+)?)"
+            r"(?:point|credit|day|hour|month|night|week|year)",
+            supported,
+        )
+        if quantity and quantity.group(1) in bare_counts:
+            return True
+    return False
+
+
 def calculation_evidence(
     calculations: Any,
     known_numbers: set[str],
@@ -687,15 +805,21 @@ def calculation_evidence(
             tokens = numeric_tokens(str(raw_input), key_numbers=True)
             if not tokens:
                 tokens = {normalize_number(str(raw_input))}
-            if not tokens & supported_inputs and not illustrative_match:
+            input_is_supported = bool(
+                tokens & supported_inputs
+                or bare_count_matches_unit_quantity(tokens, supported_inputs)
+            )
+            if not input_is_supported and not illustrative_match:
                 failures.append(
-                    f"calculation {index} input {raw_input!r} does not match cards.json or fetched source text"
+                    f"calculation {index} input {raw_input!r} does not match cards.json, "
+                    "fetched source text, or a prior calculation result"
                 )
         result_tokens = numeric_tokens(str(calculation["result"]), key_numbers=True)
         if not result_tokens:
             normalized = normalize_number(str(calculation["result"]))
             result_tokens = {normalized, "$" + normalized.lstrip("$")}
         accepted_results.update(result_tokens)
+        supported_inputs.update(result_tokens)
     return accepted_results, failures
 
 
@@ -727,13 +851,21 @@ def check_article_numeric_findings(
         source_numbers,
         illustrative_sentences,
     )
+    math_operands = math_subtraction_operand_tokens(content_html)
+    math_totals = signed_math_total_tokens(content_html)
+    supported_numbers = known_card_numbers | source_numbers | calculated
     failures = [
         f"article numeric claim {raw.strip()} does not match relevant cards.json data, fetched source text, or verified calculation evidence"
         for token, raw in claims.items()
-        if token not in known_card_numbers
-        and token not in source_numbers
-        and token not in calculated
-        and token not in illustrative_numbers
+        if (
+            token in math_totals
+            and token not in calculated
+        ) or (
+            token not in math_totals
+            and token not in supported_numbers
+            and not signed_math_operand_is_supported(token, math_operands, supported_numbers)
+            and token not in illustrative_numbers
+        )
     ]
     return calculation_failures + failures, []
 
