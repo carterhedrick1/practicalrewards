@@ -382,22 +382,9 @@ def associated_numeric_claims(
     content_html: str,
     cards: list[dict[str, Any]],
 ) -> list[tuple[dict[str, Any], str, str, str]]:
-    """Associate each dollar/multiplier with one nearest card in its block/clause."""
+    """Associate each key numeric claim with matched card context."""
     associated, _unassociated, _illustrative, _named_claims = scan_card_numeric_claims(content_html, cards)
     return associated
-
-
-CARD_CLAIM_RE = re.compile(
-    r"\b(?:annual fee|bonus|card|credit|earn(?:s|ing)?|fee|multiplier|rate|rewards?)\b",
-    re.IGNORECASE,
-)
-ILLUSTRATIVE_CARD_RE = re.compile(
-    r"\b(?:a|an)\s+(?:\$\s*\d[\d,]*(?:\.\d+)?\s+)?card\b|"
-    r"\bcards?\s+(?:that|which|with|whose|charge|charges|charging|cost|costing)\b|"
-    r"\b(?:may|might|could)\s+(?:only\s+)?be\s+\$\s*\d|"
-    r"\b(?:worth|valued?\s+at)\s+\$\s*\d[^.!?;]{0,30}\b(?:to|for)\s+you\b",
-    re.IGNORECASE,
-)
 
 
 def scan_card_numeric_claims(
@@ -422,7 +409,7 @@ def scan_card_numeric_claims(
         elif tag == "h3" and heading_cards:
             heading_context = heading_cards
         for cell_index, cell in enumerate(cells):
-            for start, end, raw, token in iter_numeric_claims(cell):
+            for start, end, raw, token in iter_numeric_claims(cell, key_numbers=True):
                 clause_start, clause_end = _clause_bounds(cell, start, end)
                 clause = cell[clause_start:clause_end].strip()
                 same_clause = [
@@ -452,17 +439,15 @@ def scan_card_numeric_claims(
                                 abs(item[1][0] - start),
                             ),
                         )
-                    elif len(heading_context) == 1:
+                    elif heading_context:
                         named_claims_present = True
-                        associated.append((heading_context[0], raw, token, cell))
+                        associated.extend(
+                            (heading_card, raw, token, cell)
+                            for heading_card in heading_context
+                        )
                         continue
                     else:
-                        if not heading_context and ILLUSTRATIVE_CARD_RE.search(clause):
-                            illustrative_sentences.append(clause)
-                        elif CARD_CLAIM_RE.search(clause) or heading_context:
-                            if heading_context:
-                                named_claims_present = True
-                            unassociated.append((raw, cell))
+                        illustrative_sentences.append(clause)
                         continue
                 associated.append((mention[2], raw, token, cell))
     return associated, unassociated, list(dict.fromkeys(illustrative_sentences)), named_claims_present
@@ -531,7 +516,7 @@ def check_card_number_findings(
     known_by_id: dict[Any, set[str]] = {}
     for card in cards:
         known_text = json.dumps(compact_card(card), ensure_ascii=False)
-        known = numeric_tokens(known_text)
+        known = numeric_tokens(known_text, key_numbers=True)
         annual_fee = card.get("annual_fee")
         if isinstance(annual_fee, (int, float)) and not isinstance(annual_fee, bool):
             known.add(normalize_number(f"${annual_fee:g}"))
@@ -542,7 +527,7 @@ def check_card_number_findings(
     )
     math_operands = math_subtraction_operand_tokens(content_html)
     math_totals = signed_math_total_tokens(content_html)
-    associated, unassociated, illustrative, named_claims_present = scan_card_numeric_claims(content_html, cards)
+    associated, _unassociated, illustrative, named_claims_present = scan_card_numeric_claims(content_html, cards)
     for card, raw, token, _block in associated:
         supported_for_card = known_by_id.get(card.get("id"), set()) | sourced | calculated
         if token in math_totals:
@@ -557,8 +542,6 @@ def check_card_number_findings(
         failures.append(
             f"{card.get('name', '')}: {raw.strip()} is associated with this card but does not match cards.json or fetched source text"
         )
-    for raw, block in unassociated:
-        failures.append(f"card-related numeric claim {raw.strip()} has no unambiguous card context: {block}")
     if named_claims_present and not associated:
         failures.append("card-related numeric claims were present but none could be associated with a card")
     illustrative_warnings, illustrative_packet = illustrative_claim_findings(
@@ -828,8 +811,10 @@ def check_article_numeric_findings(
     cards: list[dict[str, Any]],
     fetched: dict[str, str],
     calculations: Any = None,
+    *,
+    news_draft: bool = False,
 ) -> tuple[list[str], list[str]]:
-    """Require every distinct article number to exist in card data or a source page."""
+    """Hard-check named-card/news numbers; generic warnings come from the card scan."""
     article_text = html_to_text(content_html)
     claims: dict[str, str] = {}
     for _start, _end, raw, token in iter_numeric_claims(article_text, key_numbers=True):
@@ -864,7 +849,7 @@ def check_article_numeric_findings(
             token not in math_totals
             and token not in supported_numbers
             and not signed_math_operand_is_supported(token, math_operands, supported_numbers)
-            and token not in illustrative_numbers
+            and (news_draft or token not in illustrative_numbers)
         )
     ]
     return calculation_failures + failures, []
@@ -889,7 +874,10 @@ def check_news_numeric_claims(
     calculations: Any = None,
 ) -> list[str]:
     """Backward-compatible name for article-wide numeric verification."""
-    return check_article_numeric_claims(content_html, cards, fetched, calculations)
+    failures, _warnings = check_article_numeric_findings(
+        content_html, cards, fetched, calculations, news_draft=True,
+    )
+    return failures
 
 
 def source_excerpts(
@@ -1048,7 +1036,11 @@ def verify() -> dict[str, Any]:
                 f"source {url} does not contain key number(s) from its claim hint: {', '.join(missing)}"
             )
     article_number_failures, article_number_warnings = check_article_numeric_findings(
-        content_html, cards, fetched, draft.get("calculations", []),
+        content_html,
+        cards,
+        fetched,
+        draft.get("calculations", []),
+        news_draft=post_type == "news",
     )
     source_failures.extend(article_number_failures)
     source_warnings.extend(article_number_warnings)
