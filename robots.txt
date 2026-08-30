@@ -14,6 +14,7 @@ Allow: /card-pages/
 # Block crawling of component files (not standalone pages)
 Disallow: /header.html
 Disallow: /footer.html
+Disallow: /blog/post-template.html
 
 # Block any temp/backup files
 Disallow: /*.bak

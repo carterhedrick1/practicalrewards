@@ -1,22 +1,39 @@
-// Header loader and mobile menu functionality - Fixed version
+// Shared chrome loader and mobile menu functionality
+// Root-absolute component paths work from both root pages and subdirectories.
 document.addEventListener('DOMContentLoaded', function() {
-    // Wait a bit for other page scripts to initialize first
-    setTimeout(function() {
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                
-                // Initialize mobile menu after header loads
-                setTimeout(function() {
-                    initializeMobileMenu();
-                }, 100);
-            })
-            .catch(error => {
-                console.error('Error loading header:', error);
-            });
-    }, 100);
+    loadSharedComponent('/header.html', 'header-placeholder', function() {
+        initializeMobileMenu();
+    });
+    loadSharedComponent('/footer.html', 'footer-placeholder');
 });
+
+function loadSharedComponent(componentPath, placeholderId, onLoad) {
+    const placeholder = document.getElementById(placeholderId);
+
+    if (!placeholder) {
+        return;
+    }
+
+    fetch(componentPath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Component scripts are not executed by innerHTML. The loader handles
+            // header initialization below, and shared links are root-absolute.
+            placeholder.innerHTML = data;
+
+            if (typeof onLoad === 'function') {
+                onLoad();
+            }
+        })
+        .catch(error => {
+            console.error(`Error loading ${componentPath}:`, error);
+        });
+}
 
 function initializeMobileMenu() {
     const toggle = document.getElementById('mobile-menu-toggle');
