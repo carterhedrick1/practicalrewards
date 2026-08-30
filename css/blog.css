@@ -3,6 +3,28 @@
    Flat, scannable article components using the site's forest palette.
    ========================================================================== */
 
+.pr-hero {
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+    margin: 0 0 clamp(2rem, 5vw, 3rem);
+    overflow: hidden;
+    width: 100%;
+}
+
+.pr-hero svg {
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .pr-hero {
+        margin-left: clamp(-4rem, -5vw, -2rem);
+        margin-right: clamp(-4rem, -5vw, -2rem);
+        width: calc(100% + clamp(4rem, 10vw, 8rem));
+    }
+}
+
 .article-content .pr-verdict,
 .article-content .pr-math,
 .article-content .pr-steps,
@@ -225,6 +247,11 @@
 }
 
 @media (max-width: 600px) {
+    .pr-hero,
+    .pr-hero svg {
+        max-height: 15rem;
+    }
+
     .article-content .pr-compare {
         -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 1.5rem), transparent 100%);
         mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 1.5rem), transparent 100%);

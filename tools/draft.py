@@ -18,6 +18,42 @@ from common import (
 
 
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+PLAIN_TEXT_MARKUP_RE = re.compile(
+    r"<[^>]*>|&(?:#[0-9]+|#x[0-9a-f]+|[a-z][a-z0-9]+);",
+    re.IGNORECASE,
+)
+
+
+def validate_hero(value: Any, allowed_card_ids: set[int], listed_card_ids: set[int]) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise ValueError("hero must be an object when present")
+    allowed_keys = {"kicker", "stat", "label", "card_id"}
+    unexpected = sorted(value.keys() - allowed_keys)
+    if unexpected:
+        raise ValueError("hero contains unexpected keys: " + ", ".join(unexpected))
+    missing = {"kicker", "stat", "label"} - value.keys()
+    if missing:
+        raise ValueError("hero is missing keys: " + ", ".join(sorted(missing)))
+    for field in ("kicker", "stat", "label"):
+        field_value = value[field]
+        if not isinstance(field_value, str) or not field_value.strip():
+            raise ValueError(f"hero.{field} must be a non-empty string")
+        if PLAIN_TEXT_MARKUP_RE.search(field_value):
+            raise ValueError(f"hero.{field} must be plain text without markup")
+        value[field] = field_value.strip()
+    if len(value["kicker"]) >= 28:
+        raise ValueError("hero.kicker must be under 28 characters")
+    if len(value["label"]) >= 80:
+        raise ValueError("hero.label must be under 80 characters")
+    if "card_id" in value:
+        card_id = value["card_id"]
+        if not isinstance(card_id, int) or isinstance(card_id, bool):
+            raise ValueError("hero.card_id must be an integer when present")
+        if card_id not in allowed_card_ids:
+            raise ValueError("hero.card_id is outside the supplied card slice")
+        if card_id not in listed_card_ids:
+            raise ValueError("hero.card_id must be one of cards_mentioned")
+    return value
 
 
 def validate_citable_source_url(url: str) -> str:
@@ -105,6 +141,8 @@ def validate_draft(
         raise ValueError("cards_mentioned contains an ID outside the supplied card slice")
     value["cards_mentioned"] = list(dict.fromkeys(value["cards_mentioned"]))
     listed_ids = set(value["cards_mentioned"])
+    if "hero" in value:
+        value["hero"] = validate_hero(value["hero"], allowed_card_ids, listed_ids)
     if cards_all is not None:
         content_ids = {
             int(mention[2]["id"])

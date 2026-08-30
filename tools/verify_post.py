@@ -90,6 +90,10 @@ DEADLINE_YEAR_RE = re.compile(
     r"[^.!?;]{0,50}?\b(20\d{2})\b",
     re.IGNORECASE,
 )
+PLAIN_TEXT_MARKUP_RE = re.compile(
+    r"<[^>]*>|&(?:#[0-9]+|#x[0-9a-f]+|[a-z][a-z0-9]+);",
+    re.IGNORECASE,
+)
 
 
 def normalize_number(value: str) -> str:
@@ -930,6 +934,60 @@ def claim_hint_missing_numbers(url: str, claim_hint: str, source_text: str) -> s
     return expected - numeric_tokens(source_text, key_numbers=True)
 
 
+def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]]) -> list[str]:
+    hero = draft.get("hero")
+    if hero is None:
+        return []
+    if not isinstance(hero, dict):
+        return ["hero must be an object when present"]
+
+    failures: list[str] = []
+    for field in ("kicker", "label"):
+        field_value = hero.get(field)
+        if not isinstance(field_value, str) or not field_value.strip():
+            failures.append(f"hero.{field} must be non-empty plain text")
+        elif PLAIN_TEXT_MARKUP_RE.search(field_value):
+            failures.append(f"hero.{field} must be plain text without markup")
+
+    stat = hero.get("stat")
+    if not isinstance(stat, str) or not stat.strip():
+        failures.append("hero.stat must be a non-empty string")
+        return failures
+    stat_tokens = numeric_tokens(stat, key_numbers=True)
+    if not stat_tokens:
+        failures.append(f"hero.stat {stat!r} does not contain a recognizable number")
+        return failures
+
+    article_tokens = numeric_tokens(
+        html_to_text(str(draft.get("content_html", ""))),
+        key_numbers=True,
+    )
+    relevant_card_tokens: set[str] = set()
+    card_id = hero.get("card_id")
+    mentioned = set(draft.get("cards_mentioned", []))
+    if card_id is not None:
+        if not isinstance(card_id, int) or isinstance(card_id, bool):
+            failures.append("hero.card_id must be an integer when present")
+        elif card_id not in cards_by_id:
+            failures.append(f"hero.card_id {card_id} does not exist in cards.json")
+        else:
+            relevant_card_tokens = card_key_numbers(cards_by_id[card_id])
+            if card_id not in mentioned:
+                failures.append(f"hero.card_id {card_id} is not listed in cards_mentioned")
+
+    if not stat_tokens & (article_tokens | relevant_card_tokens):
+        card_context = (
+            f" or cards.json data for hero.card_id {card_id}"
+            if isinstance(card_id, int) and not isinstance(card_id, bool)
+            else ""
+        )
+        failures.append(
+            f"hero.stat {stat!r} does not match a numeric claim in content_html"
+            f"{card_context}"
+        )
+    return failures
+
+
 def verify() -> dict[str, Any]:
     draft = read_json(STATE / "draft.json")
     if not isinstance(draft, dict):
@@ -967,6 +1025,14 @@ def verify() -> dict[str, Any]:
         "name": "card_fact_packet",
         "status": "fail" if packet_failures else "pass",
         "reasons": packet_failures,
+    })
+
+    hero_failures = hero_findings(draft, cards_by_id)
+    failures.extend(hero_failures)
+    checks.append({
+        "name": "hero",
+        "status": "fail" if hero_failures else "pass",
+        "reasons": hero_failures,
     })
 
     fetched: dict[str, str] = {}

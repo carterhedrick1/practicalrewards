@@ -20,6 +20,7 @@ from common import (
 
 
 TOKEN_RE = re.compile(r"{{([A-Z0-9_]+)}}")
+HERO_BACKGROUND = "#1c1917"
 
 
 class CardLinkifier(HTMLParser):
@@ -99,6 +100,112 @@ def fill_post_template(template: str, values: dict[str, str]) -> str:
     if missing:
         raise ValueError("unfilled post template tokens: " + ", ".join(missing))
     return TOKEN_RE.sub(lambda match: values[match.group(1)], template)
+
+
+def _hero_label_lines(label: str, limit: int = 42) -> list[str]:
+    words = label.split()
+    if not words:
+        return [""]
+    lines: list[str] = []
+    current = words[0]
+    for word in words[1:]:
+        candidate = f"{current} {word}"
+        if len(candidate) <= limit:
+            current = candidate
+        else:
+            lines.append(current)
+            current = word
+    lines.append(current)
+    if len(lines) <= 2:
+        return lines
+    second = " ".join(lines[1:])
+    if len(second) > limit:
+        second = second[:limit - 1].rstrip() + "…"
+    return [lines[0], second]
+
+
+def _card_art_href(card: dict[str, Any] | None, root: Path = ROOT) -> str | None:
+    if not card:
+        return None
+    image_url = card.get("image_url")
+    if not isinstance(image_url, str) or not image_url.strip():
+        return None
+    relative = image_url.strip().lstrip("/")
+    if not relative.startswith("images/"):
+        return None
+    images_root = (root / "images").resolve()
+    candidate = (root / relative).resolve()
+    try:
+        candidate.relative_to(images_root)
+    except ValueError:
+        return None
+    if not candidate.is_file():
+        return None
+    return "/" + relative
+
+
+def render_hero(
+    draft: dict[str, Any],
+    cards: list[dict[str, Any]],
+    root: Path = ROOT,
+) -> str:
+    hero = draft.get("hero")
+    if isinstance(hero, dict):
+        kicker = str(hero.get("kicker", "PRACTICAL REWARDS")).strip()
+        stat = str(hero.get("stat", "HONEST MATH")).strip()
+        label = str(hero.get("label", draft.get("title", "Straight answers, useful math"))).strip()
+        card_id = hero.get("card_id")
+        card = next((item for item in cards if item.get("id") == card_id), None)
+    else:
+        kicker = "PRACTICAL REWARDS"
+        stat = "HONEST MATH"
+        label = str(draft.get("title", "Straight answers, useful math")).strip()
+        if len(label) >= 80:
+            label = label[:78].rstrip() + "…"
+        card = None
+
+    kicker_xml = html.escape(kicker)
+    stat_xml = html.escape(stat)
+    label_lines = _hero_label_lines(label)
+    label_tspans = "".join(
+        f'<tspan x="92" dy="{0 if index == 0 else 34}">{html.escape(line)}</tspan>'
+        for index, line in enumerate(label_lines)
+    )
+    stat_size = 110 if len(stat) <= 8 else (88 if len(stat) <= 12 else 70)
+    art_href = _card_art_href(card, root)
+    art = ""
+    if art_href:
+        art = (
+            '        <g clip-path="url(#pr-hero-art-window)">\n'
+            '            <g filter="url(#pr-hero-card-shadow)" transform="rotate(-8 976 210)">\n'
+            '                <rect x="798" y="98" width="356" height="224" rx="20" fill="#ffffff" fill-opacity="0.08"/>\n'
+            f'                <image href="{html.escape(art_href, quote=True)}" x="798" y="98" width="356" height="224" '
+            'preserveAspectRatio="xMidYMid meet" clip-path="url(#pr-hero-card-clip)"/>\n'
+            '            </g>\n'
+            '        </g>\n'
+        )
+
+    aria_label = html.escape(f"{kicker}: {stat}. {label}", quote=True)
+    return (
+        '<div class="pr-hero">\n'
+        f'    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" role="img" aria-label="{aria_label}">\n'
+        '        <defs>\n'
+        '            <filter id="pr-hero-card-shadow" x="-30%" y="-40%" width="170%" height="190%">\n'
+        '                <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000000" flood-opacity="0.38"/>\n'
+        '            </filter>\n'
+        '            <clipPath id="pr-hero-card-clip"><rect x="798" y="98" width="356" height="224" rx="20"/></clipPath>\n'
+        '            <clipPath id="pr-hero-art-window"><rect x="710" y="0" width="490" height="420"/></clipPath>\n'
+        '        </defs>\n'
+        f'        <rect width="1200" height="420" fill="{HERO_BACKGROUND}"/>\n'
+        '        <path d="M710 52H1160M710 210H1160M710 368H1160" fill="none" stroke="#ffffff" stroke-opacity="0.055" stroke-width="2"/>\n'
+        '        <rect x="50" y="48" width="8" height="324" rx="4" fill="#059669"/>\n'
+        f'        <text x="92" y="104" fill="#34d399" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="24" font-weight="800" letter-spacing="4">{kicker_xml}</text>\n'
+        f'        <text x="86" y="232" fill="#ffffff" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="{stat_size}" font-weight="900" letter-spacing="-3">{stat_xml}</text>\n'
+        f'        <text y="292" fill="#e7e5e4" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="500">{label_tspans}</text>\n'
+        f'{art}'
+        '    </svg>\n'
+        '</div>'
+    )
 
 
 def slug_collision_reasons(
@@ -289,6 +396,7 @@ def build_post() -> Path:
         "DATE_MODIFIED": iso_date,
         "DATE_DISPLAY": display_date,
         "JSON_LD": json.dumps(json_ld, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
+        "HERO": render_hero(draft, selected_cards),
         "CONTENT": content,
     })
     output_path = ROOT / "blog" / f"{slug}.html"
