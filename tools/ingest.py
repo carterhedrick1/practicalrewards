@@ -11,9 +11,10 @@ import time
 import urllib.parse
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from typing import Any
 
 from common import (
-    STATE, fetch_bytes, html_to_text, read_json, resolve_public_http_url,
+    STATE, fetch_bytes, html_to_text, read_json, resolve_google_news_source_url,
     write_json,
 )
 
@@ -85,10 +86,10 @@ def normalize_date(value: str) -> str:
         return value.strip()
 
 
-def parse_feed(payload: bytes, configured_source: str, feed_url: str = "") -> list[dict[str, str]]:
+def parse_feed(payload: bytes, configured_source: str, feed_url: str = "") -> list[dict[str, Any]]:
     root = ET.fromstring(payload)
     root_kind = local_name(root.tag)
-    items: list[dict[str, str]] = []
+    items: list[dict[str, Any]] = []
 
     if root_kind in {"rss", "rdf"}:
         channel = next((node for node in root.iter() if local_name(node.tag) == "channel"), root)
@@ -117,7 +118,7 @@ def parse_feed(payload: bytes, configured_source: str, feed_url: str = "") -> li
     else:
         raise ValueError(f"unsupported feed root element: {root.tag}")
 
-    usable: list[dict[str, str]] = []
+    usable: list[dict[str, Any]] = []
     for item in items:
         if not item["title"] or not item["url"]:
             continue
@@ -145,12 +146,12 @@ def seen_keys(raw_seen: object) -> tuple[list[dict[str, str]], set[str]]:
     return ordered, keys
 
 
-def ingest() -> list[dict[str, str]]:
+def ingest() -> list[dict[str, Any]]:
     STATE.mkdir(parents=True, exist_ok=True)
     seen_path = STATE / "seen.json"
     inbox_path = STATE / "inbox.json"
     ordered_seen, known = seen_keys(read_json(seen_path, []))
-    new_items: list[dict[str, str]] = []
+    new_items: list[dict[str, Any]] = []
     fetched_keys: set[str] = set()
     now = dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
 
@@ -167,13 +168,15 @@ def ingest() -> list[dict[str, str]]:
 
         for item in feed_items:
             try:
-                key = resolve_public_http_url(item["url"], url)
+                key, unresolved = resolve_google_news_source_url(item["url"], url)
             except Exception as error:
                 print(f"WARNING: skipping unsafe feed item URL {item['url']!r}: {error}", file=sys.stderr)
                 continue
             if not key or key in known or key in fetched_keys:
                 continue
             item["url"] = key
+            if unresolved:
+                item["unresolved_source"] = True
             fetched_keys.add(key)
             new_items.append(item)
 

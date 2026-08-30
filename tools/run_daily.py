@@ -497,8 +497,8 @@ class DailyRunner:
             if self.review:
                 preview_link = f"http://carters-mac-mini.tailb1c452.ts.net:8000/blog/{slug}.html"
                 self.notify(
-                    "Post ready for review",
-                    f"{title} — preview: {preview_link}",
+                    title,
+                    preview_link,
                     link=preview_link,
                 )
             return 0

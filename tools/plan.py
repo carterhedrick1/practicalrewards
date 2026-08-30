@@ -9,8 +9,8 @@ import sys
 from typing import Any
 
 from common import (
-    STATE, TOOLS, fill_template, parse_json_reply, read_json, run_codex,
-    validate_public_http_url, write_json,
+    STATE, TOOLS, fill_template, is_google_news_url, parse_json_reply,
+    read_json, run_codex, validate_public_http_url, write_json,
 )
 
 
@@ -37,6 +37,10 @@ def next_evergreen(topics: list[dict[str, Any]], published: list[dict[str, Any]]
     return min(candidates, key=lambda row: (row[0], row[1]))[2]
 
 
+def source_is_unresolved(item: dict[str, Any]) -> bool:
+    return item.get("unresolved_source") is True or is_google_news_url(str(item.get("url", "")))
+
+
 def validate_model_plan(value: Any, fallback: dict[str, Any], inbox: list[dict[str, Any]]) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError("planner reply must be a JSON object")
@@ -50,9 +54,13 @@ def validate_model_plan(value: Any, fallback: dict[str, Any], inbox: list[dict[s
     urls = value.get("source_urls")
     if not isinstance(title, str) or not title.strip() or not isinstance(urls, list) or not urls:
         raise ValueError("news plan requires title_hint and at least one source URL")
-    allowed = {str(item.get("url")) for item in inbox if isinstance(item, dict)}
+    allowed = {
+        str(item.get("url"))
+        for item in inbox
+        if isinstance(item, dict) and not source_is_unresolved(item)
+    }
     if any(not isinstance(url, str) or url not in allowed for url in urls):
-        raise ValueError("news plan contains a URL not present in the inbox")
+        raise ValueError("news plan contains a URL not present in the selectable inbox or marked unresolved")
     safe_urls = [validate_public_http_url(url) for url in urls]
     return {"type": "news", "title_hint": title.strip(), "source_urls": list(dict.fromkeys(safe_urls))}
 
@@ -68,6 +76,10 @@ def plan() -> dict[str, Any]:
         raise ValueError("topic-map.json has no topics list")
     published = load_published()
     fallback = next_evergreen(topics, published)
+    selectable_inbox = [
+        item for item in inbox
+        if isinstance(item, dict) and not source_is_unresolved(item)
+    ]
     template = (TOOLS / "prompts" / "plan.md").read_text(encoding="utf-8")
     prompt = fill_template(template, {
         "TODAY": dt.date.today().isoformat(),
@@ -76,12 +88,12 @@ def plan() -> dict[str, Any]:
             ensure_ascii=False,
             indent=2,
         ),
-        "INBOX_JSON": json.dumps(inbox, ensure_ascii=False, indent=2),
+        "INBOX_JSON": json.dumps(selectable_inbox, ensure_ascii=False, indent=2),
     })
     deterministic = {"type": "evergreen", "slug": fallback["slug"]}
     try:
         reply = run_codex(prompt, reasoning_effort="low")
-        brief = validate_model_plan(parse_json_reply(reply), fallback, inbox)
+        brief = validate_model_plan(parse_json_reply(reply), fallback, selectable_inbox)
     except Exception as error:
         print(f"WARNING: planner output unusable; using evergreen fallback: {error}", file=sys.stderr)
         brief = deterministic

@@ -10,7 +10,7 @@ from typing import Any
 from common import (
     ROOT, STATE, TOOLS, canonical_card_source_url, card_mentions,
     card_product_aliases, compact_card, fetch_article_text, fill_template,
-    html_to_text, issuer_aliases, normalize_card_text,
+    html_to_text, is_google_news_url, issuer_aliases, normalize_card_text,
     normalized_phrase_in_text, parse_json_reply, read_json, run_codex,
     unambiguous_card_aliases, validate_calculations, validate_content_html,
     validate_public_http_url, write_json,
@@ -18,6 +18,12 @@ from common import (
 
 
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
+def validate_citable_source_url(url: str) -> str:
+    if is_google_news_url(url):
+        raise ValueError("Google News wrapper URLs cannot be cited as sources")
+    return validate_public_http_url(url)
 
 
 def news_cards(cards: list[dict[str, Any]], haystack: str) -> list[dict[str, Any]]:
@@ -85,7 +91,7 @@ def validate_draft(
     ):
         raise ValueError("sources must be a list of claim_hint/url objects")
     for source in value["sources"]:
-        validate_public_http_url(source["url"])
+        validate_citable_source_url(source["url"])
     returned_urls = {str(source["url"]) for source in value["sources"]}
     unexpected_urls = sorted(returned_urls - allowed_source_urls)
     if unexpected_urls:
@@ -163,7 +169,7 @@ def draft() -> dict[str, Any]:
         raw_source_urls = topic.get("sources", [])
         if not isinstance(raw_source_urls, list) or not all(isinstance(url, str) for url in raw_source_urls):
             raise ValueError(f"evergreen topic {topic.get('slug')} sources must be a list of URLs")
-        source_urls = list(dict.fromkeys(validate_public_http_url(url) for url in raw_source_urls))
+        source_urls = list(dict.fromkeys(validate_citable_source_url(url) for url in raw_source_urls))
         source_articles = []
         for url in source_urls:
             text = fetch_article_text(url, timeout=15)
@@ -182,7 +188,7 @@ def draft() -> dict[str, Any]:
         urls = brief.get("source_urls")
         if not isinstance(urls, list) or not urls:
             raise ValueError("news brief requires source_urls")
-        urls = list(dict.fromkeys(validate_public_http_url(str(url)) for url in urls))
+        urls = list(dict.fromkeys(validate_citable_source_url(str(url)) for url in urls))
         articles = []
         for url in urls:
             text = fetch_article_text(str(url), timeout=15)

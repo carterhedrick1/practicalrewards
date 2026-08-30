@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import base64
 import html
 import http.client
 import ipaddress
@@ -248,6 +249,27 @@ class TextExtractor(HTMLParser):
         return re.sub(r"\s+", " ", "".join(self.parts)).strip()
 
 
+class GoogleNewsTargetExtractor(HTMLParser):
+    """Collect publisher targets exposed by a Google News interstitial."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.attribute_targets: list[str] = []
+        self.external_hrefs: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        values = {name.casefold(): value for name, value in attrs if value}
+        target = values.get("data-n-au")
+        if target:
+            self.attribute_targets.append(target.strip())
+        href = values.get("href")
+        if href and _is_external_non_google_url(href):
+            self.external_hrefs.append(href.strip())
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.handle_starttag(tag, attrs)
+
+
 class ContentHTMLValidator(HTMLParser):
     """Validate the exact passive markup subset accepted for article bodies."""
 
@@ -387,6 +409,103 @@ def validate_public_http_url(url: str) -> str:
 
 def resolve_public_http_url(value: str, base_url: str) -> str:
     return validate_public_http_url(urllib.parse.urljoin(base_url, value.strip()))
+
+
+_GOOGLE_NEWS_ARTICLE_PATH_RE = re.compile(r"^/rss/articles/([^/?#]+)")
+_EMBEDDED_HTTP_URL_RE = re.compile(
+    rb"https?://[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+",
+    flags=re.IGNORECASE,
+)
+
+
+def is_google_news_url(value: str) -> bool:
+    """Return whether a URL points at the Google News host."""
+    try:
+        hostname = (urllib.parse.urlsplit(value.strip()).hostname or "").rstrip(".").casefold()
+    except (AttributeError, ValueError):
+        return False
+    return hostname == "news.google.com"
+
+
+def _is_google_owned_hostname(hostname: str) -> bool:
+    hostname = hostname.rstrip(".").casefold()
+    if re.search(r"(?:^|\.)google\.[a-z.]+$", hostname):
+        return True
+    infrastructure_domains = (
+        "googleapis.com",
+        "googleusercontent.com",
+        "gstatic.com",
+    )
+    return any(
+        hostname == domain or hostname.endswith("." + domain)
+        for domain in infrastructure_domains
+    )
+
+
+def _is_external_non_google_url(value: str) -> bool:
+    try:
+        parsed = urllib.parse.urlsplit(value.strip())
+    except (AttributeError, ValueError):
+        return False
+    return (
+        parsed.scheme.casefold() in {"http", "https"}
+        and bool(parsed.hostname)
+        and not _is_google_owned_hostname(parsed.hostname or "")
+    )
+
+
+def _decoded_google_news_targets(url: str) -> list[str]:
+    match = _GOOGLE_NEWS_ARTICLE_PATH_RE.match(urllib.parse.urlsplit(url).path)
+    if not match:
+        return []
+    segment = urllib.parse.unquote(match.group(1))
+    try:
+        padded = segment + "=" * (-len(segment) % 4)
+        decoded = base64.b64decode(padded, altchars=b"-_", validate=True)
+    except (ValueError, UnicodeEncodeError):
+        return []
+    return [match.group(0).decode("ascii") for match in _EMBEDDED_HTTP_URL_RE.finditer(decoded)]
+
+
+def _validated_publisher_target(candidates: list[str]) -> str | None:
+    for candidate in candidates:
+        candidate = html.unescape(candidate).strip()
+        if not _is_external_non_google_url(candidate):
+            continue
+        try:
+            return validate_public_http_url(candidate)
+        except (ValueError, OSError):
+            continue
+    return None
+
+
+def resolve_google_news_source_url(value: str, base_url: str = "") -> tuple[str, bool]:
+    """Resolve a Google News RSS article wrapper to its safe publisher URL.
+
+    The boolean is true only when the input was a Google News article URL whose
+    publisher target could not be recovered. In that case the validated wrapper
+    URL is retained so ingestion can flag, rather than silently discard, the item.
+    """
+    safe_url = resolve_public_http_url(value, base_url)
+    parsed = urllib.parse.urlsplit(safe_url)
+    if not is_google_news_url(safe_url) or not _GOOGLE_NEWS_ARTICLE_PATH_RE.match(parsed.path):
+        return safe_url, False
+
+    target = _validated_publisher_target(_decoded_google_news_targets(safe_url))
+    if target:
+        return target, False
+
+    try:
+        interstitial = fetch_text(safe_url)
+        parser = GoogleNewsTargetExtractor()
+        parser.feed(interstitial)
+        parser.close()
+        target = _validated_publisher_target(
+            parser.attribute_targets + parser.external_hrefs
+        )
+    except Exception:
+        target = None
+    return (target, False) if target else (safe_url, True)
 
 
 class _PinnedHTTPConnection(http.client.HTTPConnection):
