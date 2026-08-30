@@ -240,17 +240,20 @@ class DailyRunner:
         topic = config.get("ntfy_topic") if isinstance(config, dict) else None
         if isinstance(topic, str) and topic.strip():
             try:
-                priority = "high" if "held" in title.casefold() or "fail" in title.casefold() else "default"
-                headers = {
-                    "Title": title,
-                    "Priority": priority,
+                priority_word = "high" if "held" in title.casefold() or "fail" in title.casefold() else "default"
+                priority_int = 4 if priority_word == "high" else 3
+                payload = {
+                    "topic": topic.strip(),
+                    "title": title,
+                    "message": message,
+                    "priority": priority_int,
                 }
                 if link is not None:
-                    headers["Click"] = link
+                    payload["click"] = link
                 request = urllib.request.Request(
-                    f"https://ntfy.sh/{urllib.parse.quote(topic.strip(), safe='')}",
-                    data=message.encode("utf-8"),
-                    headers=headers,
+                    "https://ntfy.sh",
+                    data=json.dumps(payload).encode("utf-8"),
+                    headers={"Content-Type": "application/json"},
                     method="POST",
                 )
                 with urllib.request.urlopen(request, timeout=5):
