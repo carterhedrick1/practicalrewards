@@ -15,7 +15,7 @@ from typing import Any
 
 from common import (
     ROOT, STATE, card_mentions, card_url, read_json, validate_calculations,
-    validate_content_html, validate_public_http_url, write_json,
+    validate_content_html, write_json,
 )
 
 
@@ -99,19 +99,6 @@ def fill_post_template(template: str, values: dict[str, str]) -> str:
     if missing:
         raise ValueError("unfilled post template tokens: " + ", ".join(missing))
     return TOKEN_RE.sub(lambda match: values[match.group(1)], template)
-
-
-def render_sources(sources: list[dict[str, Any]]) -> str:
-    if not sources:
-        return ""
-    items: list[str] = []
-    for source in sources:
-        url = validate_public_http_url(str(source.get("url", "")))
-        label = str(source.get("claim_hint", "")).strip()
-        if not label:
-            raise ValueError("every source requires a non-empty claim_hint")
-        items.append(f'<li><a href="{html.escape(url, quote=True)}">{html.escape(label)}</a></li>')
-    return "<h2>Sources</h2>\n<ul>\n" + "\n".join(items) + "\n</ul>"
 
 
 def slug_collision_reasons(
@@ -303,7 +290,6 @@ def build_post() -> Path:
         "DATE_DISPLAY": display_date,
         "JSON_LD": json.dumps(json_ld, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
         "CONTENT": content,
-        "SOURCES": render_sources(sources),
     })
     output_path = ROOT / "blog" / f"{slug}.html"
     output_path.write_text(page, encoding="utf-8")

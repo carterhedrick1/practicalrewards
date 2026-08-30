@@ -13,6 +13,7 @@ Hard rules:
 - content_html is the article body only. Use only h2, h3, p, strong, ul, ol, li, table-family tags, and the restricted blog-kit div/section/span markup described below. No h1, page chrome, scripts, styles, or Markdown. Use strong only for the rumor label.
 - Paraphrase independently. Never copy source phrasing or reuse a source's sentence structure.
 - Cite factual claims in `sources` as {"claim_hint":"short claim including its key number when applicable","url":"https://..."}. Use only provided source URLs or `https://practicalrewards.com/<card_url>` for cards.json facts, and include the canonical card-page source for every mentioned card.
+- When reacting to another outlet's reporting, attribute it inline in the prose (for example, "per Doctor of Credit" or "Frequent Miler reports"). Never add a Sources heading, bibliography, source list, or footer to content_html.
 - Do not put dates or date-type claims in claim_hint for internal `practicalrewards.com/card-pages/` sources; their hints should describe only the supported card facts.
 - Mention only cards from the supplied cards slice and list their integer IDs in cards_mentioned.
 - Put each derived number in calculations as {"inputs":["$95","2%"],"operation":"divide","result":"$4,750"}. Allowed operations are add, subtract, multiply, and divide. Use an empty list when there is no derived math.

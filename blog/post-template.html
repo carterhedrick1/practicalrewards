@@ -129,6 +129,16 @@
             color: #14532d;
             font-weight: 700;
         }
+
+        @media (min-width: 1024px) {
+            .article-shell {
+                max-width: 760px;
+            }
+
+            .article-content table {
+                width: 100%;
+            }
+        }
     </style>
     <script type="application/ld+json">{{JSON_LD}}</script>
 </head>
@@ -148,7 +158,6 @@
 
             <div class="article-content">
                 {{CONTENT}}
-                {{SOURCES}}
             </div>
         </article>
     </main>

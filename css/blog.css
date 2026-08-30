@@ -210,6 +210,27 @@
     border-bottom: 0;
 }
 
+@media (min-width: 1024px) {
+    .article-content {
+        font-size: 1.0625rem;
+        line-height: 1.7;
+    }
+
+    .article-content .pr-math,
+    .article-content .pr-compare,
+    .article-content table,
+    .article-content .pr-steps {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .article-content .pr-compare {
+        -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 1.5rem), transparent 100%);
+        mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 1.5rem), transparent 100%);
+    }
+}
+
 @media (max-width: 480px) {
     .article-content .pr-math-row {
         gap: 0.75rem;
