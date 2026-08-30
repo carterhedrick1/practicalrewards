@@ -1,0 +1,706 @@
+#!/usr/bin/env python3
+"""Shared stdlib-only helpers for the Practical Rewards content pipeline."""
+
+from __future__ import annotations
+
+import html
+import http.client
+import ipaddress
+import json
+import os
+import re
+import socket
+import ssl
+import subprocess
+import tempfile
+import urllib.parse
+from html.parser import HTMLParser
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+TOOLS = ROOT / "tools"
+STATE = TOOLS / "state"
+USER_AGENT = "PracticalRewardsBot/1.0 (+https://practicalrewards.com)"
+FETCH_TIMEOUT = 15
+MAX_RESPONSE_BYTES = 5 * 1024 * 1024
+MAX_REDIRECTS = 5
+
+
+ISSUER_ALIASES = {
+    "amex": ("american express", "amex"),
+    "bank-of-america": ("bank of america", "bofa"),
+    "barclays": ("barclays",),
+    "bilt": ("bilt",),
+    "capital-one": ("capital one",),
+    "chase": ("chase",),
+    "citi": ("citi",),
+    "discover": ("discover",),
+    "fidelity": ("fidelity",),
+    "paypal": ("paypal",),
+    "us-bank": ("u s bank", "us bank"),
+    "wells-fargo": ("wells fargo",),
+}
+
+_GENERIC_PRODUCT_SUFFIXES = (("credit", "card"), ("card",), ("by",), ("from",))
+_NETWORK_SUFFIXES = (
+    ("world", "elite", "mastercard"),
+    ("world", "mastercard"),
+    ("visa", "infinite"),
+    ("visa", "signature"),
+    ("mastercard",),
+    ("visa",),
+)
+
+
+def normalize_card_text(value: str) -> str:
+    """Normalize display text for punctuation-insensitive card-name matching."""
+    value = re.sub(r"[®™℠]", "", value or "")
+    value = value.casefold()
+    value = re.sub(r"[^a-z0-9]+", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def _normalized_text_positions(value: str) -> tuple[str, list[int]]:
+    """Return normalized text plus a map from normalized to original offsets."""
+    characters: list[str] = []
+    positions: list[int] = []
+    pending_space_at: int | None = None
+    for index, character in enumerate(value or ""):
+        folded = character.casefold()
+        emitted = False
+        for output in folded:
+            if "a" <= output <= "z" or "0" <= output <= "9":
+                if pending_space_at is not None and characters:
+                    characters.append(" ")
+                    positions.append(pending_space_at)
+                pending_space_at = None
+                characters.append(output)
+                positions.append(index)
+                emitted = True
+        if not emitted:
+            pending_space_at = index
+    return "".join(characters), positions
+
+
+def issuer_aliases(card: dict[str, Any]) -> set[str]:
+    return {
+        normalize_card_text(alias)
+        for alias in ISSUER_ALIASES.get(str(card.get("bank_type", "")), ())
+        if normalize_card_text(alias)
+    }
+
+
+def card_product_aliases(card: dict[str, Any], include_single: bool = False) -> set[str]:
+    """Derive issuer-free product phrases such as Venture X or Sapphire Reserve."""
+    product = normalize_card_text(str(card.get("name", "")))
+    for issuer in sorted(issuer_aliases(card), key=len, reverse=True):
+        product = re.sub(rf"(?<![a-z0-9]){re.escape(issuer)}(?![a-z0-9])", " ", product)
+    tokens = product.split()
+    changed = True
+    while changed and tokens:
+        changed = False
+        for suffix in _NETWORK_SUFFIXES + _GENERIC_PRODUCT_SUFFIXES:
+            if len(tokens) >= len(suffix) and tuple(tokens[-len(suffix):]) == suffix:
+                del tokens[-len(suffix):]
+                changed = True
+                break
+    if not tokens or (len(tokens) == 1 and not include_single):
+        return set()
+    return {" ".join(tokens)}
+
+
+def card_aliases(card: dict[str, Any]) -> set[str]:
+    """Build normalized full-name, issuer-variant, and distinctive-product aliases."""
+    canonical = normalize_card_text(str(card.get("name", "")))
+    if not canonical:
+        return set()
+    aliases = {canonical}
+    issuers = issuer_aliases(card)
+    product_phrases = card_product_aliases(card, include_single=True)
+    for product in product_phrases:
+        aliases.update(f"{issuer} {product}" for issuer in issuers)
+        aliases.update(f"{product} {issuer}" for issuer in issuers)
+        if len(product.split()) >= 2:
+            aliases.add(product)
+    for alias in list(aliases):
+        tokens = alias.split()
+        if tokens and tokens[-1] == "card":
+            tokens.pop()
+        if tokens:
+            aliases.add(" ".join(tokens))
+    return {alias for alias in aliases if alias}
+
+
+def card_alias_index(cards: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Return only aliases owned by one card; ambiguous aliases are unusable."""
+    owners: dict[str, list[dict[str, Any]]] = {}
+    for card in cards:
+        for alias in card_aliases(card):
+            owners.setdefault(alias, []).append(card)
+    return {
+        alias: owned[0]
+        for alias, owned in owners.items()
+        if len({card.get("id") for card in owned}) == 1
+    }
+
+
+def unambiguous_card_aliases(
+    card: dict[str, Any],
+    cards: list[dict[str, Any]],
+) -> set[str]:
+    index = card_alias_index(cards)
+    return {
+        alias for alias in card_aliases(card)
+        if alias in index and index[alias].get("id") == card.get("id")
+    }
+
+
+def normalized_phrase_in_text(phrase: str, value: str) -> bool:
+    phrase = normalize_card_text(phrase)
+    normalized = normalize_card_text(value)
+    if not phrase:
+        return False
+    return re.search(rf"(?<![a-z0-9]){re.escape(phrase)}(?![a-z0-9])", normalized) is not None
+
+
+def card_mentions(
+    value: str,
+    cards: list[dict[str, Any]],
+) -> list[tuple[int, int, dict[str, Any], str]]:
+    """Find card aliases and return their spans in the original string."""
+    normalized, positions = _normalized_text_positions(value)
+    if not normalized:
+        return []
+    candidates: list[tuple[int, int, dict[str, Any], str]] = []
+    for alias, card in sorted(card_alias_index(cards).items(), key=lambda item: len(item[0]), reverse=True):
+        pattern = rf"(?<![a-z0-9]){re.escape(alias)}(?![a-z0-9])"
+        for match in re.finditer(pattern, normalized):
+            start = positions[match.start()]
+            end = positions[match.end() - 1] + 1
+            candidates.append((start, end, card, alias))
+
+    # Prefer a card's longest alias when full and shortened aliases overlap.
+    candidates.sort(key=lambda item: (item[0], -(item[1] - item[0]), str(item[2].get("id", ""))))
+    mentions: list[tuple[int, int, dict[str, Any], str]] = []
+    for candidate in candidates:
+        start, end, card, _ = candidate
+        if any(start < existing[1] and end > existing[0] for existing in mentions):
+            continue
+        mentions.append(candidate)
+    return sorted(mentions, key=lambda item: (item[0], item[1]))
+
+
+def card_is_mentioned(value: str, card: dict[str, Any]) -> bool:
+    return bool(card_mentions(value, [card]))
+
+
+class TextExtractor(HTMLParser):
+    """Extract readable text while dropping script, style, and other chrome."""
+
+    SKIP_TAGS = {"script", "style", "noscript", "svg", "template"}
+    BLOCK_TAGS = {
+        "article", "aside", "blockquote", "br", "div", "figcaption", "footer",
+        "h1", "h2", "h3", "h4", "h5", "h6", "header", "li", "main", "nav",
+        "ol", "p", "section", "table", "td", "th", "tr", "ul",
+    }
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.parts: list[str] = []
+        self._skip_depth = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag = tag.lower()
+        if tag in self.SKIP_TAGS:
+            self._skip_depth += 1
+        elif not self._skip_depth and tag in self.BLOCK_TAGS:
+            self.parts.append(" ")
+
+    def handle_endtag(self, tag: str) -> None:
+        tag = tag.lower()
+        if tag in self.SKIP_TAGS and self._skip_depth:
+            self._skip_depth -= 1
+        elif not self._skip_depth and tag in self.BLOCK_TAGS:
+            self.parts.append(" ")
+
+    def handle_data(self, data: str) -> None:
+        if not self._skip_depth:
+            self.parts.append(data)
+
+    def text(self) -> str:
+        return re.sub(r"\s+", " ", "".join(self.parts)).strip()
+
+
+class ContentHTMLValidator(HTMLParser):
+    """Validate the exact passive markup subset accepted for article bodies."""
+
+    ALLOWED_TAGS = {
+        "h2", "h3", "p", "strong", "ul", "ol", "li",
+        "table", "thead", "tbody", "tfoot", "tr", "th", "td",
+    }
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self.stack: list[str] = []
+        self.problems: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        lower = tag.lower()
+        if lower not in self.ALLOWED_TAGS:
+            self.problems.append(f"tag <{tag}> is not allowed")
+        if attrs:
+            names = ", ".join(name for name, _ in attrs)
+            self.problems.append(f"attributes are not allowed on <{tag}>: {names}")
+        self.stack.append(lower)
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.problems.append(f"self-closing tag <{tag}/> is not allowed")
+
+    def handle_endtag(self, tag: str) -> None:
+        lower = tag.lower()
+        if lower not in self.ALLOWED_TAGS:
+            self.problems.append(f"closing tag </{tag}> is not allowed")
+        if not self.stack:
+            self.problems.append(f"closing tag </{tag}> has no opener")
+        elif self.stack[-1] != lower:
+            self.problems.append(f"misnested closing tag </{tag}>")
+            if lower in self.stack:
+                while self.stack and self.stack[-1] != lower:
+                    self.stack.pop()
+                if self.stack:
+                    self.stack.pop()
+        else:
+            self.stack.pop()
+
+    def handle_comment(self, data: str) -> None:
+        self.problems.append("HTML comments are not allowed")
+
+    def handle_decl(self, decl: str) -> None:
+        self.problems.append("HTML declarations are not allowed")
+
+    def handle_pi(self, data: str) -> None:
+        self.problems.append("processing instructions are not allowed")
+
+    def finish(self) -> None:
+        if self.stack:
+            self.problems.append("unclosed tags: " + ", ".join(self.stack[-8:]))
+
+
+def html_to_text(value: str) -> str:
+    parser = TextExtractor()
+    try:
+        parser.feed(value or "")
+        parser.close()
+    except Exception:
+        return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", value or ""))).strip()
+    return parser.text()
+
+
+def validate_content_html(value: str) -> None:
+    parser = ContentHTMLValidator()
+    try:
+        parser.feed(value)
+        parser.close()
+        parser.finish()
+    except Exception as error:
+        raise ValueError(f"content_html could not be parsed: {error}") from error
+    if parser.problems:
+        raise ValueError("invalid content_html: " + "; ".join(parser.problems))
+
+
+def _resolve_public_http_target(url: str) -> tuple[str, urllib.parse.SplitResult, tuple[str, ...]]:
+    """Validate a URL and return the exact public IPs approved for this hop."""
+    if not isinstance(url, str) or not url.strip():
+        raise ValueError("URL must be a non-empty string")
+    value = url.strip()
+    parsed = urllib.parse.urlsplit(value)
+    if parsed.scheme.casefold() not in {"http", "https"}:
+        raise ValueError(f"URL scheme is not allowed: {parsed.scheme or '(missing)'}")
+    if not parsed.hostname:
+        raise ValueError("URL has no hostname")
+    if parsed.username is not None or parsed.password is not None:
+        raise ValueError("URL credentials are not allowed")
+    try:
+        port = parsed.port or (443 if parsed.scheme.casefold() == "https" else 80)
+    except ValueError as error:
+        raise ValueError(f"URL has an invalid port: {error}") from error
+    hostname = parsed.hostname.rstrip(".")
+    if hostname.casefold() == "localhost" or hostname.casefold().endswith(".localhost"):
+        raise ValueError("localhost URLs are not allowed")
+    try:
+        resolved = socket.getaddrinfo(hostname, port, type=socket.SOCK_STREAM)
+    except socket.gaierror as error:
+        raise ValueError(f"URL hostname could not be resolved: {hostname}: {error}") from error
+    addresses = tuple(dict.fromkeys(record[4][0] for record in resolved))
+    if not addresses:
+        raise ValueError(f"URL hostname resolved to no addresses: {hostname}")
+    for address in addresses:
+        try:
+            parsed_address = ipaddress.ip_address(address.split("%", 1)[0])
+        except ValueError as error:
+            raise ValueError(f"URL hostname resolved to an invalid address: {address}") from error
+        if not parsed_address.is_global:
+            raise ValueError(f"URL hostname resolves to a non-public address: {address}")
+    return urllib.parse.urlunsplit(parsed), parsed, addresses
+
+
+def validate_public_http_url(url: str) -> str:
+    """Validate an HTTP(S) URL and resolve its host only to public addresses."""
+    safe_url, _parsed, _addresses = _resolve_public_http_target(url)
+    return safe_url
+
+
+def resolve_public_http_url(value: str, base_url: str) -> str:
+    return validate_public_http_url(urllib.parse.urljoin(base_url, value.strip()))
+
+
+class _PinnedHTTPConnection(http.client.HTTPConnection):
+    def __init__(self, host: str, port: int, pinned_ip: str, timeout: int) -> None:
+        super().__init__(host, port=port, timeout=timeout)
+        self._pinned_ip = pinned_ip
+
+    def connect(self) -> None:
+        self.sock = self._create_connection(
+            (self._pinned_ip, self.port), self.timeout, self.source_address,
+        )
+
+
+class _PinnedHTTPSConnection(http.client.HTTPSConnection):
+    def __init__(self, host: str, port: int, pinned_ip: str, timeout: int) -> None:
+        super().__init__(host, port=port, timeout=timeout, context=ssl.create_default_context())
+        self._pinned_ip = pinned_ip
+
+    def connect(self) -> None:
+        self.sock = self._create_connection(
+            (self._pinned_ip, self.port), self.timeout, self.source_address,
+        )
+        self.sock = self._context.wrap_socket(self.sock, server_hostname=self.host)
+
+
+def _request_path(parsed: urllib.parse.SplitResult) -> str:
+    path = parsed.path or "/"
+    return urllib.parse.urlunsplit(("", "", path, parsed.query, ""))
+
+
+def _host_header(parsed: urllib.parse.SplitResult) -> str:
+    hostname = parsed.hostname or ""
+    if ":" in hostname and not hostname.startswith("["):
+        hostname = f"[{hostname}]"
+    default_port = 443 if parsed.scheme.casefold() == "https" else 80
+    return hostname if parsed.port in (None, default_port) else f"{hostname}:{parsed.port}"
+
+
+def _open_pinned_response(
+    parsed: urllib.parse.SplitResult,
+    addresses: tuple[str, ...],
+    timeout: int,
+) -> tuple[http.client.HTTPConnection, http.client.HTTPResponse]:
+    port = parsed.port or (443 if parsed.scheme.casefold() == "https" else 80)
+    last_error: Exception | None = None
+    for address in addresses:
+        connection_class = _PinnedHTTPSConnection if parsed.scheme.casefold() == "https" else _PinnedHTTPConnection
+        connection = connection_class(parsed.hostname or "", port, address, timeout)
+        try:
+            connection.request(
+                "GET", _request_path(parsed),
+                headers={
+                    "Host": _host_header(parsed),
+                    "User-Agent": USER_AGENT,
+                    "Accept": "text/html,application/rss+xml,application/atom+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "Connection": "close",
+                },
+            )
+            return connection, connection.getresponse()
+        except Exception as error:
+            last_error = error
+            connection.close()
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError("URL hostname resolved to no usable addresses")
+
+
+def _read_bounded_response(
+    response: http.client.HTTPResponse,
+    max_bytes: int = MAX_RESPONSE_BYTES,
+) -> bytes:
+    raw_length = response.getheader("Content-Length")
+    if raw_length is not None:
+        try:
+            content_length = int(raw_length)
+        except ValueError as error:
+            raise ValueError("response has an invalid Content-Length") from error
+        if content_length < 0:
+            raise ValueError("response has a negative Content-Length")
+        if content_length > max_bytes:
+            raise ValueError(f"response exceeds {max_bytes} byte limit")
+    payload = response.read(max_bytes + 1)
+    if len(payload) > max_bytes:
+        raise ValueError(f"response exceeds {max_bytes} byte limit")
+    return payload
+
+
+def fetch_bytes(url: str, timeout: int = FETCH_TIMEOUT) -> tuple[bytes, str]:
+    current_url = url
+    redirect_statuses = {301, 302, 303, 307, 308}
+    for redirect_count in range(MAX_REDIRECTS + 1):
+        safe_url, parsed, addresses = _resolve_public_http_target(current_url)
+        connection, response = _open_pinned_response(parsed, addresses, timeout)
+        try:
+            if response.status in redirect_statuses:
+                location = response.getheader("Location")
+                if not location:
+                    raise RuntimeError(f"HTTP {response.status} redirect has no Location header")
+                if redirect_count >= MAX_REDIRECTS:
+                    raise RuntimeError(f"too many redirects (limit {MAX_REDIRECTS})")
+                current_url = urllib.parse.urljoin(safe_url, location)
+                continue
+            if response.status >= 400:
+                raise RuntimeError(f"HTTP request failed with status {response.status}")
+            payload = _read_bounded_response(response)
+            return payload, response.headers.get_content_charset() or "utf-8"
+        finally:
+            response.close()
+            connection.close()
+    raise RuntimeError(f"too many redirects (limit {MAX_REDIRECTS})")
+
+
+def fetch_text(url: str, timeout: int = FETCH_TIMEOUT) -> str:
+    payload, charset = fetch_bytes(url, timeout)
+    try:
+        return payload.decode(charset, errors="replace")
+    except LookupError:
+        return payload.decode("utf-8", errors="replace")
+
+
+def fetch_article_text(url: str, timeout: int = FETCH_TIMEOUT) -> str:
+    return html_to_text(fetch_text(url, timeout))
+
+
+def read_json(path: Path, default: Any = None) -> Any:
+    if not path.exists():
+        return default
+    with path.open(encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def write_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            json.dump(value, handle, indent=2, ensure_ascii=False)
+            handle.write("\n")
+        os.replace(temporary, path)
+    except Exception:
+        try:
+            os.unlink(temporary)
+        except FileNotFoundError:
+            pass
+        raise
+
+
+def fill_template(template: str, slots: dict[str, str]) -> str:
+    token_re = re.compile(r"{{([A-Z0-9_]+)}}")
+    required = {match.group(1) for match in token_re.finditer(template)}
+    missing = sorted(required - slots.keys())
+    if missing:
+        raise ValueError("unfilled prompt slots: " + ", ".join(missing))
+    return token_re.sub(lambda match: slots[match.group(1)], template)
+
+
+def parse_json_reply(raw: str) -> Any:
+    """Accept strict JSON, tolerating only an accidental Markdown fence/preamble."""
+    value = raw.strip()
+    if value.startswith("```"):
+        value = re.sub(r"^```(?:json)?\s*", "", value, flags=re.IGNORECASE)
+        value = re.sub(r"\s*```\s*$", "", value)
+    try:
+        return json.loads(value)
+    except json.JSONDecodeError as first_error:
+        decoder = json.JSONDecoder()
+        for match in re.finditer(r"[\[{]", value):
+            try:
+                parsed, end = decoder.raw_decode(value[match.start():])
+                if not value[match.start() + end:].strip().strip("`"):
+                    return parsed
+            except json.JSONDecodeError:
+                continue
+        raise first_error
+
+
+CALCULATION_OPERATIONS = {"add", "subtract", "multiply", "divide"}
+
+
+def _parse_calculation_quantity(value: Any) -> tuple[float, str]:
+    if isinstance(value, bool) or not isinstance(value, (int, float, str)):
+        raise ValueError("calculation values must be numbers or numeric strings")
+    if isinstance(value, (int, float)):
+        return float(value), "count"
+    compact = re.sub(r"[\s,]", "", value).casefold().rstrip("+")
+    percent = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)(?:%|percent)", compact)
+    if percent:
+        return float(percent.group(1)) / 100, "percent"
+    cpp = re.fullmatch(
+        r"([+-]?\d+(?:\.\d+)?)(?:cpp|¢(?:/(?:pt|point)|perpoint)?|cents?perpoint)",
+        compact,
+    )
+    if cpp:
+        return float(cpp.group(1)) / 100, "cpp"
+    quantity = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)(k)?(points?|miles?)", compact)
+    if quantity:
+        unit = "points" if quantity.group(3).startswith("point") else "miles"
+        return float(quantity.group(1)) * (1000 if quantity.group(2) else 1), unit
+    multiplier = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)x", compact)
+    if multiplier:
+        return float(multiplier.group(1)), "count"
+    plain = re.fullmatch(r"(\$?)([+-]?\d+(?:\.\d+)?)", compact)
+    if plain:
+        return float(plain.group(2)), "dollars" if plain.group(1) else "count"
+    raise ValueError(f"unsupported calculation value: {value!r}")
+
+
+def parse_calculation_value(value: Any) -> float:
+    """Return the numeric magnitude; calculation validation also tracks its unit."""
+    return _parse_calculation_quantity(value)[0]
+
+
+def _multiply_units(left: str, right: str) -> str:
+    if left == "count":
+        return right
+    if right == "count":
+        return left
+    if left == "percent":
+        return right
+    if right == "percent":
+        return left
+    if {left, right} in ({"points", "cpp"}, {"miles", "cpp"}):
+        return "dollars"
+    raise ValueError(f"units do not compose for multiplication: {left} × {right}")
+
+
+def _divide_units(numerator: str, denominator: str) -> str:
+    if numerator == denominator:
+        return "count"
+    if denominator in {"count", "percent"}:
+        return numerator
+    if numerator == "dollars" and denominator == "cpp":
+        return "points"
+    if numerator == "dollars" and denominator in {"points", "miles"}:
+        return "cpp"
+    raise ValueError(f"units do not compose for division: {numerator} ÷ {denominator}")
+
+
+def _recompute_calculation_quantity(calculation: dict[str, Any]) -> tuple[float, str]:
+    operation = calculation.get("operation")
+    inputs = calculation.get("inputs")
+    if operation not in CALCULATION_OPERATIONS:
+        raise ValueError(f"unsupported calculation operation: {operation!r}")
+    if not isinstance(inputs, list) or not inputs:
+        raise ValueError("calculation inputs must be a non-empty list")
+    quantities = [_parse_calculation_quantity(value) for value in inputs]
+    if operation in {"subtract", "divide"} and len(quantities) != 2:
+        raise ValueError(f"{operation} calculations require exactly two inputs")
+    if operation in {"add", "subtract"}:
+        units = {unit for _amount, unit in quantities}
+        if len(units) != 1:
+            rendered = ", ".join(unit for _amount, unit in quantities)
+            raise ValueError(f"{operation} requires matching units, got: {rendered}")
+        unit = quantities[0][1]
+        if operation == "add":
+            return sum(amount for amount, _unit in quantities), unit
+        return quantities[0][0] - quantities[1][0], unit
+    if operation == "multiply":
+        amount, unit = quantities[0]
+        for next_amount, next_unit in quantities[1:]:
+            amount *= next_amount
+            unit = _multiply_units(unit, next_unit)
+        return amount, unit
+    if quantities[1][0] == 0:
+        raise ValueError("calculation division by zero")
+    return quantities[0][0] / quantities[1][0], _divide_units(quantities[0][1], quantities[1][1])
+
+
+def recompute_calculation(calculation: dict[str, Any]) -> float:
+    return _recompute_calculation_quantity(calculation)[0]
+
+
+def validate_calculations(value: Any) -> list[dict[str, Any]]:
+    if not isinstance(value, list):
+        raise ValueError("calculations must be a list")
+    validated: list[dict[str, Any]] = []
+    for index, calculation in enumerate(value):
+        if not isinstance(calculation, dict):
+            raise ValueError(f"calculation {index} must be an object")
+        required = {"inputs", "operation", "result"}
+        if required - calculation.keys():
+            raise ValueError(f"calculation {index} is missing inputs, operation, or result")
+        expected, expected_unit = _recompute_calculation_quantity(calculation)
+        claimed, claimed_unit = _parse_calculation_quantity(calculation["result"])
+        if expected_unit != claimed_unit:
+            raise ValueError(
+                f"calculation {index} result unit does not match: expected {expected_unit}, got {claimed_unit}"
+            )
+        tolerance = max(1e-9, abs(expected) * 1e-6)
+        if abs(expected - claimed) > tolerance:
+            raise ValueError(
+                f"calculation {index} result does not recompute: expected {expected:g}, got {claimed:g}"
+            )
+        validated.append(calculation)
+    return validated
+
+
+def run_codex(prompt: str, reasoning_effort: str, model: str = "gpt-5.6-sol") -> str:
+    """Run Codex read-only and return only its final assistant message."""
+    STATE.mkdir(parents=True, exist_ok=True)
+    fd, output_name = tempfile.mkstemp(prefix="codex-last-", suffix=".txt")
+    os.close(fd)
+    output_path = Path(output_name)
+    command = [
+        "codex", "exec", "--ephemeral", "--color", "never",
+        "--model", model,
+        "--config", f'model_reasoning_effort="{reasoning_effort}"',
+        "--sandbox", "read-only",
+        "--cd", str(ROOT),
+        "--output-last-message", str(output_path),
+        "-",
+    ]
+    try:
+        result = subprocess.run(
+            command,
+            input=prompt,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=600,
+            check=False,
+        )
+        if result.returncode != 0:
+            detail = (result.stderr or result.stdout).strip()
+            raise RuntimeError(f"codex exec failed with exit {result.returncode}: {detail[-2000:]}")
+        reply = output_path.read_text(encoding="utf-8").strip()
+        if not reply:
+            raise RuntimeError("codex exec produced no final message")
+        return reply
+    finally:
+        output_path.unlink(missing_ok=True)
+
+
+def compact_card(card: dict[str, Any]) -> dict[str, Any]:
+    fields = ("id", "name", "annual_fee", "welcome_bonus", "features", "card_url", "practical_advice")
+    return {field: card.get(field) for field in fields}
+
+
+def card_url(card: dict[str, Any]) -> str:
+    value = str(card.get("card_url", ""))
+    if value.startswith(("http://", "https://", "/")):
+        return value
+    return "/" + value.lstrip("/")
+
+
+def canonical_card_source_url(card: dict[str, Any]) -> str:
+    value = card_url(card)
+    if value.startswith(("http://", "https://")):
+        return value
+    return "https://practicalrewards.com/" + value.lstrip("/")

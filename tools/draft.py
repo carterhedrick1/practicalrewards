@@ -1,0 +1,241 @@
+#!/usr/bin/env python3
+"""Draft a Practical Rewards post as validated strict JSON."""
+
+from __future__ import annotations
+
+import json
+import re
+from typing import Any
+
+from common import (
+    ROOT, STATE, TOOLS, canonical_card_source_url, card_mentions,
+    card_product_aliases, compact_card, fetch_article_text, fill_template,
+    html_to_text, issuer_aliases, normalize_card_text,
+    normalized_phrase_in_text, parse_json_reply, read_json, run_codex,
+    unambiguous_card_aliases, validate_calculations, validate_content_html,
+    validate_public_http_url, write_json,
+)
+
+
+SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
+def news_cards(cards: list[dict[str, Any]], haystack: str) -> list[dict[str, Any]]:
+    normalized = normalize_card_text(haystack)
+    ranked: list[tuple[int, int, dict[str, Any]]] = []
+    for index, card in enumerate(cards):
+        matched_aliases = {
+            alias for alias in unambiguous_card_aliases(card, cards)
+            if normalized_phrase_in_text(alias, normalized)
+        }
+        issuer_hit = any(
+            normalized_phrase_in_text(alias, normalized)
+            for alias in issuer_aliases(card)
+        )
+        product_hit = any(
+            normalized_phrase_in_text(alias, normalized)
+            for alias in card_product_aliases(card, include_single=True)
+        )
+        issuer_product_hit = issuer_hit and product_hit
+        if matched_aliases or issuer_product_hit:
+            longest = max((len(alias.split()) for alias in matched_aliases), default=0)
+            score = longest * 20 + (15 if issuer_product_hit else 0)
+            ranked.append((score, -index, card))
+    ranked.sort(reverse=True, key=lambda row: (row[0], row[1]))
+    return [card for _, _, card in ranked[:8]]
+
+
+def validate_draft(
+    value: Any,
+    allowed_card_ids: set[int],
+    allowed_source_urls: set[str],
+    expected_slug: str | None,
+    forbidden_slugs: set[str] | None = None,
+    required_source_urls: set[str] | None = None,
+    cards_all: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise ValueError("draft reply must be a JSON object")
+    required = {
+        "title", "meta_description", "slug", "content_html", "sources",
+        "cards_mentioned", "calculations",
+    }
+    missing = required - value.keys()
+    if missing:
+        raise ValueError("draft is missing keys: " + ", ".join(sorted(missing)))
+    for field in ("title", "meta_description", "slug", "content_html"):
+        if not isinstance(value[field], str) or not value[field].strip():
+            raise ValueError(f"{field} must be a non-empty string")
+    if len(value["title"]) > 110 or "!" in value["title"]:
+        raise ValueError("title must be at most 110 characters and contain no exclamation point")
+    if not SLUG_RE.fullmatch(value["slug"]):
+        raise ValueError("slug must contain only lowercase letters, numbers, and hyphens")
+    if expected_slug and value["slug"] != expected_slug:
+        raise ValueError(f"evergreen slug must be {expected_slug}")
+    if value["slug"] in (forbidden_slugs or set()):
+        raise ValueError(f"slug is already published or has an existing page: {value['slug']}")
+    validate_content_html(value["content_html"])
+    if not isinstance(value["sources"], list) or not all(
+        isinstance(source, dict)
+        and isinstance(source.get("claim_hint"), str)
+        and bool(source["claim_hint"].strip())
+        and isinstance(source.get("url"), str)
+        and source["url"].startswith(("http://", "https://"))
+        for source in value["sources"]
+    ):
+        raise ValueError("sources must be a list of claim_hint/url objects")
+    for source in value["sources"]:
+        validate_public_http_url(source["url"])
+    returned_urls = {str(source["url"]) for source in value["sources"]}
+    unexpected_urls = sorted(returned_urls - allowed_source_urls)
+    if unexpected_urls:
+        raise ValueError("sources contain URLs outside the supplied fact packet: " + ", ".join(unexpected_urls))
+    missing_urls = sorted((required_source_urls or set()) - returned_urls)
+    if missing_urls:
+        raise ValueError("draft omitted required source citations: " + ", ".join(missing_urls))
+    if not isinstance(value["cards_mentioned"], list) or not all(
+        isinstance(card_id, int) and card_id in allowed_card_ids for card_id in value["cards_mentioned"]
+    ):
+        raise ValueError("cards_mentioned contains an ID outside the supplied card slice")
+    value["cards_mentioned"] = list(dict.fromkeys(value["cards_mentioned"]))
+    listed_ids = set(value["cards_mentioned"])
+    if cards_all is not None:
+        content_ids = {
+            int(mention[2]["id"])
+            for mention in card_mentions(html_to_text(value["content_html"]), cards_all)
+        }
+        outside = sorted(content_ids - allowed_card_ids)
+        if outside:
+            raise ValueError("content_html mentions card IDs outside the supplied card slice: " + ", ".join(map(str, outside)))
+        omitted = sorted(content_ids - listed_ids)
+        if omitted:
+            raise ValueError("content_html mentions card IDs omitted from cards_mentioned: " + ", ".join(map(str, omitted)))
+        cards_by_id = {int(card["id"]): card for card in cards_all if isinstance(card.get("id"), int)}
+        required_card_urls = {
+            canonical_card_source_url(cards_by_id[card_id])
+            for card_id in listed_ids
+            if card_id in cards_by_id
+        }
+        missing_card_urls = sorted(required_card_urls - returned_urls)
+        if missing_card_urls:
+            raise ValueError("draft omitted required card-page citation(s): " + ", ".join(missing_card_urls))
+    value["calculations"] = validate_calculations(value["calculations"])
+    return value
+
+
+def existing_slugs() -> set[str]:
+    published = read_json(STATE / "published.json", [])
+    if not isinstance(published, list):
+        raise ValueError("tools/state/published.json must contain a JSON list")
+    slugs = {
+        str(item.get("slug"))
+        for item in published
+        if isinstance(item, dict) and item.get("slug")
+    }
+    slugs.update(path.stem for path in (ROOT / "blog").glob("*.html"))
+    return slugs
+
+
+def draft() -> dict[str, Any]:
+    brief = read_json(STATE / "todays-brief.json")
+    if not isinstance(brief, dict) or brief.get("type") not in {"evergreen", "news"}:
+        raise ValueError("todays-brief.json is missing or invalid")
+    style = (TOOLS / "content" / "style-guide.md").read_text(encoding="utf-8")
+    cards = read_json(ROOT / "cards.json", [])
+    if not isinstance(cards, list):
+        raise ValueError("cards.json must contain a list")
+
+    slots = {
+        "STYLE_GUIDE": style,
+        "BRIEF_JSON": json.dumps(brief, ensure_ascii=False, indent=2),
+    }
+    forbidden_slugs = existing_slugs()
+    required_source_urls: set[str] = set()
+    expected_slug: str | None = None
+    if brief["type"] == "evergreen":
+        topic_map = read_json(TOOLS / "content" / "topic-map.json", {})
+        topics = topic_map.get("topics", []) if isinstance(topic_map, dict) else []
+        topic = next((item for item in topics if item.get("slug") == brief.get("slug")), None)
+        if topic is None:
+            raise ValueError(f"unknown evergreen topic slug: {brief.get('slug')}")
+        related = set(topic.get("related_cards", []))
+        selected_cards = [card for card in cards if card.get("id") in related]
+        raw_source_urls = topic.get("sources", [])
+        if not isinstance(raw_source_urls, list) or not all(isinstance(url, str) for url in raw_source_urls):
+            raise ValueError(f"evergreen topic {topic.get('slug')} sources must be a list of URLs")
+        source_urls = list(dict.fromkeys(validate_public_http_url(url) for url in raw_source_urls))
+        source_articles = []
+        for url in source_urls:
+            text = fetch_article_text(url, timeout=15)
+            if not text:
+                raise RuntimeError(f"evergreen source yielded no readable text: {url}")
+            source_articles.append({"url": url, "text": text})
+        required_source_urls = set(source_urls)
+        expected_slug = str(topic["slug"])
+        slots.update({
+            "TOPIC_JSON": json.dumps(topic, ensure_ascii=False, indent=2),
+            "SOURCE_ARTICLES": json.dumps(source_articles, ensure_ascii=False, indent=2),
+            "CARDS_JSON": json.dumps([compact_card(card) for card in selected_cards], ensure_ascii=False, indent=2),
+        })
+        template_name = "draft-evergreen.md"
+    else:
+        urls = brief.get("source_urls")
+        if not isinstance(urls, list) or not urls:
+            raise ValueError("news brief requires source_urls")
+        urls = list(dict.fromkeys(validate_public_http_url(str(url)) for url in urls))
+        articles = []
+        for url in urls:
+            text = fetch_article_text(str(url), timeout=15)
+            if not text:
+                raise RuntimeError(f"source article yielded no readable text: {url}")
+            articles.append({"url": url, "text": text})
+        haystack = json.dumps(brief, ensure_ascii=False) + " " + " ".join(item["text"] for item in articles)
+        selected_cards = news_cards(cards, haystack)
+        slots.update({
+            "SOURCE_ARTICLES": json.dumps(articles, ensure_ascii=False, indent=2),
+            "CARDS_JSON": json.dumps([compact_card(card) for card in selected_cards], ensure_ascii=False, indent=2),
+        })
+        template_name = "draft-news.md"
+
+    template = (TOOLS / "prompts" / template_name).read_text(encoding="utf-8")
+    prompt = fill_template(template, slots)
+    allowed_ids = {int(card["id"]) for card in selected_cards}
+    allowed_source_urls = {
+        canonical_card_source_url(card)
+        for card in selected_cards
+        if card.get("card_url")
+    }
+    if brief["type"] == "news":
+        allowed_source_urls.update(str(url) for url in urls)
+    else:
+        allowed_source_urls.update(required_source_urls)
+    reply = run_codex(prompt, reasoning_effort="low")
+    try:
+        result = validate_draft(
+            parse_json_reply(reply), allowed_ids, allowed_source_urls, expected_slug,
+            forbidden_slugs, required_source_urls, cards,
+        )
+    except Exception as first_error:
+        correction = (
+            prompt
+            + "\n\nYour previous response failed validation: " + str(first_error)
+            + "\nPrevious response:\n" + reply
+            + "\nReturn a corrected STRICT JSON object only."
+        )
+        retry = run_codex(correction, reasoning_effort="low")
+        result = validate_draft(
+            parse_json_reply(retry), allowed_ids, allowed_source_urls, expected_slug,
+            forbidden_slugs, required_source_urls, cards,
+        )
+    write_json(STATE / "draft.json", result)
+    print(json.dumps({"title": result["title"], "slug": result["slug"]}, ensure_ascii=False))
+    return result
+
+
+def main() -> int:
+    draft()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

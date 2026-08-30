@@ -51,7 +51,7 @@ The site doubts marketing by re-pricing it, not by ranting:
 
 ## 8. Hard rules for the bot
 - Cite a source for every factual claim (issuer terms page, press release, reputable outlet). No source, no claim.
-- Unconfirmed changes must be labeled **[Rumor]** in the text.
+- Unconfirmed changes must be labeled <strong>[Rumor]</strong> in content_html.
 - Never invent or guess card terms, fees, multipliers, credits, or dates. If a term can't be verified, say so or omit it.
 - Byline is always **"Practical Rewards."** Write as "we" or impersonal — never first-person-singular anecdotes ("When I applied…" is forbidden; the site's "I" voice belongs to the founder's About page only).
 - No affiliate language: no "apply through our link," no "sponsored," no ranking cards by payout, no urgency CTAs.

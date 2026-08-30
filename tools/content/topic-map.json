@@ -3,7 +3,8 @@
     "site": "practicalrewards.com",
     "generated": "2026-08-29",
     "source_files": ["learning.html", "cards.json"],
-    "voice": "plainspoken, skeptical, fee-math-forward; deepen one idea per post, never a copy of the learning page"
+    "voice": "plainspoken, skeptical, fee-math-forward; deepen one idea per post, never a copy of the learning page",
+    "sources_field": "Each topic may include a sources array of vetted public HTTP(S) URLs. An omitted or empty array supplies no external fact packet."
   },
   "topics": [
     {

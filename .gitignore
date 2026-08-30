@@ -11,3 +11,7 @@ secrets.js
 
 # Admin/Development files (not for public)
 database.html
+
+# Automated blog runtime artifacts
+tools/state/held/
+tools/state/logs/

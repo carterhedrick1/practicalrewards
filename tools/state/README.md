@@ -1,0 +1,1 @@
+`seen.json` tracks ingested URLs, `inbox.json` holds new feed items, `published.json` records live posts, `todays-brief.json` stores the selected assignment, `draft.json` stores model output, and `verify-report.json` stores the accuracy-gate result.
