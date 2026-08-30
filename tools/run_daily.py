@@ -11,6 +11,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.parse
+import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -218,10 +220,52 @@ class DailyRunner:
                 snapshot.path.unlink()
         self.log("Restored all build-touched paths to their exact pre-run state")
 
-    def notify(self, message: str) -> None:
-        safe = message.replace("\\", "\\\\").replace('"', '\\"').replace("\n", " ")
-        script = f'display notification "{safe}" with title "Practical Rewards"'
+    def notify(self, title: str, message: str, link: str | None = None) -> None:
+        def log_notification(message: str) -> None:
+            try:
+                self.log(message)
+            except Exception:
+                pass
+
         try:
+            config_path = Path("~/.config/practicalrewards/notify.json").expanduser()
+            config = json.loads(config_path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            config = None
+        except Exception:
+            log_notification("WARNING ntfy: failed")
+            config = None
+
+        topic = config.get("ntfy_topic") if isinstance(config, dict) else None
+        if isinstance(topic, str) and topic.strip():
+            try:
+                priority = "high" if "held" in title.casefold() or "fail" in title.casefold() else "default"
+                headers = {
+                    "Title": title,
+                    "Priority": priority,
+                }
+                if link is not None:
+                    headers["Click"] = link
+                request = urllib.request.Request(
+                    f"https://ntfy.sh/{urllib.parse.quote(topic.strip(), safe='')}",
+                    data=message.encode("utf-8"),
+                    headers=headers,
+                    method="POST",
+                )
+                with urllib.request.urlopen(request, timeout=5):
+                    pass
+                log_notification("ntfy: sent")
+            except Exception:
+                log_notification("WARNING ntfy: failed")
+
+        def osascript_safe(value: str) -> str:
+            return value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", " ")
+
+        try:
+            script = (
+                f'display notification "{osascript_safe(message)}" '
+                f'with title "{osascript_safe(title)}"'
+            )
             result = subprocess.run(
                 ["osascript", "-e", script],
                 stdout=subprocess.DEVNULL,
@@ -231,9 +275,9 @@ class DailyRunner:
                 check=False,
             )
             if result.returncode != 0:
-                self.log(f"WARNING notification failed: {result.stderr.strip()}")
-        except Exception as error:
-            self.log(f"WARNING notification failed: {error}")
+                log_notification("WARNING osascript: failed")
+        except Exception:
+            log_notification("WARNING osascript: failed")
 
     def hold_failed_post(self) -> str:
         report = read_json(STATE / "verify-report.json", {})
@@ -439,7 +483,7 @@ class DailyRunner:
                     reason = self.hold_failed_post()
                     self.restore_build_state()
                     self.restore_pipeline_state()
-                    self.notify(f"today's post was held — {reason}")
+                    self.notify("Post held", f"Today's post was held — {reason}")
                 return 1
             draft = read_json(STATE / "draft.json", {})
             if self.dry_run:
@@ -450,9 +494,11 @@ class DailyRunner:
             self.current_step = "git-publish"
             title, slug = self.git_publish()
             if self.review:
+                preview_link = f"http://carters-mac-mini.tailb1c452.ts.net:8000/blog/{slug}.html"
                 self.notify(
-                    f"Post ready for review: {title} — preview: "
-                    f"http://carters-mac-mini.tailb1c452.ts.net:8000/blog/{slug}.html"
+                    "Post ready for review",
+                    f"{title} — preview: {preview_link}",
+                    link=preview_link,
                 )
             return 0
         except Exception as error:
@@ -466,7 +512,10 @@ class DailyRunner:
                     self.restore_pipeline_state()
                 except Exception as restore_error:
                     self.log(f"ERROR while restoring pipeline state: {restore_error}")
-                self.notify(f"pipeline failed during {self.current_step} — {error}")
+                self.notify(
+                    "Pipeline failed",
+                    f"Pipeline failed during {self.current_step} — {error}",
+                )
             else:
                 self.log("DRY RUN: leaving the working tree unchanged for inspection")
             return 1
