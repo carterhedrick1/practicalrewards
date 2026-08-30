@@ -1,0 +1,949 @@
+{
+  "meta": {
+    "site": "practicalrewards.com",
+    "generated": "2026-08-29",
+    "source_files": ["learning.html", "cards.json"],
+    "voice": "plainspoken, skeptical, fee-math-forward; deepen one idea per post, never a copy of the learning page"
+  },
+  "topics": [
+    {
+      "slug": "effective-annual-fee-math",
+      "title": "Your Annual Fee Isn't the Number on the Box",
+      "thesis": "A $695 fee with $600 of credits you'd genuinely use is a $95 card; a $95 card with credits you'll never touch is a $95 card. The post builds the effective-fee worksheet and runs it on real cards.",
+      "key_points": [
+        "The effective-fee formula: sticker fee minus honestly-used credits only",
+        "Worked examples across the fee spectrum ($95, $395, $795)",
+        "Why 'up to $X in value' on the marketing sheet is not your number",
+        "How to re-run the math every renewal, because credits change",
+        "When a lower-fee sibling card wins the same math"
+      ],
+      "related_cards": [2, 3, 1, 32],
+      "cluster": "fees",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "organic-spend-test",
+      "title": "The Organic Spend Test: Would You Buy It Without the Card?",
+      "thesis": "One question separates a credit that offsets a fee from a coupon that makes you overspend. This post turns the site's core test into a repeatable audit for any card's credit list.",
+      "key_points": [
+        "The test: if you wouldn't pay for it without the card, it counts as $0",
+        "Good examples: bag fees you already pay, delivery you already order",
+        "Bad examples: rideshare credits for people who don't rideshare",
+        "How banks design credits assuming partial breakage",
+        "A printable audit: score every credit on your current cards"
+      ],
+      "related_cards": [3, 8, 2],
+      "cluster": "fees",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "coupon-book-credits",
+      "title": "Monthly Credits Are a Part-Time Job: Rating Credits by Effort",
+      "thesis": "A $10 monthly credit is not $120 — it's twelve chances to forget. This post ranks credit designs from auto-apply annual (good) to brand-restricted monthly portal-only (basically a chore with a logo).",
+      "key_points": [
+        "Green flags: annual reset, auto-apply, wide acceptance",
+        "Red flags: monthly expiry, single-brand restrictions, portal-only booking",
+        "Discounting credits for realistic usage rates, not perfect ones",
+        "Why banks moved from annual to monthly credits (hint: breakage)",
+        "A scoring rubric readers can apply to any card's credit list"
+      ],
+      "related_cards": [3, 2, 8, 112],
+      "cluster": "fees",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "hotel-credit-fine-print",
+      "title": "The $200 Hotel Credit That Only Works at $700 Hotels",
+      "thesis": "Hotel credits sound like cash until you read where they're spendable. The post walks the location check, price check, and booking check before you count a dime of it.",
+      "key_points": [
+        "Preferred-collection credits vs anywhere-credits: not the same product",
+        "The three checks: cities you visit, prices you'd pay, rules you'd tolerate",
+        "When a credit forces a pricier hotel than you'd choose, it costs you money",
+        "Counterexamples: simple portal hotel credits that actually clear the fee",
+        "How to value a restricted credit at a realistic discount"
+      ],
+      "related_cards": [3, 142, 11, 25],
+      "cluster": "fees",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "foreign-transaction-fees-guide",
+      "title": "The 3% 'Welcome Abroad' Tax Is Optional",
+      "thesis": "A 3% foreign transaction fee on a 2% card means you pay to swipe. One evergreen guide to when FTFs trigger, why they hit online shoppers who never leave the couch, and the two-card fix.",
+      "key_points": [
+        "FTFs trigger on where the transaction processes, not where you sit",
+        "The online surprise: foreign-processed websites, apps, and subscriptions",
+        "The math: 3% fee minus 2% rewards is a net loss on every purchase",
+        "Pack one no-FTF Visa and one no-FTF Mastercard for acceptance coverage",
+        "Why credit beats debit abroad for everything except necessary ATM cash",
+        "Never take a credit card cash advance overseas"
+      ],
+      "related_cards": [1, 26, 135, 118],
+      "cluster": "fees",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "dynamic-currency-conversion",
+      "title": "Always Pick Local Currency: DCC Is the Airport Bottled Water of Money",
+      "thesis": "The 'pay in USD?' button at foreign terminals is a markup dressed as a favor, and your FTF can stack on top of it. A short, sharp post on the one word to say at every foreign checkout.",
+      "key_points": [
+        "How DCC works: merchant's processor sets the rate and keeps the margin",
+        "Why USD-at-the-terminal can cost you twice (bad rate plus FTF)",
+        "The script for asking a merchant to rerun a transaction in local currency",
+        "Where DCC hides: ATMs, hotel checkouts, online carts with currency pickers"
+      ],
+      "related_cards": [1, 26],
+      "cluster": "fees",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "downgrade-before-cancel",
+      "title": "Before You Cancel: The Downgrade Path That Keeps Your Points",
+      "thesis": "Cancelling a card can vaporize a points balance or your credit history; downgrading usually preserves both. The post maps common downgrade paths and the questions to ask before closing anything.",
+      "key_points": [
+        "Product change vs cancel: what each does to points, history, and fees",
+        "The 'what happens to my points if I close?' checklist",
+        "Downgrade targets that exist in each major ecosystem",
+        "Timing around the annual fee post date and refund windows",
+        "When cancelling really is the right call"
+      ],
+      "related_cards": [2, 11, 25, 136, 3],
+      "cluster": "fees",
+      "priority": 2,
+      "depth_source": "seed"
+    },
+    {
+      "slug": "break-even-spending-thresholds",
+      "title": "The Break-Even Table: What You Must Spend Before a Fee Card Beats Free",
+      "thesis": "Every fee card has a spending threshold below which the free version wins, and it's usually higher than the marketing implies. This post publishes the actual break-even math for the common matchups.",
+      "key_points": [
+        "The general formula: fee divided by the rate difference",
+        "Worked matchup: 6% grocery card at $95 vs 3% at $0 (about $264/month is the line)",
+        "Why credits shift the threshold — but only after the organic spend test",
+        "Category caps put a ceiling on the upside; include them in the math",
+        "A reference table readers can bookmark"
+      ],
+      "related_cards": [24, 126, 8, 105],
+      "cluster": "fees",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "start-with-a-2-percent-card",
+      "title": "The Boring 2% Card Is the Right First Card",
+      "thesis": "Flat-rate cards are the foundation every strategy is built on, and for many people they're also the finish line. A confident defense of the unsexy default.",
+      "key_points": [
+        "Why 2% everywhere beats a badly-run 5% strategy",
+        "The consistency premium: zero mental overhead has real value",
+        "Choosing among the 2% options: payout mechanics, approval odds, ecosystems",
+        "1.5% cards as the easier-approval on-ramp",
+        "When you've outgrown the single card — and when you haven't"
+      ],
+      "related_cards": [7, 6, 31, 135],
+      "cluster": "earning",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "category-cards-worth-it",
+      "title": "When a 6% Grocery Card Beats 2% (and When It's Just Homework)",
+      "thesis": "Category cards only pay if your spending actually lives in the category — below the threshold you've bought complexity for nothing. The post gives concrete monthly-spend lines for groceries, dining, and gas.",
+      "key_points": [
+        "The two-rate structure: bonus category vs the 1% everything-else trap",
+        "Spending thresholds: roughly $200-300/mo groceries, $300/mo dining, $150/mo gas",
+        "The complexity cost is real — price it into the decision",
+        "Fee vs no-fee category cards on the same category",
+        "Pairing rule: category card plus a flat-rate catch-all, never alone"
+      ],
+      "related_cards": [24, 126, 16],
+      "cluster": "earning",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "rotating-category-cards",
+      "title": "Rotating 5% Cards: Highest Rate, Highest Maintenance",
+      "thesis": "5% rotating cards are the best earn rate in cash back and the most commonly fumbled — forget to activate and you're earning 1%, worse than doing nothing clever. An honest maintenance manual.",
+      "key_points": [
+        "How quarterly categories and activation actually work",
+        "The cap math: $1,500/quarter means $75 max per quarter at 5%",
+        "Failure modes: missed activation, category mismatch, cap amnesia",
+        "First-year match offers and what they're realistically worth",
+        "Who should skip these entirely (most people, honestly)"
+      ],
+      "related_cards": [17, 130],
+      "cluster": "earning",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "store-cards-loyalty-math",
+      "title": "Store Cards: 5% Back or a Leash?",
+      "thesis": "A store card is great exactly in proportion to how much you already spend there — and quietly encourages you to spend more. The post separates earned loyalty from manufactured loyalty.",
+      "key_points": [
+        "The math only works for existing heavy spenders at that retailer",
+        "Membership prerequisites (Prime, warehouse clubs) change the true cost",
+        "Redemption quirks: annual certificates vs monthly cash",
+        "The lock-in risk: overspending at one store to feed the card",
+        "When a store card genuinely belongs in a two-card wallet"
+      ],
+      "related_cards": [22, 34, 133],
+      "cluster": "earning",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "grocery-card-ladder",
+      "title": "The Grocery Card Ladder, From $0 to $325 in Fees",
+      "thesis": "Groceries are the one category almost everyone has, and there's a right card at every fee level. This post climbs the ladder with break-even math at each rung.",
+      "key_points": [
+        "Rung by rung: no-fee 3%, $95 6%-with-cap, points-earning 4x",
+        "The $6,000 annual cap and what happens to big-family budgets above it",
+        "Cash back vs points on the same grocery dollar",
+        "Auto-optimizing cards as the lazy compromise",
+        "Superstore fine print: which stores don't code as groceries"
+      ],
+      "related_cards": [24, 126, 8, 16, 10],
+      "cluster": "earning",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "dining-card-showdown",
+      "title": "Dining Cards: Cash Now or Points Later",
+      "thesis": "Restaurants are the most competitive bonus category in the industry, which means the real decision isn't which card — it's whether you want simple cash or travel points with homework attached.",
+      "key_points": [
+        "The cash lane: flat 3% dining with zero fee and zero thought",
+        "The points lane: 3x-4x that can beat cash only if you redeem well",
+        "How to audit three months of dining spend before deciding",
+        "Delivery apps, bars, and food trucks: what codes as 'dining'",
+        "Why a fee card on dining alone rarely clears its own bar"
+      ],
+      "related_cards": [8, 11, 12, 10, 33],
+      "cluster": "earning",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "earning-caps-fine-print",
+      "title": "Earning Caps: Where 6% Quietly Becomes 1%",
+      "thesis": "Almost every headline rate has a ceiling — per month, per quarter, or per year — and the drop after the cap is where marketing math and real math part ways. A catalog of caps and how to plan around them.",
+      "key_points": [
+        "The common cap shapes: $500/cycle, $1,500/quarter, $6,000/year, $50k/year",
+        "Computing your real blended rate when you exceed a cap",
+        "Cap-splitting: routing overflow to a second card on purpose",
+        "Caps as the reason 'best card' lists mislead high spenders",
+        "Tracking caps without turning your wallet into a spreadsheet"
+      ],
+      "related_cards": [24, 16, 17, 130, 14, 30],
+      "cluster": "earning",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "beating-2-percent",
+      "title": "Beating 2%: Every Card Above the Bar Has Strings",
+      "thesis": "A handful of cards pay more than 2% on everything, and every one of them attaches a condition — a membership fee, a banking relationship, a six-figure balance. The post prices the strings.",
+      "key_points": [
+        "The 3%-with-membership model and its annual break-even spend",
+        "Bank-relationship boosts: what the tiers actually require now",
+        "Capped boosts: bonus rates that only apply to the first $X per cycle",
+        "Foreign-fee and redemption gotchas that claw back the edge",
+        "Who genuinely clears the strings — and who's better off at a clean 2%"
+      ],
+      "related_cards": [134, 30, 28, 27, 141],
+      "cluster": "earning",
+      "priority": 2,
+      "depth_source": "seed"
+    },
+    {
+      "slug": "rent-rewards-reality",
+      "title": "Earning on Rent: What the Housing-Points Pitch Actually Pays",
+      "thesis": "Rent is most people's biggest expense and historically earned nothing, so 'earn on rent' is a seductive pitch. The post does the fee-free math on what housing spend really returns and who it's for.",
+      "key_points": [
+        "Why rent traditionally couldn't earn: the 2-3% processing fee problem",
+        "How the current no-fee rent-earning model actually accrues points",
+        "The catch: housing rewards scale with your everyday card spend",
+        "Renter vs mortgage-holder math",
+        "When a plain 2% card plus paying rent by check still wins"
+      ],
+      "related_cards": [15, 145, 146],
+      "cluster": "earning",
+      "priority": 2,
+      "depth_source": "seed"
+    },
+    {
+      "slug": "two-plus-one-wallet",
+      "title": "The 2+1 Rule: One Default, One Booster, Done",
+      "thesis": "A 2% catch-all plus a single category booster captures most of the available upside with almost none of the complexity. This is the site's core wallet architecture, built out with real numbers.",
+      "key_points": [
+        "The architecture: 2% as default, booster only at its own category",
+        "Worked example: the 56% earnings lift from adding one grocery card",
+        "Why the third card adds less than the second, and the fourth less still",
+        "Placement tricks: gas card in the car, store card saved to the account",
+        "The stop rule: if checkout requires thought, you've overbuilt"
+      ],
+      "related_cards": [7, 24, 6],
+      "cluster": "strategy",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "duos-and-trios",
+      "title": "Duos and Trios: Card Combos That Actually Add Up",
+      "thesis": "Issuers quietly design their cards to pair — a points-holding card plus earners — and the same $2,000 of monthly spend can return wildly different totals depending on the combo. A side-by-side of the classic setups.",
+      "key_points": [
+        "The same-spend comparison: single 2% card vs the big-bank trifectas",
+        "Chase trio, Amex duo, Capital One pair: how each routes points to one pool",
+        "Why the no-fee 2x business card is the sleeper piece of the Amex duo",
+        "Combining points across cards in one ecosystem for better redemptions",
+        "The tradeoff clause: more earn, more wallet-management"
+      ],
+      "related_cards": [11, 12, 130, 8, 14, 1, 10],
+      "cluster": "strategy",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "cash-back-vs-points-fork",
+      "title": "Cash Back or Points: The Honest Fork in the Road",
+      "thesis": "Points can be worth more than cash, but only if you do work that most people won't actually do — and the industry counts on that gap. A self-assessment that routes readers to the right side of the fork.",
+      "key_points": [
+        "Cash is fixed value; points are variable value plus mandatory homework",
+        "The honesty test: will you really learn transfer partners, or just think you will?",
+        "Break-even: how good your redemptions must be to beat a flat 2%",
+        "Hybrid paths: fixed-value travel cards as the middle ground",
+        "Switching costs are low — start cash, graduate to points if the itch is real"
+      ],
+      "related_cards": [7, 6, 11, 25],
+      "cluster": "strategy",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "sign-up-bonus-timing",
+      "title": "Time the Bonus to Your Life, Not Your Life to the Bonus",
+      "thesis": "The winning move with sign-up bonuses is scheduling applications around expenses you already have — a laptop, insurance, a planned trip — so the minimum spend happens by itself.",
+      "key_points": [
+        "Organic spend only: the bonus is profit exactly when spending didn't change",
+        "Mapping 90 days of known bills before you apply",
+        "Sliding big planned purchases into the bonus window",
+        "Matching bonus size to your actual spend capacity ($500 vs $4,000 tiers)",
+        "Posting timelines: apply early enough that points land before you book"
+      ],
+      "related_cards": [11, 25, 2, 8],
+      "cluster": "strategy",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "minimum-spend-fine-print",
+      "title": "The $1 Miss: Minimum-Spend Fine Print That Voids Bonuses",
+      "thesis": "Banks are strict about bonus deadlines because strictness is profitable. This post collects the ways people accidentally miss — returns, excluded purchases, fee line-items — and how to build in margin.",
+      "key_points": [
+        "The clock starts at approval, not card arrival",
+        "Annual fees and interest don't count toward the threshold",
+        "Returns subtract after the fact and can un-earn a bonus",
+        "Cash-like purchases (gift cards, P2P) may be excluded or clawed back",
+        "The buffer rule: clear the target by a comfortable margin, days early"
+      ],
+      "related_cards": [],
+      "cluster": "strategy",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "issuer-application-rules",
+      "title": "5/24, Once Per Lifetime, and Cooldowns: Read Before You Apply",
+      "thesis": "Every issuer has house rules that decide whether you get the bonus before you ever swipe, and applying in the wrong order can burn eligibility for years. A plain-English map of the rulebook.",
+      "key_points": [
+        "Chase's 5/24 pace rule and family cooldowns, in one diagram",
+        "Amex's once-per-lifetime language and the mid-application warning",
+        "Citi's open/close family windows; Capital One's velocity quirks",
+        "Sequencing: why 5/24-restricted cards usually come first",
+        "Reading the offer's eligibility paragraph like it's a contract (it is)"
+      ],
+      "related_cards": [2, 11, 3, 8, 32],
+      "cluster": "strategy",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "churning-honest-job-description",
+      "title": "Churning Is a Part-Time Job: The Honest Job Description",
+      "thesis": "Churning can fund a real trip every year, and it demands the temperament of an air-traffic controller — deadlines, cooldowns, keeper cards, clawback risk. A recruitment ad written by a skeptic.",
+      "key_points": [
+        "What churning actually is: bonuses on organic spend, then downgrade or cancel",
+        "The personality gate: if you hate spreadsheets, hard pass",
+        "Risk inventory: clawbacks, shutdowns, vanishing points, fee drag",
+        "The ethics lines that get accounts closed across a whole bank",
+        "The moderate alternative: one well-chosen bonus per year"
+      ],
+      "related_cards": [],
+      "cluster": "strategy",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "keeper-cards",
+      "title": "The Keeper Card: Cheap Insurance for Your Points Balance",
+      "thesis": "In several ecosystems, closing the wrong card kills your points or your ability to transfer them. The post identifies the cheap 'keeper' in each ecosystem and when to move points before touching anything.",
+      "key_points": [
+        "Which points survive a closure and which evaporate, by issuer",
+        "No-fee keepers that preserve transfers in each ecosystem",
+        "The pre-cancel checklist: move, transfer, or combine first",
+        "Household combining as an escape hatch where allowed",
+        "Why this is the single most expensive churning mistake"
+      ],
+      "related_cards": [14, 136, 12],
+      "cluster": "strategy",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "ecosystem-choice",
+      "title": "Pick an Ecosystem: Chase, Amex, Capital One, or Citi",
+      "thesis": "Your first travel card is really a choice of ecosystem — partners, portal, and pairing options come bundled. A decision guide grounded in how you actually travel, not in point-value hype.",
+      "key_points": [
+        "Chase for U.S.-centric travelers: the domestic partner strength",
+        "Amex for international premium-cabin ambitions and credit-juggling tolerance",
+        "Capital One as the beginner-friendly bridge; Citi for the patient hunter",
+        "Fixed-value and cash back as legitimate answers, not consolation prizes",
+        "How the ecosystem choice constrains your next two or three cards"
+      ],
+      "related_cards": [11, 8, 1, 109, 2, 3],
+      "cluster": "strategy",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "cents-per-point-explained",
+      "title": "CPP: The Only Math You Need Before a Travel Card",
+      "thesis": "Cents per point is the exchange rate the whole points world runs on, and once you can compute it in your head, marketing claims stop working on you. The foundational math post.",
+      "key_points": [
+        "The formula: cash price divided by points price",
+        "The baseline: 1 cent per point is 'normal', not 'good'",
+        "Same flight, three prices: 1, 2, and 4 CPP walkthrough",
+        "Using CPP to compare unlike programs on equal footing",
+        "Why quoted 'point valuations' online run hot"
+      ],
+      "related_cards": [11, 1],
+      "cluster": "redemption",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "one-cent-floor-rule",
+      "title": "Never Take Less Than a Cent: The Floor Rule",
+      "thesis": "Every major program guarantees about 1 cent per point through its portal, so any redemption below that is voluntarily donating value back to the bank. The single rule that prevents most points mistakes.",
+      "key_points": [
+        "Where the guaranteed floor lives in each program",
+        "The sub-floor traps: statement credits, gift cards, merchandise at 0.5-0.8 CPP",
+        "The comparison that stings: below 1 CPP, a 2% cash card would have paid more",
+        "Each issuer's specific 'safety valve' redemption",
+        "Building the floor check into your booking habit"
+      ],
+      "related_cards": [7, 6],
+      "cluster": "redemption",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "travel-portals-guide",
+      "title": "Travel Portals: The Easy Button, With Fine Print",
+      "thesis": "Portals are the no-homework way to spend points at a reliable 1 cent — and they come with inflated prices sometimes, middleman customer service always, and bonus earning that partly makes up for it.",
+      "key_points": [
+        "How portal pricing ties points to cash prices",
+        "The four major portals compared: strengths, quirks, protections",
+        "Third-party problem-solving: what happens when a portal flight breaks",
+        "Elite-credit gaps on portal hotel bookings",
+        "The quiet win: 5x-10x earning multipliers for booking in-portal"
+      ],
+      "related_cards": [1, 2, 3, 109],
+      "cluster": "redemption",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "transfer-partners-101",
+      "title": "Transfer Partners: Where Points Multiply — If You Like Puzzles",
+      "thesis": "Moving bank points into airline and hotel programs is where the outsized-value stories come from, and it's genuinely a puzzle hobby. An honest on-ramp that tells readers whether they'll enjoy the game before they buy in.",
+      "key_points": [
+        "The mechanic: bank points become airline/hotel currency, usually 1:1",
+        "A real example: portal price vs transfer price on the same flight",
+        "The three problems: alliances confuse, partners shuffle, award seats hide",
+        "Each bank's partner lineup in one honest paragraph apiece",
+        "The exit ramp: portals remain a fine answer forever"
+      ],
+      "related_cards": [11, 8, 1, 14, 2],
+      "cluster": "redemption",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "airline-alliances-explained",
+      "title": "Alliances: How to Book a Delta Flight With Air France Miles",
+      "thesis": "Alliances are the cheat code that makes transfer partners useful — one program's miles book another airline's planes, sometimes at a better price. The mechanism explained without the jargon fog.",
+      "key_points": [
+        "Star Alliance, SkyTeam, oneworld: who's in each and where each is strong",
+        "The partner-booking mechanic, step by step",
+        "Why the same seat costs different miles in different programs",
+        "The availability catch: partner award space is scarce and early-bird",
+        "Three practical alliance plays for U.S.-based travelers"
+      ],
+      "related_cards": [3, 8],
+      "cluster": "redemption",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "hyatt-transfer-gem",
+      "title": "The Best Transfer Partner Isn't an Airline",
+      "thesis": "Hotel transfers are usually bad math — except one program, where mid-tier properties routinely return well above the portal floor without any award-chart archaeology. Why hotel points beat airline points for beginners.",
+      "key_points": [
+        "Why most hotel transfers underperform (ratios and inflated award prices)",
+        "The exception: consistent above-floor value at everyday properties",
+        "Free-night certificates as a parallel fee-offset play",
+        "Booking mechanics: no blackout Sudoku, easier than airline awards",
+        "Pairing the transfer play with the co-branded card's annual free night"
+      ],
+      "related_cards": [107, 11, 2],
+      "cluster": "redemption",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "gift-card-merchandise-trap",
+      "title": "Gift Cards and Merch: How Banks Buy Your Rewards Back Cheap",
+      "thesis": "Redemption catalogs exist to repurchase your rewards below face value — 0.6 CPP gift cards and $100-in-points coffee makers. The post names the traps and the one narrow case where gift cards are fine.",
+      "key_points": [
+        "The catalog economics: why banks push gift cards and merchandise",
+        "Merchandise 'values' vs street prices, with examples",
+        "The narrow exception: genuinely discounted gift cards (10-20% off face)",
+        "Statement credit and bank deposit as the boring correct answers",
+        "Points versions of the same trap, and why they're worse"
+      ],
+      "related_cards": [],
+      "cluster": "redemption",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "award-search-tools",
+      "title": "Seats.aero and Friends: Finding Award Seats Without Rage",
+      "thesis": "The hardest part of transfer partners isn't the transfer — it's finding a seat. A working guide to the free and paid search tools and a realistic account of what they can and can't do.",
+      "key_points": [
+        "The tool lineup: free availability scanners, paid multi-program search, comparison charts",
+        "A worked search: from 'I want to go to Europe' to a bookable award",
+        "Setting alerts instead of refreshing at midnight",
+        "Reality check: tools find seats that exist; they can't conjure them",
+        "When to give up and take the portal price"
+      ],
+      "related_cards": [],
+      "cluster": "redemption",
+      "priority": 3,
+      "depth_source": "seed"
+    },
+    {
+      "slug": "cash-back-redemption-guide",
+      "title": "Statement Credit or Deposit: Getting Paid Without Getting Played",
+      "thesis": "Cash back is nearly impossible to redeem badly — which is exactly its selling point — but there are still small optimizations and one real trap. The complete but mercifully short guide.",
+      "key_points": [
+        "Statement credit vs bank deposit: identical value, different cash flow",
+        "Minimum-redemption thresholds and auto-redemption settings",
+        "The annual-certificate model some store cards use, and its expiry risk",
+        "The one trap: catalog redemptions below face value",
+        "Why 'hard to mess up' is a feature worth paying for in simplicity"
+      ],
+      "related_cards": [7, 6, 34],
+      "cluster": "redemption",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "lounge-access-home-airport",
+      "title": "Check Your Home Airport Before Paying for Lounge Access",
+      "thesis": "Lounge access is the most-marketed premium perk and the most location-dependent one: a $695 fee makes no sense if your airport has one mediocre lounge past the wrong security checkpoint. The audit comes before the application.",
+      "key_points": [
+        "The three access types: bank lounges, airline clubs, Priority Pass",
+        "The home-airport audit: what's actually behind your terminal's doors",
+        "Same-day-ticket rules that gut airline-club value for airline-hoppers",
+        "Crowding and entry restrictions at flagship bank lounges",
+        "Pricing the perk honestly against your real annual airport hours"
+      ],
+      "related_cards": [1, 2, 3, 19, 20, 18],
+      "cluster": "perks-protections",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "priority-pass-reality",
+      "title": "Priority Pass: 1,300 Lounges, Wildly Uneven",
+      "thesis": "Priority Pass is the most common lounge perk and the least understood — international locations can be excellent while domestic ones are waiting rooms with crackers. How to value the membership you probably already have.",
+      "key_points": [
+        "How the network model differs from bank- and airline-owned lounges",
+        "The quality spread, and why international skews better",
+        "Guest rules vary by the card that issued your membership",
+        "The app check: look up your actual airports before valuing the perk",
+        "Restaurant credits and other network extras where they still exist"
+      ],
+      "related_cards": [1, 142, 146],
+      "cluster": "perks-protections",
+      "priority": 3,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "lounge-guest-fee-tightening",
+      "title": "Guests Cost Extra Now: The Quiet Squeeze on Lounge Rules",
+      "thesis": "Issuers are steadily converting free guest and authorized-user lounge access into paid add-ons, which changes the family math on premium cards. A fee-forward look at what 'lounge access' now means for a household.",
+      "key_points": [
+        "The trend: per-guest fees and paid authorized-user access replacing free entry",
+        "Recomputing a premium card's value for couples and families",
+        "Spending-threshold unlocks for free guests, and whether to chase them",
+        "Authorized-user pricing across the major premium cards",
+        "When two cheaper cards beat one premium card for a traveling pair"
+      ],
+      "related_cards": [1, 3, 18, 2],
+      "cluster": "perks-protections",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "card-protections-101",
+      "title": "The Insurance You Already Have: Card Protections 101",
+      "thesis": "Trip delay coverage, baggage insurance, purchase protection, extended warranty — free insurance most cardholders never claim because they never learned the trigger words. The overview post that anchors the protections series.",
+      "key_points": [
+        "The full protection stack, mapped from checkout to claim",
+        "Trigger words: 12-hour delay, primary CDW, 90-day purchase window",
+        "The documentation habit: receipts, screenshots, delay notices",
+        "Routing purchases to the card with the best coverage for that purchase",
+        "The award-ticket move: put the taxes and fees on your best-protected card",
+        "Don't choose a card for protections — but don't waste the ones you have"
+      ],
+      "related_cards": [2, 11, 6],
+      "cluster": "perks-protections",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "cell-phone-protection-move",
+      "title": "Put Your Phone Bill on the Right Card",
+      "thesis": "One autopay switch buys phone insurance with a small deductible — probably the highest-value thirty-second move in the whole rewards game. The post covers which cards offer it and how claims actually go.",
+      "key_points": [
+        "The mechanic: pay the wireless bill with the card, coverage follows",
+        "Typical terms: ~$50 deductible, per-claim caps, claims-per-year limits",
+        "Covered vs not: cracked screens and theft yes, lost phones and scuffs no",
+        "Comparing against carrier insurance you might be paying for",
+        "The claim kit: the phone bill statement, photos, police report for theft"
+      ],
+      "related_cards": [6, 26, 13, 1],
+      "cluster": "perks-protections",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "rental-car-cdw",
+      "title": "Decline the Desk Insurance: Primary vs Secondary CDW",
+      "thesis": "The $30/day counter pitch duplicates coverage many cards already include — but only if you know whether yours is primary or secondary and don't accidentally void it. The rental-counter script, with fine print.",
+      "key_points": [
+        "Primary vs secondary: who pays first and why it matters for your premiums",
+        "The voiding mistakes: taking the agency CDW, wrong drivers, wrong vehicle class",
+        "What CDW never covers: liability, exotic cars, some peer-to-peer rentals",
+        "Country exclusions and the long-rental duration caps",
+        "The claim workflow when the bumper meets the pole"
+      ],
+      "related_cards": [2, 11, 1],
+      "cluster": "perks-protections",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "extended-warranty-purchase-protection",
+      "title": "The Free Extra Year of Warranty Nobody Claims",
+      "thesis": "Extended warranty and purchase protection quietly cover most electronics and appliance purchases, and claim rates are tiny because nobody keeps receipts. How to make these benefits real instead of theoretical.",
+      "key_points": [
+        "Extended warranty: the automatic extra year on eligible manufacturer warranties",
+        "Purchase protection: 90-120 days of damage/theft coverage on new purchases",
+        "Eligibility edges: warranty-length limits, refurbished exclusions, per-item caps",
+        "The receipt system: where to keep proof so future-you can find it",
+        "Which purchases to deliberately route to your best-protected card"
+      ],
+      "related_cards": [7, 12, 24, 8],
+      "cluster": "perks-protections",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "know-your-player-type",
+      "title": "Set-and-Forget or Optimizer: Pick Your Type Before Your Card",
+      "thesis": "The most important variable in card strategy isn't a rate — it's your honest tolerance for ongoing homework. A self-assessment that matches wallet complexity to personality, not aspiration.",
+      "key_points": [
+        "The three types: set-and-forget, strategic optimizer, efficiency maximalist",
+        "Why aspirational self-assessment fails (you won't become organized in Q3)",
+        "Matching each type to a wallet size and card style",
+        "The cost of a personality mismatch, in dollars and stress",
+        "Permission slip: one 2% card is a complete, respectable strategy"
+      ],
+      "related_cards": [6, 7],
+      "cluster": "psychology",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "optimization-fomo",
+      "title": "Optimization FOMO: Chasing $30 With $300 of Effort",
+      "thesis": "Rewards content manufactures anxiety that you're 'leaving money on the table,' but the marginal dollars past a simple setup are small and the effort is real. A defense of good-enough.",
+      "key_points": [
+        "The diminishing-returns curve: card one earns most of the money",
+        "Valuing your time and attention like the real costs they are",
+        "How comparison content and screenshots distort the stakes",
+        "The wrong-card-anyway problem: complex setups executed badly earn less than simple ones",
+        "A 'good enough' benchmark readers can stop at guilt-free"
+      ],
+      "related_cards": [],
+      "cluster": "psychology",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "rewards-overspending",
+      "title": "2% Back on Money You Shouldn't Have Spent Is Still -98%",
+      "thesis": "Every rewards mechanism — bonuses, credits, categories — is engineered to nudge spending upward, and one nudge taken wipes out a year of optimization. The behavioral post underneath the whole site.",
+      "key_points": [
+        "The nudges, named: minimum spends, expiring credits, category psychology",
+        "Why banks profit from rewards programs (the answer is you, overspending)",
+        "Interest arithmetic: one carried balance erases years of 2%",
+        "The organic-spend principle as the universal antidote",
+        "Self-audit questions to catch reward-justified purchases"
+      ],
+      "related_cards": [],
+      "cluster": "psychology",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "too-many-cards-signs",
+      "title": "Four Signs Your Wallet Has Too Many Cards",
+      "thesis": "There's a point where each new card subtracts value — in fees, errors, and attention — and most optimizers blow past it. The post gives the concrete symptoms and a humane downsizing plan.",
+      "key_points": [
+        "The four signs: phone-checking at checkout, wrong-card rate, FOMO stress, filing-cabinet wallet",
+        "Measuring your actual error rate (it's higher than you think)",
+        "The downsizing plan: downgrade, consolidate, simplify — in that order",
+        "What to do with orphaned points before you prune",
+        "The steady-state wallet: a number to aim for, by player type"
+      ],
+      "related_cards": [],
+      "cluster": "psychology",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "points-value-hype",
+      "title": "No, Your Points Aren't Worth 10 Cents Each",
+      "thesis": "Influencer point valuations quote the best-case redemption as if it were typical; honest accounting starts at the 1-cent floor and treats anything above it as upside you have to earn with effort.",
+      "key_points": [
+        "Where the inflated valuations come from (aspirational redemptions, affiliate incentives)",
+        "Floor-based valuation as the honest default",
+        "Domestic reality: transfers to U.S. airlines usually land near 1 CPP",
+        "Why 'worth up to' is doing all the work in that sentence",
+        "How to compute what YOUR points are worth from your last three redemptions"
+      ],
+      "related_cards": [],
+      "cluster": "myths",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "annual-fees-not-the-villain",
+      "title": "Annual Fees Aren't the Villain — Unused Perks Are",
+      "thesis": "The reflex that all annual fees are scams costs people real money: several fee cards pay for themselves with one habitual behavior. The counter-myth post, argued entirely in fee math.",
+      "key_points": [
+        "The reframe: fees are prices; the question is what you get and use",
+        "Self-liquidating cards: anniversary points or one credit that clears the fee",
+        "The mirror myth: 'no annual fee' cards that cost you in weak earning",
+        "The renewal-day ritual: re-justify every fee annually or downgrade",
+        "A shortlist of fee cards with genuinely easy break-evens"
+      ],
+      "related_cards": [25, 107, 144, 11],
+      "cluster": "myths",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "business-class-savings-myth",
+      "title": "You Didn't Save $4,000: Honest Accounting for Business Class",
+      "thesis": "Redeeming points for a seat you'd never buy with cash isn't saving its sticker price — it's upgrading your comfort at an opportunity cost. Still often worth it, but the bragging math is wrong.",
+      "key_points": [
+        "Savings vs consumption: the counterfactual you'd actually have bought",
+        "Opportunity-cost framing: what those points could have covered instead",
+        "Why 4 CPP screenshots mislead beginners into the wrong ecosystem",
+        "A defensible way to decide when the upgrade is worth it",
+        "The quiet alternative: two economy trips instead of one flat bed"
+      ],
+      "related_cards": [3, 8],
+      "cluster": "myths",
+      "priority": 2,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "devaluation-melting-ice",
+      "title": "Points Are a Melting Ice Cube: Earn and Burn",
+      "thesis": "Programs reprice awards whenever they like and never in your favor, so hoarding points is lending the bank money at negative interest. The case for redeeming on a horizon, not a someday.",
+      "key_points": [
+        "How devaluations happen: dynamic pricing, chart changes, partner shuffles",
+        "Why cash back is immune and points never are",
+        "The earn-and-burn discipline: hold only what you'll use in 12-24 months",
+        "Hedging: transferable points devalue slower than single-program balances",
+        "Reading devaluation history as a program-quality signal"
+      ],
+      "related_cards": [18, 106],
+      "cluster": "myths",
+      "priority": 2,
+      "depth_source": "seed"
+    },
+    {
+      "slug": "debit-card-upgrade",
+      "title": "Still on Debit? You're Tipping Yourself 0%",
+      "thesis": "The single biggest rewards upgrade available to most Americans is swapping the debit card for any no-fee cash back card — same spending, 2% returned, better fraud protection. The true-beginner post.",
+      "key_points": [
+        "The baseline math: 2% of a normal household's card spend per year",
+        "Fraud liability: why credit's protections beat debit's",
+        "The discipline prerequisite: pay in full monthly or don't switch",
+        "Starter picks by approval difficulty",
+        "Setting up autopay so the upgrade requires zero willpower"
+      ],
+      "related_cards": [7, 6, 135],
+      "cluster": "credit-basics",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "new-card-credit-score",
+      "title": "What a New Card Actually Does to Your Score",
+      "thesis": "A new application is a small, temporary ding that good habits erase — and a new credit line often helps your score over time. Demystifying inquiries, average age, and utilization for nervous first-timers.",
+      "key_points": [
+        "The hard inquiry: a few points, fading in months",
+        "Average age of accounts: what shrinks and how it recovers",
+        "The upside nobody mentions: more available credit lowers utilization",
+        "When the caution is warranted: rapid-fire applications",
+        "Score-drop myths vs the actual scoring factors"
+      ],
+      "related_cards": [],
+      "cluster": "credit-basics",
+      "priority": 1,
+      "depth_source": "seed"
+    },
+    {
+      "slug": "utilization-pay-early",
+      "title": "Pay Early, Report Low: Utilization While Chasing Bonuses",
+      "thesis": "Pushing spend through one card to hit a bonus can make your statement report a scary utilization number even though you pay in full. The fix is a mid-cycle payment, and this post shows the timing.",
+      "key_points": [
+        "How statement-date balances, not due-date balances, hit your report",
+        "The mid-cycle payment move, step by step",
+        "Per-card vs overall utilization and which matters when",
+        "Why this matters most right before a big loan application",
+        "Automating it so you never think about it again"
+      ],
+      "related_cards": [],
+      "cluster": "credit-basics",
+      "priority": 2,
+      "depth_source": "seed"
+    },
+    {
+      "slug": "never-carry-a-balance",
+      "title": "Interest Eats Points for Breakfast",
+      "thesis": "At 25%+ APR, one month of carried balance can erase a year of rewards — which makes 'pay in full' not advice but a precondition for playing at all. The non-negotiable rule, with the arithmetic shown.",
+      "key_points": [
+        "The arithmetic: average APR vs a 2% reward rate, month by month",
+        "Why rewards cards carry higher APRs than plain cards",
+        "The bank's business model: rewards funded by people who carry balances",
+        "If you carry a balance: the payoff-first plan before any rewards talk",
+        "Autopay-in-full as the default setting, not an option"
+      ],
+      "related_cards": [],
+      "cluster": "credit-basics",
+      "priority": 1,
+      "depth_source": "deep"
+    },
+    {
+      "slug": "mortgage-application-pause",
+      "title": "Buying a House Soon? Stop Applying for Cards",
+      "thesis": "Underwriters read recent credit-seeking as risk, and no sign-up bonus is worth a worse mortgage rate. When to freeze applications, for how long, and what's safe to keep doing.",
+      "key_points": [
+        "Why mortgage underwriting punishes recent inquiries and new accounts",
+        "The freeze window: months before application through closing",
+        "The rate math: a fraction of a percent on a mortgage dwarfs any bonus",
+        "What's fine during the freeze: using existing cards, paying in full",
+        "Restarting responsibly after the keys are in hand"
+      ],
+      "related_cards": [],
+      "cluster": "credit-basics",
+      "priority": 2,
+      "depth_source": "seed"
+    },
+    {
+      "slug": "authorized-user-economics",
+      "title": "Authorized Users: Family Perk or $175 Line Item?",
+      "thesis": "Adding a partner to your card ranges from free and valuable to a paid add-on that quietly raises your effective fee. The household math on authorized users, card by card type.",
+      "key_points": [
+        "What an authorized user gets: purchasing, sometimes perks, sometimes lounges",
+        "Where AU fees now stand on premium cards, and what they buy",
+        "Credit-building for the AU: how the account reports to their file",
+        "When two separate cards beat one card plus paid AUs",
+        "The risk column: shared spending, one person's liability"
+      ],
+      "related_cards": [3, 1, 18, 2],
+      "cluster": "credit-basics",
+      "priority": 2,
+      "depth_source": "seed"
+    }
+  ],
+  "clusters": {
+    "fees": {
+      "count": 8,
+      "description": "The site's signature lane: effective annual fees, credit fine print, break-even math, foreign transaction fees, and downgrade paths.",
+      "priority_1_topics": 5
+    },
+    "earning": {
+      "count": 9,
+      "description": "Flat vs category vs rotating vs store cards, caps, beating 2%, and category deep-dives (groceries, dining, rent).",
+      "priority_1_topics": 4
+    },
+    "strategy": {
+      "count": 9,
+      "description": "Wallet architecture (2+1, duos/trios), sign-up bonus planning, issuer rules, churning, keeper cards, and ecosystem choice.",
+      "priority_1_topics": 6
+    },
+    "redemption": {
+      "count": 9,
+      "description": "CPP math, the 1-cent floor, portals, transfer partners, alliances, and the redemption traps that repurchase rewards below face value.",
+      "priority_1_topics": 4
+    },
+    "perks-protections": {
+      "count": 7,
+      "description": "Lounge-access reality checks plus the free-insurance stack: cell phone, rental CDW, extended warranty, trip protections.",
+      "priority_1_topics": 3
+    },
+    "psychology": {
+      "count": 4,
+      "description": "The behavioral layer: player types, optimization FOMO, reward-justified overspending, and knowing when the wallet is overbuilt.",
+      "priority_1_topics": 2
+    },
+    "myths": {
+      "count": 4,
+      "description": "Skeptical counter-programming: point-value hype, fee reflexes, business-class 'savings,' and hoarding through devaluations.",
+      "priority_1_topics": 2
+    },
+    "credit-basics": {
+      "count": 6,
+      "description": "Foundations the learning page only seeds: debit-to-credit upgrade, score mechanics, utilization, interest, mortgage timing, authorized users.",
+      "priority_1_topics": 3
+    }
+  }
+}
