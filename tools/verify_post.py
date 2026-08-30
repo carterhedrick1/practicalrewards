@@ -8,6 +8,8 @@ import json
 import re
 import subprocess
 import sys
+import urllib.parse
+from collections import Counter
 from html.parser import HTMLParser
 from typing import Any
 
@@ -21,12 +23,16 @@ from common import (
 
 MONEY_OR_MULTIPLIER_RE = re.compile(r"\$\s*\d[\d,]*(?:\.\d+)?\+?|\b\d+(?:\.\d+)?x\b", re.IGNORECASE)
 RANGE_SEPARATOR_RE = r"(?:[-–—]|\bto\b)"
-CPP_UNIT_RE = r"(?:¢(?:\s*/\s*(?:pt|point)|\s+per\s+point)?|cpp|cents?\s+per\s+point)"
+REWARDS_UNIT_RE = r"(?:points?|pts?|miles?|mi)"
+CPP_UNIT_RE = (
+    r"(?:¢(?:\s*/\s*(?:pt|point|mi|mile)|\s+per\s+(?:point|mile))?|"
+    r"cpp|cpm|cents?\s+per\s+(?:point|mile))"
+)
 KEY_NUMBER_RE = re.compile(
     r"\$\s*\d[\d,]*(?:\.\d+)?\+?|"
     r"\b\d+(?:\.\d+)?(?:x\b|%(?![a-z0-9])|[\s-]+percent(?:age)?s?\b)|"
     r"\b\d[\d,]*(?:\.\d+)?[kK]?(?:[\s®™℠-]+[A-Za-z]+){0,3}"
-    r"[\s®™℠-]+(?:points?|miles?)\b|"
+    rf"[\s®™℠-]+{REWARDS_UNIT_RE}\b|"
     r"\b\d[\d,]*(?:\.\d+)?[\s-]*"
     r"(?:credits?|days?|hours?|months?|nights?|weeks?|years?)\b",
     re.IGNORECASE,
@@ -45,8 +51,8 @@ PERCENT_RANGE_RE = re.compile(
     re.IGNORECASE,
 )
 POINTS_RANGE_RE = re.compile(
-    rf"\b(\d[\d,]*(?:\.\d+)?[kK]?)\s*(?:(points?|miles?))?\s*{RANGE_SEPARATOR_RE}\s*"
-    r"(\d[\d,]*(?:\.\d+)?[kK]?)\s*(points?|miles?)\b",
+    rf"\b(\d[\d,]*(?:\.\d+)?[kK]?)\s*({REWARDS_UNIT_RE})?\s*{RANGE_SEPARATOR_RE}\s*"
+    rf"(\d[\d,]*(?:\.\d+)?[kK]?)\s*({REWARDS_UNIT_RE})\b",
     re.IGNORECASE,
 )
 QUANTITY_RANGE_RE = re.compile(
@@ -62,8 +68,7 @@ CPP_RANGE_RE = re.compile(
     re.IGNORECASE,
 )
 CPP_RE = re.compile(
-    r"\b\d+(?:\.\d+)?\s*"
-    r"(?:¢(?:\s*/\s*(?:pt|point)|\s+per\s+point)?|cpp|cents?\s+per\s+point)(?![a-z0-9])",
+    rf"\b\d+(?:\.\d+)?\s*{CPP_UNIT_RE}(?![a-z0-9])",
     re.IGNORECASE,
 )
 DATE_RE = re.compile(
@@ -82,25 +87,29 @@ DEADLINE_YEAR_RE = re.compile(
 
 def normalize_number(value: str) -> str:
     compact = re.sub(r"[\s,-]", "", value).casefold().rstrip("+")
+    cpp = re.fullmatch(
+        r"(\d+(?:\.\d+)?)(?:cpp|cpm|"
+        r"¢(?:/(?:pt|point|mi|mile)|per(?:point|mile))?|"
+        r"cents?per(?:point|mile))",
+        compact,
+    )
+    if cpp:
+        amount = float(cpp.group(1))
+        return (str(int(amount)) if amount.is_integer() else f"{amount:g}") + "cpp"
     quantity = re.fullmatch(
         r"(\d+(?:\.\d+)?)(k)?[a-z®™℠]*"
-        r"(points?|miles?|credits?|days?|hours?|months?|nights?|weeks?|years?)",
+        r"(points?|pts?|miles?|mi|credits?|days?|hours?|months?|nights?|weeks?|years?)",
         compact,
     )
     if quantity:
         amount = float(quantity.group(1)) * (1000 if quantity.group(2) else 1)
         number = str(int(amount)) if amount.is_integer() else f"{amount:g}"
         unit = quantity.group(3)
+        if re.fullmatch(r"points?|pts?|miles?|mi", unit):
+            return number + "point"
         if unit.endswith("s"):
             unit = unit[:-1]
         return number + unit
-    cpp = re.fullmatch(
-        r"(\d+(?:\.\d+)?)(?:¢(?:/(?:pt|point)|perpoint)?|cpp|cents?perpoint)",
-        compact,
-    )
-    if cpp:
-        amount = float(cpp.group(1))
-        return (str(int(amount)) if amount.is_integer() else f"{amount:g}") + "cpp"
     simple = re.fullmatch(r"(\$?)(\d+(?:\.\d+)?)(%|x|percent(?:age)?s?)?", compact)
     if simple:
         amount = float(simple.group(2))
@@ -288,7 +297,7 @@ def associated_numeric_claims(
     cards: list[dict[str, Any]],
 ) -> list[tuple[dict[str, Any], str, str, str]]:
     """Associate each dollar/multiplier with one nearest card in its block/clause."""
-    associated, _unassociated, _claims_present = scan_card_numeric_claims(content_html, cards)
+    associated, _unassociated, _illustrative, _named_claims = scan_card_numeric_claims(content_html, cards)
     return associated
 
 
@@ -296,15 +305,28 @@ CARD_CLAIM_RE = re.compile(
     r"\b(?:annual fee|bonus|card|credit|earn(?:s|ing)?|fee|multiplier|rate|rewards?)\b",
     re.IGNORECASE,
 )
+ILLUSTRATIVE_CARD_RE = re.compile(
+    r"\b(?:a|an)\s+(?:\$\s*\d[\d,]*(?:\.\d+)?\s+)?card\b|"
+    r"\bcards?\s+(?:that|which|with|whose|charge|charges|charging|cost|costing)\b|"
+    r"\b(?:may|might|could)\s+(?:only\s+)?be\s+\$\s*\d|"
+    r"\b(?:worth|valued?\s+at)\s+\$\s*\d[^.!?;]{0,30}\b(?:to|for)\s+you\b",
+    re.IGNORECASE,
+)
 
 
 def scan_card_numeric_claims(
     content_html: str,
     cards: list[dict[str, Any]],
-) -> tuple[list[tuple[dict[str, Any], str, str, str]], list[tuple[str, str]], bool]:
+) -> tuple[
+    list[tuple[dict[str, Any], str, str, str]],
+    list[tuple[str, str]],
+    list[str],
+    bool,
+]:
     associated: list[tuple[dict[str, Any], str, str, str]] = []
     unassociated: list[tuple[str, str]] = []
-    claims_present = False
+    illustrative_sentences: list[str] = []
+    named_claims_present = False
     heading_context: list[dict[str, Any]] = []
     for tag, cells in structured_content_blocks(content_html):
         mentions_by_cell = [card_mentions(cell, cards) for cell in cells]
@@ -315,15 +337,15 @@ def scan_card_numeric_claims(
             heading_context = heading_cards
         for cell_index, cell in enumerate(cells):
             for start, end, raw, token in iter_numeric_claims(cell):
-                if mentions_by_cell[cell_index] or heading_context or CARD_CLAIM_RE.search(cell):
-                    claims_present = True
                 clause_start, clause_end = _clause_bounds(cell, start, end)
+                clause = cell[clause_start:clause_end].strip()
                 same_clause = [
                     mention for mention in mentions_by_cell[cell_index]
                     if mention[0] >= clause_start and mention[1] <= clause_end
                 ]
                 candidates = same_clause or mentions_by_cell[cell_index]
                 if candidates:
+                    named_claims_present = True
                     mention = min(
                         candidates,
                         key=lambda item: _span_distance(start, end, item[0], item[1]),
@@ -335,6 +357,7 @@ def scan_card_numeric_claims(
                         for mention in mentions
                     ]
                     if row_candidates:
+                        named_claims_present = True
                         _, mention = min(
                             row_candidates,
                             key=lambda item: (
@@ -344,22 +367,79 @@ def scan_card_numeric_claims(
                             ),
                         )
                     elif len(heading_context) == 1:
+                        named_claims_present = True
                         associated.append((heading_context[0], raw, token, cell))
                         continue
                     else:
-                        if CARD_CLAIM_RE.search(cell) or heading_context:
+                        if not heading_context and ILLUSTRATIVE_CARD_RE.search(clause):
+                            illustrative_sentences.append(clause)
+                        elif CARD_CLAIM_RE.search(clause) or heading_context:
+                            if heading_context:
+                                named_claims_present = True
                             unassociated.append((raw, cell))
                         continue
                 associated.append((mention[2], raw, token, cell))
-    return associated, unassociated, claims_present
+    return associated, unassociated, list(dict.fromkeys(illustrative_sentences)), named_claims_present
 
 
-def check_card_numbers(
+def _numeric_counter(value: str) -> Counter[str]:
+    return Counter(token for _start, _end, _raw, token in iter_numeric_claims(value, key_numbers=True))
+
+
+def _calculation_matches_sentence(calculation: dict[str, Any], sentence: str) -> bool:
+    sentence_numbers = _numeric_counter(sentence)
+    evidence_numbers: Counter[str] = Counter()
+    for raw_value in list(calculation.get("inputs", [])) + [calculation.get("result", "")]:
+        tokens = _numeric_counter(str(raw_value))
+        if not tokens:
+            tokens[normalize_number(str(raw_value))] += 1
+        evidence_numbers.update(tokens)
+    return bool(evidence_numbers) and all(
+        sentence_numbers[token] >= count for token, count in evidence_numbers.items()
+    )
+
+
+def illustrative_claim_findings(
+    sentences: list[str],
+    calculations: Any,
+) -> tuple[list[str], list[dict[str, Any]]]:
+    warnings: list[str] = []
+    packet: list[dict[str, Any]] = []
+    calculation_list = calculations if isinstance(calculations, list) else []
+    for sentence in sentences:
+        matching = [
+            calculation for calculation in calculation_list
+            if isinstance(calculation, dict) and _calculation_matches_sentence(calculation, sentence)
+        ]
+        evidence_status = "not_required"
+        evidence_error: str | None = None
+        if matching:
+            try:
+                validate_calculations(matching)
+                evidence_status = "verified"
+            except ValueError as error:
+                evidence_status = "invalid"
+                evidence_error = str(error)
+        elif sum(_numeric_counter(sentence).values()) >= 3:
+            evidence_status = "missing"
+        warnings.append(f"illustrative generic card-number example: {sentence}")
+        if evidence_status == "missing":
+            warnings.append(f"illustrative arithmetic has no matching calculation evidence: {sentence}")
+        packet.append({
+            "sentence": sentence,
+            "numeric_claims": [raw for _start, _end, raw, _token in iter_numeric_claims(sentence, key_numbers=True)],
+            "calculation_evidence": evidence_status,
+            **({"calculation_error": evidence_error} if evidence_error else {}),
+        })
+    return list(dict.fromkeys(warnings)), packet
+
+
+def check_card_number_findings(
     content_html: str,
     cards: list[dict[str, Any]],
     source_texts: list[str] | None = None,
     calculations: Any = None,
-) -> list[str]:
+) -> tuple[list[str], list[str], list[dict[str, Any]]]:
     failures: list[str] = []
     sourced = set().union(*(numeric_tokens(text, key_numbers=True) for text in (source_texts or [])))
     known_by_id: dict[Any, set[str]] = {}
@@ -374,7 +454,7 @@ def check_card_numbers(
     calculated, _calculation_failures = calculation_evidence(
         calculations if calculations is not None else [], all_known, sourced,
     )
-    associated, unassociated, claims_present = scan_card_numeric_claims(content_html, cards)
+    associated, unassociated, illustrative, named_claims_present = scan_card_numeric_claims(content_html, cards)
     for card, raw, token, _block in associated:
         if token in known_by_id.get(card.get("id"), set()) or token in sourced or token in calculated:
             continue
@@ -383,9 +463,24 @@ def check_card_numbers(
         )
     for raw, block in unassociated:
         failures.append(f"card-related numeric claim {raw.strip()} has no unambiguous card context: {block}")
-    if claims_present and not associated:
+    if named_claims_present and not associated:
         failures.append("card-related numeric claims were present but none could be associated with a card")
-    return list(dict.fromkeys(failures))
+    illustrative_warnings, illustrative_packet = illustrative_claim_findings(
+        illustrative, calculations if calculations is not None else [],
+    )
+    return list(dict.fromkeys(failures)), illustrative_warnings, illustrative_packet
+
+
+def check_card_numbers(
+    content_html: str,
+    cards: list[dict[str, Any]],
+    source_texts: list[str] | None = None,
+    calculations: Any = None,
+) -> list[str]:
+    failures, _warnings, _packet = check_card_number_findings(
+        content_html, cards, source_texts, calculations,
+    )
+    return failures
 
 
 def words(value: str) -> list[str]:
@@ -573,6 +668,7 @@ def calculation_evidence(
     calculations: Any,
     known_numbers: set[str],
     source_numbers: set[str],
+    illustrative_sentences: list[str] | None = None,
 ) -> tuple[set[str], list[str]]:
     accepted_results: set[str] = set()
     failures: list[str] = []
@@ -583,11 +679,15 @@ def calculation_evidence(
     supported_inputs = known_numbers | source_numbers
     for index, calculation in enumerate(validated):
         recompute_calculation(calculation)
+        illustrative_match = any(
+            _calculation_matches_sentence(calculation, sentence)
+            for sentence in (illustrative_sentences or [])
+        )
         for raw_input in calculation["inputs"]:
             tokens = numeric_tokens(str(raw_input), key_numbers=True)
             if not tokens:
                 tokens = {normalize_number(str(raw_input))}
-            if not tokens & supported_inputs:
+            if not tokens & supported_inputs and not illustrative_match:
                 failures.append(
                     f"calculation {index} input {raw_input!r} does not match cards.json or fetched source text"
                 )
@@ -599,12 +699,12 @@ def calculation_evidence(
     return accepted_results, failures
 
 
-def check_article_numeric_claims(
+def check_article_numeric_findings(
     content_html: str,
     cards: list[dict[str, Any]],
     fetched: dict[str, str],
     calculations: Any = None,
-) -> list[str]:
+) -> tuple[list[str], list[str]]:
     """Require every distinct article number to exist in card data or a source page."""
     article_text = html_to_text(content_html)
     claims: dict[str, str] = {}
@@ -615,17 +715,39 @@ def check_article_numeric_claims(
         numeric_tokens(source_text, key_numbers=True)
         for source_text in fetched.values()
     ))
+    _associated, _unassociated, illustrative_sentences, _named_claims = scan_card_numeric_claims(
+        content_html, cards,
+    )
+    illustrative_numbers = set().union(*(
+        set(_numeric_counter(sentence)) for sentence in illustrative_sentences
+    ))
     calculated, calculation_failures = calculation_evidence(
         calculations if calculations is not None else [],
         known_card_numbers,
         source_numbers,
+        illustrative_sentences,
     )
     failures = [
         f"article numeric claim {raw.strip()} does not match relevant cards.json data, fetched source text, or verified calculation evidence"
         for token, raw in claims.items()
-        if token not in known_card_numbers and token not in source_numbers and token not in calculated
+        if token not in known_card_numbers
+        and token not in source_numbers
+        and token not in calculated
+        and token not in illustrative_numbers
     ]
-    return calculation_failures + failures
+    return calculation_failures + failures, []
+
+
+def check_article_numeric_claims(
+    content_html: str,
+    cards: list[dict[str, Any]],
+    fetched: dict[str, str],
+    calculations: Any = None,
+) -> list[str]:
+    failures, _warnings = check_article_numeric_findings(
+        content_html, cards, fetched, calculations,
+    )
+    return failures
 
 
 def check_news_numeric_claims(
@@ -670,6 +792,22 @@ def source_excerpts(
             pieces = [re.sub(r"\s+", " ", source_text[:1200]).strip()]
         excerpts[url] = " […] ".join(piece for piece in pieces if piece)
     return excerpts
+
+
+def is_internal_card_page_url(url: str) -> bool:
+    parsed = urllib.parse.urlsplit(url)
+    hostname = (parsed.hostname or "").casefold().rstrip(".")
+    return hostname in {"practicalrewards.com", "www.practicalrewards.com"} and parsed.path.startswith("/card-pages/")
+
+
+def claim_hint_missing_numbers(url: str, claim_hint: str, source_text: str) -> set[str]:
+    expected = numeric_tokens(claim_hint, key_numbers=True)
+    if is_internal_card_page_url(url):
+        expected = {
+            token for token in expected
+            if not token.startswith(("date:", "date-year:"))
+        }
+    return expected - numeric_tokens(source_text, key_numbers=True)
 
 
 def verify() -> dict[str, Any]:
@@ -770,25 +908,28 @@ def verify() -> dict[str, Any]:
         url = str(source.get("url", ""))
         if url not in fetched:
             continue
-        expected = numeric_tokens(str(source.get("claim_hint", "")), key_numbers=True)
-        present = numeric_tokens(fetched[url], key_numbers=True)
-        missing = sorted(expected - present)
+        missing = sorted(claim_hint_missing_numbers(
+            url, str(source.get("claim_hint", "")), fetched[url],
+        ))
         if missing:
             source_failures.append(
                 f"source {url} does not contain key number(s) from its claim hint: {', '.join(missing)}"
             )
-    source_failures.extend(check_article_numeric_claims(
+    article_number_failures, article_number_warnings = check_article_numeric_findings(
         content_html, cards, fetched, draft.get("calculations", []),
-    ))
+    )
+    source_failures.extend(article_number_failures)
+    source_warnings.extend(article_number_warnings)
 
-    card_number_failures = check_card_numbers(
+    card_number_failures, card_number_warnings, illustrative_packet = check_card_number_findings(
         content_html, cards, list(fetched.values()), draft.get("calculations", []),
     )
     failures.extend(card_number_failures)
+    warnings.extend(card_number_warnings)
     checks.append({
         "name": "card_numbers",
-        "status": "fail" if card_number_failures else "pass",
-        "reasons": card_number_failures,
+        "status": "fail" if card_number_failures else ("warn" if card_number_warnings else "pass"),
+        "reasons": card_number_failures + card_number_warnings,
     })
 
     failures.extend(source_failures)
@@ -837,6 +978,7 @@ def verify() -> dict[str, Any]:
         "DRAFT_JSON": json.dumps(draft, ensure_ascii=False, indent=2),
         "CARDS_JSON": json.dumps([compact_card(card) for card in cards], ensure_ascii=False, indent=2),
         "SOURCE_EXCERPTS": json.dumps(excerpts, ensure_ascii=False, indent=2),
+        "ILLUSTRATIVE_CLAIMS": json.dumps(illustrative_packet, ensure_ascii=False, indent=2),
     })
     verifier, llm_result, fallback_reason = independent_check(prompt)
     if fallback_reason:

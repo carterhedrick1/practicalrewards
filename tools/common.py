@@ -543,18 +543,22 @@ def _parse_calculation_quantity(value: Any) -> tuple[float, str]:
     if percent:
         return float(percent.group(1)) / 100, "percent"
     cpp = re.fullmatch(
-        r"([+-]?\d+(?:\.\d+)?)(?:cpp|¢(?:/(?:pt|point)|perpoint)?|cents?perpoint)",
+        r"([+-]?\d+(?:\.\d+)?)(?:cpp|cpm|"
+        r"¢(?:/(?:pt|point|mi|mile)|per(?:point|mile))?|"
+        r"cents?per(?:point|mile))",
         compact,
     )
     if cpp:
         return float(cpp.group(1)) / 100, "cpp"
-    quantity = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)(k)?(points?|miles?)", compact)
+    quantity = re.fullmatch(
+        r"([+-]?\d+(?:\.\d+)?)(k)?(?:points?|pts?|miles?|mi)",
+        compact,
+    )
     if quantity:
-        unit = "points" if quantity.group(3).startswith("point") else "miles"
-        return float(quantity.group(1)) * (1000 if quantity.group(2) else 1), unit
+        return float(quantity.group(1)) * (1000 if quantity.group(2) else 1), "points"
     multiplier = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)x", compact)
     if multiplier:
-        return float(multiplier.group(1)), "count"
+        return float(multiplier.group(1)), "points_per_dollar"
     plain = re.fullmatch(r"(\$?)([+-]?\d+(?:\.\d+)?)", compact)
     if plain:
         return float(plain.group(2)), "dollars" if plain.group(1) else "count"
@@ -575,8 +579,10 @@ def _multiply_units(left: str, right: str) -> str:
         return right
     if right == "percent":
         return left
-    if {left, right} in ({"points", "cpp"}, {"miles", "cpp"}):
+    if {left, right} == {"points", "cpp"}:
         return "dollars"
+    if {left, right} == {"dollars", "points_per_dollar"}:
+        return "points"
     raise ValueError(f"units do not compose for multiplication: {left} × {right}")
 
 
@@ -587,8 +593,12 @@ def _divide_units(numerator: str, denominator: str) -> str:
         return numerator
     if numerator == "dollars" and denominator == "cpp":
         return "points"
-    if numerator == "dollars" and denominator in {"points", "miles"}:
+    if numerator == "dollars" and denominator == "points":
         return "cpp"
+    if numerator == "points" and denominator == "dollars":
+        return "points_per_dollar"
+    if numerator == "points" and denominator == "points_per_dollar":
+        return "dollars"
     raise ValueError(f"units do not compose for division: {numerator} ÷ {denominator}")
 
 
