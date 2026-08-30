@@ -7,6 +7,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -17,7 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from common import ROOT, STATE, read_json
+from common import ROOT, STATE, read_json, slugify_brand_name
 
 
 STEPS = ("ingest", "plan", "draft", "build", "verify")
@@ -124,8 +125,29 @@ class DailyRunner:
         paths = list(STATIC_PUBLISH_PATHS)
         if slug:
             paths.append(f"blog/{slug}.html")
+            paths.extend(self.referenced_brand_paths(slug))
         paths.extend(f"tools/state/{name}" for name in DURABLE_STATE_FILES)
         return paths
+
+    def referenced_brand_paths(self, slug: str) -> list[str]:
+        """Return only local brand assets referenced by this run's built page."""
+        post_path = ROOT / "blog" / f"{slug}.html"
+        if not post_path.is_file():
+            return []
+        value = post_path.read_text(encoding="utf-8")
+        paths: set[str] = set()
+        for reference in re.findall(
+            r"\b(?:href|src)\s*=\s*['\"]([^'\"]+)['\"]",
+            value,
+            flags=re.IGNORECASE,
+        ):
+            relative = urllib.parse.unquote(urllib.parse.urlsplit(reference).path).lstrip("/")
+            if not relative.startswith("images/brands/"):
+                continue
+            filename = relative.removeprefix("images/brands/")
+            if filename and Path(filename).name == filename:
+                paths.add(f"images/brands/{filename}")
+        return sorted(paths)
 
     def preflight_publish(self) -> None:
         if not self.review:
@@ -147,12 +169,18 @@ class DailyRunner:
         status = self.run_git([
             "git", "status", "--porcelain=v1", "--", *self.publish_paths(),
         ])
-        if status.returncode != 0:
+        brand_status = self.run_git([
+            "git", "status", "--porcelain=v1", "--untracked-files=no", "--",
+            "images/brands/",
+        ])
+        if status.returncode != 0 or brand_status.returncode != 0:
             raise RuntimeError("could not inspect publish targets")
-        if status.stdout.strip():
+        dirty_targets = status.stdout.strip().splitlines()
+        dirty_targets.extend(brand_status.stdout.strip().splitlines())
+        if dirty_targets:
             raise RuntimeError(
                 "publish target has pre-existing work; aborting before ingest: "
-                + " | ".join(status.stdout.strip().splitlines())
+                + " | ".join(dirty_targets)
             )
         self.publish_base_head = local.stdout.strip()
         mode = "Review" if self.review else "Publish"
@@ -187,6 +215,12 @@ class DailyRunner:
             ROOT / "sitemap.xml",
             STATE / "published.json",
         ]
+        hero = draft.get("hero") if isinstance(draft, dict) else None
+        art = hero.get("art") if isinstance(hero, dict) else None
+        brand_name = art.get("brand_name") if isinstance(art, dict) else None
+        brand_slug = slugify_brand_name(brand_name) if isinstance(brand_name, str) else ""
+        if brand_slug:
+            paths.append(ROOT / "images" / "brands" / f"{brand_slug}.png")
         self.snapshots = [
             Snapshot(path, path.exists(), path.read_bytes() if path.exists() else None, self.is_tracked(path))
             for path in paths

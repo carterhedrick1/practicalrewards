@@ -9,15 +9,18 @@ import html
 import json
 import re
 import xml.etree.ElementTree as ET
-import zlib
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
 from common import (
-    ROOT, STATE, card_mentions, card_url, read_json, validate_calculations,
-    validate_content_html, write_json,
+    ROOT, STATE, card_mentions, card_url, fetch_brand_logo, image_looks_valid,
+    read_json, validate_calculations, validate_content_html, write_json,
 )
+
+
+# Compatibility alias retained after moving the validator into common.py.
+_image_looks_valid = image_looks_valid
 
 
 TOKEN_RE = re.compile(r"{{([A-Z0-9_]+)}}")
@@ -128,234 +131,13 @@ def _hero_label_lines(label: str, limit: int = 36) -> list[str]:
     return [lines[0], second]
 
 
-def _image_looks_valid(path: Path) -> bool:
-    """Require a structurally complete supported image with nonzero dimensions."""
-    try:
-        data = path.read_bytes()
-    except OSError:
-        return False
-    if data.startswith(b"\x89PNG\r\n\x1a\n"):
-        return _valid_png(data)
-    if data.startswith(b"\xff\xd8\xff"):
-        return _valid_jpeg(data)
-    if data.startswith((b"GIF87a", b"GIF89a")):
-        return _valid_gif(data)
-    if data.startswith(b"RIFF") and data[8:12] == b"WEBP":
-        return _valid_webp(data)
-    if len(data) >= 12 and data[4:8] == b"ftyp" and b"avif" in data[8:32]:
-        return _valid_avif(data)
-    return False
-
-
-def _valid_png(data: bytes) -> bool:
-    position = 8
-    dimensions: tuple[int, int] | None = None
-    saw_image_data = False
-    while position + 12 <= len(data):
-        length = int.from_bytes(data[position:position + 4], "big")
-        chunk_type = data[position + 4:position + 8]
-        chunk_end = position + 12 + length
-        if chunk_end > len(data):
-            return False
-        payload = data[position + 8:position + 8 + length]
-        expected_crc = int.from_bytes(data[position + 8 + length:chunk_end], "big")
-        if zlib.crc32(chunk_type + payload) & 0xFFFFFFFF != expected_crc:
-            return False
-        if position == 8:
-            if chunk_type != b"IHDR" or length != 13:
-                return False
-            dimensions = (
-                int.from_bytes(payload[0:4], "big"),
-                int.from_bytes(payload[4:8], "big"),
-            )
-        elif chunk_type == b"IDAT" and length > 0:
-            saw_image_data = True
-        if chunk_type == b"IEND":
-            return length == 0 and chunk_end == len(data) and saw_image_data and bool(
-                dimensions and dimensions[0] > 0 and dimensions[1] > 0
-            )
-        position = chunk_end
-    return False
-
-
-def _valid_jpeg(data: bytes) -> bool:
-    if len(data) < 12 or not data.endswith(b"\xff\xd9"):
-        return False
-    position = 2
-    dimensions: tuple[int, int] | None = None
-    saw_scan_data = False
-    standalone = {0x01, *range(0xD0, 0xDA)}
-    start_of_frame = {
-        0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7,
-        0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF,
-    }
-    while position < len(data) - 2:
-        if data[position] != 0xFF:
-            return False
-        while position < len(data) and data[position] == 0xFF:
-            position += 1
-        if position >= len(data):
-            return False
-        marker = data[position]
-        position += 1
-        if marker == 0xDA:
-            if position + 2 > len(data):
-                return False
-            segment_length = int.from_bytes(data[position:position + 2], "big")
-            scan_start = position + segment_length
-            if segment_length < 2 or scan_start >= len(data) - 2:
-                return False
-            saw_scan_data = True
-            break
-        if marker in standalone:
-            continue
-        if position + 2 > len(data):
-            return False
-        segment_length = int.from_bytes(data[position:position + 2], "big")
-        if segment_length < 2 or position + segment_length > len(data):
-            return False
-        if marker in start_of_frame:
-            if segment_length < 7:
-                return False
-            dimensions = (
-                int.from_bytes(data[position + 5:position + 7], "big"),
-                int.from_bytes(data[position + 3:position + 5], "big"),
-            )
-        position += segment_length
-    return saw_scan_data and bool(dimensions and dimensions[0] > 0 and dimensions[1] > 0)
-
-
-def _skip_gif_subblocks(data: bytes, position: int) -> int | None:
-    while position < len(data):
-        length = data[position]
-        position += 1
-        if length == 0:
-            return position
-        position += length
-        if position > len(data):
-            return None
-    return None
-
-
-def _valid_gif(data: bytes) -> bool:
-    if len(data) < 14:
-        return False
-    width = int.from_bytes(data[6:8], "little")
-    height = int.from_bytes(data[8:10], "little")
-    if not width or not height:
-        return False
-    packed = data[10]
-    position = 13
-    if packed & 0x80:
-        position += 3 * (2 ** ((packed & 0x07) + 1))
-    while position < len(data):
-        marker = data[position]
-        position += 1
-        if marker == 0x3B:
-            return position == len(data)
-        if marker == 0x21:
-            if position >= len(data):
-                return False
-            position += 1
-            next_position = _skip_gif_subblocks(data, position)
-            if next_position is None:
-                return False
-            position = next_position
-            continue
-        if marker != 0x2C or position + 9 > len(data):
-            return False
-        descriptor = data[position:position + 9]
-        position += 9
-        if descriptor[8] & 0x80:
-            position += 3 * (2 ** ((descriptor[8] & 0x07) + 1))
-        if position >= len(data):
-            return False
-        position += 1
-        next_position = _skip_gif_subblocks(data, position)
-        if next_position is None:
-            return False
-        position = next_position
-    return False
-
-
-def _valid_webp(data: bytes) -> bool:
-    if len(data) < 20 or int.from_bytes(data[4:8], "little") + 8 != len(data):
-        return False
-    position = 12
-    dimensions: tuple[int, int] | None = None
-    while position + 8 <= len(data):
-        chunk_type = data[position:position + 4]
-        length = int.from_bytes(data[position + 4:position + 8], "little")
-        payload_start = position + 8
-        payload_end = payload_start + length
-        next_position = payload_end + (length & 1)
-        if payload_end > len(data) or next_position > len(data):
-            return False
-        payload = data[payload_start:payload_end]
-        if chunk_type == b"VP8X" and length >= 10:
-            dimensions = (
-                int.from_bytes(payload[4:7], "little") + 1,
-                int.from_bytes(payload[7:10], "little") + 1,
-            )
-        elif chunk_type == b"VP8L" and length >= 5 and payload[0] == 0x2F:
-            packed_dimensions = int.from_bytes(payload[1:5], "little")
-            dimensions = (
-                (packed_dimensions & 0x3FFF) + 1,
-                ((packed_dimensions >> 14) & 0x3FFF) + 1,
-            )
-        elif chunk_type == b"VP8 " and length >= 10 and payload[3:6] == b"\x9d\x01\x2a":
-            dimensions = (
-                int.from_bytes(payload[6:8], "little") & 0x3FFF,
-                int.from_bytes(payload[8:10], "little") & 0x3FFF,
-            )
-        position = next_position
-    return position == len(data) and bool(
-        dimensions and dimensions[0] > 0 and dimensions[1] > 0
-    )
-
-
-def _valid_avif(data: bytes) -> bool:
-    position = 0
-    saw_ftyp = False
-    saw_media_data = False
-    while position < len(data):
-        if position + 8 > len(data):
-            return False
-        box_length = int.from_bytes(data[position:position + 4], "big")
-        box_type = data[position + 4:position + 8]
-        header_length = 8
-        if box_length == 1:
-            if position + 16 > len(data):
-                return False
-            box_length = int.from_bytes(data[position + 8:position + 16], "big")
-            header_length = 16
-        elif box_length == 0:
-            box_length = len(data) - position
-        if box_length < header_length or position + box_length > len(data):
-            return False
-        if box_type == b"ftyp":
-            saw_ftyp = b"avif" in data[position + header_length:position + box_length]
-        elif box_type == b"mdat" and box_length > header_length:
-            saw_media_data = True
-        position += box_length
-    marker = data.find(b"ispe")
-    if not saw_ftyp or not saw_media_data or marker < 4 or marker + 16 > len(data):
-        return False
-    property_length = int.from_bytes(data[marker - 4:marker], "big")
-    if property_length < 20 or marker - 4 + property_length > len(data):
-        return False
-    width = int.from_bytes(data[marker + 8:marker + 12], "big")
-    height = int.from_bytes(data[marker + 12:marker + 16], "big")
-    return width > 0 and height > 0
-
-
 def _local_image_href(relative: str, base: Path, root: Path) -> str | None:
     candidate = (root / relative).resolve()
     try:
         candidate.relative_to(base.resolve())
     except ValueError:
         return None
-    if not candidate.is_file() or not _image_looks_valid(candidate):
+    if not candidate.is_file() or not image_looks_valid(candidate):
         return None
     return "/" + relative
 
@@ -451,7 +233,12 @@ def render_hero(
         else:
             art = _typographic_art()
     elif art_type == "brand":
-        art_href = _brand_art_href(art_spec.get("asset"), root)
+        asset = art_spec.get("asset")
+        brand_name = art_spec.get("brand_name")
+        if isinstance(brand_name, str):
+            resolved = fetch_brand_logo(brand_name)
+            asset = resolved.name if resolved is not None else None
+        art_href = _brand_art_href(asset, root)
         if art_href:
             art = (
                 '        <g class="pr-hero-art pr-hero-art-brand" aria-hidden="true">\n'
@@ -493,7 +280,6 @@ def render_hero(
         '            <clipPath id="pr-hero-card-clip"><rect x="485" y="131" width="250" height="157" rx="14"/></clipPath>\n'
         '            <clipPath id="pr-hero-art-window"><rect x="470" y="0" width="290" height="420"/></clipPath>\n'
         '        </defs>\n'
-        '        <path d="M38 52H445M38 210H445M38 368H445" fill="none" stroke="#ffffff" stroke-opacity="0.055" stroke-width="2"/>\n'
         '        <rect x="28" y="48" width="7" height="324" rx="3.5" fill="url(#pr-hero-accent)"/>\n'
         f'        <text x="60" y="104" fill="#34d399" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="800" letter-spacing="3">{kicker_xml}</text>\n'
         f'        <text x="54" y="232" fill="#ffffff" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="{stat_size}" font-weight="900" letter-spacing="-3">{stat_xml}</text>\n'

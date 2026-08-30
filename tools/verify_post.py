@@ -17,8 +17,9 @@ from typing import Any
 from common import (
     ROOT, STATE, TOOLS, canonical_card_source_url, card_mentions,
     compact_card, fetch_article_text, fill_template, html_to_text,
-    parse_json_reply, read_json, recompute_calculation, run_codex,
-    validate_calculations, validate_public_http_url, write_json,
+    image_looks_valid, parse_json_reply, read_json, recompute_calculation,
+    run_codex, slugify_brand_name, validate_calculations,
+    validate_public_http_url, write_json,
 )
 
 
@@ -647,6 +648,22 @@ def validate_built_html(slug: str) -> list[str]:
                 failures.append("JSON-LD is valid JSON but is not an Article object")
         except json.JSONDecodeError as error:
             failures.append(f"Article JSON-LD is invalid JSON: {error}")
+    for reference in re.findall(
+        r"\b(?:href|src)\s*=\s*['\"]([^'\"]+)['\"]",
+        value,
+        flags=re.IGNORECASE,
+    ):
+        relative = urllib.parse.unquote(urllib.parse.urlsplit(reference).path).lstrip("/")
+        if not relative.startswith("images/brands/"):
+            continue
+        asset_name = relative.removeprefix("images/brands/")
+        asset_path = ROOT / relative
+        if not asset_name or Path(asset_name).name != asset_name or not asset_path.is_file():
+            failures.append(f"built page brand asset is missing: {relative}")
+        elif not image_looks_valid(asset_path):
+            failures.append(
+                f"built page brand asset failed structural image validation: {relative}"
+            )
     return failures
 
 
@@ -985,15 +1002,28 @@ def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]])
             if card_id not in mentioned:
                 failures.append(f"hero.art.card_id {card_id} is not listed in cards_mentioned")
     elif art.get("type") == "brand":
-        asset = art.get("asset")
-        if set(art) != {"type", "asset"}:
-            failures.append("brand hero art must contain only type and asset")
-        if (
-            not isinstance(asset, str)
-            or Path(asset).name != asset
-            or not (ROOT / "images" / "brands" / asset).is_file()
-        ):
-            failures.append("hero.art.asset does not exist in images/brands")
+        if set(art) == {"type", "asset"}:
+            asset = art.get("asset")
+            if (
+                not isinstance(asset, str)
+                or Path(asset).name != asset
+                or not (ROOT / "images" / "brands" / asset).is_file()
+            ):
+                failures.append("hero.art.asset does not exist in images/brands")
+        elif set(art) == {"type", "brand_name"}:
+            brand_name = art.get("brand_name")
+            if (
+                not isinstance(brand_name, str)
+                or not brand_name.strip()
+                or len(brand_name.strip()) > 120
+                or any(ord(character) < 32 for character in brand_name.strip())
+                or PLAIN_TEXT_MARKUP_RE.search(brand_name)
+                or not slugify_brand_name(brand_name)
+                or len(slugify_brand_name(brand_name)) > 120
+            ):
+                failures.append("hero.art.brand_name is not a safe plain-text brand name")
+        else:
+            failures.append("brand hero art must contain type plus asset or brand_name")
     elif art.get("type") == "none":
         if set(art) != {"type"}:
             failures.append("none hero art must contain only type")

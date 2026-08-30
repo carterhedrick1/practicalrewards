@@ -13,8 +13,12 @@ import re
 import socket
 import ssl
 import subprocess
+import sys
 import tempfile
+import unicodedata
 import urllib.parse
+import xml.etree.ElementTree as ET
+import zlib
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
@@ -365,6 +369,344 @@ def validate_content_html(value: str) -> None:
         raise ValueError("invalid content_html: " + "; ".join(parser.problems))
 
 
+def _valid_png(data: bytes) -> bool:
+    position = 8
+    dimensions: tuple[int, int] | None = None
+    saw_image_data = False
+    while position + 12 <= len(data):
+        length = int.from_bytes(data[position:position + 4], "big")
+        chunk_type = data[position + 4:position + 8]
+        chunk_end = position + 12 + length
+        if chunk_end > len(data):
+            return False
+        payload = data[position + 8:position + 8 + length]
+        expected_crc = int.from_bytes(data[position + 8 + length:chunk_end], "big")
+        if zlib.crc32(chunk_type + payload) & 0xFFFFFFFF != expected_crc:
+            return False
+        if position == 8:
+            if chunk_type != b"IHDR" or length != 13:
+                return False
+            dimensions = (
+                int.from_bytes(payload[0:4], "big"),
+                int.from_bytes(payload[4:8], "big"),
+            )
+        elif chunk_type == b"IDAT" and length > 0:
+            saw_image_data = True
+        if chunk_type == b"IEND":
+            return length == 0 and chunk_end == len(data) and saw_image_data and bool(
+                dimensions and dimensions[0] > 0 and dimensions[1] > 0
+            )
+        position = chunk_end
+    return False
+
+
+def _valid_jpeg(data: bytes) -> bool:
+    if len(data) < 12 or not data.endswith(b"\xff\xd9"):
+        return False
+    position = 2
+    dimensions: tuple[int, int] | None = None
+    saw_scan_data = False
+    standalone = {0x01, *range(0xD0, 0xDA)}
+    start_of_frame = {
+        0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7,
+        0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF,
+    }
+    while position < len(data) - 2:
+        if data[position] != 0xFF:
+            return False
+        while position < len(data) and data[position] == 0xFF:
+            position += 1
+        if position >= len(data):
+            return False
+        marker = data[position]
+        position += 1
+        if marker == 0xDA:
+            if position + 2 > len(data):
+                return False
+            segment_length = int.from_bytes(data[position:position + 2], "big")
+            scan_start = position + segment_length
+            if segment_length < 2 or scan_start >= len(data) - 2:
+                return False
+            saw_scan_data = True
+            break
+        if marker in standalone:
+            continue
+        if position + 2 > len(data):
+            return False
+        segment_length = int.from_bytes(data[position:position + 2], "big")
+        if segment_length < 2 or position + segment_length > len(data):
+            return False
+        if marker in start_of_frame:
+            if segment_length < 7:
+                return False
+            dimensions = (
+                int.from_bytes(data[position + 5:position + 7], "big"),
+                int.from_bytes(data[position + 3:position + 5], "big"),
+            )
+        position += segment_length
+    return saw_scan_data and bool(dimensions and dimensions[0] > 0 and dimensions[1] > 0)
+
+
+def _skip_gif_subblocks(data: bytes, position: int) -> int | None:
+    while position < len(data):
+        length = data[position]
+        position += 1
+        if length == 0:
+            return position
+        position += length
+        if position > len(data):
+            return None
+    return None
+
+
+def _valid_gif(data: bytes) -> bool:
+    if len(data) < 14:
+        return False
+    width = int.from_bytes(data[6:8], "little")
+    height = int.from_bytes(data[8:10], "little")
+    if not width or not height:
+        return False
+    packed = data[10]
+    position = 13
+    if packed & 0x80:
+        position += 3 * (2 ** ((packed & 0x07) + 1))
+    while position < len(data):
+        marker = data[position]
+        position += 1
+        if marker == 0x3B:
+            return position == len(data)
+        if marker == 0x21:
+            if position >= len(data):
+                return False
+            position += 1
+            next_position = _skip_gif_subblocks(data, position)
+            if next_position is None:
+                return False
+            position = next_position
+            continue
+        if marker != 0x2C or position + 9 > len(data):
+            return False
+        descriptor = data[position:position + 9]
+        position += 9
+        if descriptor[8] & 0x80:
+            position += 3 * (2 ** ((descriptor[8] & 0x07) + 1))
+        if position >= len(data):
+            return False
+        position += 1
+        next_position = _skip_gif_subblocks(data, position)
+        if next_position is None:
+            return False
+        position = next_position
+    return False
+
+
+def _valid_webp(data: bytes) -> bool:
+    if len(data) < 20 or int.from_bytes(data[4:8], "little") + 8 != len(data):
+        return False
+    position = 12
+    dimensions: tuple[int, int] | None = None
+    while position + 8 <= len(data):
+        chunk_type = data[position:position + 4]
+        length = int.from_bytes(data[position + 4:position + 8], "little")
+        payload_start = position + 8
+        payload_end = payload_start + length
+        next_position = payload_end + (length & 1)
+        if payload_end > len(data) or next_position > len(data):
+            return False
+        payload = data[payload_start:payload_end]
+        if chunk_type == b"VP8X" and length >= 10:
+            dimensions = (
+                int.from_bytes(payload[4:7], "little") + 1,
+                int.from_bytes(payload[7:10], "little") + 1,
+            )
+        elif chunk_type == b"VP8L" and length >= 5 and payload[0] == 0x2F:
+            packed_dimensions = int.from_bytes(payload[1:5], "little")
+            dimensions = (
+                (packed_dimensions & 0x3FFF) + 1,
+                ((packed_dimensions >> 14) & 0x3FFF) + 1,
+            )
+        elif chunk_type == b"VP8 " and length >= 10 and payload[3:6] == b"\x9d\x01\x2a":
+            dimensions = (
+                int.from_bytes(payload[6:8], "little") & 0x3FFF,
+                int.from_bytes(payload[8:10], "little") & 0x3FFF,
+            )
+        position = next_position
+    return position == len(data) and bool(
+        dimensions and dimensions[0] > 0 and dimensions[1] > 0
+    )
+
+
+def _valid_avif(data: bytes) -> bool:
+    position = 0
+    saw_ftyp = False
+    saw_media_data = False
+    while position < len(data):
+        if position + 8 > len(data):
+            return False
+        box_length = int.from_bytes(data[position:position + 4], "big")
+        box_type = data[position + 4:position + 8]
+        header_length = 8
+        if box_length == 1:
+            if position + 16 > len(data):
+                return False
+            box_length = int.from_bytes(data[position + 8:position + 16], "big")
+            header_length = 16
+        elif box_length == 0:
+            box_length = len(data) - position
+        if box_length < header_length or position + box_length > len(data):
+            return False
+        if box_type == b"ftyp":
+            saw_ftyp = b"avif" in data[position + header_length:position + box_length]
+        elif box_type == b"mdat" and box_length > header_length:
+            saw_media_data = True
+        position += box_length
+    marker = data.find(b"ispe")
+    if not saw_ftyp or not saw_media_data or marker < 4 or marker + 16 > len(data):
+        return False
+    property_length = int.from_bytes(data[marker - 4:marker], "big")
+    if property_length < 20 or marker - 4 + property_length > len(data):
+        return False
+    width = int.from_bytes(data[marker + 8:marker + 12], "big")
+    height = int.from_bytes(data[marker + 12:marker + 16], "big")
+    return width > 0 and height > 0
+
+
+def _jpeg_dimensions(data: bytes) -> tuple[int, int] | None:
+    position = 2
+    start_of_frame = {
+        0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7,
+        0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF,
+    }
+    while position + 4 <= len(data):
+        if data[position] != 0xFF:
+            return None
+        while position < len(data) and data[position] == 0xFF:
+            position += 1
+        if position >= len(data):
+            return None
+        marker = data[position]
+        position += 1
+        if marker == 0xDA:
+            return None
+        if marker == 0x01 or 0xD0 <= marker <= 0xD9:
+            continue
+        if position + 2 > len(data):
+            return None
+        length = int.from_bytes(data[position:position + 2], "big")
+        if marker in start_of_frame and length >= 7:
+            return (
+                int.from_bytes(data[position + 5:position + 7], "big"),
+                int.from_bytes(data[position + 3:position + 5], "big"),
+            )
+        position += length
+    return None
+
+
+def _webp_dimensions(data: bytes) -> tuple[int, int] | None:
+    position = 12
+    while position + 8 <= len(data):
+        chunk_type = data[position:position + 4]
+        length = int.from_bytes(data[position + 4:position + 8], "little")
+        payload = data[position + 8:position + 8 + length]
+        if chunk_type == b"VP8X" and length >= 10:
+            return (
+                int.from_bytes(payload[4:7], "little") + 1,
+                int.from_bytes(payload[7:10], "little") + 1,
+            )
+        if chunk_type == b"VP8L" and length >= 5 and payload[0] == 0x2F:
+            packed = int.from_bytes(payload[1:5], "little")
+            return ((packed & 0x3FFF) + 1, ((packed >> 14) & 0x3FFF) + 1)
+        if chunk_type == b"VP8 " and length >= 10 and payload[3:6] == b"\x9d\x01\x2a":
+            return (
+                int.from_bytes(payload[6:8], "little") & 0x3FFF,
+                int.from_bytes(payload[8:10], "little") & 0x3FFF,
+            )
+        position += 8 + length + (length & 1)
+    return None
+
+
+def _svg_dimensions(data: bytes) -> tuple[int, int] | None:
+    if b"<!DOCTYPE" in data.upper() or b"<!ENTITY" in data.upper():
+        return None
+    try:
+        root = ET.fromstring(data)
+    except (ET.ParseError, ValueError):
+        return None
+    if root.tag.rsplit("}", 1)[-1].casefold() != "svg":
+        return None
+
+    def numeric_dimension(value: str | None) -> float | None:
+        if not value:
+            return None
+        match = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*(?:px|pt|pc|mm|cm|in)?\s*", value)
+        return float(match.group(1)) if match else None
+
+    width = numeric_dimension(root.get("width"))
+    height = numeric_dimension(root.get("height"))
+    if not width or not height:
+        view_box = root.get("viewBox") or root.get("viewbox")
+        if view_box:
+            parts = re.split(r"[\s,]+", view_box.strip())
+            try:
+                if len(parts) == 4:
+                    width, height = float(parts[2]), float(parts[3])
+            except ValueError:
+                return None
+    if not width or not height or width <= 0 or height <= 0:
+        return None
+    return max(1, round(width)), max(1, round(height))
+
+
+def image_dimensions(path: Path) -> tuple[int, int] | None:
+    """Return dimensions only for a structurally complete supported image."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    if data.startswith(b"\x89PNG\r\n\x1a\n") and _valid_png(data):
+        return (
+            int.from_bytes(data[16:20], "big"),
+            int.from_bytes(data[20:24], "big"),
+        )
+    if data.startswith(b"\xff\xd8\xff") and _valid_jpeg(data):
+        return _jpeg_dimensions(data)
+    if data.startswith((b"GIF87a", b"GIF89a")) and _valid_gif(data):
+        return (
+            int.from_bytes(data[6:8], "little"),
+            int.from_bytes(data[8:10], "little"),
+        )
+    if data.startswith(b"RIFF") and data[8:12] == b"WEBP" and _valid_webp(data):
+        return _webp_dimensions(data)
+    if len(data) >= 12 and data[4:8] == b"ftyp" and b"avif" in data[8:32] and _valid_avif(data):
+        marker = data.find(b"ispe")
+        return (
+            int.from_bytes(data[marker + 8:marker + 12], "big"),
+            int.from_bytes(data[marker + 12:marker + 16], "big"),
+        )
+    if path.suffix.casefold() == ".svg" or data.lstrip().startswith(b"<"):
+        return _svg_dimensions(data)
+    return None
+
+
+def image_looks_valid(path: Path, min_short_side: int = 1) -> bool:
+    """Require a complete image whose width and height meet the requested floor."""
+    dimensions = image_dimensions(path)
+    return bool(dimensions and min(dimensions) >= min_short_side)
+
+
+# Retain the validator's original private name for callers that predate the move.
+_image_looks_valid = image_looks_valid
+
+
+def slugify_brand_name(brand_name: str) -> str:
+    """Return a stable ASCII filename slug for a brand name."""
+    if not isinstance(brand_name, str):
+        return ""
+    normalized = unicodedata.normalize("NFKD", brand_name)
+    ascii_value = normalized.encode("ascii", "ignore").decode("ascii").casefold()
+    return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", ascii_value)).strip("-")
+
+
 def _resolve_public_http_target(url: str) -> tuple[str, urllib.parse.SplitResult, tuple[str, ...]]:
     """Validate a URL and return the exact public IPs approved for this hop."""
     if not isinstance(url, str) or not url.strip():
@@ -593,10 +935,23 @@ def _read_bounded_response(
     return payload
 
 
-def fetch_bytes(url: str, timeout: int = FETCH_TIMEOUT) -> tuple[bytes, str]:
+def fetch_bytes(
+    url: str,
+    timeout: int = FETCH_TIMEOUT,
+    *,
+    max_bytes: int = MAX_RESPONSE_BYTES,
+    allowed_hosts: frozenset[str] | None = None,
+    https_only: bool = False,
+) -> tuple[bytes, str]:
     current_url = url
     redirect_statuses = {301, 302, 303, 307, 308}
     for redirect_count in range(MAX_REDIRECTS + 1):
+        unresolved = urllib.parse.urlsplit(current_url)
+        if https_only and unresolved.scheme.casefold() != "https":
+            raise ValueError("HTTP response URL must use HTTPS")
+        hostname = (unresolved.hostname or "").rstrip(".").casefold()
+        if allowed_hosts is not None and hostname not in allowed_hosts:
+            raise ValueError("HTTP response host is not allowlisted")
         safe_url, parsed, addresses = _resolve_public_http_target(current_url)
         connection, response = _open_pinned_response(parsed, addresses, timeout)
         try:
@@ -610,12 +965,199 @@ def fetch_bytes(url: str, timeout: int = FETCH_TIMEOUT) -> tuple[bytes, str]:
                 continue
             if response.status >= 400:
                 raise RuntimeError(f"HTTP request failed with status {response.status}")
-            payload = _read_bounded_response(response)
+            payload = _read_bounded_response(response, max_bytes=max_bytes)
             return payload, response.headers.get_content_charset() or "utf-8"
         finally:
             response.close()
             connection.close()
     raise RuntimeError(f"too many redirects (limit {MAX_REDIRECTS})")
+
+
+_WIKIPEDIA_API_HOSTS = frozenset({"en.wikipedia.org"})
+_BRAND_LOGO_DOWNLOAD_HOSTS = frozenset({
+    "en.wikipedia.org",
+    "commons.wikimedia.org",
+    "upload.wikimedia.org",
+})
+
+
+class _BrandLogoFetchError(RuntimeError):
+    pass
+
+
+def _brand_logo_warning(brand_name: str, reason: str) -> None:
+    brand = re.sub(r"\s+", " ", brand_name).strip()[:120]
+    brand = re.sub(r"https?://\S+", "[url]", brand, flags=re.IGNORECASE)
+    print(f"brand logo fetch failed: {brand}: {reason}", file=sys.stderr)
+
+
+def fetch_brand_logo(brand_name: str) -> Path | None:
+    """Resolve a cached logo or fetch a bounded Wikipedia lead logo as PNG."""
+    display_name = brand_name if isinstance(brand_name, str) else str(brand_name)
+    try:
+        clean_name = brand_name.strip() if isinstance(brand_name, str) else ""
+        if not clean_name or len(clean_name) > 120 or any(ord(char) < 32 for char in clean_name):
+            raise _BrandLogoFetchError("brand name must be 1-120 plain-text characters")
+        slug = slugify_brand_name(clean_name)
+        if not slug:
+            raise _BrandLogoFetchError("brand name does not produce a safe slug")
+        if len(slug) > 120:
+            raise _BrandLogoFetchError("brand slug is too long")
+
+        brands_dir = ROOT / "images" / "brands"
+        for suffix in (".png", ".svg"):
+            cached = brands_dir / f"{slug}{suffix}"
+            if cached.is_file():
+                return cached
+
+        query = urllib.parse.urlencode({
+            "action": "query",
+            "titles": clean_name,
+            "prop": "pageimages",
+            "piprop": "original",
+            "format": "json",
+            "redirects": "1",
+        })
+        try:
+            payload, charset = fetch_bytes(
+                f"https://en.wikipedia.org/w/api.php?{query}",
+                timeout=10,
+                allowed_hosts=_WIKIPEDIA_API_HOSTS,
+                https_only=True,
+            )
+        except Exception as error:
+            raise _BrandLogoFetchError(
+                f"Wikipedia API request failed ({type(error).__name__})"
+            ) from error
+        try:
+            response = json.loads(payload.decode(charset))
+            pages = response["query"]["pages"]
+            page = next(
+                item for item in pages.values()
+                if isinstance(item, dict) and "missing" not in item
+            )
+            article_title = page["title"]
+            original_url = page["original"]["source"]
+        except (KeyError, StopIteration, TypeError, UnicodeError, json.JSONDecodeError) as error:
+            raise _BrandLogoFetchError("Wikipedia returned no usable lead image") from error
+        if not isinstance(article_title, str) or not isinstance(original_url, str):
+            raise _BrandLogoFetchError("Wikipedia returned invalid image metadata")
+
+        parsed_original = urllib.parse.urlsplit(original_url)
+        original_host = (parsed_original.hostname or "").rstrip(".").casefold()
+        if parsed_original.scheme.casefold() != "https" or original_host != "upload.wikimedia.org":
+            raise _BrandLogoFetchError("Wikipedia image host is not allowlisted")
+        filename = urllib.parse.unquote(Path(parsed_original.path).name)
+        extension = Path(filename).suffix.casefold()
+        title_matches = slugify_brand_name(article_title) == slug
+        use_filepath_fallback = False
+        if "logo" not in filename.casefold() and not (
+            title_matches and extension in {".svg", ".png"}
+        ):
+            # Fallback: fetch the infobox from wikitext and look for a logo field
+            try:
+                wikitext_query = urllib.parse.urlencode({
+                    "action": "query",
+                    "titles": clean_name,
+                    "prop": "revisions",
+                    "rvprop": "content",
+                    "rvslots": "main",
+                    "format": "json",
+                    "redirects": "1",
+                })
+                wikitext_payload, wikitext_charset = fetch_bytes(
+                    f"https://en.wikipedia.org/w/api.php?{wikitext_query}",
+                    timeout=10,
+                    allowed_hosts=_WIKIPEDIA_API_HOSTS,
+                    https_only=True,
+                )
+                wikitext_response = json.loads(wikitext_payload.decode(wikitext_charset))
+                wikitext_pages = wikitext_response["query"]["pages"]
+                wikitext_page = next(
+                    item for item in wikitext_pages.values()
+                    if isinstance(item, dict) and "missing" not in item
+                )
+                wikitext_content = wikitext_page["revisions"][0]["slots"]["main"]["*"]
+                if not isinstance(wikitext_content, str):
+                    raise _BrandLogoFetchError("Wikipedia returned no usable infobox logo")
+
+                # Extract filename from infobox logo field; patterns: '| logo = File:Delta logo.svg', '|logo=Delta_logo.svg', 'logo_full', 'company_logo'
+                logo_match = re.search(
+                    r'\|\s*(?:logo(?:_full)?|company_logo)\s*=\s*(?:\[\[)?(?:File:|Image:)?\s*([^\[\n|]+)',
+                    wikitext_content,
+                    flags=re.IGNORECASE
+                )
+                if not logo_match:
+                    raise _BrandLogoFetchError("Wikipedia infobox has no logo field")
+
+                infobox_filename = logo_match.group(1).strip()
+                # Remove brackets and size suffixes
+                infobox_filename = re.sub(r'\[\[|\]\]', '', infobox_filename)
+                infobox_filename = re.sub(r'\|.*$', '', infobox_filename).strip()
+
+                # Extract first .svg/.png/.jpg filename
+                logo_file_match = re.search(r'([^\s/]+\.(?:svg|png|jpg|jpeg))', infobox_filename, flags=re.IGNORECASE)
+                if not logo_file_match:
+                    raise _BrandLogoFetchError("Wikipedia infobox logo is not a recognized image format")
+
+                filename = logo_file_match.group(1)
+                extension = Path(filename).suffix.casefold()
+                use_filepath_fallback = True
+            except _BrandLogoFetchError:
+                raise
+            except Exception as error:
+                raise _BrandLogoFetchError(
+                    f"Wikipedia infobox lookup failed ({type(error).__name__})"
+                ) from error
+
+        # Construct download URL using Special:FilePath for SVG or infobox fallback
+        if extension == ".svg" or use_filepath_fallback:
+            quoted_filename = urllib.parse.quote(filename, safe="")
+            download_url = (
+                "https://commons.wikimedia.org/wiki/Special:FilePath/"
+                f"{quoted_filename}?width=600"
+            )
+        else:
+            download_url = original_url
+        try:
+            image_data, _charset = fetch_bytes(
+                download_url,
+                timeout=10,
+                max_bytes=MAX_RESPONSE_BYTES,
+                allowed_hosts=_BRAND_LOGO_DOWNLOAD_HOSTS,
+                https_only=True,
+            )
+        except Exception as error:
+            raise _BrandLogoFetchError(
+                f"logo download failed ({type(error).__name__})"
+            ) from error
+        if len(image_data) > MAX_RESPONSE_BYTES:
+            raise _BrandLogoFetchError("logo download exceeds 5MB")
+        if not image_data.startswith(b"\x89PNG\r\n\x1a\n"):
+            raise _BrandLogoFetchError("downloaded logo is not PNG")
+
+        brands_dir.mkdir(parents=True, exist_ok=True)
+        destination = brands_dir / f"{slug}.png"
+        descriptor, temporary_name = tempfile.mkstemp(
+            prefix=f".{slug}.", suffix=".png", dir=brands_dir,
+        )
+        temporary = Path(temporary_name)
+        try:
+            with os.fdopen(descriptor, "wb") as handle:
+                handle.write(image_data)
+            if not image_looks_valid(temporary, min_short_side=200):
+                raise _BrandLogoFetchError(
+                    "downloaded logo is invalid or smaller than 200px"
+                )
+            os.replace(temporary, destination)
+        finally:
+            temporary.unlink(missing_ok=True)
+        return destination
+    except _BrandLogoFetchError as error:
+        _brand_logo_warning(display_name, str(error))
+    except Exception as error:
+        _brand_logo_warning(display_name, f"unexpected {type(error).__name__}")
+    return None
 
 
 def fetch_text(url: str, timeout: int = FETCH_TIMEOUT) -> str:

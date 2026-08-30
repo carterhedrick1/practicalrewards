@@ -14,8 +14,8 @@ from common import (
     card_product_aliases, compact_card, fetch_article_text, fill_template,
     html_to_text, is_google_news_url, issuer_aliases, normalize_card_text,
     normalized_phrase_in_text, parse_json_reply, read_json, run_codex,
-    unambiguous_card_aliases, validate_calculations, validate_content_html,
-    validate_public_http_url, write_json,
+    slugify_brand_name, unambiguous_card_aliases, validate_calculations,
+    validate_content_html, validate_public_http_url, write_json,
 )
 
 
@@ -80,12 +80,33 @@ def validate_hero(
         elif card_id not in listed_card_ids:
             value["art"] = _downgrade_hero_art("hero.art.card_id is not in cards_mentioned")
     elif art_type == "brand":
-        asset = art.get("asset")
-        available = set(available_brand_assets(root))
-        if set(art) != {"type", "asset"}:
-            value["art"] = _downgrade_hero_art("brand art must contain only type and asset")
-        elif not isinstance(asset, str) or asset not in available:
-            value["art"] = _downgrade_hero_art("hero.art.asset is not available in images/brands")
+        if set(art) == {"type", "asset"}:
+            asset = art.get("asset")
+            available = set(available_brand_assets(root))
+            if not isinstance(asset, str) or asset not in available:
+                value["art"] = _downgrade_hero_art(
+                    "hero.art.asset is not available in images/brands"
+                )
+        elif set(art) == {"type", "brand_name"}:
+            brand_name = art.get("brand_name")
+            if (
+                not isinstance(brand_name, str)
+                or not brand_name.strip()
+                or len(brand_name.strip()) > 120
+                or any(ord(character) < 32 for character in brand_name.strip())
+                or PLAIN_TEXT_MARKUP_RE.search(brand_name)
+                or not slugify_brand_name(brand_name)
+                or len(slugify_brand_name(brand_name)) > 120
+            ):
+                value["art"] = _downgrade_hero_art(
+                    "hero.art.brand_name must be a plain brand name with a safe slug"
+                )
+            else:
+                art["brand_name"] = brand_name.strip()
+        else:
+            value["art"] = _downgrade_hero_art(
+                "brand art must contain type plus asset or brand_name"
+            )
     elif art_type == "none":
         if set(art) != {"type"}:
             value["art"] = _downgrade_hero_art("none art must contain only type")
