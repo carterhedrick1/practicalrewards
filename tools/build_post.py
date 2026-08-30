@@ -287,7 +287,7 @@ def build_post() -> Path:
         "@context": "https://schema.org",
         "@type": "Article",
         "headline": str(draft["title"])[:110],
-        "author": {"@type": "Organization", "name": "Practical Rewards", "url": "https://practicalrewards.com"},
+        "author": {"@type": "Person", "name": "Carter", "url": "https://practicalrewards.com/about.html"},
         "publisher": {"@type": "Organization", "name": "Practical Rewards", "url": "https://practicalrewards.com"},
         "datePublished": iso_date,
         "dateModified": iso_date,
