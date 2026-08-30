@@ -10,8 +10,10 @@ from typing import Any
 
 from common import (
     STATE, TOOLS, fill_template, is_google_news_url, parse_json_reply,
-    read_json, run_codex, validate_public_http_url, write_json,
+    read_json, resolve_google_news_source_url, run_codex,
+    validate_public_http_url, write_json,
 )
+from ingest import record_seen_aliases
 
 
 def load_published() -> list[dict[str, Any]]:
@@ -37,10 +39,6 @@ def next_evergreen(topics: list[dict[str, Any]], published: list[dict[str, Any]]
     return min(candidates, key=lambda row: (row[0], row[1]))[2]
 
 
-def source_is_unresolved(item: dict[str, Any]) -> bool:
-    return item.get("unresolved_source") is True or is_google_news_url(str(item.get("url", "")))
-
-
 def validate_model_plan(value: Any, fallback: dict[str, Any], inbox: list[dict[str, Any]]) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError("planner reply must be a JSON object")
@@ -54,15 +52,37 @@ def validate_model_plan(value: Any, fallback: dict[str, Any], inbox: list[dict[s
     urls = value.get("source_urls")
     if not isinstance(title, str) or not title.strip() or not isinstance(urls, list) or not urls:
         raise ValueError("news plan requires title_hint and at least one source URL")
-    allowed = {
-        str(item.get("url"))
-        for item in inbox
-        if isinstance(item, dict) and not source_is_unresolved(item)
-    }
+    allowed = {str(item.get("url")) for item in inbox if isinstance(item, dict)}
     if any(not isinstance(url, str) or url not in allowed for url in urls):
-        raise ValueError("news plan contains a URL not present in the selectable inbox or marked unresolved")
+        raise ValueError("news plan contains a URL not present in the inbox")
     safe_urls = [validate_public_http_url(url) for url in urls]
     return {"type": "news", "title_hint": title.strip(), "source_urls": list(dict.fromkeys(safe_urls))}
+
+
+def resolve_selected_news_sources(brief: dict[str, Any]) -> dict[str, Any]:
+    """Resolve and retain only safe publisher URLs for a selected news story."""
+    resolved_urls: list[str] = []
+    alias_pairs: list[tuple[str, str]] = []
+    for source_url in brief["source_urls"]:
+        try:
+            resolved_url, unresolved = resolve_google_news_source_url(source_url)
+            if unresolved or is_google_news_url(resolved_url):
+                raise ValueError("Google News wrapper did not resolve to a publisher URL")
+            resolved_urls.append(validate_public_http_url(resolved_url))
+            if resolved_url != source_url:
+                alias_pairs.append((source_url, resolved_url))
+        except Exception as error:
+            print(
+                f"WARNING: selected news source could not be resolved safely "
+                f"{source_url!r}: {error}",
+                file=sys.stderr,
+            )
+
+    resolved_urls = list(dict.fromkeys(resolved_urls))
+    if not resolved_urls:
+        raise ValueError("none of the selected story's sources resolved to a safe public URL")
+    record_seen_aliases(STATE / "seen.json", alias_pairs)
+    return {**brief, "source_urls": resolved_urls}
 
 
 def plan() -> dict[str, Any]:
@@ -76,10 +96,7 @@ def plan() -> dict[str, Any]:
         raise ValueError("topic-map.json has no topics list")
     published = load_published()
     fallback = next_evergreen(topics, published)
-    selectable_inbox = [
-        item for item in inbox
-        if isinstance(item, dict) and not source_is_unresolved(item)
-    ]
+    selectable_inbox = [item for item in inbox if isinstance(item, dict)]
     template = (TOOLS / "prompts" / "plan.md").read_text(encoding="utf-8")
     prompt = fill_template(template, {
         "TODAY": dt.date.today().isoformat(),
@@ -94,6 +111,8 @@ def plan() -> dict[str, Any]:
     try:
         reply = run_codex(prompt, reasoning_effort="low")
         brief = validate_model_plan(parse_json_reply(reply), fallback, selectable_inbox)
+        if brief["type"] == "news":
+            brief = resolve_selected_news_sources(brief)
     except Exception as error:
         print(f"WARNING: planner output unusable; using evergreen fallback: {error}", file=sys.stderr)
         brief = deterministic
