@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss version="2.0">
+  <channel>
+    <title>Practical Rewards Blog</title>
+    <link>https://practicalrewards.com/blog/</link>
+    <description>Straight answers about credit cards, points, cash back, and the fine print.</description>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 30 Aug 2026 03:09:41 +0000</lastBuildDate>
+    <item>
+      <title>Your Annual Fee Isn’t the Number That Matters</title>
+      <link>https://practicalrewards.com/blog/effective-annual-fee-math.html</link>
+      <guid isPermaLink="true">https://practicalrewards.com/blog/effective-annual-fee-math.html</guid>
+      <pubDate>Sat, 29 Aug 2026 12:00:00 +0000</pubDate>
+      <description>Calculate a credit card’s effective annual fee using only credits you would genuinely use, then repeat the math at every renewal.</description>
+    </item>
+  </channel>
+</rss>
