@@ -9,6 +9,7 @@ import html
 import json
 import re
 import xml.etree.ElementTree as ET
+import zlib
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
@@ -20,7 +21,10 @@ from common import (
 
 
 TOKEN_RE = re.compile(r"{{([A-Z0-9_]+)}}")
-HERO_BACKGROUND = "#1c1917"
+IMAGE_ERROR_HANDLER = (
+    "this.setAttribute('visibility','hidden');"
+    "this.previousElementSibling.setAttribute('visibility','visible')"
+)
 
 
 class CardLinkifier(HTMLParser):
@@ -102,7 +106,7 @@ def fill_post_template(template: str, values: dict[str, str]) -> str:
     return TOKEN_RE.sub(lambda match: values[match.group(1)], template)
 
 
-def _hero_label_lines(label: str, limit: int = 42) -> list[str]:
+def _hero_label_lines(label: str, limit: int = 36) -> list[str]:
     words = label.split()
     if not words:
         return [""]
@@ -124,6 +128,238 @@ def _hero_label_lines(label: str, limit: int = 42) -> list[str]:
     return [lines[0], second]
 
 
+def _image_looks_valid(path: Path) -> bool:
+    """Require a structurally complete supported image with nonzero dimensions."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return False
+    if data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return _valid_png(data)
+    if data.startswith(b"\xff\xd8\xff"):
+        return _valid_jpeg(data)
+    if data.startswith((b"GIF87a", b"GIF89a")):
+        return _valid_gif(data)
+    if data.startswith(b"RIFF") and data[8:12] == b"WEBP":
+        return _valid_webp(data)
+    if len(data) >= 12 and data[4:8] == b"ftyp" and b"avif" in data[8:32]:
+        return _valid_avif(data)
+    return False
+
+
+def _valid_png(data: bytes) -> bool:
+    position = 8
+    dimensions: tuple[int, int] | None = None
+    saw_image_data = False
+    while position + 12 <= len(data):
+        length = int.from_bytes(data[position:position + 4], "big")
+        chunk_type = data[position + 4:position + 8]
+        chunk_end = position + 12 + length
+        if chunk_end > len(data):
+            return False
+        payload = data[position + 8:position + 8 + length]
+        expected_crc = int.from_bytes(data[position + 8 + length:chunk_end], "big")
+        if zlib.crc32(chunk_type + payload) & 0xFFFFFFFF != expected_crc:
+            return False
+        if position == 8:
+            if chunk_type != b"IHDR" or length != 13:
+                return False
+            dimensions = (
+                int.from_bytes(payload[0:4], "big"),
+                int.from_bytes(payload[4:8], "big"),
+            )
+        elif chunk_type == b"IDAT" and length > 0:
+            saw_image_data = True
+        if chunk_type == b"IEND":
+            return length == 0 and chunk_end == len(data) and saw_image_data and bool(
+                dimensions and dimensions[0] > 0 and dimensions[1] > 0
+            )
+        position = chunk_end
+    return False
+
+
+def _valid_jpeg(data: bytes) -> bool:
+    if len(data) < 12 or not data.endswith(b"\xff\xd9"):
+        return False
+    position = 2
+    dimensions: tuple[int, int] | None = None
+    saw_scan_data = False
+    standalone = {0x01, *range(0xD0, 0xDA)}
+    start_of_frame = {
+        0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7,
+        0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF,
+    }
+    while position < len(data) - 2:
+        if data[position] != 0xFF:
+            return False
+        while position < len(data) and data[position] == 0xFF:
+            position += 1
+        if position >= len(data):
+            return False
+        marker = data[position]
+        position += 1
+        if marker == 0xDA:
+            if position + 2 > len(data):
+                return False
+            segment_length = int.from_bytes(data[position:position + 2], "big")
+            scan_start = position + segment_length
+            if segment_length < 2 or scan_start >= len(data) - 2:
+                return False
+            saw_scan_data = True
+            break
+        if marker in standalone:
+            continue
+        if position + 2 > len(data):
+            return False
+        segment_length = int.from_bytes(data[position:position + 2], "big")
+        if segment_length < 2 or position + segment_length > len(data):
+            return False
+        if marker in start_of_frame:
+            if segment_length < 7:
+                return False
+            dimensions = (
+                int.from_bytes(data[position + 5:position + 7], "big"),
+                int.from_bytes(data[position + 3:position + 5], "big"),
+            )
+        position += segment_length
+    return saw_scan_data and bool(dimensions and dimensions[0] > 0 and dimensions[1] > 0)
+
+
+def _skip_gif_subblocks(data: bytes, position: int) -> int | None:
+    while position < len(data):
+        length = data[position]
+        position += 1
+        if length == 0:
+            return position
+        position += length
+        if position > len(data):
+            return None
+    return None
+
+
+def _valid_gif(data: bytes) -> bool:
+    if len(data) < 14:
+        return False
+    width = int.from_bytes(data[6:8], "little")
+    height = int.from_bytes(data[8:10], "little")
+    if not width or not height:
+        return False
+    packed = data[10]
+    position = 13
+    if packed & 0x80:
+        position += 3 * (2 ** ((packed & 0x07) + 1))
+    while position < len(data):
+        marker = data[position]
+        position += 1
+        if marker == 0x3B:
+            return position == len(data)
+        if marker == 0x21:
+            if position >= len(data):
+                return False
+            position += 1
+            next_position = _skip_gif_subblocks(data, position)
+            if next_position is None:
+                return False
+            position = next_position
+            continue
+        if marker != 0x2C or position + 9 > len(data):
+            return False
+        descriptor = data[position:position + 9]
+        position += 9
+        if descriptor[8] & 0x80:
+            position += 3 * (2 ** ((descriptor[8] & 0x07) + 1))
+        if position >= len(data):
+            return False
+        position += 1
+        next_position = _skip_gif_subblocks(data, position)
+        if next_position is None:
+            return False
+        position = next_position
+    return False
+
+
+def _valid_webp(data: bytes) -> bool:
+    if len(data) < 20 or int.from_bytes(data[4:8], "little") + 8 != len(data):
+        return False
+    position = 12
+    dimensions: tuple[int, int] | None = None
+    while position + 8 <= len(data):
+        chunk_type = data[position:position + 4]
+        length = int.from_bytes(data[position + 4:position + 8], "little")
+        payload_start = position + 8
+        payload_end = payload_start + length
+        next_position = payload_end + (length & 1)
+        if payload_end > len(data) or next_position > len(data):
+            return False
+        payload = data[payload_start:payload_end]
+        if chunk_type == b"VP8X" and length >= 10:
+            dimensions = (
+                int.from_bytes(payload[4:7], "little") + 1,
+                int.from_bytes(payload[7:10], "little") + 1,
+            )
+        elif chunk_type == b"VP8L" and length >= 5 and payload[0] == 0x2F:
+            packed_dimensions = int.from_bytes(payload[1:5], "little")
+            dimensions = (
+                (packed_dimensions & 0x3FFF) + 1,
+                ((packed_dimensions >> 14) & 0x3FFF) + 1,
+            )
+        elif chunk_type == b"VP8 " and length >= 10 and payload[3:6] == b"\x9d\x01\x2a":
+            dimensions = (
+                int.from_bytes(payload[6:8], "little") & 0x3FFF,
+                int.from_bytes(payload[8:10], "little") & 0x3FFF,
+            )
+        position = next_position
+    return position == len(data) and bool(
+        dimensions and dimensions[0] > 0 and dimensions[1] > 0
+    )
+
+
+def _valid_avif(data: bytes) -> bool:
+    position = 0
+    saw_ftyp = False
+    saw_media_data = False
+    while position < len(data):
+        if position + 8 > len(data):
+            return False
+        box_length = int.from_bytes(data[position:position + 4], "big")
+        box_type = data[position + 4:position + 8]
+        header_length = 8
+        if box_length == 1:
+            if position + 16 > len(data):
+                return False
+            box_length = int.from_bytes(data[position + 8:position + 16], "big")
+            header_length = 16
+        elif box_length == 0:
+            box_length = len(data) - position
+        if box_length < header_length or position + box_length > len(data):
+            return False
+        if box_type == b"ftyp":
+            saw_ftyp = b"avif" in data[position + header_length:position + box_length]
+        elif box_type == b"mdat" and box_length > header_length:
+            saw_media_data = True
+        position += box_length
+    marker = data.find(b"ispe")
+    if not saw_ftyp or not saw_media_data or marker < 4 or marker + 16 > len(data):
+        return False
+    property_length = int.from_bytes(data[marker - 4:marker], "big")
+    if property_length < 20 or marker - 4 + property_length > len(data):
+        return False
+    width = int.from_bytes(data[marker + 8:marker + 12], "big")
+    height = int.from_bytes(data[marker + 12:marker + 16], "big")
+    return width > 0 and height > 0
+
+
+def _local_image_href(relative: str, base: Path, root: Path) -> str | None:
+    candidate = (root / relative).resolve()
+    try:
+        candidate.relative_to(base.resolve())
+    except ValueError:
+        return None
+    if not candidate.is_file() or not _image_looks_valid(candidate):
+        return None
+    return "/" + relative
+
+
 def _card_art_href(card: dict[str, Any] | None, root: Path = ROOT) -> str | None:
     if not card:
         return None
@@ -133,15 +369,36 @@ def _card_art_href(card: dict[str, Any] | None, root: Path = ROOT) -> str | None
     relative = image_url.strip().lstrip("/")
     if not relative.startswith("images/"):
         return None
-    images_root = (root / "images").resolve()
-    candidate = (root / relative).resolve()
-    try:
-        candidate.relative_to(images_root)
-    except ValueError:
+    return _local_image_href(relative, root / "images", root)
+
+
+def _brand_art_href(asset: Any, root: Path = ROOT) -> str | None:
+    if not isinstance(asset, str) or not asset.strip():
         return None
-    if not candidate.is_file():
+    filename = asset.strip()
+    if Path(filename).name != filename:
         return None
-    return "/" + relative
+    relative = f"images/brands/{filename}"
+    return _local_image_href(relative, root / "images" / "brands", root)
+
+
+def _typographic_art() -> str:
+    return (
+        '        <g class="pr-hero-art pr-hero-art-fallback" aria-hidden="true">\n'
+        '            <circle cx="615" cy="210" r="72" fill="#ffffff" fill-opacity="0.06"/>\n'
+        '            <text x="615" y="225" text-anchor="middle" fill="#d1fae5" fill-opacity="0.82" '
+        'font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="48" font-weight="900">PR</text>\n'
+        '        </g>\n'
+    )
+
+
+def _hidden_typographic_fallback(indent: str) -> str:
+    return (
+        f'{indent}<g class="pr-hero-art-fallback" visibility="hidden" aria-hidden="true">\n'
+        f'{indent}    <text x="615" y="225" text-anchor="middle" fill="#d1fae5" fill-opacity="0.82" '
+        'font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="48" font-weight="900">PR</text>\n'
+        f'{indent}</g>\n'
+    )
 
 
 def render_hero(
@@ -154,56 +411,96 @@ def render_hero(
         kicker = str(hero.get("kicker", "PRACTICAL REWARDS")).strip()
         stat = str(hero.get("stat", "HONEST MATH")).strip()
         label = str(hero.get("label", draft.get("title", "Straight answers, useful math"))).strip()
-        card_id = hero.get("card_id")
-        card = next((item for item in cards if item.get("id") == card_id), None)
+        art_spec = hero.get("art")
+        if not isinstance(art_spec, dict) and "card_id" in hero:
+            # Keep old drafts buildable while all new drafts use the nested art contract.
+            art_spec = {"type": "card", "card_id": hero.get("card_id")}
     else:
         kicker = "PRACTICAL REWARDS"
         stat = "HONEST MATH"
         label = str(draft.get("title", "Straight answers, useful math")).strip()
         if len(label) >= 80:
             label = label[:78].rstrip() + "…"
-        card = None
+        art_spec = {"type": "none"}
 
     kicker_xml = html.escape(kicker)
     stat_xml = html.escape(stat)
     label_lines = _hero_label_lines(label)
     label_tspans = "".join(
-        f'<tspan x="92" dy="{0 if index == 0 else 34}">{html.escape(line)}</tspan>'
+        f'<tspan x="60" dy="{0 if index == 0 else 30}">{html.escape(line)}</tspan>'
         for index, line in enumerate(label_lines)
     )
     stat_size = 110 if len(stat) <= 8 else (88 if len(stat) <= 12 else 70)
-    art_href = _card_art_href(card, root)
     art = ""
-    if art_href:
-        art = (
-            '        <g clip-path="url(#pr-hero-art-window)">\n'
-            '            <g filter="url(#pr-hero-card-shadow)" transform="rotate(-8 976 210)">\n'
-            '                <rect x="798" y="98" width="356" height="224" rx="20" fill="#ffffff" fill-opacity="0.08"/>\n'
-            f'                <image href="{html.escape(art_href, quote=True)}" x="798" y="98" width="356" height="224" '
-            'preserveAspectRatio="xMidYMid meet" clip-path="url(#pr-hero-card-clip)"/>\n'
-            '            </g>\n'
-            '        </g>\n'
-        )
+    art_type = art_spec.get("type") if isinstance(art_spec, dict) else None
+    if art_type == "card":
+        card_id = art_spec.get("card_id")
+        card = next((item for item in cards if item.get("id") == card_id), None)
+        art_href = _card_art_href(card, root)
+        if art_href:
+            art = (
+                '        <g clip-path="url(#pr-hero-art-window)">\n'
+                '            <g class="pr-hero-art pr-hero-art-card" filter="url(#pr-hero-card-shadow)" transform="rotate(-8 610 210)">\n'
+                '                <rect x="485" y="131" width="250" height="157" rx="14" fill="#ffffff" fill-opacity="0.08"/>\n'
+                f'{_hidden_typographic_fallback("                ")}'
+                f'                <image href="{html.escape(art_href, quote=True)}" x="485" y="131" width="250" height="157" '
+                f'preserveAspectRatio="xMidYMid meet" clip-path="url(#pr-hero-card-clip)" onerror="{IMAGE_ERROR_HANDLER}"/>\n'
+                '            </g>\n'
+                '        </g>\n'
+            )
+        else:
+            art = _typographic_art()
+    elif art_type == "brand":
+        art_href = _brand_art_href(art_spec.get("asset"), root)
+        if art_href:
+            art = (
+                '        <g class="pr-hero-art pr-hero-art-brand" aria-hidden="true">\n'
+                '            <circle cx="615" cy="210" r="72" fill="#ffffff" fill-opacity="0.06"/>\n'
+                f'{_hidden_typographic_fallback("            ")}'
+                f'            <image href="{html.escape(art_href, quote=True)}" x="555" y="150" width="120" height="120" '
+                f'preserveAspectRatio="xMidYMid meet" onerror="{IMAGE_ERROR_HANDLER}"/>\n'
+                '        </g>\n'
+            )
+        else:
+            art = _typographic_art()
+    elif art_type not in {None, "none"}:
+        art = _typographic_art()
 
     aria_label = html.escape(f"{kicker}: {stat}. {label}", quote=True)
     return (
         '<div class="pr-hero">\n'
-        f'    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" role="img" aria-label="{aria_label}">\n'
+        '    <svg class="pr-hero-ground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">\n'
         '        <defs>\n'
+        '            <linearGradient id="pr-hero-ground-gradient" x1="0%" y1="0%" x2="100%" y2="100%">\n'
+        '                <stop offset="0%" stop-color="#0f2027"/>\n'
+        '                <stop offset="30%" stop-color="#0f2027"/>\n'
+        '                <stop offset="70%" stop-color="#203a43"/>\n'
+        '                <stop offset="100%" stop-color="#2c5364"/>\n'
+        '            </linearGradient>\n'
+        '        </defs>\n'
+        '        <rect width="100" height="100" fill="url(#pr-hero-ground-gradient)"/>\n'
+        '    </svg>\n'
+        '    <div class="pr-hero-inner">\n'
+        f'        <svg class="pr-hero-content" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" preserveAspectRatio="xMinYMid slice" role="img" aria-label="{aria_label}">\n'
+        '        <defs>\n'
+        '            <linearGradient id="pr-hero-accent" x1="0" y1="48" x2="0" y2="372" gradientUnits="userSpaceOnUse">\n'
+        '                <stop offset="0%" stop-color="#059669"/>\n'
+        '                <stop offset="100%" stop-color="#22c55e"/>\n'
+        '            </linearGradient>\n'
         '            <filter id="pr-hero-card-shadow" x="-30%" y="-40%" width="170%" height="190%">\n'
         '                <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000000" flood-opacity="0.38"/>\n'
         '            </filter>\n'
-        '            <clipPath id="pr-hero-card-clip"><rect x="798" y="98" width="356" height="224" rx="20"/></clipPath>\n'
-        '            <clipPath id="pr-hero-art-window"><rect x="710" y="0" width="490" height="420"/></clipPath>\n'
+        '            <clipPath id="pr-hero-card-clip"><rect x="485" y="131" width="250" height="157" rx="14"/></clipPath>\n'
+        '            <clipPath id="pr-hero-art-window"><rect x="470" y="0" width="290" height="420"/></clipPath>\n'
         '        </defs>\n'
-        f'        <rect width="1200" height="420" fill="{HERO_BACKGROUND}"/>\n'
-        '        <path d="M710 52H1160M710 210H1160M710 368H1160" fill="none" stroke="#ffffff" stroke-opacity="0.055" stroke-width="2"/>\n'
-        '        <rect x="50" y="48" width="8" height="324" rx="4" fill="#059669"/>\n'
-        f'        <text x="92" y="104" fill="#34d399" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="24" font-weight="800" letter-spacing="4">{kicker_xml}</text>\n'
-        f'        <text x="86" y="232" fill="#ffffff" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="{stat_size}" font-weight="900" letter-spacing="-3">{stat_xml}</text>\n'
-        f'        <text y="292" fill="#e7e5e4" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="500">{label_tspans}</text>\n'
+        '        <path d="M38 52H445M38 210H445M38 368H445" fill="none" stroke="#ffffff" stroke-opacity="0.055" stroke-width="2"/>\n'
+        '        <rect x="28" y="48" width="7" height="324" rx="3.5" fill="url(#pr-hero-accent)"/>\n'
+        f'        <text x="60" y="104" fill="#34d399" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="800" letter-spacing="3">{kicker_xml}</text>\n'
+        f'        <text x="54" y="232" fill="#ffffff" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="{stat_size}" font-weight="900" letter-spacing="-3">{stat_xml}</text>\n'
+        f'        <text y="292" fill="#e7e5e4" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="24" font-weight="500">{label_tspans}</text>\n'
         f'{art}'
-        '    </svg>\n'
+        '        </svg>\n'
+        '    </div>\n'
         '</div>'
     )
 

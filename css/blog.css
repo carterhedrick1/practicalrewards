@@ -4,25 +4,31 @@
    ========================================================================== */
 
 .pr-hero {
-    border-radius: 14px;
-    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
-    margin: 0 0 clamp(2rem, 5vw, 3rem);
+    height: clamp(16rem, 35vw, 26.25rem);
     overflow: hidden;
+    position: relative;
     width: 100%;
+}
+
+.pr-hero-ground {
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+}
+
+.pr-hero-inner {
+    height: 100%;
+    margin: 0 auto;
+    max-width: 65ch;
+    position: relative;
+    width: 100%;
+    z-index: 1;
 }
 
 .pr-hero svg {
     display: block;
-    height: auto;
+    height: 100%;
     width: 100%;
-}
-
-@media (min-width: 768px) {
-    .pr-hero {
-        margin-left: clamp(-4rem, -5vw, -2rem);
-        margin-right: clamp(-4rem, -5vw, -2rem);
-        width: calc(100% + clamp(4rem, 10vw, 8rem));
-    }
 }
 
 .article-content .pr-verdict,
@@ -233,6 +239,10 @@
 }
 
 @media (min-width: 1024px) {
+    .pr-hero-inner {
+        max-width: 760px;
+    }
+
     .article-content {
         font-size: 1.0625rem;
         line-height: 1.7;
@@ -247,9 +257,8 @@
 }
 
 @media (max-width: 600px) {
-    .pr-hero,
-    .pr-hero svg {
-        max-height: 15rem;
+    .pr-hero {
+        height: clamp(13rem, 60vw, 15rem);
     }
 
     .article-content .pr-compare {

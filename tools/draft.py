@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import json
 import re
+import sys
+from pathlib import Path
 from typing import Any
 
 from common import (
@@ -24,10 +26,27 @@ PLAIN_TEXT_MARKUP_RE = re.compile(
 )
 
 
-def validate_hero(value: Any, allowed_card_ids: set[int], listed_card_ids: set[int]) -> dict[str, Any]:
+def available_brand_assets(root: Path = ROOT) -> list[str]:
+    brands_dir = root / "images" / "brands"
+    if not brands_dir.is_dir():
+        return []
+    return sorted(path.name for path in brands_dir.iterdir() if path.is_file())
+
+
+def _downgrade_hero_art(reason: str) -> dict[str, str]:
+    print(f"Note: {reason}; using hero.art type none", file=sys.stderr)
+    return {"type": "none"}
+
+
+def validate_hero(
+    value: Any,
+    allowed_card_ids: set[int],
+    listed_card_ids: set[int],
+    root: Path = ROOT,
+) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError("hero must be an object when present")
-    allowed_keys = {"kicker", "stat", "label", "card_id"}
+    allowed_keys = {"kicker", "stat", "label", "art"}
     unexpected = sorted(value.keys() - allowed_keys)
     if unexpected:
         raise ValueError("hero contains unexpected keys: " + ", ".join(unexpected))
@@ -45,14 +64,33 @@ def validate_hero(value: Any, allowed_card_ids: set[int], listed_card_ids: set[i
         raise ValueError("hero.kicker must be under 28 characters")
     if len(value["label"]) >= 80:
         raise ValueError("hero.label must be under 80 characters")
-    if "card_id" in value:
-        card_id = value["card_id"]
-        if not isinstance(card_id, int) or isinstance(card_id, bool):
-            raise ValueError("hero.card_id must be an integer when present")
-        if card_id not in allowed_card_ids:
-            raise ValueError("hero.card_id is outside the supplied card slice")
-        if card_id not in listed_card_ids:
-            raise ValueError("hero.card_id must be one of cards_mentioned")
+    art = value.get("art")
+    if not isinstance(art, dict):
+        value["art"] = _downgrade_hero_art("hero.art must be an object")
+        return value
+    art_type = art.get("type")
+    if art_type == "card":
+        card_id = art.get("card_id")
+        if set(art) != {"type", "card_id"}:
+            value["art"] = _downgrade_hero_art("card art must contain only type and card_id")
+        elif not isinstance(card_id, int) or isinstance(card_id, bool):
+            value["art"] = _downgrade_hero_art("hero.art.card_id must be an integer")
+        elif card_id not in allowed_card_ids:
+            value["art"] = _downgrade_hero_art("hero.art.card_id is outside the supplied card slice")
+        elif card_id not in listed_card_ids:
+            value["art"] = _downgrade_hero_art("hero.art.card_id is not in cards_mentioned")
+    elif art_type == "brand":
+        asset = art.get("asset")
+        available = set(available_brand_assets(root))
+        if set(art) != {"type", "asset"}:
+            value["art"] = _downgrade_hero_art("brand art must contain only type and asset")
+        elif not isinstance(asset, str) or asset not in available:
+            value["art"] = _downgrade_hero_art("hero.art.asset is not available in images/brands")
+    elif art_type == "none":
+        if set(art) != {"type"}:
+            value["art"] = _downgrade_hero_art("none art must contain only type")
+    else:
+        value["art"] = _downgrade_hero_art("hero.art.type must be card, brand, or none")
     return value
 
 
@@ -192,6 +230,7 @@ def draft() -> dict[str, Any]:
     slots = {
         "STYLE_GUIDE": style,
         "BRIEF_JSON": json.dumps(brief, ensure_ascii=False, indent=2),
+        "BRAND_ASSETS_JSON": json.dumps(available_brand_assets(), ensure_ascii=False),
     }
     forbidden_slugs = existing_slugs()
     required_source_urls: set[str] = set()

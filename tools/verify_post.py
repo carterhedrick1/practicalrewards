@@ -11,6 +11,7 @@ import sys
 import urllib.parse
 from collections import Counter
 from html.parser import HTMLParser
+from pathlib import Path
 from typing import Any
 
 from common import (
@@ -942,6 +943,9 @@ def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]])
         return ["hero must be an object when present"]
 
     failures: list[str] = []
+    unexpected = sorted(set(hero) - {"kicker", "stat", "label", "art"})
+    if unexpected:
+        failures.append("hero contains unexpected keys: " + ", ".join(unexpected))
     for field in ("kicker", "label"):
         field_value = hero.get(field)
         if not isinstance(field_value, str) or not field_value.strip():
@@ -963,21 +967,42 @@ def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]])
         key_numbers=True,
     )
     relevant_card_tokens: set[str] = set()
-    card_id = hero.get("card_id")
     mentioned = set(draft.get("cards_mentioned", []))
-    if card_id is not None:
+    card_id: Any = None
+    art = hero.get("art")
+    if not isinstance(art, dict):
+        failures.append("hero.art must be an object")
+    elif art.get("type") == "card":
+        card_id = art.get("card_id")
+        if set(art) != {"type", "card_id"}:
+            failures.append("card hero art must contain only type and card_id")
         if not isinstance(card_id, int) or isinstance(card_id, bool):
-            failures.append("hero.card_id must be an integer when present")
+            failures.append("hero.art.card_id must be an integer")
         elif card_id not in cards_by_id:
-            failures.append(f"hero.card_id {card_id} does not exist in cards.json")
+            failures.append(f"hero.art.card_id {card_id} does not exist in cards.json")
         else:
             relevant_card_tokens = card_key_numbers(cards_by_id[card_id])
             if card_id not in mentioned:
-                failures.append(f"hero.card_id {card_id} is not listed in cards_mentioned")
+                failures.append(f"hero.art.card_id {card_id} is not listed in cards_mentioned")
+    elif art.get("type") == "brand":
+        asset = art.get("asset")
+        if set(art) != {"type", "asset"}:
+            failures.append("brand hero art must contain only type and asset")
+        if (
+            not isinstance(asset, str)
+            or Path(asset).name != asset
+            or not (ROOT / "images" / "brands" / asset).is_file()
+        ):
+            failures.append("hero.art.asset does not exist in images/brands")
+    elif art.get("type") == "none":
+        if set(art) != {"type"}:
+            failures.append("none hero art must contain only type")
+    else:
+        failures.append("hero.art.type must be card, brand, or none")
 
     if not stat_tokens & (article_tokens | relevant_card_tokens):
         card_context = (
-            f" or cards.json data for hero.card_id {card_id}"
+            f" or cards.json data for hero.art.card_id {card_id}"
             if isinstance(card_id, int) and not isinstance(card_id, bool)
             else ""
         )
