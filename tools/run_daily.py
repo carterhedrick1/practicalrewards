@@ -49,8 +49,9 @@ class StepFailure(RuntimeError):
 
 
 class DailyRunner:
-    def __init__(self, dry_run: bool) -> None:
+    def __init__(self, dry_run: bool, review: bool = False) -> None:
         self.dry_run = dry_run
+        self.review = review
         self.today = dt.date.today().isoformat()
         self.log_path = STATE / "logs" / f"{self.today}.log"
         self.log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -124,18 +125,22 @@ class DailyRunner:
         return paths
 
     def preflight_publish(self) -> None:
-        fetch = self.run_git(["git", "fetch", "origin", "main"])
-        if fetch.returncode != 0:
-            raise RuntimeError("could not fetch origin/main for publish preflight")
+        if not self.review:
+            fetch = self.run_git(["git", "fetch", "origin", "main"])
+            if fetch.returncode != 0:
+                raise RuntimeError("could not fetch origin/main for publish preflight")
         branch = self.run_git(["git", "branch", "--show-current"])
         if branch.returncode != 0 or branch.stdout.strip() != "main":
             raise RuntimeError("publishing requires the checked-out branch to be main")
         local = self.run_git(["git", "rev-parse", "HEAD"])
-        upstream = self.run_git(["git", "rev-parse", "refs/remotes/origin/main"])
-        if local.returncode != 0 or upstream.returncode != 0:
-            raise RuntimeError("could not resolve local or origin/main commit")
-        if local.stdout.strip() != upstream.stdout.strip():
-            raise RuntimeError("publishing requires HEAD to exactly match origin/main")
+        if local.returncode != 0:
+            raise RuntimeError("could not resolve the local main commit")
+        if not self.review:
+            upstream = self.run_git(["git", "rev-parse", "refs/remotes/origin/main"])
+            if upstream.returncode != 0:
+                raise RuntimeError("could not resolve origin/main commit")
+            if local.stdout.strip() != upstream.stdout.strip():
+                raise RuntimeError("publishing requires HEAD to exactly match origin/main")
         status = self.run_git([
             "git", "status", "--porcelain=v1", "--", *self.publish_paths(),
         ])
@@ -147,7 +152,8 @@ class DailyRunner:
                 + " | ".join(status.stdout.strip().splitlines())
             )
         self.publish_base_head = local.stdout.strip()
-        self.log(f"Publish preflight passed at {self.publish_base_head}")
+        mode = "Review" if self.review else "Publish"
+        self.log(f"{mode} preflight passed at {self.publish_base_head}")
 
     def capture_pipeline_state(self) -> None:
         paths = [STATE / name for name in PUBLISH_STATE_FILES]
@@ -246,7 +252,7 @@ class DailyRunner:
         self.log(f"Held failed post artifacts in {held}")
         return first_reason
 
-    def git_publish(self) -> None:
+    def git_publish(self) -> tuple[str, str]:
         draft = read_json(STATE / "draft.json", {})
         title = str(draft.get("title", "Untitled")) if isinstance(draft, dict) else "Untitled"
         slug = str(draft.get("slug", "")) if isinstance(draft, dict) else ""
@@ -257,13 +263,18 @@ class DailyRunner:
             raise RuntimeError("publish preflight was not completed")
         branch = self.run_git(["git", "branch", "--show-current"])
         current = self.run_git(["git", "rev-parse", "HEAD"])
-        upstream = self.run_git(["git", "rev-parse", "refs/remotes/origin/main"])
         if branch.stdout.strip() != "main":
             raise RuntimeError("branch changed after preflight; refusing to publish")
-        if any(result.returncode != 0 for result in (branch, current, upstream)):
+        if any(result.returncode != 0 for result in (branch, current)):
             raise RuntimeError("could not re-check publish base")
-        if current.stdout.strip() != self.publish_base_head or upstream.stdout.strip() != self.publish_base_head:
-            raise RuntimeError("HEAD or origin/main changed after preflight; refusing to publish")
+        if current.stdout.strip() != self.publish_base_head:
+            raise RuntimeError("HEAD changed after preflight; refusing to publish")
+        if not self.review:
+            upstream = self.run_git(["git", "rev-parse", "refs/remotes/origin/main"])
+            if upstream.returncode != 0:
+                raise RuntimeError("could not re-check origin/main")
+            if upstream.stdout.strip() != self.publish_base_head:
+                raise RuntimeError("origin/main changed after preflight; refusing to publish")
 
         descriptor, temporary_name = tempfile.mkstemp(prefix="practical-rewards-index-", suffix=".gitindex")
         os.close(descriptor)
@@ -370,6 +381,10 @@ class DailyRunner:
                 )
             raise
 
+        if self.review:
+            self.log(f"Review commit prepared locally at {new_head}; git push skipped")
+            return title, slug
+
         # This push is deliberately the final operation on the success path: no
         # local synchronization remains that could fail after origin/main moves.
         try:
@@ -396,6 +411,7 @@ class DailyRunner:
             if rollback_failures:
                 message += "; rollback also failed for: " + ", ".join(rollback_failures)
             raise RuntimeError(message)
+        return title, slug
 
     def run_full(self) -> int:
         try:
@@ -432,7 +448,12 @@ class DailyRunner:
                 )
                 return 0
             self.current_step = "git-publish"
-            self.git_publish()
+            title, slug = self.git_publish()
+            if self.review:
+                self.notify(
+                    f"Post ready for review: {title} — preview: "
+                    f"http://carters-mac-mini.tailb1c452.ts.net:8000/blog/{slug}.html"
+                )
             return 0
         except Exception as error:
             self.log(f"ERROR during {self.current_step}: {type(error).__name__}: {error}")
@@ -456,7 +477,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="run the full pipeline without commit, push, hold, or restore; leave outputs for inspection",
+        help="run the full pipeline without commit, push, hold, or restore; leave outputs for inspection (also overrides --review)",
+    )
+    parser.add_argument(
+        "--review",
+        action="store_true",
+        help="commit a verified post locally on main for review, skip the origin/main match and push, and send a preview notification",
     )
     parser.add_argument(
         "--step",
@@ -468,7 +494,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    runner = DailyRunner(dry_run=args.dry_run)
+    runner = DailyRunner(dry_run=args.dry_run, review=args.review)
     if args.step:
         return runner.run_step(args.step)
     return runner.run_full()
