@@ -13,5 +13,9 @@ secrets.js
 database.html
 
 # Automated blog runtime artifacts
+tools/state/inbox.json
+tools/state/todays-brief.json
+tools/state/draft.json
+tools/state/verify-report.json
 tools/state/held/
 tools/state/logs/

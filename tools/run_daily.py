@@ -28,10 +28,11 @@ SCRIPT_NAMES = {
     "build": "build_post.py",
     "verify": "verify_post.py",
 }
-PUBLISH_STATE_FILES = (
-    "seen.json", "inbox.json", "todays-brief.json", "draft.json",
-    "verify-report.json", "published.json",
+DURABLE_STATE_FILES = ("seen.json", "published.json")
+SCRATCH_STATE_FILES = (
+    "inbox.json", "todays-brief.json", "draft.json", "verify-report.json",
 )
+PIPELINE_STATE_FILES = DURABLE_STATE_FILES + SCRATCH_STATE_FILES
 STATIC_PUBLISH_PATHS = ("blog/index.html", "blog/feed.xml", "sitemap.xml")
 
 
@@ -123,7 +124,7 @@ class DailyRunner:
         paths = list(STATIC_PUBLISH_PATHS)
         if slug:
             paths.append(f"blog/{slug}.html")
-        paths.extend(f"tools/state/{name}" for name in PUBLISH_STATE_FILES)
+        paths.extend(f"tools/state/{name}" for name in DURABLE_STATE_FILES)
         return paths
 
     def preflight_publish(self) -> None:
@@ -158,7 +159,7 @@ class DailyRunner:
         self.log(f"{mode} preflight passed at {self.publish_base_head}")
 
     def capture_pipeline_state(self) -> None:
-        paths = [STATE / name for name in PUBLISH_STATE_FILES]
+        paths = [STATE / name for name in PIPELINE_STATE_FILES]
         self.state_snapshots = [
             Snapshot(path, path.exists(), path.read_bytes() if path.exists() else None, self.is_tracked(path))
             for path in paths
