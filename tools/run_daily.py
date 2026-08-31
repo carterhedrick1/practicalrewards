@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
@@ -290,9 +291,17 @@ class DailyRunner:
                     headers={"Content-Type": "application/json"},
                     method="POST",
                 )
-                with urllib.request.urlopen(request, timeout=5):
-                    pass
-                log_notification("ntfy: sent")
+                for attempt in range(2):
+                    try:
+                        with urllib.request.urlopen(request, timeout=10):
+                            pass
+                        log_notification("ntfy: sent")
+                        break
+                    except Exception:
+                        if attempt < 1:
+                            time.sleep(2)
+                        else:
+                            raise
             except Exception:
                 log_notification("WARNING ntfy: failed")
 

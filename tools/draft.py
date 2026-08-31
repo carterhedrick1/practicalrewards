@@ -326,7 +326,7 @@ def draft() -> dict[str, Any]:
             + "\nPrevious response:\n" + reply
             + "\nReturn a corrected STRICT JSON object only."
         )
-        retry = run_codex(correction, reasoning_effort="low")
+        retry = run_codex(correction, reasoning_effort="medium")
         result = validate_draft(
             parse_json_reply(retry), allowed_ids, allowed_source_urls, expected_slug,
             forbidden_slugs, required_source_urls, cards,

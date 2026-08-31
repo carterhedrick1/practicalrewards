@@ -223,7 +223,7 @@ class TextExtractor(HTMLParser):
     BLOCK_TAGS = {
         "article", "aside", "blockquote", "br", "div", "figcaption", "footer",
         "h1", "h2", "h3", "h4", "h5", "h6", "header", "li", "main", "nav",
-        "ol", "p", "section", "table", "td", "th", "tr", "ul",
+        "ol", "p", "section", "span", "table", "td", "th", "tr", "ul",
     }
 
     def __init__(self) -> None:
@@ -266,9 +266,10 @@ class GoogleNewsTargetExtractor(HTMLParser):
         target = values.get("data-n-au")
         if target:
             self.attribute_targets.append(target.strip())
-        href = values.get("href")
-        if href and _is_external_non_google_url(href):
-            self.external_hrefs.append(href.strip())
+        if tag == "a":
+            href = values.get("href")
+            if href and _is_external_non_google_url(href):
+                self.external_hrefs.append(href.strip())
 
     def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         self.handle_starttag(tag, attrs)
@@ -777,6 +778,11 @@ def _is_google_owned_hostname(hostname: str) -> bool:
         "googleapis.com",
         "googleusercontent.com",
         "gstatic.com",
+        "google-analytics.com",
+        "googletagmanager.com",
+        "googlesyndication.com",
+        "googleadservices.com",
+        "doubleclick.net",
     )
     return any(
         hostname == domain or hostname.endswith("." + domain)
@@ -810,9 +816,17 @@ def _decoded_google_news_targets(url: str) -> list[str]:
 
 
 def _validated_publisher_target(candidates: list[str]) -> str | None:
+    asset_extensions = frozenset((
+        ".js", ".mjs", ".css", ".json", ".xml", ".txt",
+        ".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".ico",
+        ".woff", ".woff2",
+    ))
     for candidate in candidates:
         candidate = html.unescape(candidate).strip()
         if not _is_external_non_google_url(candidate):
+            continue
+        parsed = urllib.parse.urlsplit(candidate)
+        if any(parsed.path.casefold().endswith(ext) for ext in asset_extensions):
             continue
         try:
             return validate_public_http_url(candidate)
@@ -1342,7 +1356,7 @@ def validate_calculations(value: Any) -> list[dict[str, Any]]:
             raise ValueError(f"calculation {index} is missing inputs, operation, or result")
         expected, expected_unit = _recompute_calculation_quantity(calculation)
         claimed, claimed_unit = _parse_calculation_quantity(calculation["result"])
-        if expected_unit != claimed_unit:
+        if expected_unit != claimed_unit and {expected_unit, claimed_unit} != {"count", "percent"}:
             raise ValueError(
                 f"calculation {index} result unit does not match: expected {expected_unit}, got {claimed_unit}"
             )
