@@ -22,7 +22,10 @@
   },
   {
     "key": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxNcGhDbFcwUEtvU096THdFNWt0WUdrUVJxcHFjVlN4dGllWkdpWkdtVmFsYmcxSlZEY0lsRWxmMTZBZFlvV2VYUWRBMHN5Z2RPNm1oNExLdGhnZnVZbTIyNmZvRHRZdzVEa2x5bGJNbUVzd21VTzUyNk9vaTNPSldCaVdrd0N3S1JOUFc3N0EzTl9TQktfUy1Nekd6LVBoQnBwaWtkcGNRSHFoZzIxOWxBZGltNkF4Sl9GZDFYT3Z3el9DN3Nfb3NPZnl0Y2lVaWRJUlV0OGZjZFk1d2N5V21uUUY3S012SkxEcTdr?oc=5",
-    "seen_at": "2026-08-30T02:54:40.216218Z"
+    "seen_at": "2026-08-30T02:54:40.216218Z",
+    "fingerprints": [
+      "v1:b2ebb6934afd540169e7956fb4d50ea1f36b092641d7158a9aae2e65b0a761dd"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxQOWJQXzZiNlMzekJSdnJKVHBZc3ZnUGdJMXMzTThpLUtsYmsxOUc2aTNNa2JqZ2tKbk9TVGQtT3hLZnRUeVlwd1BlR18zOFlvNzJiWEx3cFhfd1Y4SlVSZ2c0eXZTbHVoVV9Gc2k0akZWeG5iUjBMMWM4LWE0cDJFZFRsSHEyUzBfSnZXVmduVk85aGtXeEF6bk1NcXZMMmVZOVlmZ09pZEhEaXNRSmFtZGNpZ3VLWW41S1VaWWx0dXVoSTJtVnpIcTVWNEQ0RmwwekpqdXZNOU9FUjg?oc=5",
@@ -761,7 +764,10 @@
   },
   {
     "key": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZmczT2RuYU9sZDVHUWl2TlY3N25iclRwQlVaU2hCS2duYW16ZGlyRUlQdkxxZzNMOVprUVBZUXlrUkZRNDFqOWFoNktHcFkySzkwNlV1QWVtRS1GMnhqU1pmOWZTaG12MGQ1dmFHWGFrZ2pKbVlTTXpkY3RQLWpUajB6Qnk0WnY3U3RF?oc=5",
-    "seen_at": "2026-08-30T02:54:40.216218Z"
+    "seen_at": "2026-08-30T02:54:40.216218Z",
+    "fingerprints": [
+      "v1:4ac96063e84160fab7316c08fd35cc72ee47210eb71570607b221efa266a947e"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOMjBOeGNuMl9KcWhUVkdTeW4tX3JWeGNNTVNjRHNzOUY1UDBMUFR2MG40X2kwci1mSUNLVTQzYkFpYWJBRkpOZTZQS08xVUYtbktTYXVJXzZEU0N6SG9oaDlZZHp4Q2RidWlLWlZvM1lDMDdUbDZ1OVBrcVZpaktETHJXTlM5WFpwM19xTUdB?oc=5",
@@ -810,7 +816,8 @@
     "key": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPSl9BaDBUYmdSVkh3d3MteEFnOHhUbFIxSEhVRC1yU1hvaVZEWkU3SDFfOTB4X1o1T3RnWXBDM09QU1lGZDljU2t6VE1UUDctZGt5cEY0aXhzMDcwTkpiX2hmV29PSmlJdEJXX3ktUjMxMm1DajdmYWRlZ01WcEFIaQ?oc=5",
     "seen_at": "2026-08-30T02:54:40.216218Z",
     "fingerprints": [
-      "v1:baec8e514c1203df8767b7cd18918f631855b7f643e47be7a36239d49125cac5"
+      "v1:baec8e514c1203df8767b7cd18918f631855b7f643e47be7a36239d49125cac5",
+      "v1:482dcce6f0f109587e9a9cc453b6419bffa5a7405b8839f1cb684122f04107bf"
     ]
   },
   {
@@ -1570,7 +1577,10 @@
   },
   {
     "key": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxObVkxV2ZnOEc0SWp6UjZ5bHRZaXBZUnVib0RIQXZSdjFGcmlaWVpPSWt4dzM2WHdrVldOVzk3REQ0ZHJQUDlJT21VUDFwekRkQXh2WTg0QTBqTWM2VjI1V0RXRVhTTVlPVG5OWUl5QWVzc2VNQ3VycFZFLXNoeDc3LXdCUk56NDFR?oc=5",
-    "seen_at": "2026-08-30T02:54:40.216218Z"
+    "seen_at": "2026-08-30T02:54:40.216218Z",
+    "fingerprints": [
+      "v1:0f800dfe6edb22c8ba88b4dce4d060caa5c271f013aeba690a31471718632b1d"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOTzJHWUJ5bmEzSWpYTU1JeXRRUGlqSVFLaTBFTjdGQ01GdURRZHJFREN2S0NwRjNDZ05YNW4zcHF2eUxjS2p5SHVzU1p3UEt4ZERnVXlsWDFaTzJ6cEVSWVJCTzdVRVpUNmtmZnNrNkVYRWI3aVk5alRueXVqTkRLRS1VLXBxLTNrbmwwZFBlaWw0UQ?oc=5",
@@ -1642,7 +1652,10 @@
   },
   {
     "key": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOS3NBMEI2X0NtV2U3VlJDYTVCZDVjWXhCWHpmcUZfYnJsU214R3lKTlFKRXFVSDRUM041NmRVLWw0c09haUsyTzA5c3Y3SzVtNDBnbHJTckZ6VnF2cDhtMTFrVzRJY3Y4V1h1M1RaU0dGOHkzYUVtQW9PVDIyUUF0X2QtNXV2c3VMa1ltb0NwQjdDN1V1enBKbUp3dWVFUi1Wc01FRkZyRzRPT1dkN0E?oc=5",
-    "seen_at": "2026-08-30T02:54:40.216218Z"
+    "seen_at": "2026-08-30T02:54:40.216218Z",
+    "fingerprints": [
+      "v1:16c7ec207f876d35ddcdff396238212498187ba29e848087c71f714273e4b857"
+    ]
   },
   {
     "key": "https://onemileatatime.com/news/british-airways-passenger-sues-airline-misaligned-eyes-water-bottle-fell-head/",
@@ -2014,12 +2027,12 @@
   {
     "key": "https://thepointsguy.com/credit-cards/ten-years-sapphire-reserve/",
     "seen_at": "2026-08-30T02:54:40.216218Z",
+    "aliases": [
+      "https://news.google.com/rss/articles/CBMic0FVX3lxTE94aksxOW9pWExIa2JwYTJfay14Y1d4dmpYTUZzVWxzcDNWSmRqdWlHTjJuSDFSR0pKcFdyalRQVnBIOFkxZUlydHN1dVhkN0I1eTIyZUlQOGY3Nnh6OUxmdFJVRGR2aVByUzBqdjV6N1lWYW8?oc=5"
+    ],
     "fingerprints": [
       "v1:d4ffd8ca490db7feac5ebf1820b7fff9e4b23b2b94f293d47c32757c942e7e76",
       "v1:19fe1e9a86f3799540c29a2de61b71e2bb8ad3cf4660fd4b6fa558a298de6834"
-    ],
-    "aliases": [
-      "https://news.google.com/rss/articles/CBMic0FVX3lxTE94aksxOW9pWExIa2JwYTJfay14Y1d4dmpYTUZzVWxzcDNWSmRqdWlHTjJuSDFSR0pKcFdyalRQVnBIOFkxZUlydHN1dVhkN0I1eTIyZUlQOGY3Nnh6OUxmdFJVRGR2aVByUzBqdjV6N1lWYW8?oc=5"
     ]
   },
   {
@@ -2030,7 +2043,8 @@
     "key": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxORGM2S2xlUTh2eUJhYmU2VGdydEFqQmJTTHJXbGVQWS01QXlrRXhmTUJMUm4wOUVQeVVHSlloX2tKcHA5MkZWcXE0SDcyd3pWVzdhWUZ2MEhReFg0eHBRdGo5SkRKS0lrdmktb2VualAyRjBPbEU3VW1ia1pVR1dxdVRHNnlJQlU5?oc=5",
     "seen_at": "2026-08-30T02:54:40.216218Z",
     "fingerprints": [
-      "v1:04be4bb7ef1d8135f1e1930314f23b64ffe3424dab79235d799150fb827af8be"
+      "v1:04be4bb7ef1d8135f1e1930314f23b64ffe3424dab79235d799150fb827af8be",
+      "v1:91316160a84ebddeaf1bda5af0eca43cf8fa56956ad19f947aba6018b57e2d97"
     ]
   },
   {
@@ -2124,7 +2138,10 @@
   },
   {
     "key": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPZEdidFNMcElQREc0blFLTGViS3lySC14VmVmdlBLeTlDbEIzSUd5TzRrcWVqcW5oSVJpMzl6cEZRRVJXQTMyNkJkZGdHaEJMVzlqSm9hSFVqalhZSGJwc3Q5WDdKdEpSVE5hLWtoLTNwd1YtSDUzaEsteVgxNExBUXEzbXdKT0pjUzVRZVh5Q1BjWk41NmtfN2dEUlhjU2lCSkF6RUVjbzV3bEhVWklWX0xmNmFNdw?oc=5",
-    "seen_at": "2026-08-30T02:54:40.216218Z"
+    "seen_at": "2026-08-30T02:54:40.216218Z",
+    "fingerprints": [
+      "v1:f95bf126f1248679f0c784c60470841fa05a8b003b4861e4d1c54d5b5a31043a"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPSlpac3RlVVpMLS0wN0pIN3kweUVManZMY2tYNFFibEJETkF3MVVnNGt5UDVHenBfeUdybXU4b09idy1EcVFLT3FLRHphRVVyekFsLV9KY1RtVldlNzREVUYyZVA3SUVQTzlxRVFMcGVRME9nRm9vZE0ydngzM0tzcTQybjhsMWs?oc=5",
@@ -2529,7 +2546,10 @@
   },
   {
     "key": "https://news.google.com/rss/articles/CBMingFBVV95cUxOaS1YZHFOMDB2MF9yYm5lVldlU1BoYjVfc3dUSXVtUktEcFZJem9ZQXl1bDlnZmZVUmE3SHM2Mkk4SmVVdU9rMDIzS3BIY0xJYTdpaXVfeFUtQW1vUEVyTEhHcWZnSm1pcWdzMVpmY3JnVDRzcXRaXzhxa3BBb3cyb3ZUOWdZanBUcEdtXzJJTzVDdDZud2VpY2F1Zmo0Zw?oc=5",
-    "seen_at": "2026-08-30T02:54:40.216218Z"
+    "seen_at": "2026-08-30T02:54:40.216218Z",
+    "fingerprints": [
+      "v1:c9ddde319eaf6d40a5ea00e9718a301c7a32d08e69b7ad90abccaf94f17dfee4"
+    ]
   },
   {
     "key": "https://frequentmiler.com/sapphire-reserve-exclusive-tables/",
@@ -2896,12 +2916,12 @@
   {
     "key": "https://thepointsguy.com/credit-cards/delta-amex-current-offers/",
     "seen_at": "2026-08-30T02:54:40.216218Z",
+    "aliases": [
+      "https://news.google.com/rss/articles/CBMickFVX3lxTE51aV94cHBoeFQ0cnNuaFV6RzZjU0UzSGhicHFaTW56YlByMThPVjZCdk9pYkV2TDE0TVRHb0dudkh2UFprejQ4aVJNRUFmU0xiUjlXUVUtbTVPYVFnUnBodFN5Q2xacjVranIwU0tmMFREUQ?oc=5"
+    ],
     "fingerprints": [
       "v1:79153213f4a395b693466f049b4d646d5d01d90e20002797ed37c3d4e74170f2",
       "v1:5490613adcaaddf203d91700bb7ce9ad33df991498e74d2a146f228df1926cea"
-    ],
-    "aliases": [
-      "https://news.google.com/rss/articles/CBMickFVX3lxTE51aV94cHBoeFQ0cnNuaFV6RzZjU0UzSGhicHFaTW56YlByMThPVjZCdk9pYkV2TDE0TVRHb0dudkh2UFprejQ4aVJNRUFmU0xiUjlXUVUtbTVPYVFnUnBodFN5Q2xacjVranIwU0tmMFREUQ?oc=5"
     ]
   },
   {
@@ -3072,7 +3092,10 @@
   },
   {
     "key": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOVk1Wcm5rQzJ3TlhCOGNQZUwycHd4cEY3Qm9Vemw5azRSMlI1bjFzWEkyTHBaWUxtUzJvZ19tN09Wcmw0QnFJS3o1NC1GdXBMS2FHbDQ5dmRraDRjelJhbTVhT0dnakZlVTJUTHIyZlRFa01rOGNKYWxfUUdmS2tQQkkyYXhmZFJoRWpwR2VjNnVRTUE?oc=5",
-    "seen_at": "2026-08-30T02:54:40.216218Z"
+    "seen_at": "2026-08-30T02:54:40.216218Z",
+    "fingerprints": [
+      "v1:1628821064b60dcbd56213e71e516341e93fba2f4c224f4f5e52798aa1611ba1"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPcWlEZHI0MTdzcWllTmNUUmtBd0szcUN1dE9JYnc5cDBlZGxlQzZMVEpMQVBGcm45bDZhVlhURzdJSW9NdjdScVhJZTFQbUd3UTFvemx0YnkyNHZjRGRBb0UwZDQ2NFNOQy0xOUlwaVRmaXJ4N3NVa2JnOHRNSnFsYTdvRnRncUNkczVJc2E4YWlzQkZuenh0TGFTZHhIZzRuUmhN?oc=5",
@@ -3162,7 +3185,8 @@
     "key": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQQzV5Uk0tMTdnUlZNUzVidjRDYlk0MUVtd0JLZlB1d3pQVGtnVmhub1pDdW9adDh6emlKUmZvQmFPUHd3ejdYc081SDBDbFlEU3JfWV9aZ1N2LTV4MlJMWGNleFVtb0ZNenlhMVJQMDRJTzVwdG9PenFPTEtrVzdoLU1XSmJXU2s?oc=5",
     "seen_at": "2026-08-30T02:54:40.216218Z",
     "fingerprints": [
-      "v1:0b86b36df6bcbe1aa7dbe4a666c2967f518bfd3a2fffd2b60e1d20a43e45036c"
+      "v1:0b86b36df6bcbe1aa7dbe4a666c2967f518bfd3a2fffd2b60e1d20a43e45036c",
+      "v1:fcb9c5be026eec3bc5d263c8260d72eaf07c6ecfc6380707029ea48026fa7334"
     ]
   },
   {
@@ -3203,7 +3227,10 @@
   },
   {
     "key": "https://www.reddit.com/r/CreditCards/comments/1fyjae2/read_first_before_posting_or_commenting/",
-    "seen_at": "2026-08-30T02:54:40.216218Z"
+    "seen_at": "2026-08-30T02:54:40.216218Z",
+    "fingerprints": [
+      "v1:a6ce085911f9dad941e4ae670974d75cfe41fcfbe9e9f3a196afceda9f320594"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9XNmJwNHY2cGo0S1hsTmxkUWFxdE9XX0t0enVBLVJPRGk5RWNiMzRwbmpPWXNsZkxLaVptTzhGak4tdVBETFlsNWhUNW14ZEpvemZRU1dCTEt3aE01Y1RTOWQ2ODhpWFhrbldydlI0eGRFSl9T?oc=5",
@@ -3655,7 +3682,10 @@
   },
   {
     "key": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNVkpSVjZ1OXVyaGd5OWpFU0FGMnFFWnZjX2JISG9yQ0ZBVWItS21kM1JxLV9GRG9WempqY3pQa2NuaUtRREJ3MEc4YWNES1RMSFZJYlo3RlpPZGhDWlFWYVZXWHVlRlMxbUpvbEY0X19vWFJSRGUzQmtGeFRlVWkxcENpOVV1cWpTV3JSU1BXVTBMb01uek5wUGRkX0lURFVCTlBnc0ZWLXlUbVZfX2s4Q3VqNi1tc3FfWjgwS29wT2dLZw?oc=5",
-    "seen_at": "2026-08-30T03:02:01.595071Z"
+    "seen_at": "2026-08-30T03:02:01.595071Z",
+    "fingerprints": [
+      "v1:1313be1a9498643d5a9dc8d00215d99a5e1aad09a739fd059885894e3bd7c5c4"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9qUUE2SGF0bVVrYW4xaWd5MnkwRTRjRzNZQzNuMFUxVkN5aGdSRGpWbmVzcW5IZ3NVZU9CNnE3ZVRaME5QUFJaVDdnZExhUmNxc0lTMFdHN3ppRXZ6LVhDWUJab0I0MlFHeWpNRkc0enNjR00?oc=5",
@@ -3684,240 +3714,722 @@
   },
   {
     "key": "https://www.doctorofcredit.com/maximizing-the-lululmen-300-credit-on-american-express-platinum/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:d04fe5490068a21d3851343fb2c05ef781aa56081790fe1764d20f42d2330dab",
       "v1:02332d75d28c0cab6e4c19e602205371ea1cbfa608af40fa2dce3b508d1a275f"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://frequentmiler.com/office-depot-officemax-buy-300-mastercard-gift-cards-save-15/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:d17de40e9c993bf5ff87f2b83e3805d5f691dd83692a8ca975a348efcbcc1591"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://onemileatatime.com/news/the-aviation-herald-founder-forced-sell-home-after-slovakian-airline-lawsuit/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:a156ffef1e027e85bef7ba6e0e9be4a6824cbb731a86171597d19d8f2080c318",
       "v1:725a26632066e74eafd0ea260a3f8370dbe99ac297120cdfd86bba72a8b4b547"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://onemileatatime.com/news/airlink-dangerously-low-flyover-dhl-stadium-safety-questions/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:9ca69eb4c50844e5743b9b656eedd82b6b3d1f373959f912dae39cfd6570c656",
       "v1:8617f847b61e0c1270415025892cc3b7589c6c206e4ff12c9ca8251733827e2c"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://onemileatatime.com/news/delta-flight-diverts-bad-weather-leaves-passengers-behind/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:46248422ca6ffdddd912b7a0f61e663b6b32ea153bf35dbaec966b1dc5ab5741",
       "v1:94d60cb7140e0ef809f4a48874af54b7a2cc228073d272d3c3844bc8501fc93f"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://viewfromthewing.com/fly-to-europe-for-3000-points-business-class-to-africa-for-75000-the-best-frequent-flyer-sweet-spots-that-still-work/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:d0b98bca6a200f85f76d08f4a45d10ec8926c1a2fddac8d00f07962005144525",
       "v1:64525017183350d16eebae5e00e433af936cf9fcd77210fc516e4fd504e07566"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://viewfromthewing.com/american-airlines-mechanic-dies-at-100-after-80-year-career-he-was-older-than-american-itself-roundup/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:f87d6820e1bb89f8ec576125ea225bfb85dbdab5bf58dd0f76cf820087a91dd6"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://viewfromthewing.com/drew-barrymore-broke-down-crying-in-an-airplane-galley-then-the-flight-attendant-who-held-her-appeared-on-her-show/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:595b6ba34332159ea5060ef2cc8016188977d8556783e82b1791de730f67b60a"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://viewfromthewing.com/delta-sent-passengers-to-baggage-claim-after-diverting-to-ft-myers-then-tsa-closed-and-the-flight-left-without-them/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:3804f50db289d5f148a616d50dcb72248d5467f38999d8f77af9129fdc37452c"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://thepointsguy.com/credit-cards/reviews/platinum-delta-skymiles-credit-card-review/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:2d3ec9c17746c641bc9dfd53a9260c5ef7aab00d8d831ce79fc60dd7199821f5",
       "v1:902a702493108513c6369d48936c77f564eb94b2ab6a6278205a0ff4b78d526e"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://thepointsguy.com/news/united-delta-single-aisle-planes-long-haul/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:afb283c292f9148fd83c6ff549fdcaa2e320d04662bd1d6521d5a771ed09ee76",
       "v1:9b83cd680376de1312461982dafd69011543dfddc4909603a79f91967847e926"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://www.reddit.com/r/churning/comments/1w2cge8/question_thread_august_30_2026/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:af5088144aa8ea07ffe47f6562b2724a6ad569489dcf356edc476d67d16db305"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://www.reddit.com/r/churning/comments/1w2cfjr/trip_report_and_churning_success_story_weekly/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:6d01d70ba479210657de7b93e60add62c415ece353cd33b35bf1011b41b10de1"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://www.reddit.com/r/churning/comments/1w2cirj/news_and_updates_thread_august_30_2026/",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:18be5006909e3ddff91b56f9e1616e6f76754ee7d4c514bea226d7b55090b6e0"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPQ3d4S1NrWThZQ1hseW9KeVFTTFZoV2xaZUpqNkllaXpKa2VFbkhrdGl5alIzZVVIM09iTW5HaFhDUGtBYkYwbmVXT2psblBEUUhMTDBaYmdxRXhJZWlpcF9PU2R0WjhrbTlwSEVYdkNTQjY4TVh3YkJLX0pFajBybTFoNHNGQkM5VEZINQ?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:333a26bc18ab350957d7fd826fa597948292ed130386e2b232324d1ca95b96aa"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPZ0d6OGZ4RVBNZnhtU2J1ZlNHTWtIbFNmUFV2dkdDZm1YNVkwZjRKZWR5Rm9UY09QdXIzZlBxSzE1WGRCc3BwNkFEczg0ZEEybVVTT2t5b1p4RkYtOFZXTXRmMmY0V1VhNEluT3RmLWpqTWM1WFZvaTA1dXoxbmRoQjJ1RlZUdmdMQTBxQkpuSi1wWWRGN1lkbS02OHhOQVY4aGVaV0l1aHNZUkhLZXJTZEdVWWVNSzdXSjEydEhFWHNUVWQyUkw1Rg?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:0b9c2aafad5e9e9088ddddd6b7799b95979035d96f780769121c4c6e146e1e95"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNZmU3Vk9OZGdEc3pyYkRjZGM0bXk0TTZwOHNwVTBOZWFmU0hzOGRYYkVfbXE5Sk9NMi1jM3g2M2t5M2xIY2xRM0tWR3BMSlB1bVA1YkF5anlRSXMxanlVWDFzY204b2lPUG5CNk9uZDV0ckdoemdqTmJKQ2JkS3JDakRCcEtmc1dpZ1FZR0xZRk5zN25HMmE4aHMtUThabXhnN1VhOHB2RHVYMUtOTk1jYWM2czFfbU5HVktz?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:c5580884769bb38506d4bac9d57c2b40f058249b0a9b3d047f1c261b6683e855"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOSU4xbC12eUI4V3NkYXVXaFE1bjBJVFExZTJVOE1LdXlnd294OUhaNi1IUFlfb1Y1M0JQcldnTmlPUS15bFBYRENib2xZeXF1Wlg0bnluQ2pHT1lfZkd3ZzZjbFhFRFZLRHhfZzhKX1ZzRUp1SFRTTFg3OVZQa3VheHljN2VZdkps?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:0f90fcd5bda31d439ac5ffbf75f707653ddc3917e48b78dd991981450d27295b"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPbUdLRnZyMTZBSEtXaUxCTGF6eVpqNGFRbFdRSlV6VEtNT1RFQ0xQUkdTUWtOYV9TMFQ1MnpPSlB5bUhxVG5nVDRKUkxTcHloNHU3bzZfSnRReENpS0F4NGRVUFZXYlNyUmlyU2pwRVYwMDE4U0lxTkpQNWNtVm5SX1FBbkdBTlU5bnhrVkhCOA?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:9d31a348d5f43e4a58b3f0b07b6d3007b1ef34bde7af481cb3a89c3b9c8c869b"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQZHhMN0FUOHM1MmYtaTZPd1ltdl93UWhYeHBUSjJlUlBWZ1hmZUZObVRja2NNdmVUMUNVS1BSLVMza2RDWVctRXh4NmV6TXFWSk9QVmtya2thODE0QU1NVVpNdHBEcXg0S1kyZmtBLTJzcmt2aF9Ma1BYZUU4S08tdDVDQTNtQTkyMWxJTEVGendXcHIxelhYRXJYN2RSeTRFbXctb0dnVjR6NEQ5S0pRNzJoMzEyX2RpN0p4MzFQU1dXVTVpV0NfX0hCUEZtM3BkandCbTRmT3hfallkR1VxYg?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:4d2458e8dfe3e83c2e3c50c472dd179b7836eaa03aa465c58ed0f1858b601a90"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNdkd3VDJLUG9DV2FhaC14c29TNkphMThoWXhDZVF5R1E0ZUtxeHZuTFZoT01wQXBJSU4tb1JFaTFyb0FHWkhJRk5uYXFyQVA1Qm55elhiU3dubmxWb1ExYW4tcmwyYU9Db0oxRHdjOFV0YnA3RWdheXFOYlQ5S2VJZFctUUIwRnhqOTMwbHZBQkNlNi1DZ0Z2ZXhuSE5mOG5tNm5jV2l2MFV1cUVEU0Y2VFB5UlFYYXlSS2t4RUhwaW10SHBVR0piSnd6YjNGbmtqUnhlcGYzcHNTaGVnNVE?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:ecacdb7264ea4ae4f5208daece10f8c12bd240b01520b509d214ab2f400de1c4"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOTjE4SFQ2bzhEWERuU0JMRklEaXNGUjhITTFBRVlRYnNmVWRLalR0Mm5EWmgwaVlYNUxaN2xtamtFdGVJYmV3Z0cxc2tjZlRlWm1NRGtUUmozbEV0TXhjWjVkejZMODlzOC15ZEpQTWVrNm45M0g0MzFFb2lTdllCd1hvbnEzNW9iTzdITlZ3UUo5Y3dGTXltdWZQa2RGS3hFY3Z5emQxM01lQng1?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:4459a3fc3d9651e642ccbd4e0fd647b161453bc7aa5087ff7f68a3cd8aa0e9ed"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxOS0lNZGtMemhnQklqVzI2QmN2LVg2SXY3aGhiTlRBZFpad1FXWlpiNG05Ym5IQWRzcUlfQzVTQTBDTHFIXzN1dnl2RnhxNThIOFRQRnktczlmSnNvNG9GZWpFaUJtc2cxMXpiUmV0Tkk0T2hCazZ5cUo1UkNxQzk3eVRwWWpxZTR4cnB2Z0VkVlQ0aFBUU2x4R0czZmxxUmJoLUVfVWlpRnMzRk1fcUdXcXV6TkxQM0dBemM5RDJhSlpsYTBzSmdDV2FiT1J5VGdTbE5yOWh3dWNVeGlfUVdIZA?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:f6d53b8217d369617bb2b0284d81de14a010482dadc61dae7fa23bd0bcec67e3"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOeTBCMUdNMDU5ZDRIU1RaWUlKY2NtbFdJRnd1M01hNWIxcTJTaGxkY3FKSGx2THExLVViS2w5bE51NFNwUlY1Q1RDXzVfNE5GRGIxQlpfb2QzMkVCMnhsT19EeXpHY3pHZy1KdjEtZGJBaEtHUjNmTGxMX3NwR1lQb3RnbF9RT1NBWmZ0M21zeXhfQzZmZGJ0aWNQeVFXZ240UFFDb3hkcE5KMGhrVmU1a1Y5Q0N4clVEd1JOU0Y5a2JUTHVUZWJyYnJqRjFvWXpITVVHMlVjaW1oUkNtUHdF?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:2b2d002302588c7faf933b4df6156f7de9580412d48e5986b6f4f526436c1377"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOSGRWRDFHTWlQaThIR3ZOXzRpOWtiVzJqaGF1dmhmS0haMWJCWkR6YUtLLWNxSHIxLUpoRzZ2RkN5Y2xBR29MTjdKS1EtR3pXZVQwSnF6SWJIV3MzellRWjBCa2txZnptWXg0Umw3V2tqNFVyVW9ydGJYbVQ0QXQ1bldFQ1BqN0VXVFB5TkEyQmJkUQ?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:6bbf8ac9fa67dd3c93553fe6f693e032023938258ce53f41803d9c71cc87a809"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOT2ZMaFlrYkcwMEVfbkt5OURjLVExSUl1VElXRDRtX1IwMXJ2NFUzVFp5NTd6ZVlCZFFQVVVYWEowY3FUaHk3RVBWMWpkc0hXTnU3ZEYtOVB6NFZScUd2Q0QwNFRTM0hRTHBVTVc3OXV5S0hXXzdNZTRBVVZhb0ZXTVNGTWFycVpPbWYwRQ?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:d89c54e944138e1175bb22f5ee5c1490116071475cac92b62a5aa04aed15b723"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMihwJBVV95cUxQWXNDNzBzWjc4QVlhNll4XzkyLXR6ekl0S1hoQ2V4Wm1idDNTQTIxczVBLXozVDIyaFEyQU1XbUt0YXNOck5CVFgtNWFLcXQxOUZsR25XWUswS1M1eTkyOVY3Z2JGUHdCV3Z5dVpQaDVXOGs5X1ZsNFVPZTlQdEYwMkswMmtjZHFfTFFhNjhTWVZUZ1ltMmRvTjYzRmRRelJuUUZjbXdFLVp2alhzVUtXMDB4czFuR1lCQkpPb0tuY1NZeDR3M2hHTGM1RUhyWDNEdmJfM1ZoVFZuQ3hYcWdMVEhodzMzTHlmSEN1cXp1cVJLVHBFU28tZlJnX29fc1RySU4xUEVmd9IBjAJBVV95cUxORDYxaHNaTGtORE8tMGFpTko4ckNrOU1qMGRVY2szbjJ3cnlQbTlWR1VTNUtKbDlSNEZ1YVpUYTRzWXluQzM1OUhVTDhIWWx2RVhVLTNyY3J4YkdzODQyNDdKX25Ea1hRRVZ6RkhGVFNQVjVYU3YtZ3ZlaDZKcFdjRUFjaE44b2JjZGR3ZU1EZ2ZtbW1kcVZtUlVBc1NKUHY2aF9kNlJvR1Jlb3ZqdHl4YVVlV0NVaXpKTUxTSEhFLUg4U1VER0x2OEVIb1UtN3N2MU0zbWNrR21vb0lma0Fpd05UdjZhY2ZMMEN1ZDRSaEdHajJSRnFGeFBJZFBTdmdTYWpiZVdEVlVuTUsy?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:e92012b859104183f1428deab6f63b7a9427d557bac7bf4ec2f266ea71461355"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQZlNZYWNLWVJfUkUxVWF3ZWhUOUU1bmRYME02Y2wyWTlTLUlINGpscnZxZklmSXljc3g5MnVtSEt2UVZhQ1RzU2tIcG91QmR2QzVkenZ0SnFLbEw2a2FxZ2RYaUVaOERjR2JVV0hhRzBBa1ZpSGhWTUFJZjl3UlpUYS1IQ2pyVmJaZ2lHRmxn?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:0a601e1e3c68d86081f6c4b277dde12f7e9cf06e53211e7b02b1bec207987e32"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOYWdOSldzQzFOQTJBZXp0Nm9TTXc5WXRxSFp3TEM3eU5tYWpaWEdSYU82aERDTnJXX1IwQS1ueVg0TjFKbHEwempKaW1nUzd5WlM1a3BVMHBzSGUxdUR2MEg1OW1vU2ZjWnl4cDRvaHg1ZWhHQjBMLWtWS3JBTE82RGJFbmlqeF9iY2JWc2pFU0VNRk1FUTRNWHBkMm80SkZnaG5pemphZElRM3pa?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:e06f4adb044a257b3332699a5c4c4f53f97b588acd1171e69c388e3d496ced67"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMirgFBVV95cUxORXFHM3g3Rk9TRmJfQUlJR2VTVmlEZk1YNGxxYmY5YkdRTnY5dTFCWk92R1YyaV9zWmlhU1hXWjVCTENvNWlxT3JnRjFXVVp1U3ROaTBTT2haVUcwdVpLejdzc1RzMnl1NHNvREk1MDAwM0N5MUJxOW5HX0hBN2lXUTFlRy11dlg1T2ZicTF3ZDdxYkpsdFl4eHVWWXRKVW9QYm9MVHhjY0NOZElNSkE?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:5e8d42ee5dfe292e82eca8ac75e841274a23c15c8ed55fa9b575983b64784fbd"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOZjJJTmUzQ0RGckl1a012ZVdyTER2SEV2cjlTYlFrUldjb01ndlhIYTJ6WF9jNWw3UEpUbXZZWjNHVlhGcG5mSGlXbFJmOVFjMFJwdUNuTExLZW1hN1o4ZlNONTB0bHdVdTNRNU1mXzVRQ3VGT3hTeTVRN05oS1VYZkxSQW40R0hNSTNMcFRtT0xQNW5RZnRVNHVzQzBQS0pERFIybjJTam5XNTZRYzk2dTBwX3FkaFhDQmFuMQ?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:3432eea8a1fa2c059776865fd1ebe226e8fac84bc380a5d625c59cc8b85bbd83"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5SY1pOWWJJdXpLb2VYRTFsOHFiVU5lZVRPMHVNMTFNNDlaZkJ2TmhsdFVOWmYxY0Jtbmo2S1B4ZnZrbjhjc0taMmtVelBQMVlXM3FrY0d2SndiMHYxWDZqM2xuX2g4akdyVDNfcy13?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:251ff82ca4755ab3194c9cef6be4abc69154813fc8bef642f7806ddb6f78a827"
-    ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    ]
   },
   {
     "key": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1Mc1BOM010dUprdlBWazVmVXV5cENkWGR4RTdIb3RaSUFBa3hRRFBGUG5aUU54LVR0MU8xS01jTXVSZm1DOElHWmEwQVd1Mjh1bnFHaUVnQXM3TS1RejVSWjZvWXhBMU5ickRZSlY5NA?oc=5",
+    "seen_at": "2026-08-30T17:28:11.427385Z",
     "fingerprints": [
       "v1:fb8b62395df522bf0e5ea6d011fd64dfb4bb1c44d302b63cb0e0bc37b54e0c5e"
+    ]
+  },
+  {
+    "key": "https://frequentmiler.com/now-50k-points-with-new-carnival-rewards-mastercard/",
+    "fingerprints": [
+      "v1:564a5e94c8eb3bb3c37b223ba760c7a4098a9c2decb4ea20f4712a5ae5dd732f"
     ],
-    "seen_at": "2026-08-30T17:28:11.427385Z"
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://frequentmiler.com/1k-new-customer-bonus-with-10k-deposit-of-cash-or-crypto-with-galaxyone-and-promo-code-august1000-ends-8-31-26/",
+    "fingerprints": [
+      "v1:fcb8179a7289a56edaec9dac09054aea3494c43d18e3deb2c6ce965ac94619f1"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://frequentmiler.com/our-week-in-mallorca-solar-eclipse-wooden-train-tram-all-inclusive-snorkel-cruise-more/",
+    "fingerprints": [
+      "v1:e0d90eb49a66462905ee50436b4d3acbdbf2dc3654bab10a4003f6e35f64c6db"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://onemileatatime.com/insights/airlines-good-service-ground/",
+    "fingerprints": [
+      "v1:1a998c882e38ba17f96483033414998290597fb334e164eccb8fb2368ced5469",
+      "v1:48210eb67c0845e170e9a7295d4b4ecb1617f4d08c4f4878226aa2057a00f2b9"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://onemileatatime.com/guides/atmos-rewards-status-points-credit-card/",
+    "fingerprints": [
+      "v1:d1a9b2f05904e42cd49213f2dc5a4b91538b11ef0a974b9d85b8d336f27d2f46",
+      "v1:d766dd16c9aff618832af149d64b1f5117d702422b3ba9e4215a5f0f4969297a"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://onemileatatime.com/news/jfk-atc-taunts-distracted-delta-pilot/",
+    "fingerprints": [
+      "v1:6c84a27d0a2b3aff4378413ee8d8993e20c3ab335287e845f13ad2504c36c1fa",
+      "v1:f41dedc4640501944dccc08f92c0538953a273dc0e3a345d0dbd8014face219a"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://onemileatatime.com/guides/citi-strata-elite/",
+    "fingerprints": [
+      "v1:ede260e5336b41c2011bdf3c324447b8920af28a94245986c5870aee243ff26d",
+      "v1:e00b795be8e2f197a75972156ba42eab8b61c89b13b7129561fd91605b3cee16"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://onemileatatime.com/guides/best-oneworld-emerald-lounges/",
+    "fingerprints": [
+      "v1:306550299a2c1f96aedc88b54a04ae196b849e74f8f4f2d49dbf5f07b392d2f7",
+      "v1:25c9c75ac3f7aaef8b1ea0dee728970e74749e880607ba32bd1fd97b97bc835e"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://onemileatatime.com/insights/fly-economy/",
+    "fingerprints": [
+      "v1:ac9583903c7d0cd7a80662650c2f031ddeef0bec635f4f125b25edbd7941e967",
+      "v1:6dc82c2938b627ff511b16d8bb18587288fe1566091713a50f7ff807640d43fd"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://onemileatatime.com/guides/atmos-rewards-summit-card-partner-award-booking-fee-waiver/",
+    "fingerprints": [
+      "v1:e32d6463cc1ae342a839de5e8669c8da296f7d8f4b59c85b7f40a2d3fa072dc5",
+      "v1:baf412e700074c5e36d00a48c0b1d13cf25730c71c133024108fa4967598eb54"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://onemileatatime.com/insights/bilt-credit-card-authorized-user-trick/",
+    "fingerprints": [
+      "v1:13cc1bd0ee4bc3cfcca26c1346a7e16eb9adcbc67c3d507398f6b5cf69e71dc4",
+      "v1:b6c244797cad043b3d0ae77181ea8bfb9048328581a185b5c8e2381680b12b30"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://viewfromthewing.com/70-new-and-expanded-airport-lounges-are-coming-the-credit-card-arms-race-promises-better-food-and-less-crowding/",
+    "fingerprints": [
+      "v1:32fa3c05c12c9386a279fdc752794ec98a21388d0d5cb16cb4c63f0c3454204f"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://viewfromthewing.com/tsa-forces-you-through-security-then-a-private-company-sells-your-attention-and-keeps-most-of-the-money/",
+    "fingerprints": [
+      "v1:3b3f743038b76cf8a522a8982cfa6fd619be1961d010d781cc43c81c545db3f9"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://viewfromthewing.com/flight-attendant-union-tells-crews-dont-answer-ice-questions-or-help-detain-passengers-roundup/",
+    "fingerprints": [
+      "v1:0e681808b5e58338a23388747e8645512c9039ce800afa72d67f6fb0ad7fc0bc",
+      "v1:df6171fa8d4a0fb85f312ca644123094432e76a4ca2904eb735ce062c05c93f0"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://viewfromthewing.com/american-quietly-adds-connections-to-fiji-airways-awards-when-business-class-costs-405000-miles-one-way/",
+    "fingerprints": [
+      "v1:f98cb1399a5ab84ee40b8d1ddf6c17aa6d2e0a7bf48d95df6df4a183ff593e67",
+      "v1:28a42ff9a90f0b3b82ea38a78b965ad344b29d5e7cac6e2f12f150b12e33602f"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://viewfromthewing.com/riggs-hotel-d-c-review/",
+    "fingerprints": [
+      "v1:c4ee5d8043fe084ea26b5a4024ded9eab97e21372a9be08c61ae0bee0bd52d87",
+      "v1:219958424ad6895a5afefda2119578d28cb5096d7219e1b59f6dc35c28ca9716"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://thepointsguy.com/travel/seats-aero/",
+    "fingerprints": [
+      "v1:ba82420a3fdca748094ab10553463d77b0808efa309cff1fc3e60e22caceb2c8",
+      "v1:b1bea46ce14b7727bc6bdbefdeb7d680d0de8ac1c236d7aa34d998e339270c93"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://thepointsguy.com/credit-cards/amex-business-card-application/",
+    "fingerprints": [
+      "v1:b051adbe541b7aaa4a51b7a829db88ad2675cbe8c0c056a94fb8c213841e981e",
+      "v1:d8f1f7abb8000176f8e2994efa06f3abdd85c3ee4d79f38298a5638ea7ae983c"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/churning/comments/1w38771/question_thread_august_31_2026/",
+    "fingerprints": [
+      "v1:898af3db47b3b1af5c2037bda29914de8aa697360f4a9e19685d726907837a9e"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/churning/comments/1w389mw/news_and_updates_thread_august_31_2026/",
+    "fingerprints": [
+      "v1:ac37d5c2a9cca40dd0a8d7bfa495fa4f14bf8c9d1b2c55dbe6cc7d64a03f2c8c"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/churning/comments/1w386ug/weekly_off_topic_thread_week_of_august_31_2026/",
+    "fingerprints": [
+      "v1:272c6953494e8192a5c234508e1570ecc01ca8b5da59776a7c67621daaafd509"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w323ot/wsj_highend_credit_cardholders_find_its_harder_to/",
+    "fingerprints": [
+      "v1:f2e140ee05464af66d6d1c2ffdad3d41b80d3434aeeabda3fe4f696bc75942ce"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3fc5n/us_bank_altitude_reserve_transfer_partners/",
+    "fingerprints": [
+      "v1:a600706f6835696a0d07449b4caa101ac3d17c1ca37707e16a3a0b411516ac02"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3fom5/capital_one_trio_discover_it_card/",
+    "fingerprints": [
+      "v1:62f483de3cd5806927ab94e96917dd8285fccd1b3b8a9a2da22979e647330f81"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3eiu8/is_applying_to_capital_ones_still_worth_it/",
+    "fingerprints": [
+      "v1:208eceddd9471667be2ebd4d2ac5ab31d29b78162e7eee737e6dcca3da6c9edd"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w2uyew/whats_your_highest_credit_limit/",
+    "fingerprints": [
+      "v1:ed0d054059d60dd53d3f42fba4677f0e75fa3c5e7a5d47796a3c575e44817b7e"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w2pt2l/how_many_dunkin_donut_gcs_do_you_have_so_far/",
+    "fingerprints": [
+      "v1:736a8fab6615b5ec17c28439c0f62963402a14b2abf26a8e53378d78120b46c5"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3hima/card_recommendation_request_should_i_add_a_travel/",
+    "fingerprints": [
+      "v1:d403259ab3033e519a632455df81aa538f5437c13f4f8c679b97c02c9aaa4a9d"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3hg52/its_that_time_again_what_are_your_q4_discover/",
+    "fingerprints": [
+      "v1:da486b8f11a4a5136ab9715c1b133c307f353d3702615a9668ed4c5a1fd30e27"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3h1yh/credit_card_recommendation/",
+    "fingerprints": [
+      "v1:890024b3bf698d9f5296956fec76e2de85244e315295516447de809b27f14b9c"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3h04b/credit_card_fraud_on_newly_issued_cards/",
+    "fingerprints": [
+      "v1:792802aa3b7441c32a8de80907b5e374eba46600f2ec6eb3de062de3f09f8c0c"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3gs7c/navy_federal_product_change/",
+    "fingerprints": [
+      "v1:cc212d7d4c86b7d44c1473ae74364d7f4a3e1fe24f581a9f6faef88eb38abf65"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3891m/19_years_old_60k_incomewhat_card_should_i_get/",
+    "fingerprints": [
+      "v1:b83239f22fd08fc8bef5f2d185ba96aef12a035f9aa08cb8deada07ae230e4ff"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3e8x4/anyone_cave_for_new_quicksilver/",
+    "fingerprints": [
+      "v1:1923993d14e586a17fc9478bf7d9206d12f7af660efd0a081d5ca8828d4589f4"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3e2ku/amex_gold_4x_on_gift_cards/",
+    "fingerprints": [
+      "v1:03ed66311e9acca1ec96a0324d4828695c688d0df547991fc143978b92dbdd7a"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3e144/anyone_faced_an_issue_with_chases_24month_bonus/",
+    "fingerprints": [
+      "v1:684d9bd53d78e7bf9218485fb3cd51f06a6d8675f91675b73f89cd02a0163b1b"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3des1/chase_ink_biz_cash_5_card_is_the_best_cc_as_5/",
+    "fingerprints": [
+      "v1:30fe9e9340c5edccbebfe73d695963a2639d8e0d4f223798033aad928e72d99c"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w385dx/debit_card_payments_for_rakuten_american_express/",
+    "fingerprints": [
+      "v1:15d205d5262a0928e4c802f9c63a0d9204035ba4e7b208eabdf9299ace933f61"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w2xo8p/if_i_have_1m_to_invest_is_there_any_cashback_card/",
+    "fingerprints": [
+      "v1:af8fd22d76b0243696fad06b95ba917011db43013c91845502138de9ae7fa070"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w32xjz/csr_venture_x_keep_csp_other_considerations/",
+    "fingerprints": [
+      "v1:2a80cdee8fcdc3b5248591952827073ac3b8d56fe43ae79f6abd66d0a4b33cc0"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w2onn6/nibbles_pet_credit_card_whats_the_catch/",
+    "fingerprints": [
+      "v1:39e563c5833a9e4963537708d63b6d9abca6ddddfb994c376bf84cf2ef252e97"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w35v4a/has_anyone_tried_product_changing_wf_one_key_to/",
+    "fingerprints": [
+      "v1:81313b9c3dd8d8a2b794dce409162d4dfdcb899b8d4e520b1bdabb78c53a5ac9"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w32r64/paze_wf_active_cash_cvv_invalid/",
+    "fingerprints": [
+      "v1:a2d8ec7668cc2ca853ae4b36c9a89ba005581dd4ad2a9807720aa79b9d7583e5"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w2ynfz/questions_about_the_amex_gold_credit_card/",
+    "fingerprints": [
+      "v1:e9f9851f458c355a9d2720bedac40d0b91677111e16f872768dd1a29b3c8c3d2"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://www.reddit.com/r/CreditCards/comments/1w3h5v0/paze_offer_buying_gift_cards_from_newegg/",
+    "fingerprints": [
+      "v1:35574f3ce70dcfc46da34fbfa88feaad981c97b32786ddb8a0de99fcea705928"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNakk5OC1MVTVRdHN4LVZaUXJDTHQwaHJEbk03Si1memJnaEtfNVVNT2NWOERuanBiVGNtSlV4MExOVm5xUUVyQlhuZG9MVW9nUG1ZMkJOLW9oSE8xeS1qbUNlalZyM0c3VEJ4clVqbXdWd3RaYl9ONGFKUDZJMjUtVXV0eV9pSmFHR09kVF85QUlOTnU3NGFWVGJvRm02dVZ5c2pz?oc=5",
+    "fingerprints": [
+      "v1:1576e2207f59d3fad78cea404966d1df99e69e3a10b2df1b9cf3b0e23cc76a94"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNT1hfVHA1N0JaZDBRcXRQQ3pPUjJRWmJ2VExxSGw5cXFJdmZWbDc4YjdOYXVCMzc4Y3FyU21FdVlxTDVLQVF2c0tuU29LYmQ2ZHQtY056Tm5pSzRiTGZNVG5aNnV3bUJLRy11RmRBN1VIQXVYeXBUdXoxTkJ2X2YxbXNrM2R4SjYxQ09J?oc=5",
+    "fingerprints": [
+      "v1:137dcd9b49623a025cac4a8f2e24083488ede37881cc196e195f1f72a839b34f"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNY21wODM2LU9MNmQ3eUd1NU5POXlrU2swZ3c1aWVBMmVaS3dvcXRTaXlIUjc3RUFMb0hObW50UEtzSmk1ZUphZzNVeS1tWW82U2ZUVHQtVnY5TnRGR1E1ZXVNVGRqdHRuQmVkVElabjU4b2pRWmRHUkNCNktYX1VRVTJEZW5GbWdzZkpIWVY3Smo5UQ?oc=5",
+    "fingerprints": [
+      "v1:3aecf7acf5d6247f51f38dd9e2a77d3cfc200731ebb2066ac617de27d2708bf5"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNMWRsQjZ5WldCeWlpVEluRVNjc0hGeFZka0hadjF4UTBNRzRLVGlDOVpzM1lZVEdCVlQ3SmM3YVg2azNUdll3ZU5KbHFUa2xnZlFPMUNfVERPWlZFMDNjVDl0X0ZoZUVFREEyT0NIZ2sxNi1zdFQyS050cENweHM5SWRHamJzM2EwdFBHcXFBUzZXQ1FmaXBTUg?oc=5",
+    "fingerprints": [
+      "v1:9996dbd305d28ede7643dd4c3b52a3f31c9c108ba432171e8b140eb8e562777d"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPMXU1NnB0WmItTklGSnhVZHpmQWJVczRrTGdrZmRuUDA1dC1mbEhqN3BMdjgtNDBjQzNfWk9GZ05UZUpoUmhEWHk5a21rNXBnNHRhRjA5WmlqdDJ2TzhHZC0xZnJEQ29sT0JVWGFoYmgzNnNVUEp5cXJZMHZTeklZd01lcThnY2xsVmQ0S2FZakZuYWtmcE1HaTdrMUJjdU1RWTFBa3F1NmNKYnRTd3owd1VJd0RTMmJVMmgxeDlBZ1ZxejNvVDRicE1tc3B0RXhDd1IxQ0VvajM5WnJnMjNOaHJYWFJhWWcwa204?oc=5",
+    "fingerprints": [
+      "v1:fcec3660a340cf58c689cfeacc892e17e08c8b93627c350b43b8bef0a4f8e7e9"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOczVrRHdDMjVJTTFyLXM0RVpSdWZOX2Q3Z0xhbi1NZ2o0TXdnRmhvZ1MxR19NNENhYWNvU2VjMG9PTkQwRmhLWUlrQ19kbW0yVGh2eEt4WThQc0s5OGxWYnRSczVTTDBta2Z6RWY1akRKemlubl9yLTFPYzNtNmFteFhoOGFvMHI2Y0hvMDF5NkZvVHZTU0Y2WV9idGpzWldJZGNHR2NTSVRRNEtWMmtzUw?oc=5",
+    "fingerprints": [
+      "v1:f521efc35ebfc24cd5ccb3216bdbe31e874756cd38b9d05ba48c76e026c0fe9d"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOUTNvMWlDTmY2UHhlMWhVZm5Md09QYkhJTk05cGJPOTdYQUhLVDBCbnYzWkdWMGhYU2ZfTTNkWVJYczZWT3dNYkdfY3ptckNfUF9BUkRORFMzMmppQnBwbW9MRnhxZUZ1eEpkT1RhZVJaaHBtS0xWU1U3aF96ZlFFTUYwbmkzMUpoWjZTajNQdVVNeExSTVhpcDAxU05yZmVUODJKMFluaUZONm5SNEZJRU1jeWhLdU16U2E1NmRIMnAtWC00WGszZWVn?oc=5",
+    "fingerprints": [
+      "v1:68eecaab8e45675417d2dd02c976becfbf3f915046072d9a6da7667ab7915294"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMibkFVX3lxTFB1YjJIVnE3Vk1WVkJwd2FKWkNuYWhLdFBzYWpNanBIQzRCQ2o3SlZIcGRPRlRBT1lnaEh6b1Q2T2hGSm1OOHhJWFZudS1Vc0xqVHR3cHJHOUxRam45Ym0xUkREZGhKeWZvRk9KWDhB?oc=5",
+    "fingerprints": [
+      "v1:0bb6a73c716a4c647560c03b70a21664c4a444560b4e80d35d9b9524f61c70c2"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOdld1Tl9PZHppR3I3OXRqREFzQmpvaTdVbl9oT2JOTFpSeWtoaEs4X2loTHFZTXVpcFY5T0kyRXBpX2ppUHpZU0NjaVo1cVlaZGVCYkoyTUhfMVh5dWx0MXNWek80QTNkLU0ySm5wS3FjYXphZXhzRWc2NDNhemtEaFJoMXFIbDNnMkFyVHduM0NNUlpNR09NVlRsd0owd2RiblRCWjhjQnZuQQ?oc=5",
+    "fingerprints": [
+      "v1:a721613baf0755dc98c7f686cd79d24521359f8132fbc65588cc527db1223150"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5NUXJFeVQtd3lOY04xUXlJcFV5cUhQZlJ1X01Sa1l2cWJweFIzR1NwNzdEUUZWVXZTcHRzV3ZVajdBQ1FoMnZxaVVodHRhaGhWdTZLN1NrT2FVMFhiSEJNOTNWZDBiM3BlZWNNZlJLYl9YWmxN?oc=5",
+    "fingerprints": [
+      "v1:628110f64b151f7a228ac8199ff0edd558394d50160dc33ff1c3cd54204b3f9f"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNZ0VyQk8xaWg0RG4zSmNVajZEUjVyTFZOMVpYbnBLMTJCRFBFNTJER0RSNmR2UVRiY04yYXEtT0U5M3VrUURyQjFsZlFsUXEzcmlVZEtmVGJxTHZzSE9CeFhKNy02eldKcnIwanFFTS1PMGNNMkVkVWYtOXpNcWFnc0cxN2NJMlZNaVBGNTR0eVNKc2VHZWttUkdOSHMzSzFiRV9qWHdaeGwydzlDNko0OXg1M3Fsc2VUbGNmUl9CMlhZM0RhY1ItREN3T1dIMVk?oc=5",
+    "fingerprints": [
+      "v1:c5914e056cd436b881556a31f2deedc6210019d8aa9d7477906be4062d7ff262"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBrRktmVHlCcWhqbVhnWGRkUmpfOU5qSnpWQ1dVTW5QZEd4d1hHcTlXbVozRGRXblBkdHpsMHhXaklfVDA1Wk1kODIyb1RaMVk2c3k4OVdZX19ubmVXbHU5UUNHcGs0SzJ3dXdZV0FZUkt1TmUx?oc=5",
+    "fingerprints": [
+      "v1:34a4d1b8f47e052b9706b47e7809087bc4e91eff0ea9da9a4ceef9e9e34e8115"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPUEVEWWYyZEUwQzBRNV9LWW5SQ05RZFRqbUtJT001XzhEUjIwamRkYTBZLU9kNFJIYmItZXdZRGExNTFZUHZuNFg5SHRxUVRiMkNZS1VOUmh2Q3lhSnlTdXNZSl9veVpjeGFEdk9tM0FSeWlTWUJCYmxfakw2WlRRMkE4YWYydGQwQ2JHM0J5UHRJYVdWeFZrRXlmSVJic0JRUjV2aEJZY0ZiZw?oc=5",
+    "fingerprints": [
+      "v1:2d25229d1f37f1921dcf736230d7ffa422d33baea9cb7bc0196b4e1389eef650"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOM2pKRkxMek9Zc2VFT1FITl9IajdXbzVjMGY5ZXVjYkdFdnp6Yndxd01KMHYwYllHVWRNaVRid0pEUXhlU3lQVUM4ZUs2UGxrODlDSnFNUXFDVFliYlJIb1BGOW5OTllwb3N3aWpESU1KQUhCMXpWYU43NkZCUzNucEhhVEdobFE?oc=5",
+    "fingerprints": [
+      "v1:dfe2f66e40f003f87d2e5d2aa510a12cc2215540e24fffdd58f7c584f29d96e5"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMidkFVX3lxTE50WkVDV2NzWXBMd1BQeGZaT2FHbEVhNzQxNzlrVllDR1VETUV5b0JxeDUxWGwxRGpqSVQzb1kwVHNRVFdxQlZuQUwyTkNLVW1Fb2dKWTF5c1RnSXF1bWluZlowdGhtUFNMdW9ySFphSGtIeFZKc2c?oc=5",
+    "fingerprints": [
+      "v1:6188e8dfeeb62528d6b99e0231ff53d4b1659d451aa3ac22c0ed3a812ce5f946"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNWkl2bUF1QkNYaVFCU3hVVkhMaEVuMDl3aDJjT0c0NU1ocENkcFdlNXNNSk0xeEh3RlZrOW5pWmFkUUZFSlluWXpTUTd3OFphbjBBX1BRU2lqZGg1R3JNV01pRTdYZ1dvcjkxR0Z1UXdPbC13NW1TZVkyTFd5dUVUQw?oc=5",
+    "fingerprints": [
+      "v1:d80e26fc6d647e439de7822f2a15f44f3713f16dee814de164e0de9ada156375"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMid0FVX3lxTFB4eFlmQ0owcllWMnZ5dE1md1N3dmdORTAyc1dSSFE5RGk5Zl9WT3JmcmZTOEFTTEFqajg0N1JmNTVWSk9LV0ZBMjBSbVBnVzM3cTR3cmV6YTdBQkdjSFNja2p6WW84bXlIcEFuWmhDQ3Z3ZUs3Tm1N?oc=5",
+    "fingerprints": [
+      "v1:c98d15251827395990256c02730a84b86d90673cd6ab14c3d872100ad7437240"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPd3BmMC1sYTV1LVlkQzhRdFF5OFRUMkJxRHFiZTBKb0NpMk9SUUhUcDUzdk1vcGIwNjN6alVDRHFGVUJrWkFDb0pmc0EwOThHNmhJVDQyS2g2dFNLVWs4VHZnQjhkY19NSDBtczFndHNZOHBTeEtPdUdkN0tsdkJGT25mMHlMM1B3dGRnM252X2E1eWFXb3FmMjhVZ0ZLMHFs?oc=5",
+    "fingerprints": [
+      "v1:b11bdddc7a9b3ff7c26c27884b0ee4d518c8ad6cd6ae492a827a4014ce5dab72"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPTmVLMXhCQzlMdHpBNzE3WW13c0F3Z1NhdVpaUkxtS3FwMk1ndVVCTE9IU1N6SjBEOE5uSnl0UVpOTHRuU3I5SUp2d19XcXJQUEZISEdndERHTXFqMDFXbkFkdkNjTVF3VXRkUl9rcy1GRmZyU1huQkxGekc0aktCM3Y4c0k4WWJ1VkF1VkNYd3RLX3Y4dW0xUFpWTGk?oc=5",
+    "fingerprints": [
+      "v1:140d1c06da6a88d75ddb97bdd5a36f8eceaea9e1d2d8a93f6cb3be2562da20f9"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQTW5yWmZOdkVJMjVxZnhPWDdoVjFVUVpmVEFXZlpfOXd2YURWRlFmLS1EOGR6ejk1RHI0LTFja3NGOGZ1VGRQbkFyTElPajdVSGZBMkFoYnVNMkYyQlV3UjYydW1tVVEtQ09qeW1uUWZqZFVFUi1lVG5zXzgwT3ByUHl2VHlsTHFDR3NlM3RvVW5Kdmx2VlI1b0hORkliQ3RrRGppdVFRVThudmI2NFJSdDNIaVNXM0Nh?oc=5",
+    "fingerprints": [
+      "v1:96c72519af48d6e1f0e43dbcfe92dfe04ec8b8871f85f4544c798d2eda128d60"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQUmFJM3p4UGZDV2RCcjR5NFM0WDI5ZGg1RU5XX3pOMElpbmc0TXY2THZCU1BTWU1NOGxYRUc1dmxxMHdTbHJ5VUQ1RG12YjdqQjNlY05pV0tsMG9laWdaRnlxV3NKRXlLeEVzXzNxMXdwVWJFMVVSRU1FS1VadVY5UmVKWUg1TVZhSU9rdTRyR2x3Zk1hS2hCNS1KemlrNC1odHc?oc=5",
+    "fingerprints": [
+      "v1:37debef667bf1a3cb315b70f1d6fe343399c4ec1b7679552e8cc5e21ad3e5f41"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
+  },
+  {
+    "key": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQTUo0TVJGSXNVUUh6ZUtnSlQyOWtKdnlyNmdlejlmUS14RW5ZQkZTZWtlWkZ3d1BQV04zWUNEaFdpcUZDbkIzc0FVeEpEMXVCdTNuelo0bXpTRHduTEpNMTRPakpLTHdUeW5oNDJVc291Ukg3Smh4akk4LWxSdTRCUTVyT0tSejFSVHpSOEFzU0FSTHliUFVoS1VfdnlMMjhVbXoyVFZCSDJNUC1ORkpISDNBNzJOQTNnbW5mVEczV0YtalBvSkJlSVU1X3dFcUE?oc=5",
+    "fingerprints": [
+      "v1:ac3caffc260b98d3ba939e8a36bfb342f0a0aa28461e90bf2dbfe14d33f87b69"
+    ],
+    "seen_at": "2026-08-31T16:04:25.725314Z"
   }
 ]
