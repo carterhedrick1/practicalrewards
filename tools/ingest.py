@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 from common import (
-    STATE, fetch_bytes, html_to_text, is_google_news_url, read_json,
+    HTTPStatusError, STATE, fetch_bytes, html_to_text, is_google_news_url, read_json,
     resolve_public_http_url, write_json,
 )
 
@@ -53,7 +53,9 @@ def child_text(element: ET.Element, names: tuple[str, ...]) -> str:
     for name in names:
         for child in list(element):
             if local_name(child.tag) == name:
-                return "".join(child.itertext()).strip()
+                value = "".join(child.itertext()).strip()
+                if value:
+                    return value
     return ""
 
 
@@ -97,7 +99,20 @@ def normalize_date(value: str) -> str:
 
 
 def parse_feed(payload: bytes, configured_source: str, feed_url: str = "") -> list[dict[str, Any]]:
-    root = ET.fromstring(payload)
+    if b"<!doctype" in payload.lower():
+        raise ValueError("feed payload contains a prohibited DOCTYPE")
+    try:
+        root = ET.fromstring(payload)
+    except ET.ParseError:
+        markup_start = payload.find(b"<")
+        if markup_start < 0:
+            raise
+        cleaned = re.sub(
+            rb"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]",
+            b"",
+            payload[markup_start:],
+        )
+        root = ET.fromstring(cleaned)
     root_kind = local_name(root.tag)
     items: list[dict[str, Any]] = []
 
@@ -390,7 +405,33 @@ def ingest() -> list[dict[str, Any]]:
         if "reddit.com" in url.lower():
             time.sleep(10)
         try:
-            payload, _ = fetch_bytes(url, timeout=15)
+            for attempt in range(2):
+                try:
+                    payload, _ = fetch_bytes(url, timeout=15)
+                    break
+                except HTTPStatusError as error:
+                    if error.status != 429 or attempt:
+                        raise
+                    delay = 15.0
+                    if error.retry_after:
+                        try:
+                            delay = float(error.retry_after)
+                        except ValueError:
+                            try:
+                                retry_at = email.utils.parsedate_to_datetime(error.retry_after)
+                                if retry_at.tzinfo is None:
+                                    retry_at = retry_at.replace(tzinfo=dt.timezone.utc)
+                                delay = (
+                                    retry_at - dt.datetime.now(dt.timezone.utc)
+                                ).total_seconds()
+                            except (TypeError, ValueError, OverflowError):
+                                delay = 15.0
+                    delay = min(60.0, max(0.0, delay))
+                    print(
+                        f"WARNING: {source} returned HTTP 429; retrying in {delay:g}s",
+                        file=sys.stderr,
+                    )
+                    time.sleep(delay)
             feed_items = parse_feed(payload, source, url)
             print(f"{source}: {len(feed_items)} items", file=sys.stderr)
         except Exception as error:

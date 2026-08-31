@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import fcntl
 import json
 import os
 import re
@@ -33,6 +34,7 @@ SCRIPT_NAMES = {
 DURABLE_STATE_FILES = ("seen.json", "published.json")
 SCRATCH_STATE_FILES = (
     "inbox.json", "todays-brief.json", "draft.json", "verify-report.json",
+    "articles.json",
 )
 PIPELINE_STATE_FILES = DURABLE_STATE_FILES + SCRATCH_STATE_FILES
 STATIC_PUBLISH_PATHS = ("blog/index.html", "blog/feed.xml", "sitemap.xml")
@@ -47,8 +49,8 @@ class Snapshot:
 
 
 class StepFailure(RuntimeError):
-    def __init__(self, step: str, returncode: int) -> None:
-        super().__init__(f"{step} exited with status {returncode}")
+    def __init__(self, step: str, returncode: int, detail: str | None = None) -> None:
+        super().__init__(detail or f"{step} exited with status {returncode}")
         self.step = step
         self.returncode = returncode
 
@@ -64,6 +66,8 @@ class DailyRunner:
         self.state_snapshots: list[Snapshot] = []
         self.publish_base_head: str | None = None
         self.current_step = "startup"
+        self.last_step_stderr = ""
+        self.started_at = dt.datetime.now().astimezone()
 
     def log(self, message: str) -> None:
         stamp = dt.datetime.now().astimezone().isoformat(timespec="seconds")
@@ -72,18 +76,39 @@ class DailyRunner:
         with self.log_path.open("a", encoding="utf-8") as handle:
             handle.write(line + "\n")
 
-    def run_step(self, step: str) -> int:
+    def run_step(self, step: str, env: dict[str, str] | None = None) -> int:
         self.current_step = step
         command = [sys.executable, str(ROOT / "tools" / SCRIPT_NAMES[step])]
         self.log(f"START {step}: {' '.join(command)}")
-        result = subprocess.run(
-            command,
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-        )
+        step_env = os.environ.copy()
+        if env:
+            step_env.update(env)
+        try:
+            result = subprocess.run(
+                command,
+                cwd=ROOT,
+                env=step_env,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=1800,
+                check=False,
+            )
+        except subprocess.TimeoutExpired as error:
+            stdout = error.stdout or ""
+            stderr = error.stderr or ""
+            if isinstance(stdout, bytes):
+                stdout = stdout.decode(errors="replace")
+            if isinstance(stderr, bytes):
+                stderr = stderr.decode(errors="replace")
+            self.last_step_stderr = stderr
+            for stream_name, value in (("stdout", stdout), ("stderr", stderr)):
+                for line in value.rstrip().splitlines():
+                    self.log(f"{step} {stream_name}: {line}")
+            message = f"{step} timed out after 1800 seconds"
+            self.log(f"END {step}: {message}")
+            raise StepFailure(step, -1, message) from error
+        self.last_step_stderr = result.stderr
         for stream_name, value in (("stdout", result.stdout), ("stderr", result.stderr)):
             if value:
                 for line in value.rstrip().splitlines():
@@ -332,13 +357,15 @@ class DailyRunner:
         first_reason = str(failures[0]) if failures else "verification failed"
         draft = read_json(STATE / "draft.json", {})
         slug = str(draft.get("slug", "post")) if isinstance(draft, dict) else "post"
-        held = STATE / "held" / self.today
+        held_at = self.started_at
+        held = STATE / "held" / held_at.strftime("%Y-%m-%d-%H%M%S")
+        while held.exists():
+            held_at += dt.timedelta(seconds=1)
+            held = STATE / "held" / held_at.strftime("%Y-%m-%d-%H%M%S")
         held.mkdir(parents=True, exist_ok=True)
         for path in (STATE / "draft.json", STATE / "verify-report.json", ROOT / "blog" / f"{slug}.html"):
             if path.exists():
                 destination = held / path.name
-                if destination.exists():
-                    destination.unlink()
                 shutil.move(str(path), str(destination))
         self.log(f"Held failed post artifacts in {held}")
         return first_reason
@@ -463,8 +490,10 @@ class DailyRunner:
             if ref_update.returncode != 0:
                 raise RuntimeError("local main could not be prepared for publish")
             ref_changed = True
-        except Exception:
+        except BaseException as error:
             rollback_failures = restore_prepared_local_state()
+            if isinstance(error, (KeyboardInterrupt, SystemExit)):
+                raise
             if rollback_failures:
                 raise RuntimeError(
                     "publish preparation failed and rollback also failed for: "
@@ -487,8 +516,10 @@ class DailyRunner:
                 stderr=subprocess.PIPE,
                 check=False,
             )
-        except Exception as error:
+        except BaseException as error:
             rollback_failures = restore_prepared_local_state()
+            if isinstance(error, (KeyboardInterrupt, SystemExit)):
+                raise
             message = f"git push could not run: {type(error).__name__}: {error}"
             if rollback_failures:
                 message += "; rollback also failed for: " + ", ".join(rollback_failures)
@@ -510,10 +541,19 @@ class DailyRunner:
                 self.current_step = "publish-preflight"
                 self.preflight_publish()
                 self.capture_pipeline_state()
-            for step in ("ingest", "plan", "draft"):
+            for step in ("ingest", "plan"):
                 code = self.run_step(step)
                 if code:
                     raise StepFailure(step, code)
+            draft_code = self.run_step("draft")
+            if draft_code and "DRAFT_SOURCES_UNAVAILABLE" in self.last_step_stderr:
+                self.log("Draft sources unavailable; forcing the evergreen fallback once")
+                plan_code = self.run_step("plan", {"PLAN_FORCE_EVERGREEN": "1"})
+                if plan_code:
+                    raise StepFailure("plan", plan_code)
+                draft_code = self.run_step("draft")
+            if draft_code:
+                raise StepFailure("draft", draft_code)
             self.capture_build_state()
             code = self.run_step("build")
             if code:
@@ -548,16 +588,16 @@ class DailyRunner:
                     link=preview_link,
                 )
             return 0
-        except Exception as error:
+        except BaseException as error:
             self.log(f"ERROR during {self.current_step}: {type(error).__name__}: {error}")
             if not self.dry_run:
                 try:
                     self.restore_build_state()
-                except Exception as restore_error:
+                except BaseException as restore_error:
                     self.log(f"ERROR while restoring tree: {restore_error}")
                 try:
                     self.restore_pipeline_state()
-                except Exception as restore_error:
+                except BaseException as restore_error:
                     self.log(f"ERROR while restoring pipeline state: {restore_error}")
                 self.notify(
                     "Pipeline failed",
@@ -565,6 +605,8 @@ class DailyRunner:
                 )
             else:
                 self.log("DRY RUN: leaving the working tree unchanged for inspection")
+            if isinstance(error, (KeyboardInterrupt, SystemExit)):
+                raise
             return 1
 
 
@@ -590,10 +632,25 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    lock_path = STATE / ".run.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    lock_handle = lock_path.open("a+")
+    try:
+        fcntl.flock(lock_handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        runner = DailyRunner(dry_run=args.dry_run, review=args.review)
+        message = "another run is in progress"
+        runner.log(f"ERROR: {message}")
+        runner.notify("Pipeline failed", message)
+        lock_handle.close()
+        return 1
     runner = DailyRunner(dry_run=args.dry_run, review=args.review)
-    if args.step:
-        return runner.run_step(args.step)
-    return runner.run_full()
+    try:
+        if args.step:
+            return runner.run_step(args.step)
+        return runner.run_full()
+    finally:
+        lock_handle.close()
 
 
 if __name__ == "__main__":

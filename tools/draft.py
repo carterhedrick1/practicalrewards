@@ -24,6 +24,26 @@ PLAIN_TEXT_MARKUP_RE = re.compile(
     r"<[^>]*>|&(?:#[0-9]+|#x[0-9a-f]+|[a-z][a-z0-9]+);",
     re.IGNORECASE,
 )
+DRAFT_SOURCES_UNAVAILABLE = "DRAFT_SOURCES_UNAVAILABLE"
+
+
+def fetch_source_articles(urls: list[str]) -> list[dict[str, str]]:
+    articles: list[dict[str, str]] = []
+    for url in urls:
+        try:
+            text = fetch_article_text(url, timeout=15)
+            if not text:
+                raise RuntimeError("no readable page text")
+            articles.append({"url": url, "text": text})
+        except Exception as error:
+            print(f"WARNING: draft source unavailable {url}: {error}", file=sys.stderr)
+    if urls and not articles:
+        print(DRAFT_SOURCES_UNAVAILABLE, file=sys.stderr)
+        raise RuntimeError("no draft source articles were available")
+    write_json(STATE / "articles.json", {
+        article["url"]: article["text"] for article in articles
+    })
+    return articles
 
 
 def available_brand_assets(root: Path = ROOT) -> list[str]:
@@ -268,16 +288,16 @@ def draft() -> dict[str, Any]:
         if not isinstance(raw_source_urls, list) or not all(isinstance(url, str) for url in raw_source_urls):
             raise ValueError(f"evergreen topic {topic.get('slug')} sources must be a list of URLs")
         source_urls = list(dict.fromkeys(validate_citable_source_url(url) for url in raw_source_urls))
-        source_articles = []
-        for url in source_urls:
-            text = fetch_article_text(url, timeout=15)
-            if not text:
-                raise RuntimeError(f"evergreen source yielded no readable text: {url}")
-            source_articles.append({"url": url, "text": text})
+        source_articles = fetch_source_articles(source_urls)
+        source_urls = [article["url"] for article in source_articles]
+        brief = {**brief, "source_urls": source_urls}
+        write_json(STATE / "todays-brief.json", brief)
+        slots["BRIEF_JSON"] = json.dumps(brief, ensure_ascii=False, indent=2)
         required_source_urls = set(source_urls)
         expected_slug = str(topic["slug"])
+        prompt_topic = {**topic, "sources": source_urls}
         slots.update({
-            "TOPIC_JSON": json.dumps(topic, ensure_ascii=False, indent=2),
+            "TOPIC_JSON": json.dumps(prompt_topic, ensure_ascii=False, indent=2),
             "SOURCE_ARTICLES": json.dumps(source_articles, ensure_ascii=False, indent=2),
             "CARDS_JSON": json.dumps([compact_card(card) for card in selected_cards], ensure_ascii=False, indent=2),
         })
@@ -287,12 +307,15 @@ def draft() -> dict[str, Any]:
         if not isinstance(urls, list) or not urls:
             raise ValueError("news brief requires source_urls")
         urls = list(dict.fromkeys(validate_citable_source_url(str(url)) for url in urls))
-        articles = []
-        for url in urls:
-            text = fetch_article_text(str(url), timeout=15)
-            if not text:
-                raise RuntimeError(f"source article yielded no readable text: {url}")
-            articles.append({"url": url, "text": text})
+        articles = fetch_source_articles(urls)
+        urls = [article["url"] for article in articles]
+        brief = {**brief, "source_urls": urls}
+        write_json(STATE / "todays-brief.json", brief)
+        slots["BRIEF_JSON"] = json.dumps(
+            brief,
+            ensure_ascii=False,
+            indent=2,
+        )
         haystack = json.dumps(brief, ensure_ascii=False) + " " + " ".join(item["text"] for item in articles)
         selected_cards = news_cards(cards, haystack)
         slots.update({

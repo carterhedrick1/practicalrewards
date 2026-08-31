@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import os
 import sys
 from typing import Any
 
@@ -96,6 +97,11 @@ def plan() -> dict[str, Any]:
         raise ValueError("topic-map.json has no topics list")
     published = load_published()
     fallback = next_evergreen(topics, published)
+    deterministic = {"type": "evergreen", "slug": fallback["slug"]}
+    if os.environ.get("PLAN_FORCE_EVERGREEN"):
+        write_json(STATE / "todays-brief.json", deterministic)
+        print(json.dumps(deterministic, ensure_ascii=False))
+        return deterministic
     selectable_inbox = [item for item in inbox if isinstance(item, dict)]
     template = (TOOLS / "prompts" / "plan.md").read_text(encoding="utf-8")
     prompt = fill_template(template, {
@@ -107,7 +113,6 @@ def plan() -> dict[str, Any]:
         ),
         "INBOX_JSON": json.dumps(selectable_inbox, ensure_ascii=False, indent=2),
     })
-    deterministic = {"type": "evergreen", "slug": fallback["slug"]}
     try:
         reply = run_codex(prompt, reasoning_effort="low")
         brief = validate_model_plan(parse_json_reply(reply), fallback, selectable_inbox)

@@ -23,9 +23,18 @@ from common import (
 )
 
 
+SCALE_PATTERN = r"(?:[kK]\b|\s+(?:thousand|million|billion)\b)"
+SCALE_FACTORS = {
+    None: 1,
+    "k": 1000,
+    "thousand": 1000,
+    "million": 1_000_000,
+    "billion": 1_000_000_000,
+}
 SIGNED_MONEY_PATTERN = (
     r"(?:(?<![^\s(])-\$|\u2212\$|\$[-\u2212]?)\s*"
     r"\d[\d,]*(?:\.\d+)?"
+    rf"(?:{SCALE_PATTERN})?"
 )
 MONEY_OR_MULTIPLIER_RE = re.compile(
     rf"{SIGNED_MONEY_PATTERN}\+?|\b\d+(?:\.\d+)?x\b",
@@ -33,25 +42,42 @@ MONEY_OR_MULTIPLIER_RE = re.compile(
 )
 RANGE_SEPARATOR_RE = r"(?:[-–—]|\bto\b)"
 REWARDS_UNIT_RE = r"(?:points?|pts?|miles?|mi)"
+REWARDS_BRIDGE_RE = (
+    r"(?:bonus|extra|welcome|anniversary|additional|base|total|"
+    r"membership|rewards|ultimate|thankyou|chase|capital|one|american|express|"
+    r"bank|of|america|preferred|wells|fargo|bilt|citi|air|canada|british|"
+    r"airways|aeroplan|avios|carnival|emirates|skywards|airlines|aadvantage|"
+    r"skymiles|delta|united|mileageplus|southwest|rapid|jetblue|trueblue|"
+    r"alaska|mileage|plan|hilton|honors|marriott|bonvoy|world|hyatt|ihg|"
+    r"wyndham|choice|privileges|statement)"
+)
+QUANTITY_BRIDGE_RE = (
+    r"(?:free|bonus|award|additional|anniversary|statement|night['’]s)"
+)
+QUANTITY_UNIT_RE = r"(?:credits?|days?|hours?|months?|nights?|weeks?|years?)"
 CPP_UNIT_RE = (
     r"(?:¢(?:\s*/\s*(?:pt|point|mi|mile)|\s+per\s+(?:point|mile))?|"
-    r"cpp|cpm|cents?\s+per\s+(?:point|mile))"
+    r"cpp|cpm|cents?\s+(?:per\s+(?:point|mile)|each|apiece))"
 )
 KEY_NUMBER_RE = re.compile(
     rf"{SIGNED_MONEY_PATTERN}\+?|"
-    r"\b\d+(?:\.\d+)?(?:x\b|%(?![a-z0-9])|[\s-]+percent(?:age)?s?\b)|"
-    r"\b\d[\d,]*(?:\.\d+)?[kK]?(?:[\s®™℠-]+[A-Za-z]+){0,3}"
+    r"\b\d+(?:\.\d+)?(?:[x×](?![a-z0-9])|%(?![a-z0-9])|[\s-]+percent(?:age)?s?\b)|"
+    rf"\b\d[\d,]*(?:\.\d+)?(?:{SCALE_PATTERN})?"
+    rf"(?:[\s®™℠-]+{REWARDS_BRIDGE_RE}){{0,5}}"
     rf"[\s®™℠-]+{REWARDS_UNIT_RE}\b|"
-    r"\b\d[\d,]*(?:\.\d+)?[\s-]*"
-    r"(?:credits?|days?|hours?|months?|nights?|weeks?|years?)\b",
+    r"\b\d[\d,]*(?:\.\d+)?"
+    rf"(?:[\s-]+{QUANTITY_BRIDGE_RE}){{0,2}}[\s-]+"
+    rf"{QUANTITY_UNIT_RE}\b",
     re.IGNORECASE,
 )
 MONEY_RANGE_RE = re.compile(
-    rf"\$\s*(\d[\d,]*(?:\.\d+)?)\s*{RANGE_SEPARATOR_RE}\s*\$?\s*(\d[\d,]*(?:\.\d+)?)",
+    r"\$\s*(\d[\d,]*(?:\.\d+)?)\s*"
+    r"(?:(?:[-–—])\s*\$?\s*|\bto\b\s*\$\s*)"
+    r"(\d[\d,]*(?:\.\d+)?)",
     re.IGNORECASE,
 )
 MULTIPLIER_RANGE_RE = re.compile(
-    rf"\b(\d+(?:\.\d+)?)\s*x?\s*{RANGE_SEPARATOR_RE}\s*(\d+(?:\.\d+)?)\s*(x)\b",
+    rf"\b(\d+(?:\.\d+)?)\s*[x×]?\s*{RANGE_SEPARATOR_RE}\s*(\d+(?:\.\d+)?)\s*([x×])(?![a-z0-9])",
     re.IGNORECASE,
 )
 PERCENT_RANGE_RE = re.compile(
@@ -60,12 +86,12 @@ PERCENT_RANGE_RE = re.compile(
     re.IGNORECASE,
 )
 POINTS_RANGE_RE = re.compile(
-    rf"\b(\d[\d,]*(?:\.\d+)?[kK]?)\s*({REWARDS_UNIT_RE})?\s*{RANGE_SEPARATOR_RE}\s*"
+    rf"(?<![\d,$])(?<!\$\s)\b(\d[\d,]*(?:\.\d+)?[kK]?)\s*({REWARDS_UNIT_RE})?\s*{RANGE_SEPARATOR_RE}\s*"
     rf"(\d[\d,]*(?:\.\d+)?[kK]?)\s*({REWARDS_UNIT_RE})\b",
     re.IGNORECASE,
 )
 QUANTITY_RANGE_RE = re.compile(
-    rf"\b(\d[\d,]*(?:\.\d+)?)\s*"
+    rf"(?<![\d,$])(?<!\$\s)\b(\d[\d,]*(?:\.\d+)?)\s*"
     rf"(?:(credits?|days?|hours?|months?|nights?|weeks?|years?))?\s*"
     rf"{RANGE_SEPARATOR_RE}\s*(\d[\d,]*(?:\.\d+)?)\s*"
     r"(credits?|days?|hours?|months?|nights?|weeks?|years?)\b",
@@ -83,7 +109,7 @@ CPP_RE = re.compile(
 DATE_RE = re.compile(
     r"\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
     r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|"
-    r"Dec(?:ember)?)\s+(?:20\d{2}|\d{1,2}(?:st|nd|rd|th)?(?:,?\s+\d{4})?)\b|"
+    r"Dec(?:ember)?)(?:\.)?\s+(?:20\d{2}|\d{1,2}(?:st|nd|rd|th)?(?:,?\s+\d{4})?)\b|"
     r"\b\d{4}-\d{1,2}-\d{1,2}\b|\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b",
     re.IGNORECASE,
 )
@@ -99,7 +125,13 @@ PLAIN_TEXT_MARKUP_RE = re.compile(
 
 
 def normalize_number(value: str) -> str:
-    compact = re.sub(r"[\s,]", "", value).casefold().replace("\u2212", "-").rstrip("+")
+    compact = (
+        re.sub(r"[\s,]", "", value).casefold()
+        .replace("\u2212", "-")
+        .replace("×", "x")
+        .translate(str.maketrans("", "", "®™℠"))
+        .rstrip("+")
+    )
     negative = False
     if compact.startswith("-$"):
         negative = True
@@ -115,31 +147,43 @@ def normalize_number(value: str) -> str:
     cpp = re.fullmatch(
         r"(\d+(?:\.\d+)?)(?:cpp|cpm|"
         r"¢(?:/(?:pt|point|mi|mile)|per(?:point|mile))?|"
-        r"cents?per(?:point|mile))",
+        r"cents?(?:per(?:point|mile)|each|apiece))",
         compact,
     )
     if cpp:
         amount = float(cpp.group(1))
         return (str(int(amount)) if amount.is_integer() else f"{amount:g}") + "cpp"
     quantity = re.fullmatch(
-        r"(\d+(?:\.\d+)?)(k)?[a-z®™℠]*"
-        r"(points?|pts?|miles?|mi|credits?|days?|hours?|months?|nights?|weeks?|years?)",
+        r"(\d+(?:\.\d+)?)(k|thousand|million|billion)?"
+        rf"(?:{REWARDS_BRIDGE_RE}){{0,5}}"
+        r"(points?|pts?|miles?|mi)",
         compact,
     )
     if quantity:
-        amount = float(quantity.group(1)) * (1000 if quantity.group(2) else 1)
+        amount = float(quantity.group(1)) * SCALE_FACTORS[quantity.group(2)]
         number = str(int(amount)) if amount.is_integer() else f"{amount:g}"
-        unit = quantity.group(3)
-        if re.fullmatch(r"points?|pts?|miles?|mi", unit):
-            return number + "point"
+        return number + "point"
+    quantity = re.fullmatch(
+        rf"(\d+(?:\.\d+)?)(?:{QUANTITY_BRIDGE_RE}){{0,2}}"
+        rf"({QUANTITY_UNIT_RE})",
+        compact,
+    )
+    if quantity:
+        amount = float(quantity.group(1))
+        number = str(int(amount)) if amount.is_integer() else f"{amount:g}"
+        unit = quantity.group(2)
         if unit.endswith("s"):
             unit = unit[:-1]
         return number + unit
-    simple = re.fullmatch(r"(\$?)(\d+(?:\.\d+)?)(%|x|percent(?:age)?s?)?", compact)
+    simple = re.fullmatch(
+        r"(\$?)(\d+(?:\.\d+)?)(k|thousand|million|billion)?"
+        r"(%|x|percent(?:age)?s?)?",
+        compact,
+    )
     if simple:
-        amount = float(simple.group(2))
+        amount = float(simple.group(2)) * SCALE_FACTORS[simple.group(3)]
         number = str(int(amount)) if amount.is_integer() else f"{amount:g}"
-        suffix = simple.group(3) or ""
+        suffix = simple.group(4) or ""
         if suffix.startswith("percent"):
             suffix = "%"
         sign = "-" if negative else ""
@@ -149,6 +193,8 @@ def normalize_number(value: str) -> str:
 
 def normalize_date(value: str) -> str:
     cleaned = re.sub(r"(\d)(?:st|nd|rd|th)\b", r"\1", value.strip(), flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bSept\b\.?", "Sep", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\b([A-Za-z]{3})\.", r"\1", cleaned)
     cleaned = re.sub(r"\s+", " ", cleaned.replace(",", " ")).strip()
     formats = (
         "%B %Y", "%b %Y",
@@ -226,7 +272,11 @@ def iter_numeric_claims(value: str, key_numbers: bool = False) -> list[tuple[int
     return sorted(matches, key=lambda item: (item[0], item[1]))
 
 
-def numeric_tokens(value: str, key_numbers: bool = False) -> set[str]:
+def numeric_tokens(
+    value: str,
+    key_numbers: bool = False,
+    include_bare_years: bool = False,
+) -> set[str]:
     tokens = {claim[3] for claim in iter_numeric_claims(value, key_numbers=key_numbers)}
     if key_numbers:
         for token in list(tokens):
@@ -237,6 +287,11 @@ def numeric_tokens(value: str, key_numbers: bool = False) -> set[str]:
             month_year = re.fullmatch(r"date:(\d{4})-(\d{2})", token)
             if month_year:
                 tokens.add("date-year:" + month_year.group(1))
+        if include_bare_years:
+            tokens.update(
+                "date-year:" + match.group(0)
+                for match in re.finditer(r"(?<!\w)20\d{2}(?!\w)", value)
+            )
     return tokens
 
 
@@ -518,11 +573,14 @@ def check_card_number_findings(
     calculations: Any = None,
 ) -> tuple[list[str], list[str], list[dict[str, Any]]]:
     failures: list[str] = []
-    sourced = set().union(*(numeric_tokens(text, key_numbers=True) for text in (source_texts or [])))
+    sourced = set().union(*(
+        numeric_tokens(text, key_numbers=True, include_bare_years=True)
+        for text in (source_texts or [])
+    ))
     known_by_id: dict[Any, set[str]] = {}
     for card in cards:
         known_text = json.dumps(compact_card(card), ensure_ascii=False)
-        known = numeric_tokens(known_text, key_numbers=True)
+        known = numeric_tokens(known_text, key_numbers=True, include_bare_years=True)
         annual_fee = card.get("annual_fee")
         if isinstance(annual_fee, (int, float)) and not isinstance(annual_fee, bool):
             known.add(normalize_number(f"${annual_fee:g}"))
@@ -758,6 +816,7 @@ def card_key_numbers(card: dict[str, Any]) -> set[str]:
     known = numeric_tokens(
         json.dumps(compact_card(card), ensure_ascii=False),
         key_numbers=True,
+        include_bare_years=True,
     )
     annual_fee = card.get("annual_fee")
     if isinstance(annual_fee, (int, float)) and not isinstance(annual_fee, bool):
@@ -843,7 +902,7 @@ def check_article_numeric_findings(
         claims.setdefault(token, raw)
     known_card_numbers = set().union(*(card_key_numbers(card) for card in cards))
     source_numbers = set().union(*(
-        numeric_tokens(source_text, key_numbers=True)
+        numeric_tokens(source_text, key_numbers=True, include_bare_years=True)
         for source_text in fetched.values()
     ))
     _associated, _unassociated, illustrative_sentences, _named_claims = scan_card_numeric_claims(
@@ -949,7 +1008,11 @@ def claim_hint_missing_numbers(url: str, claim_hint: str, source_text: str) -> s
             token for token in expected
             if not token.startswith(("date:", "date-year:"))
         }
-    return expected - numeric_tokens(source_text, key_numbers=True)
+    return expected - numeric_tokens(
+        source_text,
+        key_numbers=True,
+        include_bare_years=True,
+    )
 
 
 def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]]) -> list[str]:
@@ -1091,6 +1154,9 @@ def verify() -> dict[str, Any]:
     })
 
     fetched: dict[str, str] = {}
+    saved_articles = read_json(STATE / "articles.json", {})
+    if not isinstance(saved_articles, dict):
+        saved_articles = {}
     source_failures: list[str] = []
     source_warnings: list[str] = []
     draft_source_urls = {
@@ -1099,6 +1165,8 @@ def verify() -> dict[str, Any]:
     }
     if post_type == "news":
         raw_brief_urls = brief.get("source_urls", []) if isinstance(brief, dict) else []
+    elif isinstance(brief, dict) and "source_urls" in brief:
+        raw_brief_urls = brief.get("source_urls", [])
     else:
         topic_map = read_json(TOOLS / "content" / "topic-map.json", {})
         topics = topic_map.get("topics", []) if isinstance(topic_map, dict) else []
@@ -1139,12 +1207,24 @@ def verify() -> dict[str, Any]:
             )
     urls_to_fetch = draft_source_urls | brief_source_urls
     for url in sorted(urls_to_fetch):
-        try:
-            fetched[url] = fetch_article_text(url, timeout=15)
-            if not fetched[url]:
-                raise RuntimeError("no readable page text")
-        except Exception as error:
-            source_failures.append(f"source fetch failed for {url}: {error}")
+        saved_text = saved_articles.get(url)
+        if isinstance(saved_text, str) and saved_text.strip():
+            fetched[url] = saved_text
+            continue
+        last_error: Exception | None = None
+        for attempt in range(2):
+            try:
+                fetched[url] = fetch_article_text(url, timeout=15)
+                if not fetched[url]:
+                    raise RuntimeError("no readable page text")
+                break
+            except Exception as error:
+                last_error = error
+                fetched.pop(url, None)
+                if attempt == 0:
+                    continue
+        if url not in fetched:
+            source_failures.append(f"source fetch failed for {url}: {last_error}")
     for source in sources:
         url = str(source.get("url", ""))
         if url not in fetched:

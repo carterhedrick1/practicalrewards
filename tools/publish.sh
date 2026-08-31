@@ -14,6 +14,7 @@ scratch_exclusions=(
     ':(exclude)tools/state/todays-brief.json'
     ':(exclude)tools/state/draft.json'
     ':(exclude)tools/state/verify-report.json'
+    ':(exclude)tools/state/articles.json'
 )
 
 if ! tracked_changes="$(
@@ -26,6 +27,18 @@ fi
 if [[ -n "$tracked_changes" ]]; then
     printf '%s\n' 'FAILURE: refusing to push; tracked files have uncommitted changes:' >&2
     printf '%s\n' "$tracked_changes" >&2
+    exit 1
+fi
+
+if ! git fetch origin main; then
+    printf '%s\n' 'FAILURE: could not fetch origin/main before push.' >&2
+    exit 1
+fi
+
+git merge-base --is-ancestor origin/main main
+ancestor_status=$?
+if [[ $ancestor_status -ne 0 ]]; then
+    printf '%s\n' 'FAILURE: local main has diverged from or is behind origin/main; refusing to push.' >&2
     exit 1
 fi
 

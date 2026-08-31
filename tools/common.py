@@ -949,6 +949,13 @@ def _read_bounded_response(
     return payload
 
 
+class HTTPStatusError(RuntimeError):
+    def __init__(self, status: int, retry_after: str | None = None) -> None:
+        super().__init__(f"HTTP request failed with status {status}")
+        self.status = status
+        self.retry_after = retry_after
+
+
 def fetch_bytes(
     url: str,
     timeout: int = FETCH_TIMEOUT,
@@ -978,7 +985,10 @@ def fetch_bytes(
                 current_url = urllib.parse.urljoin(safe_url, location)
                 continue
             if response.status >= 400:
-                raise RuntimeError(f"HTTP request failed with status {response.status}")
+                raise HTTPStatusError(
+                    response.status,
+                    response.getheader("Retry-After"),
+                )
             payload = _read_bounded_response(response, max_bytes=max_bytes)
             return payload, response.headers.get_content_charset() or "utf-8"
         finally:
@@ -1239,6 +1249,13 @@ def parse_json_reply(raw: str) -> Any:
 
 
 CALCULATION_OPERATIONS = {"add", "subtract", "multiply", "divide"}
+CALCULATION_SCALE_FACTORS = {
+    None: 1,
+    "k": 1000,
+    "thousand": 1000,
+    "million": 1_000_000,
+    "billion": 1_000_000_000,
+}
 
 
 def _parse_calculation_quantity(value: Any) -> tuple[float, str]:
@@ -1246,7 +1263,7 @@ def _parse_calculation_quantity(value: Any) -> tuple[float, str]:
         raise ValueError("calculation values must be numbers or numeric strings")
     if isinstance(value, (int, float)):
         return float(value), "count"
-    compact = re.sub(r"[\s,]", "", value).casefold().rstrip("+")
+    compact = re.sub(r"[\s,]", "", value).casefold().replace("×", "x").rstrip("+")
     percent = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)(?:%|percent)", compact)
     if percent:
         return float(percent.group(1)) / 100, "percent"
@@ -1259,17 +1276,27 @@ def _parse_calculation_quantity(value: Any) -> tuple[float, str]:
     if cpp:
         return float(cpp.group(1)) / 100, "cpp"
     quantity = re.fullmatch(
-        r"([+-]?\d+(?:\.\d+)?)(k)?(?:points?|pts?|miles?|mi)",
+        r"([+-]?\d+(?:\.\d+)?)(k|thousand|million|billion)?"
+        r"(?:points?|pts?|miles?|mi)",
         compact,
     )
     if quantity:
-        return float(quantity.group(1)) * (1000 if quantity.group(2) else 1), "points"
+        return (
+            float(quantity.group(1)) * CALCULATION_SCALE_FACTORS[quantity.group(2)],
+            "points",
+        )
     multiplier = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)x", compact)
     if multiplier:
         return float(multiplier.group(1)), "points_per_dollar"
-    plain = re.fullmatch(r"(\$?)([+-]?\d+(?:\.\d+)?)", compact)
+    plain = re.fullmatch(
+        r"(\$?)([+-]?\d+(?:\.\d+)?)(k|thousand|million|billion)?",
+        compact,
+    )
     if plain:
-        return float(plain.group(2)), "dollars" if plain.group(1) else "count"
+        return (
+            float(plain.group(2)) * CALCULATION_SCALE_FACTORS[plain.group(3)],
+            "dollars" if plain.group(1) else "count",
+        )
     raise ValueError(f"unsupported calculation value: {value!r}")
 
 
