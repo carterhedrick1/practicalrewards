@@ -6,6 +6,7 @@ Hard rules:
 - Follow the inlined house style: dry, numerate, blunt verdicts, no hype, no exclamation points, "we" or impersonal voice, never first-person singular.
 - Every number, dollar figure, percentage, multiplier, points figure, or date you write must already appear in the article with the same value. Do not introduce any number that is not in the article. Do not round, convert, or extrapolate.
 - Name only cards, issuers, and brands the article names.
+- When the article is about a change, say exactly what changed (old value → new value, when) and treat everything else as already existing. Never present a pre-existing benefit as if it starts on the change date; a reader who already holds the card must not think the whole package is new.
 - Dates read like a person talking today: write "October 1" or "starting October 1", never "October 1, 2026" or "in 2026". Include a year only when the article is contrasting two different years.
 - No affiliate language, no "apply now", no urgency, no emoji, no hashtags or URLs inside slides, verdict, or caption (hashtags and the link line are appended automatically).
 - Do not repeat the hero stat card's label verbatim, and do not restate the math panel's rows on a text slide.

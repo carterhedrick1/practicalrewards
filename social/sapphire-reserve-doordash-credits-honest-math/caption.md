@@ -1,11 +1,11 @@
-Most of this DoorDash benefit is for paper towels and snacks, not dinner.
+Most of this DoorDash value is not takeout money.
 
-Starting October 1, the Sapphire Reserve carries $35 in monthly order benefits: a flexible $15 credit and $20 limited to non-restaurant orders. Across 12 months, that is $420 in face value. DashPass remains separate.
+Starting October 1, the flexible monthly credit grows from $5 to $15 and works on restaurant or non-restaurant orders. The two $10 non-restaurant discounts stay unchanged, while DashPass remains separate from the $35 monthly total.
 
-The catch is organic spend. The non-restaurant discounts expire monthly, and the $15 credit can still pull a larger order along with it—the pickup minimum is $20. A benefit that creates spending or a recurring chore is not worth its printed value.
+The catch is fit. The full $35 works only for households already ordering groceries or convenience items through DoorDash most months. Restaurant-only users can count up to $15, plus whatever DashPass genuinely saves on orders they would place anyway. A $20 pickup minimum can also make a small credit pull a larger order behind it.
 
-Count purchases and savings already in the budget. If DoorDash is not already part of the routine, value the order benefits at $0 and ignore the coupon book.
+Count purchases and savings already in the budget, then ignore the rest of the coupon book.
 
 Full breakdown on practicalrewards.com (link in bio).
 
-#CreditCards #CreditCardRewards #TravelRewards #PointsAndMiles #PersonalFinance #SapphireReserve #DoorDash #Chase
+#CreditCards #CreditCardRewards #TravelRewards #PointsAndMiles #PersonalFinance #SapphireReserve #DoorDash #DashPass
