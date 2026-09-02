@@ -566,12 +566,59 @@ class DailyRunner:
                 reason = str(failures[0]) if failures else f"verify exited with status {verify_code}"
                 if self.dry_run:
                     self.log(f"DRY RUN: post failed verification; leaving all changes for inspection: {reason}")
-                else:
+                    return 1
+                for revision_round in range(1, 3):
+                    self.log(
+                        f"Verification failed ({reason}); requesting draft revision {revision_round}/2"
+                    )
+                    failed_draft = read_json(STATE / "draft.json", {})
+                    failed_slug = (
+                        str(failed_draft.get("slug", ""))
+                        if isinstance(failed_draft, dict)
+                        else ""
+                    )
+                    failed_html_path = ROOT / "blog" / f"{failed_slug}.html"
+                    failed_html = (
+                        failed_html_path.read_bytes()
+                        if failed_slug and failed_html_path.is_file()
+                        else None
+                    )
+                    self.restore_build_state()
+                    revision_code = self.run_step("draft", {"DRAFT_REVISE": "1"})
+                    if revision_code:
+                        if failed_html is not None:
+                            failed_html_path.parent.mkdir(parents=True, exist_ok=True)
+                            failed_html_path.write_bytes(failed_html)
+                        self.log(
+                            f"Draft revision {revision_round}/2 failed with status {revision_code}; holding post"
+                        )
+                        break
+                    self.capture_build_state()
+                    build_code = self.run_step("build")
+                    if build_code:
+                        raise StepFailure("build", build_code)
+                    verify_code = self.run_step("verify")
+                    report = read_json(STATE / "verify-report.json", {})
+                    passed = (
+                        verify_code == 0
+                        and isinstance(report, dict)
+                        and report.get("passed") is True
+                    )
+                    failures = report.get("failures", []) if isinstance(report, dict) else []
+                    reason = (
+                        str(failures[0])
+                        if failures
+                        else f"verify exited with status {verify_code}"
+                    )
+                    if passed:
+                        self.log(f"Verification passed after revision {revision_round}")
+                        break
+                if not passed:
                     reason = self.hold_failed_post()
                     self.restore_build_state()
                     self.restore_pipeline_state()
                     self.notify("Post held", f"Today's post was held — {reason}")
-                return 1
+                    return 1
             draft = read_json(STATE / "draft.json", {})
             if self.dry_run:
                 self.log(

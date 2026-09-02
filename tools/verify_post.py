@@ -586,7 +586,7 @@ def check_card_number_findings(
             known.add(normalize_number(f"${annual_fee:g}"))
         known_by_id[card.get("id")] = known
     all_known = set().union(*known_by_id.values())
-    calculated, _calculation_failures = calculation_evidence(
+    _accepted, _calculation_failures, calculated = calculation_evidence(
         calculations if calculations is not None else [], all_known, sourced,
     )
     math_operands = math_subtraction_operand_tokens(content_html)
@@ -851,27 +851,40 @@ def calculation_evidence(
     known_numbers: set[str],
     source_numbers: set[str],
     illustrative_sentences: list[str] | None = None,
-) -> tuple[set[str], list[str]]:
+) -> tuple[set[str], list[str], set[str]]:
     accepted_results: set[str] = set()
+    strict_results: set[str] = set()
     failures: list[str] = []
     try:
         validated = validate_calculations(calculations)
     except ValueError as error:
-        return set(), [f"invalid calculation evidence: {error}"]
+        return set(), [f"invalid calculation evidence: {error}"], set()
     supported_inputs = known_numbers | source_numbers
+    strict_supported_inputs = known_numbers | source_numbers
+    illustrative_inputs = set().union(*(
+        set(_numeric_counter(sentence)) for sentence in (illustrative_sentences or [])
+    ))
     for index, calculation in enumerate(validated):
         recompute_calculation(calculation)
         illustrative_match = any(
             _calculation_matches_sentence(calculation, sentence)
             for sentence in (illustrative_sentences or [])
         )
+        strict_inputs_supported = True
         for raw_input in calculation["inputs"]:
             tokens = numeric_tokens(str(raw_input), key_numbers=True)
             if not tokens:
                 tokens = {normalize_number(str(raw_input))}
+            strict_input_is_supported = bool(
+                tokens & strict_supported_inputs
+                or bare_count_matches_unit_quantity(tokens, strict_supported_inputs)
+            )
+            strict_inputs_supported = strict_inputs_supported and strict_input_is_supported
             input_is_supported = bool(
                 tokens & supported_inputs
                 or bare_count_matches_unit_quantity(tokens, supported_inputs)
+                or tokens & illustrative_inputs
+                or bare_count_matches_unit_quantity(tokens, illustrative_inputs)
             )
             if not input_is_supported and not illustrative_match:
                 failures.append(
@@ -884,7 +897,10 @@ def calculation_evidence(
             result_tokens = {normalized, "$" + normalized.lstrip("$")}
         accepted_results.update(result_tokens)
         supported_inputs.update(result_tokens)
-    return accepted_results, failures
+        if strict_inputs_supported:
+            strict_results.update(result_tokens)
+            strict_supported_inputs.update(result_tokens)
+    return accepted_results, failures, strict_results
 
 
 def check_article_numeric_findings(
@@ -911,7 +927,7 @@ def check_article_numeric_findings(
     illustrative_numbers = set().union(*(
         set(_numeric_counter(sentence)) for sentence in illustrative_sentences
     ))
-    calculated, calculation_failures = calculation_evidence(
+    calculated, calculation_failures, _strict_results = calculation_evidence(
         calculations if calculations is not None else [],
         known_card_numbers,
         source_numbers,

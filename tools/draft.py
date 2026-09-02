@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -28,8 +29,18 @@ DRAFT_SOURCES_UNAVAILABLE = "DRAFT_SOURCES_UNAVAILABLE"
 
 
 def fetch_source_articles(urls: list[str]) -> list[dict[str, str]]:
+    try:
+        cached = read_json(STATE / "articles.json", {})
+    except (OSError, ValueError):
+        cached = {}
+    if not isinstance(cached, dict):
+        cached = {}
     articles: list[dict[str, str]] = []
     for url in urls:
+        cached_text = cached.get(url)
+        if isinstance(cached_text, str) and cached_text.strip():
+            articles.append({"url": url, "text": cached_text})
+            continue
         try:
             text = fetch_article_text(url, timeout=15)
             if not text:
@@ -259,7 +270,37 @@ def existing_slugs() -> set[str]:
     return slugs
 
 
+def revision_context() -> tuple[dict[str, Any], list[str]]:
+    draft_path = STATE / "draft.json"
+    if not draft_path.is_file():
+        raise ValueError("revise mode requires tools/state/draft.json, but it is missing")
+    try:
+        previous_draft = read_json(draft_path)
+    except (OSError, ValueError) as error:
+        raise ValueError(f"revise mode requires a valid tools/state/draft.json: {error}") from error
+    if not isinstance(previous_draft, dict):
+        raise ValueError("revise mode requires a valid tools/state/draft.json object")
+    slug = previous_draft.get("slug")
+    if not isinstance(slug, str) or not SLUG_RE.fullmatch(slug):
+        raise ValueError("revise mode requires draft.json to contain a valid slug")
+    report_path = STATE / "verify-report.json"
+    if not report_path.is_file():
+        raise ValueError("revise mode requires tools/state/verify-report.json, but it is missing")
+    try:
+        report = read_json(report_path)
+    except (OSError, ValueError) as error:
+        raise ValueError(f"revise mode requires a valid tools/state/verify-report.json: {error}") from error
+    if not isinstance(report, dict):
+        raise ValueError("revise mode requires a valid tools/state/verify-report.json object")
+    failures = report.get("failures")
+    if not isinstance(failures, list) or not all(isinstance(failure, str) for failure in failures):
+        raise ValueError("revise mode requires verify-report.json failures to be a list of strings")
+    return previous_draft, failures
+
+
 def draft() -> dict[str, Any]:
+    revise = os.environ.get("DRAFT_REVISE") == "1"
+    previous_draft, verification_failures = revision_context() if revise else ({}, [])
     brief = read_json(STATE / "todays-brief.json")
     if not isinstance(brief, dict) or brief.get("type") not in {"evergreen", "news"}:
         raise ValueError("todays-brief.json is missing or invalid")
@@ -336,7 +377,22 @@ def draft() -> dict[str, Any]:
         allowed_source_urls.update(str(url) for url in urls)
     else:
         allowed_source_urls.update(required_source_urls)
-    reply = run_codex(prompt, reasoning_effort="low")
+    if revise:
+        expected_slug = str(previous_draft["slug"])
+        forbidden_slugs.discard(expected_slug)
+        prompt = (
+            prompt
+            + "\n\nYour previous draft failed independent verification with these problems:\n"
+            + "\n".join(f"- {failure}" for failure in verification_failures)
+            + "\nPrevious draft JSON:\n"
+            + json.dumps(previous_draft, ensure_ascii=False, indent=2)
+            + "\nRevise the draft to fix every listed problem while preserving the slug, topic, "
+            "structure, and everything that was not flagged. Typical fixes: state any hypothetical "
+            "assumption in the same sentence as the number it produces; remove or properly source "
+            "unsupported numbers; keep every calculation consistent with the prose and the supplied "
+            "unit rules. Return a corrected STRICT JSON object only."
+        )
+    reply = run_codex(prompt, reasoning_effort="medium" if revise else "low")
     try:
         result = validate_draft(
             parse_json_reply(reply), allowed_ids, allowed_source_urls, expected_slug,
