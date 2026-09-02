@@ -39,6 +39,7 @@ SCRATCH_STATE_FILES = (
 )
 PIPELINE_STATE_FILES = DURABLE_STATE_FILES + SCRATCH_STATE_FILES
 STATIC_PUBLISH_PATHS = ("blog/index.html", "blog/feed.xml", "sitemap.xml")
+INSTAGRAM_PREVIEW_URL = "http://carters-mac-mini.tailb1c452.ts.net:8000/preview/instagram/"
 
 
 @dataclass
@@ -71,6 +72,7 @@ class DailyRunner:
         self.started_at = dt.datetime.now().astimezone()
         self.social_dir: Path | None = None
         self.social_note = ""
+        self.social_ready = False
 
     def log(self, message: str) -> None:
         stamp = dt.datetime.now().astimezone().isoformat(timespec="seconds")
@@ -312,7 +314,14 @@ class DailyRunner:
             shutil.rmtree(self.social_dir, ignore_errors=True)
         self.log("Restored all build-touched paths to their exact pre-run state")
 
-    def notify(self, title: str, message: str, link: str | None = None) -> None:
+    def notify(
+        self,
+        title: str,
+        message: str,
+        link: str | None = None,
+        actions: list[tuple[str, str]] | None = None,
+    ) -> None:
+        """Send an ntfy push (with optional tap buttons) and a macOS notification."""
         def log_notification(message: str) -> None:
             try:
                 self.log(message)
@@ -341,6 +350,11 @@ class DailyRunner:
                 }
                 if link is not None:
                     payload["click"] = link
+                if actions:
+                    payload["actions"] = [
+                        {"action": "view", "label": label, "url": url, "clear": True}
+                        for label, url in actions[:3]
+                    ]
                 request = urllib.request.Request(
                     "https://ntfy.sh",
                     data=json.dumps(payload).encode("utf-8"),
@@ -576,13 +590,13 @@ class DailyRunner:
             record = read_json(ROOT / "social" / slug / "post.json", {}) if slug else {}
             count = len(record.get("images", [])) if isinstance(record, dict) else 0
             self.social_note = (
-                f"IG {record.get('format', 'post')} ready ({count} image{'s' if count != 1 else ''}): "
-                "http://carters-mac-mini.tailb1c452.ts.net:8000/preview/instagram/"
+                f"Instagram {record.get('format', 'post')} ready ({count} image{'s' if count != 1 else ''})"
             )
-            self.log(self.social_note)
+            self.social_ready = True
+            self.log(self.social_note + f": {INSTAGRAM_PREVIEW_URL}")
             return
         self.log("WARNING social step failed; publishing the post without share images")
-        self.social_note = "IG assets FAILED"
+        self.social_note = "Instagram assets FAILED (post still ready)"
         if slug:
             shutil.rmtree(ROOT / "social" / slug, ignore_errors=True)
             self.strip_share_image_tags(slug)
@@ -682,10 +696,14 @@ class DailyRunner:
             title, slug = self.git_publish()
             if self.review:
                 preview_link = f"http://carters-mac-mini.tailb1c452.ts.net:8000/blog/{slug}.html"
+                actions = [("Blog preview", preview_link)]
+                if self.social_ready:
+                    actions.append(("Instagram preview", INSTAGRAM_PREVIEW_URL))
                 self.notify(
                     title,
-                    preview_link + (f" — {self.social_note}" if self.social_note else ""),
+                    (self.social_note or "Post ready for review") + f"\nBlog: {preview_link}",
                     link=preview_link,
+                    actions=actions,
                 )
             return 0
         except BaseException as error:
