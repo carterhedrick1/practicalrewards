@@ -176,6 +176,8 @@ def check_text(field: str, value: Any, limit: int, allowed_numbers: set[str], al
         raise CopyRejected(f"{field} uses first-person singular")
     if re.search(r"\brumou?r\b", value, re.IGNORECASE):
         raise CopyRejected(f"{field} uses the word rumor")
+    if re.search(r"\b(?:19|20)\d{2}\b", value):
+        raise CopyRejected(f"{field} spells out a year; write dates like 'October 1' instead")
     unsupported = {
         token for token in numeric_tokens(value, key_numbers=True, include_bare_years=True) - allowed_numbers
         if not _same_value_elsewhere(token, allowed_numbers)

@@ -202,6 +202,23 @@ def load_records() -> dict[str, Any]:
     return records if isinstance(records, dict) else {}
 
 
+def backlog_slug(records: dict[str, Any]) -> str | None:
+    """Oldest post (by blog date) with generated assets that has not been posted."""
+    published = read_json(STATE / "published.json", [])
+    if not isinstance(published, list):
+        return None
+    for item in published:  # published.json is in chronological order
+        if not isinstance(item, dict):
+            continue
+        slug = str(item.get("slug", ""))
+        record = records.get(slug)
+        if isinstance(record, dict) and record.get("state") == "published":
+            continue
+        if (ROOT / "social" / slug / "post.json").is_file():
+            return slug
+    return None
+
+
 def latest_slug() -> str:
     published = read_json(STATE / "published.json", [])
     if not isinstance(published, list) or not published:
@@ -215,6 +232,7 @@ def main() -> int:
     group.add_argument("--check", action="store_true", help="validate the token and print the account")
     group.add_argument("--latest", action="store_true", help="publish the newest post in published.json")
     group.add_argument("--slug", help="publish social/<slug>/")
+    group.add_argument("--backlog", action="store_true", help="publish the oldest generated post not yet on Instagram (no-op when the backlog is empty)")
     parser.add_argument("--dry-run", action="store_true", help="validate images and config without posting")
     parser.add_argument("--wait", type=int, default=600, help="seconds to wait for images to deploy (default 600)")
     args = parser.parse_args()
@@ -226,12 +244,18 @@ def main() -> int:
             account = check_account(config)
             print(json.dumps(account, indent=2))
             return 0
-        slug = args.slug or latest_slug()
+        records = load_records()
+        if args.backlog:
+            slug = backlog_slug(records)
+            if slug is None:
+                print("backlog empty: every generated post is already on Instagram")
+                return 0
+        else:
+            slug = args.slug or latest_slug()
         record_path = ROOT / "social" / slug / "post.json"
         record = read_json(record_path)
         if not isinstance(record, dict) or not record.get("images"):
             raise PublishError(f"no generated Instagram post at {record_path}")
-        records = load_records()
         existing = records.get(slug)
         if isinstance(existing, dict) and existing.get("state") == "published":
             print(f"already published: {existing.get('permalink')}")
