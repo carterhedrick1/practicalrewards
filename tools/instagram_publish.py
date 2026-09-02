@@ -197,6 +197,27 @@ def publish(record: dict[str, Any], config: dict[str, str], dry_run: bool, wait:
     }
 
 
+def notify(title: str, message: str, link: str | None = None) -> None:
+    """Best-effort ntfy push using the same topic as the blog pipeline."""
+    try:
+        config = json.loads(Path("~/.config/practicalrewards/notify.json").expanduser().read_text(encoding="utf-8"))
+        topic = str(config.get("ntfy_topic", "")).strip()
+        if not topic:
+            return
+        payload: dict[str, Any] = {"topic": topic, "title": title, "message": message, "priority": 3}
+        if link:
+            payload["click"] = link
+            payload["actions"] = [{"action": "view", "label": "Open post", "url": link, "clear": True}]
+        request = urllib.request.Request(
+            "https://ntfy.sh", data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"}, method="POST",
+        )
+        with urllib.request.urlopen(request, timeout=10):
+            pass
+    except Exception:
+        pass
+
+
 def load_records() -> dict[str, Any]:
     records = read_json(RECORDS_PATH, {})
     return records if isinstance(records, dict) else {}
@@ -269,6 +290,7 @@ def main() -> int:
                 build_preview()
             except Exception as error:
                 print(f"WARNING: could not rebuild the Instagram preview page: {error}", file=sys.stderr)
+            notify("Instagram: posted", str(record.get("title", slug)), link=result.get("permalink"))
         print(json.dumps({"slug": slug, **result}, indent=2))
         return 0
     except PublishError as error:
