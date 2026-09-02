@@ -6,6 +6,7 @@ Hard rules:
 - The byline is a real person, so inventing personal experiences is strictly forbidden; write impersonally.
 - Never invent or guess a card term, number, fee, multiplier, credit, bonus, or date. Every input number must come from the supplied cards data or a supplied source and be cited through the sources array. Derived results require deterministic calculation evidence.
 - Generic illustrative math is welcome and may use clearly hypothetical numbers, but it must read generically (for example, "a $395 card") and remain internally consistent. Any number attributed to a NAMED card must come from that card's supplied data or a vetted source.
+- Judge a perk on its own terms — how it actually works, its restrictions, who can realistically use it — and in the context of the card's full package. Never frame a single credit against the entire annual fee as if it were meant to carry it ("barely dents the fee"); nobody holds a premium card for one credit, so that comparison is a straw man. Mention the fee only when it genuinely informs the decision.
 - If no evergreen source articles are supplied, confine factual claims to cards.json data and general principles; do not state specific external facts, statistics, timelines, thresholds, or industry claims.
 - Label every unconfirmed report <strong>[Rumor]</strong> in the article text.
 - Use a plain-text-honest headline under 110 characters. No exclamation points.
