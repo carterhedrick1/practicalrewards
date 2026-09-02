@@ -1,0 +1,59 @@
+{
+  "slug": "coupon-book-credits",
+  "title": "Monthly Card Credits Are a Part-Time Job",
+  "url": "https://practicalrewards.com/blog/coupon-book-credits.html",
+  "format": "carousel",
+  "created_at": "2026-09-02T14:53:01-05:00",
+  "copy_source": "codex",
+  "images": [
+    {
+      "file": "slide-01.jpg",
+      "url": "https://practicalrewards.com/social/coupon-book-credits/slide-01.jpg",
+      "sha256": "e0d38b5ba363ae6e6970377aa6049a875af4645c6ed75b97d877521b893c3b2e"
+    },
+    {
+      "file": "slide-02.jpg",
+      "url": "https://practicalrewards.com/social/coupon-book-credits/slide-02.jpg",
+      "sha256": "82839913733e85d27a041b4e04c136f706aa4d66b0ff193721fc0288b75437ee"
+    },
+    {
+      "file": "slide-03.jpg",
+      "url": "https://practicalrewards.com/social/coupon-book-credits/slide-03.jpg",
+      "sha256": "9dd5e48fcc752f804afa35cc65bffeef47e13e0ea2962d120342afc7a3543f53"
+    },
+    {
+      "file": "slide-04.jpg",
+      "url": "https://practicalrewards.com/social/coupon-book-credits/slide-04.jpg",
+      "sha256": "02b54b150f43889a0bab636da5d4d87d385336492036e29a033357a44f124f8d"
+    },
+    {
+      "file": "slide-05.jpg",
+      "url": "https://practicalrewards.com/social/coupon-book-credits/slide-05.jpg",
+      "sha256": "132ad0cd953a951705b72969c9c6f6d750567eda5df108b534981f6e3d5656c5"
+    }
+  ],
+  "og_image": "https://practicalrewards.com/social/coupon-book-credits/og.png",
+  "caption": "Face value is the number on the brochure. Usable value is what survives your calendar.\n\nA $10 monthly credit can produce $120 over a year, but only if all 12 months cooperate. Each reset creates another chance to forget, miss the deadline, or buy something because the coupon is expiring.\n\nThe catch: effort is personal. Automatic credits tied to spending already in your routine can deserve close to face value. Narrow merchants, portal-only booking, and repeated reminders turn benefits into unpaid administration.\n\nCount automatic annual credits first, discount anything that needs babysitting, and give forced spending a value of zero.\n\nFull breakdown on practicalrewards.com (link in bio).\n\n#CreditCards #CreditCardRewards #TravelRewards #PointsAndMiles #PersonalFinance",
+  "cover_style": "dark",
+  "slides": [
+    {
+      "type": "Cover"
+    },
+    {
+      "type": "MathSlide"
+    },
+    {
+      "type": "TextSlide",
+      "heading": "Face value is marketing",
+      "body": "Usable value depends on spending you already do and the effort required to collect it. Score your real routine—not your organized imaginary self."
+    },
+    {
+      "type": "TextSlide",
+      "heading": "Red means recurring homework",
+      "body": "Monthly expiration, narrow merchants, portal-only booking, and extra purchases turn a credit into a chore. Forced spending is not reimbursement."
+    },
+    {
+      "type": "VerdictSlide"
+    }
+  ]
+}

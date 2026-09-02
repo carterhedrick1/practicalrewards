@@ -1,0 +1,51 @@
+{
+  "slug": "organic-spend-test",
+  "title": "The Organic Spend Test: Would You Buy It Without the Card?",
+  "url": "https://practicalrewards.com/blog/organic-spend-test.html",
+  "format": "carousel",
+  "created_at": "2026-09-02T14:52:29-05:00",
+  "copy_source": "codex",
+  "images": [
+    {
+      "file": "slide-01.jpg",
+      "url": "https://practicalrewards.com/social/organic-spend-test/slide-01.jpg",
+      "sha256": "029ab480f01c18aa48ca4293113594bbd92090b86044d3b3b1798ca5160e2a95"
+    },
+    {
+      "file": "slide-02.jpg",
+      "url": "https://practicalrewards.com/social/organic-spend-test/slide-02.jpg",
+      "sha256": "ecb8466bcaf36d5f82de6afb9b7f711ba91b883e47450a30826bc1cee978e595"
+    },
+    {
+      "file": "slide-03.jpg",
+      "url": "https://practicalrewards.com/social/organic-spend-test/slide-03.jpg",
+      "sha256": "35b69b09131679a4006ca8ea278a35c772e3298877aafafeda6c0aebe6b8170f"
+    },
+    {
+      "file": "slide-04.jpg",
+      "url": "https://practicalrewards.com/social/organic-spend-test/slide-04.jpg",
+      "sha256": "5ce728ecb3f3c25b01502f1f6bfae38d589028b4dde8882f9bf9321430dfcc7f"
+    }
+  ],
+  "og_image": "https://practicalrewards.com/social/organic-spend-test/og.png",
+  "caption": "Using a credit is not the same as saving money.\n\nA credit offsets an annual fee only when it replaces spending that was already going to happen. Record what you would normally spend—not the advertised maximum—and reduce the value for merchant switching, extra spending, or unwanted purchases.\n\nThat matters when a Chase Sapphire Reserve costs $795, an American Express Platinum costs $895, or an American Express Gold Card costs $325. Printed credit totals look tidy; real life usually needs an audit.\n\nIf you would not buy it without the card, it is not savings. Count it at $0.\n\nFull breakdown on practicalrewards.com (link in bio).\n\n#CreditCards #CreditCardRewards #TravelRewards #PointsAndMiles #PersonalFinance #ChaseSapphireReserve #AmexPlatinum #AmexGold",
+  "cover_style": "dark",
+  "slides": [
+    {
+      "type": "Cover"
+    },
+    {
+      "type": "TextSlide",
+      "heading": "The purchase must survive",
+      "body": "Remove the credit and imagine paying with cash. If the purchase disappears, the fee offset disappears with it."
+    },
+    {
+      "type": "TextSlide",
+      "heading": "Redeemed is not saved",
+      "body": "Changing merchants, ordering more often, or buying before a credit expires is manufactured spending—not a discount."
+    },
+    {
+      "type": "VerdictSlide"
+    }
+  ]
+}

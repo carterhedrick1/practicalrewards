@@ -42,14 +42,29 @@ if [[ $ancestor_status -ne 0 ]]; then
     exit 1
 fi
 
+publish_instagram() {
+    local config="$HOME/.config/practicalrewards/instagram.json"
+    if [[ ! -f "$config" ]]; then
+        printf '%s\n' 'Instagram: no config at ~/.config/practicalrewards/instagram.json; skipping.'
+        return 0
+    fi
+    if python3 tools/instagram_publish.py --latest --wait 900; then
+        printf '%s\n' 'SUCCESS: Instagram post published.'
+    else
+        printf '%s\n' 'WARNING: Instagram publish failed; the blog push already succeeded. Re-run: python3 tools/instagram_publish.py --latest' >&2
+    fi
+}
+
 if git push origin main; then
     printf '%s\n' 'SUCCESS: pushed local main to origin/main.'
+    publish_instagram
     exit 0
 fi
 
 printf '%s\n' 'Plain git push failed; retrying with GitHub CLI credentials.' >&2
 if git -c 'credential.helper=!gh auth git-credential' push origin main; then
     printf '%s\n' 'SUCCESS: pushed local main to origin/main with GitHub CLI credentials.'
+    publish_instagram
     exit 0
 fi
 

@@ -1,0 +1,59 @@
+{
+  "slug": "effective-annual-fee-math",
+  "title": "Your Annual Fee Isn’t the Number That Matters",
+  "url": "https://practicalrewards.com/blog/effective-annual-fee-math.html",
+  "format": "carousel",
+  "created_at": "2026-09-02T14:51:52-05:00",
+  "copy_source": "codex",
+  "images": [
+    {
+      "file": "slide-01.jpg",
+      "url": "https://practicalrewards.com/social/effective-annual-fee-math/slide-01.jpg",
+      "sha256": "3f8e1185d5d6d01051d9b1eaa886c49b4573c90c14bbd0a3a0c2ac3c9d4ac817"
+    },
+    {
+      "file": "slide-02.jpg",
+      "url": "https://practicalrewards.com/social/effective-annual-fee-math/slide-02.jpg",
+      "sha256": "df475bbd1a3d96bfec2651bfc2c61205dafacd58f24d513431d6634b44c0c5e6"
+    },
+    {
+      "file": "slide-03.jpg",
+      "url": "https://practicalrewards.com/social/effective-annual-fee-math/slide-03.jpg",
+      "sha256": "cacdc5d4a4a0bf87a0a5204058b7f76122a04197c4784cd950daa8a8cd3edb3a"
+    },
+    {
+      "file": "slide-04.jpg",
+      "url": "https://practicalrewards.com/social/effective-annual-fee-math/slide-04.jpg",
+      "sha256": "18c0c18167329e85eb40d74a763210de8daa48ff46e357e9454b69078b86081f"
+    },
+    {
+      "file": "slide-05.jpg",
+      "url": "https://practicalrewards.com/social/effective-annual-fee-math/slide-05.jpg",
+      "sha256": "03f449893c08ba720e117c15bb25f42768da32babdbe8da0f03e32f6ad837803"
+    }
+  ],
+  "og_image": "https://practicalrewards.com/social/effective-annual-fee-math/og.png",
+  "caption": "A premium card can look cheap on paper and still cost too much.\n\nThe Capital One Venture X math reaches an effective fee of −$5 when the $300 Capital One Travel credit and 10,000 anniversary miles both replace spending you would make anyway. That is the useful calculation—not the pile of benefits on the marketing page.\n\nThe catch is that the travel credit requires portal spending, and the miles are worth $100 here only at the 1¢ per mile statement-redemption value against eligible travel purchases. If either benefit changes your habits or goes unused, give it a haircut or enter $0.\n\nSubtract only credits that replace normal spending. If the remaining fee still feels heavy, the card is too expensive for you.\n\nFull breakdown on practicalrewards.com (link in bio).\n\n#CreditCards #CreditCardRewards #TravelRewards #PointsAndMiles #PersonalFinance #CapitalOneVentureX",
+  "cover_style": "dark",
+  "slides": [
+    {
+      "type": "Cover"
+    },
+    {
+      "type": "MathSlide"
+    },
+    {
+      "type": "TextSlide",
+      "heading": "Face value is not your value",
+      "body": "Count a credit only when it replaces normal spending at roughly the same price. Portal detours, extra purchases, and babysitting deserve a haircut—or $0."
+    },
+    {
+      "type": "TextSlide",
+      "heading": "Renewal resets the math",
+      "body": "Use current terms and recent behavior, not last year's intentions. Aspirational credits are unused coupons wearing nicer clothes."
+    },
+    {
+      "type": "VerdictSlide"
+    }
+  ]
+}

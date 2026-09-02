@@ -480,6 +480,7 @@ def build_post() -> Path:
         "DATE_DISPLAY": display_date,
         "JSON_LD": json.dumps(json_ld, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
         "HERO": render_hero(draft, selected_cards),
+        "OG_IMAGE_URL": f"https://practicalrewards.com/social/{slug}/og.png",
         "CONTENT": content,
     })
     output_path = ROOT / "blog" / f"{slug}.html"

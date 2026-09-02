@@ -23,13 +23,14 @@ from typing import Any
 from common import ROOT, STATE, read_json, slugify_brand_name
 
 
-STEPS = ("ingest", "plan", "draft", "build", "verify")
+STEPS = ("ingest", "plan", "draft", "build", "verify", "social")
 SCRIPT_NAMES = {
     "ingest": "ingest.py",
     "plan": "plan.py",
     "draft": "draft.py",
     "build": "build_post.py",
     "verify": "verify_post.py",
+    "social": "social.py",
 }
 DURABLE_STATE_FILES = ("seen.json", "published.json")
 SCRATCH_STATE_FILES = (
@@ -68,6 +69,8 @@ class DailyRunner:
         self.current_step = "startup"
         self.last_step_stderr = ""
         self.started_at = dt.datetime.now().astimezone()
+        self.social_dir: Path | None = None
+        self.social_note = ""
 
     def log(self, message: str) -> None:
         stamp = dt.datetime.now().astimezone().isoformat(timespec="seconds")
@@ -76,9 +79,9 @@ class DailyRunner:
         with self.log_path.open("a", encoding="utf-8") as handle:
             handle.write(line + "\n")
 
-    def run_step(self, step: str, env: dict[str, str] | None = None) -> int:
+    def run_step(self, step: str, env: dict[str, str] | None = None, args: list[str] | None = None) -> int:
         self.current_step = step
-        command = [sys.executable, str(ROOT / "tools" / SCRIPT_NAMES[step])]
+        command = [sys.executable, str(ROOT / "tools" / SCRIPT_NAMES[step]), *(args or [])]
         self.log(f"START {step}: {' '.join(command)}")
         step_env = os.environ.copy()
         if env:
@@ -152,8 +155,32 @@ class DailyRunner:
         if slug:
             paths.append(f"blog/{slug}.html")
             paths.extend(self.referenced_brand_paths(slug))
+            paths.extend(self.social_asset_paths(slug))
         paths.extend(f"tools/state/{name}" for name in DURABLE_STATE_FILES)
         return paths
+
+    def social_asset_paths(self, slug: str) -> list[str]:
+        """Return the generated Instagram/share assets for this slug, if any."""
+        social_dir = ROOT / "social" / slug
+        if not social_dir.is_dir():
+            return []
+        return sorted(
+            str(path.relative_to(ROOT))
+            for path in social_dir.iterdir()
+            if path.is_file() and not path.name.startswith(".")
+        )
+
+    def strip_share_image_tags(self, slug: str) -> None:
+        """Remove og:image/twitter:image tags when no share image was generated."""
+        post_path = ROOT / "blog" / f"{slug}.html"
+        if not post_path.is_file():
+            return
+        lines = post_path.read_text(encoding="utf-8").splitlines(keepends=True)
+        kept = [
+            line for line in lines
+            if not re.search(r'(?:property="og:image(?::width|:height)?"|name="twitter:(?:card|image)")', line)
+        ]
+        post_path.write_text("".join(kept), encoding="utf-8")
 
     def referenced_brand_paths(self, slug: str) -> list[str]:
         """Return only local brand assets referenced by this run's built page."""
@@ -251,6 +278,8 @@ class DailyRunner:
             Snapshot(path, path.exists(), path.read_bytes() if path.exists() else None, self.is_tracked(path))
             for path in paths
         ]
+        social_dir = ROOT / "social" / slug
+        self.social_dir = None if social_dir.exists() else social_dir
         self.log(f"Captured pre-build state for {len(paths)} paths")
 
     def restore_build_state(self) -> None:
@@ -279,6 +308,8 @@ class DailyRunner:
                 snapshot.path.write_bytes(snapshot.data or b"")
             elif snapshot.path.exists():
                 snapshot.path.unlink()
+        if self.social_dir is not None and self.social_dir.exists():
+            shutil.rmtree(self.social_dir, ignore_errors=True)
         self.log("Restored all build-touched paths to their exact pre-run state")
 
     def notify(self, title: str, message: str, link: str | None = None) -> None:
@@ -535,6 +566,24 @@ class DailyRunner:
             raise RuntimeError(message)
         return title, slug
 
+    def run_social_step(self, slug: str) -> None:
+        """Generate Instagram slides and the share image; never blocks the post."""
+        try:
+            code = self.run_step("social", args=[slug, "--force"] if slug else None)
+        except StepFailure as error:
+            code = error.returncode
+        if code == 0:
+            record = read_json(ROOT / "social" / slug / "post.json", {}) if slug else {}
+            count = len(record.get("images", [])) if isinstance(record, dict) else 0
+            self.social_note = f"IG {record.get('format', 'post')} ready ({count} image{'s' if count != 1 else ''})"
+            self.log(self.social_note)
+            return
+        self.log("WARNING social step failed; publishing the post without share images")
+        self.social_note = "IG assets FAILED"
+        if slug:
+            shutil.rmtree(ROOT / "social" / slug, ignore_errors=True)
+            self.strip_share_image_tags(slug)
+
     def run_full(self) -> int:
         try:
             if not self.dry_run:
@@ -620,6 +669,7 @@ class DailyRunner:
                     self.notify("Post held", f"Today's post was held — {reason}")
                     return 1
             draft = read_json(STATE / "draft.json", {})
+            self.run_social_step(str(draft.get("slug", "")) if isinstance(draft, dict) else "")
             if self.dry_run:
                 self.log(
                     f"DRY RUN PASS: built and verified {draft.get('title', 'post')}; no commit or push; changes left for inspection"
@@ -631,7 +681,7 @@ class DailyRunner:
                 preview_link = f"http://carters-mac-mini.tailb1c452.ts.net:8000/blog/{slug}.html"
                 self.notify(
                     title,
-                    preview_link,
+                    preview_link + (f" — {self.social_note}" if self.social_note else ""),
                     link=preview_link,
                 )
             return 0
