@@ -86,6 +86,40 @@ def graph(config: dict[str, str], method: str, path: str, params: dict[str, Any]
     return payload
 
 
+def refresh_token_if_due(config: dict[str, Any]) -> dict[str, Any]:
+    """Refresh a long-lived Instagram-Login token once it is more than a week old.
+
+    Long-lived tokens last 60 days and can be refreshed any time after 24 hours.
+    Refreshing on every publish (at most once a week) keeps the token from ever
+    expiring while the daily pipeline is running. Failures are non-fatal; the
+    existing token keeps working until its expiry date.
+    """
+    if not str(config.get("graph_host", "")).startswith("https://graph.instagram.com"):
+        return config
+    obtained = config.get("token_obtained")
+    try:
+        obtained_date = dt.date.fromisoformat(str(obtained)) if obtained else None
+    except ValueError:
+        obtained_date = None
+    if obtained_date and (dt.date.today() - obtained_date).days < 7:
+        return config
+    try:
+        result = graph(config, "GET", "refresh_access_token", {"grant_type": "ig_refresh_token"})
+    except PublishError as error:
+        print(f"WARNING: token refresh failed ({error}); continuing with the current token", file=sys.stderr)
+        return config
+    token = result.get("access_token")
+    if not isinstance(token, str) or not token:
+        return config
+    expires_in = int(result.get("expires_in", 60 * 86400))
+    config["access_token"] = token
+    config["token_obtained"] = dt.date.today().isoformat()
+    config["token_expires"] = (dt.date.today() + dt.timedelta(seconds=expires_in)).isoformat()
+    CONFIG_PATH.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
+    print(f"token refreshed; now valid until {config['token_expires']}")
+    return config
+
+
 def check_account(config: dict[str, str]) -> dict[str, Any]:
     return graph(config, "GET", config["ig_user_id"], {"fields": "id,username,name,account_type,media_count"})
 
@@ -187,6 +221,7 @@ def main() -> int:
 
     try:
         config = load_config()
+        config = refresh_token_if_due(config)
         if args.check:
             account = check_account(config)
             print(json.dumps(account, indent=2))

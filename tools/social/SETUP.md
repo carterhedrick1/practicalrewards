@@ -1,5 +1,22 @@
 # Instagram publishing setup (Graph API)
 
+**Status (2026-09-02): configured.** Meta app "Practical Rewards Publisher"
+(app id 1725463365384371, Instagram app id 1582616906672673) owned by Carter's
+Facebook developer account; practical.rewards is a Business account and an
+Instagram Tester on the app; config lives at
+`~/.config/practicalrewards/instagram.json` (Instagram-Login flavor,
+graph.instagram.com). The publisher refreshes the 60-day token automatically
+once a week. `python3 tools/instagram_publish.py --check` verifies it.
+
+If the token ever dies: open the OAuth URL in the practicalrewards Chrome
+profile (`https://www.instagram.com/oauth/authorize?client_id=1582616906672673&redirect_uri=https%3A%2F%2Fpracticalrewards.com%2F&response_type=code&scope=instagram_business_basic%2Cinstagram_business_content_publish`),
+click Allow, take the `code` from the redirect URL, and exchange it with the app
+secret (dashboard → Instagram app secret → copy) at
+`POST https://api.instagram.com/oauth/access_token`, then
+`GET https://graph.instagram.com/access_token?grant_type=ig_exchange_token`.
+The dashboard's own "Generate token" button opens a popup Chrome blocks.
+
+
 The daily pipeline generates `social/<slug>/` (slides, `og.png`, `caption.md`,
 `post.json`) for every post. Publishing to Instagram happens once, at
 `tools/publish.sh` time, through the Instagram Graph API. It needs a one-time
