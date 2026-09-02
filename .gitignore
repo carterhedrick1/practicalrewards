@@ -19,3 +19,4 @@ tools/state/draft.json
 tools/state/verify-report.json
 tools/state/held/
 tools/state/logs/
+tools/state/articles.json
