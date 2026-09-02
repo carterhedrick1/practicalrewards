@@ -233,7 +233,7 @@ def backlog_slug(records: dict[str, Any]) -> str | None:
             continue
         slug = str(item.get("slug", ""))
         record = records.get(slug)
-        if isinstance(record, dict) and record.get("state") == "published":
+        if isinstance(record, dict) and record.get("state") in {"published", "skipped"}:
             continue
         if (ROOT / "social" / slug / "post.json").is_file():
             return slug
@@ -253,6 +253,8 @@ def main() -> int:
     group.add_argument("--check", action="store_true", help="validate the token and print the account")
     group.add_argument("--latest", action="store_true", help="publish the newest post in published.json")
     group.add_argument("--slug", help="publish social/<slug>/")
+    group.add_argument("--skip", metavar="SLUG", help="mark a post as skipped so the backlog job never posts it")
+    group.add_argument("--unskip", metavar="SLUG", help="clear a skip mark")
     group.add_argument("--backlog", action="store_true", help="publish the oldest generated post not yet on Instagram (no-op when the backlog is empty)")
     parser.add_argument("--dry-run", action="store_true", help="validate images and config without posting")
     parser.add_argument("--wait", type=int, default=600, help="seconds to wait for images to deploy (default 600)")
@@ -266,6 +268,18 @@ def main() -> int:
             print(json.dumps(account, indent=2))
             return 0
         records = load_records()
+        if args.skip or args.unskip:
+            slug = args.skip or args.unskip
+            existing = records.get(slug)
+            if isinstance(existing, dict) and existing.get("state") == "published":
+                raise PublishError(f"{slug} is already live; delete it on Instagram if needed")
+            if args.skip:
+                records[slug] = {"state": "skipped", "skipped_at": dt.datetime.now().astimezone().isoformat(timespec="seconds")}
+            else:
+                records.pop(slug, None)
+            write_json(RECORDS_PATH, records)
+            print(f"{slug}: {'skipped' if args.skip else 'back in the queue'}")
+            return 0
         if args.backlog:
             slug = backlog_slug(records)
             if slug is None:

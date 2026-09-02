@@ -392,7 +392,7 @@ def draft() -> dict[str, Any]:
             "unsupported numbers; keep every calculation consistent with the prose and the supplied "
             "unit rules. Return a corrected STRICT JSON object only."
         )
-    reply = run_codex(prompt, reasoning_effort="medium" if revise else "low")
+    reply = run_codex(prompt, reasoning_effort="high" if revise else "medium")
     try:
         result = validate_draft(
             parse_json_reply(reply), allowed_ids, allowed_source_urls, expected_slug,
@@ -405,7 +405,7 @@ def draft() -> dict[str, Any]:
             + "\nPrevious response:\n" + reply
             + "\nReturn a corrected STRICT JSON object only."
         )
-        retry = run_codex(correction, reasoning_effort="medium")
+        retry = run_codex(correction, reasoning_effort="high")
         result = validate_draft(
             parse_json_reply(retry), allowed_ids, allowed_source_urls, expected_slug,
             forbidden_slugs, required_source_urls, cards,
