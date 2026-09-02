@@ -5,7 +5,20 @@ The daily pipeline generates `social/<slug>/` (slides, `og.png`, `caption.md`,
 `tools/publish.sh` time, through the Instagram Graph API. It needs a one-time
 setup that only the account owner can do.
 
-## One-time setup
+## One-time setup (Instagram Login flavor, no Facebook Page needed)
+
+1. Instagram: Settings → Account type and tools → Switch to professional account.
+2. https://developers.facebook.com (needs a Facebook login) → Create app → use
+   case "Instagram" (API with Instagram Login) → in the app dashboard open
+   Instagram → API setup with Instagram login → step 1 "Generate access tokens":
+   add the practical.rewards account and generate a token (it is long-lived,
+   60 days; refresh with GET /refresh_access_token?grant_type=ig_refresh_token).
+3. The dashboard shows the Instagram account id next to the token.
+4. Save `{"ig_user_id": "...", "access_token": "IGAA...", "graph_host": "https://graph.instagram.com"}`
+   at `~/.config/practicalrewards/instagram.json` (chmod 600) and run
+   `python3 tools/instagram_publish.py --check`.
+
+## Alternative setup (Facebook Login flavor)
 
 1. **Instagram account type.** In the Instagram app: Settings → Account type
    and tools → Switch to professional account → Creator (or Business).

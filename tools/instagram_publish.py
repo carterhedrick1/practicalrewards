@@ -8,7 +8,12 @@ Usage:
   instagram_publish.py ... --dry-run      do everything except create/publish
 
 Config lives outside the repo at ~/.config/practicalrewards/instagram.json:
-  {"ig_user_id": "1784...", "access_token": "EAAB...", "api_version": "v21.0"}
+  {"ig_user_id": "1784...", "access_token": "IGAA...", "api_version": "v21.0",
+   "graph_host": "https://graph.instagram.com"}
+
+graph_host is https://graph.instagram.com for the "Instagram API with Instagram
+Login" flavor (no Facebook Page needed) or https://graph.facebook.com for the
+older Facebook-Login flavor. Endpoints are identical for publishing.
 
 Images must be publicly reachable on practicalrewards.com (Render deploys on
 push), so the publisher waits for each image URL to return 200 before it asks
@@ -33,7 +38,7 @@ from common import ROOT, STATE, read_json, write_json
 
 CONFIG_PATH = Path("~/.config/practicalrewards/instagram.json").expanduser()
 RECORDS_PATH = STATE / "instagram.json"
-GRAPH = "https://graph.facebook.com"
+DEFAULT_GRAPH_HOST = "https://graph.instagram.com"
 
 
 class PublishError(RuntimeError):
@@ -49,13 +54,16 @@ def load_config() -> dict[str, str]:
         if not isinstance(config.get(key), str) or not config[key].strip():
             raise PublishError(f"config is missing {key}")
     config.setdefault("api_version", "v21.0")
+    config.setdefault("graph_host", DEFAULT_GRAPH_HOST)
+    if not str(config["graph_host"]).startswith("https://graph."):
+        raise PublishError("graph_host must be https://graph.instagram.com or https://graph.facebook.com")
     return config
 
 
 def graph(config: dict[str, str], method: str, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
     params = dict(params or {})
     params["access_token"] = config["access_token"]
-    url = f"{GRAPH}/{config['api_version']}/{path.lstrip('/')}"
+    url = f"{config['graph_host'].rstrip('/')}/{config['api_version']}/{path.lstrip('/')}"
     data = None
     if method == "GET":
         url += "?" + urllib.parse.urlencode(params)
@@ -79,7 +87,7 @@ def graph(config: dict[str, str], method: str, path: str, params: dict[str, Any]
 
 
 def check_account(config: dict[str, str]) -> dict[str, Any]:
-    return graph(config, "GET", config["ig_user_id"], {"fields": "id,username,name,media_count"})
+    return graph(config, "GET", config["ig_user_id"], {"fields": "id,username,name,account_type,media_count"})
 
 
 def wait_for_urls(urls: list[str], timeout: int) -> None:
