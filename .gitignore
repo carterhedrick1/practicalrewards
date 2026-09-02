@@ -21,3 +21,6 @@ tools/state/held/
 tools/state/logs/
 tools/state/articles.json
 tools/state/instagram.json
+
+# Local-only preview pages (served by the dev server, never deployed)
+preview/

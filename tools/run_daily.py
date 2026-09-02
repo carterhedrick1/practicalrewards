@@ -575,7 +575,10 @@ class DailyRunner:
         if code == 0:
             record = read_json(ROOT / "social" / slug / "post.json", {}) if slug else {}
             count = len(record.get("images", [])) if isinstance(record, dict) else 0
-            self.social_note = f"IG {record.get('format', 'post')} ready ({count} image{'s' if count != 1 else ''})"
+            self.social_note = (
+                f"IG {record.get('format', 'post')} ready ({count} image{'s' if count != 1 else ''}): "
+                "http://carters-mac-mini.tailb1c452.ts.net:8000/preview/instagram/"
+            )
             self.log(self.social_note)
             return
         self.log("WARNING social step failed; publishing the post without share images")

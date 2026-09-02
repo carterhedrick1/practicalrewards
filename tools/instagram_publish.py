@@ -240,6 +240,11 @@ def main() -> int:
         if result["state"] == "published":
             records[slug] = result
             write_json(RECORDS_PATH, records)
+            try:
+                from social_preview import build_preview
+                build_preview()
+            except Exception as error:
+                print(f"WARNING: could not rebuild the Instagram preview page: {error}", file=sys.stderr)
         print(json.dumps({"slug": slug, **result}, indent=2))
         return 0
     except PublishError as error:

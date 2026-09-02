@@ -400,6 +400,12 @@ def generate(slug: str, out_dir: Path, use_llm: bool, force: bool) -> dict[str, 
         ],
     }
     write_json(out_dir / "post.json", record)
+    if out_dir.parent == SOCIAL_DIR:
+        try:
+            from social_preview import build_preview
+            build_preview()
+        except Exception as error:  # preview is a convenience, never a failure
+            print(f"WARNING: could not rebuild the Instagram preview page: {error}", file=sys.stderr)
     return record
 
 
