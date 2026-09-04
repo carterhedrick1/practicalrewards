@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import os
 import re
 import subprocess
 import sys
@@ -122,6 +123,107 @@ PLAIN_TEXT_MARKUP_RE = re.compile(
     r"<[^>]*>|&(?:#[0-9]+|#x[0-9a-f]+|[a-z][a-z0-9]+);",
     re.IGNORECASE,
 )
+ARTICLE_NUMERIC_PREFIX = "article numeric claim "
+ATTRIBUTED_NUMERIC_PREFIX = "attributed numeric claim "
+CALCULATION_INPUT_RE = re.compile(r"^calculation \d+ input ")
+INVALID_CALCULATION_PREFIX = "invalid calculation evidence: "
+SOURCE_FETCH_PREFIX = "source fetch failed for "
+SOURCE_ECHO_RE = re.compile(r"^source echo for .+: (\d+) shared 8-grams ")
+HERO_FORMAT_CATEGORY = "hero_format"
+HERO_CARD_ID_CATEGORY = "hero_card_id"
+LLM_FACTS_CATEGORY = "llm_facts"
+LLM_VOICE_CATEGORY = "llm_voice"
+LLM_ERROR_CATEGORY = "llm_error"
+LLM_WARNING_CATEGORY = "llm_warning"
+LLM_PROBLEM_PREFIX = "verifier problem: "
+OUTLET_WORD_RE = r"[A-Z][A-Za-z0-9&.'’/-]*"
+OUTLET_CONNECTOR_RE = r"(?:of|the|and|&|for)"
+OUTLET_ATTRIBUTION_RE = re.compile(
+    rf"\b(?i:according\s+to|per)\s+{OUTLET_WORD_RE}"
+    rf"(?:\s+(?:{OUTLET_WORD_RE}|{OUTLET_CONNECTOR_RE})){{0,6}}\b|"
+    rf"\b{OUTLET_WORD_RE}(?:\s+(?:{OUTLET_WORD_RE}|{OUTLET_CONNECTOR_RE})){{0,6}}"
+    r"\s+(?i:reports?|says?|notes?|confirms?)\b"
+)
+VERIFY_MODES = {"auto", "review"}
+
+
+def verify_mode() -> str:
+    mode = os.environ.get("VERIFY_MODE", "auto").strip().casefold()
+    if mode not in VERIFY_MODES:
+        raise ValueError("VERIFY_MODE must be 'auto' or 'review'")
+    return mode
+
+
+def classify_finding(
+    check_name: str,
+    message: str,
+    *,
+    post_type: str = "evergreen",
+    mode: str = "auto",
+    llm_result: dict[str, Any] | None = None,
+    category: str | None = None,
+) -> str:
+    """Return the policy severity for a verifier failure finding."""
+    if check_name in {"card_fact_packet", "card_numbers", "built_html", "first_person_singular"}:
+        return "hard"
+    if check_name == "hero":
+        return "hard" if category == HERO_CARD_ID_CATEGORY else "soft"
+    if check_name == "source_8gram_overlap":
+        match = SOURCE_ECHO_RE.match(message)
+        return "hard" if match and int(match.group(1)) >= 25 else "soft"
+    if check_name == "source_reachability_and_numbers":
+        if message.startswith(INVALID_CALCULATION_PREFIX):
+            return "hard"
+        if message.startswith(ATTRIBUTED_NUMERIC_PREFIX):
+            return "hard"
+        if CALCULATION_INPUT_RE.match(message):
+            return "soft"
+        if message.startswith(ARTICLE_NUMERIC_PREFIX):
+            return "soft"
+        if message.startswith(SOURCE_FETCH_PREFIX):
+            return "hard" if post_type == "news" else "soft"
+        return "hard"
+    if check_name == "llm_review":
+        if mode == "review" or category == LLM_VOICE_CATEGORY:
+            return "soft"
+        if category == LLM_ERROR_CATEGORY:
+            return "hard"
+        matching_problem = next(
+            (
+                problem for problem in (llm_result or {}).get("problems", [])
+                if isinstance(problem, dict)
+                and message == f"{LLM_PROBLEM_PREFIX}{problem.get('message', '')}"
+            ),
+            None,
+        )
+        if matching_problem is not None:
+            return "hard" if matching_problem.get("severity") == "error" else "soft"
+        if category == LLM_FACTS_CATEGORY:
+            has_error = any(
+                isinstance(problem, dict) and problem.get("severity") == "error"
+                for problem in (llm_result or {}).get("problems", [])
+            )
+            return "hard" if has_error else "soft"
+        return "soft"
+    raise ValueError(f"unknown verifier check: {check_name}")
+
+
+def verification_outcome(
+    mode: str,
+    hard_findings: list[str],
+    soft_findings: list[str],
+    warnings: list[str] | None = None,
+) -> tuple[bool, list[str], list[str]]:
+    """Apply the mode gate while preserving informational warnings in auto mode."""
+    if mode not in VERIFY_MODES:
+        raise ValueError("mode must be 'auto' or 'review'")
+    failures = list(hard_findings)
+    report_warnings = list(warnings or [])
+    if mode == "review":
+        report_warnings.extend(soft_findings)
+    else:
+        failures.extend(soft_findings)
+    return not failures, failures, report_warnings
 
 
 def normalize_number(value: str) -> str:
@@ -758,21 +860,24 @@ def validate_llm_reply(value: Any) -> dict[str, Any]:
     }
 
 
-def llm_review_findings(llm_result: dict[str, Any]) -> tuple[list[str], list[str]]:
-    failures: list[str] = []
-    warnings: list[str] = []
+def llm_review_findings(
+    llm_result: dict[str, Any],
+) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
+    failures: list[tuple[str, str]] = []
+    warnings: list[tuple[str, str]] = []
     if not llm_result["facts_ok"]:
-        failures.append("independent verifier marked facts_ok=false")
+        failures.append((LLM_FACTS_CATEGORY, "independent verifier marked facts_ok=false"))
     if llm_result["voice_score_0_10"] < 6:
-        failures.append(
-            f"independent verifier voice score {llm_result['voice_score_0_10']} is below 6"
-        )
+        failures.append((
+            LLM_VOICE_CATEGORY,
+            f"independent verifier voice score {llm_result['voice_score_0_10']} is below 6",
+        ))
     for problem in llm_result["problems"]:
-        rendered = f"verifier problem: {problem['message']}"
+        rendered = f"{LLM_PROBLEM_PREFIX}{problem['message']}"
         if problem["severity"] == "error":
-            failures.append(rendered)
+            failures.append((LLM_ERROR_CATEGORY, rendered))
         else:
-            warnings.append(rendered)
+            warnings.append((LLM_WARNING_CATEGORY, rendered))
     return failures, warnings
 
 
@@ -858,7 +963,7 @@ def calculation_evidence(
     try:
         validated = validate_calculations(calculations)
     except ValueError as error:
-        return set(), [f"invalid calculation evidence: {error}"], set()
+        return set(), [f"{INVALID_CALCULATION_PREFIX}{error}"], set()
     supported_inputs = known_numbers | source_numbers
     strict_supported_inputs = known_numbers | source_numbers
     illustrative_inputs = set().union(*(
@@ -911,11 +1016,15 @@ def check_article_numeric_findings(
     *,
     news_draft: bool = False,
 ) -> tuple[list[str], list[str]]:
-    """Hard-check named-card/news numbers; generic warnings come from the card scan."""
+    """Find unsupported article numbers and preserve attribution fidelity."""
     article_text = html_to_text(content_html)
-    claims: dict[str, str] = {}
-    for _start, _end, raw, token in iter_numeric_claims(article_text, key_numbers=True):
-        claims.setdefault(token, raw)
+    claims: dict[str, tuple[str, int, int, bool]] = {}
+    for start, end, raw, token in iter_numeric_claims(article_text, key_numbers=True):
+        sentence_start, sentence_end = _clause_bounds(article_text, start, end)
+        attributed = bool(OUTLET_ATTRIBUTION_RE.search(article_text[sentence_start:sentence_end]))
+        existing = claims.get(token)
+        if existing is None or (attributed and not existing[3]):
+            claims[token] = (raw, start, end, attributed)
     known_card_numbers = set().union(*(card_key_numbers(card) for card in cards))
     source_numbers = set().union(*(
         numeric_tokens(source_text, key_numbers=True, include_bare_years=True)
@@ -924,9 +1033,6 @@ def check_article_numeric_findings(
     _associated, _unassociated, illustrative_sentences, _named_claims = scan_card_numeric_claims(
         content_html, cards,
     )
-    illustrative_numbers = set().union(*(
-        set(_numeric_counter(sentence)) for sentence in illustrative_sentences
-    ))
     calculated, calculation_failures, _strict_results = calculation_evidence(
         calculations if calculations is not None else [],
         known_card_numbers,
@@ -936,19 +1042,27 @@ def check_article_numeric_findings(
     math_operands = math_subtraction_operand_tokens(content_html)
     math_totals = signed_math_total_tokens(content_html)
     supported_numbers = known_card_numbers | source_numbers | calculated
-    failures = [
-        f"article numeric claim {raw.strip()} does not match relevant cards.json data, fetched source text, or verified calculation evidence"
-        for token, raw in claims.items()
-        if (
+    failures: list[str] = []
+    for token, (raw, _start, _end, attributed) in claims.items():
+        unsupported = (
             token in math_totals
             and token not in calculated
         ) or (
             token not in math_totals
             and token not in supported_numbers
             and not signed_math_operand_is_supported(token, math_operands, supported_numbers)
-            and (news_draft or token not in illustrative_numbers)
         )
-    ]
+        if not unsupported:
+            continue
+        prefix = (
+            ATTRIBUTED_NUMERIC_PREFIX
+            if attributed
+            else ARTICLE_NUMERIC_PREFIX
+        )
+        failures.append(
+            f"{prefix}{raw.strip()} does not match relevant cards.json data, "
+            "fetched source text, or verified calculation evidence"
+        )
     return calculation_failures + failures, []
 
 
@@ -1031,55 +1145,64 @@ def claim_hint_missing_numbers(url: str, claim_hint: str, source_text: str) -> s
     )
 
 
-def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]]) -> list[str]:
+def hero_findings(
+    draft: dict[str, Any],
+    cards_by_id: dict[Any, dict[str, Any]],
+) -> list[tuple[str, str]]:
     hero = draft.get("hero")
     if hero is None:
         return []
     if not isinstance(hero, dict):
-        return ["hero must be an object when present"]
+        return [(HERO_FORMAT_CATEGORY, "hero must be an object when present")]
 
-    failures: list[str] = []
+    failures: list[tuple[str, str]] = []
+
+    def format_finding(message: str) -> None:
+        failures.append((HERO_FORMAT_CATEGORY, message))
+
+    def card_id_finding(message: str) -> None:
+        failures.append((HERO_CARD_ID_CATEGORY, message))
+
     unexpected = sorted(set(hero) - {"kicker", "stat", "label", "art"})
     if unexpected:
-        failures.append("hero contains unexpected keys: " + ", ".join(unexpected))
+        format_finding("hero contains unexpected keys: " + ", ".join(unexpected))
     for field in ("kicker", "label"):
         field_value = hero.get(field)
         if not isinstance(field_value, str) or not field_value.strip():
-            failures.append(f"hero.{field} must be non-empty plain text")
+            format_finding(f"hero.{field} must be non-empty plain text")
         elif PLAIN_TEXT_MARKUP_RE.search(field_value):
-            failures.append(f"hero.{field} must be plain text without markup")
+            format_finding(f"hero.{field} must be plain text without markup")
 
     stat = hero.get("stat")
     if not isinstance(stat, str) or not stat.strip():
-        failures.append("hero.stat must be a non-empty string")
+        format_finding("hero.stat must be a non-empty string")
+        return failures
+    if not re.search(r"\d", stat):
+        format_finding(f"hero.stat {stat!r} does not contain a digit")
         return failures
     stat_tokens = numeric_tokens(stat, key_numbers=True)
-    if not stat_tokens:
-        failures.append(f"hero.stat {stat!r} does not contain a recognizable number")
-        return failures
-
-    article_tokens = numeric_tokens(
-        html_to_text(str(draft.get("content_html", ""))),
-        key_numbers=True,
-    )
+    article_text = html_to_text(str(draft.get("content_html", "")))
+    article_tokens = numeric_tokens(article_text, key_numbers=True)
     relevant_card_tokens: set[str] = set()
     mentioned = set(draft.get("cards_mentioned", []))
     card_id: Any = None
     art = hero.get("art")
     if not isinstance(art, dict):
-        failures.append("hero.art must be an object")
+        format_finding("hero.art must be an object")
     elif art.get("type") == "card":
         card_id = art.get("card_id")
         if set(art) != {"type", "card_id"}:
-            failures.append("card hero art must contain only type and card_id")
+            format_finding("card hero art must contain only type and card_id")
         if not isinstance(card_id, int) or isinstance(card_id, bool):
-            failures.append("hero.art.card_id must be an integer")
+            format_finding("hero.art.card_id must be an integer")
         elif card_id not in cards_by_id:
-            failures.append(f"hero.art.card_id {card_id} does not exist in cards.json")
+            card_id_finding(f"hero.art.card_id {card_id} does not exist in cards.json")
         else:
             relevant_card_tokens = card_key_numbers(cards_by_id[card_id])
             if card_id not in mentioned:
-                failures.append(f"hero.art.card_id {card_id} is not listed in cards_mentioned")
+                card_id_finding(
+                    f"hero.art.card_id {card_id} is not listed in cards_mentioned"
+                )
     elif art.get("type") == "brand":
         if set(art) == {"type", "asset"}:
             asset = art.get("asset")
@@ -1088,7 +1211,7 @@ def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]])
                 or Path(asset).name != asset
                 or not (ROOT / "images" / "brands" / asset).is_file()
             ):
-                failures.append("hero.art.asset does not exist in images/brands")
+                format_finding("hero.art.asset does not exist in images/brands")
         elif set(art) == {"type", "brand_name"}:
             brand_name = art.get("brand_name")
             if (
@@ -1100,22 +1223,29 @@ def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]])
                 or not slugify_brand_name(brand_name)
                 or len(slugify_brand_name(brand_name)) > 120
             ):
-                failures.append("hero.art.brand_name is not a safe plain-text brand name")
+                format_finding("hero.art.brand_name is not a safe plain-text brand name")
         else:
-            failures.append("brand hero art must contain type plus asset or brand_name")
+            format_finding("brand hero art must contain type plus asset or brand_name")
     elif art.get("type") == "none":
         if set(art) != {"type"}:
-            failures.append("none hero art must contain only type")
+            format_finding("none hero art must contain only type")
     else:
-        failures.append("hero.art.type must be card, brand, or none")
+        format_finding("hero.art.type must be card, brand, or none")
 
-    if not stat_tokens & (article_tokens | relevant_card_tokens):
+    stat_matches_content = bool(stat_tokens & (article_tokens | relevant_card_tokens))
+    if not stat_tokens:
+        digit_runs = re.findall(r"\d+", stat)
+        stat_matches_content = bool(digit_runs) and all(
+            re.search(rf"(?<!\w){re.escape(digit_run)}(?!\w)", article_text)
+            for digit_run in digit_runs
+        )
+    if not stat_matches_content:
         card_context = (
             f" or cards.json data for hero.art.card_id {card_id}"
             if isinstance(card_id, int) and not isinstance(card_id, bool)
             else ""
         )
-        failures.append(
+        format_finding(
             f"hero.stat {stat!r} does not match a numeric claim in content_html"
             f"{card_context}"
         )
@@ -1123,6 +1253,7 @@ def hero_findings(draft: dict[str, Any], cards_by_id: dict[Any, dict[str, Any]])
 
 
 def verify() -> dict[str, Any]:
+    mode = verify_mode()
     draft = read_json(STATE / "draft.json")
     if not isinstance(draft, dict):
         raise ValueError("draft.json is missing or invalid")
@@ -1147,33 +1278,97 @@ def verify() -> dict[str, Any]:
             "content_html mentions card IDs outside cards_mentioned/fact packet: "
             + ", ".join(map(str, omitted_ids))
         )
-    sources = [source for source in draft.get("sources", []) if isinstance(source, dict)]
+    raw_sources = draft.get("sources", [])
+    source_structure_failures: list[str] = []
+    if not isinstance(raw_sources, list):
+        source_structure_failures.append("sources are not a list")
+        raw_sources = []
+    sources = [source for source in raw_sources if isinstance(source, dict)]
     brief = read_json(STATE / "todays-brief.json", {})
     post_type = brief.get("type", "evergreen") if isinstance(brief, dict) else "evergreen"
 
-    failures: list[str] = []
-    warnings: list[str] = []
+    hard_findings: list[str] = []
+    soft_findings: list[str] = []
+    informational_warnings: list[str] = []
     checks: list[dict[str, Any]] = []
-    failures.extend(packet_failures)
-    checks.append({
-        "name": "card_fact_packet",
-        "status": "fail" if packet_failures else "pass",
-        "reasons": packet_failures,
-    })
+
+    llm_result: dict[str, Any] | None = None
+
+    def add_check(
+        name: str,
+        failure_messages: list[str | tuple[str, str]],
+        warning_messages: list[str | tuple[str, str]] | None = None,
+        **extra: Any,
+    ) -> None:
+        warning_messages = warning_messages or []
+        normalized_failures = [
+            finding if isinstance(finding, tuple) else (None, finding)
+            for finding in failure_messages
+        ]
+        normalized_warnings = [
+            finding if isinstance(finding, tuple) else (None, finding)
+            for finding in warning_messages
+        ]
+        failure_findings = [
+            {
+                "severity": classify_finding(
+                    name,
+                    message,
+                    post_type=post_type,
+                    mode=mode,
+                    llm_result=llm_result if name == "llm_review" else None,
+                    category=category,
+                ),
+                "message": message,
+                **({"category": category} if category is not None else {}),
+            }
+            for category, message in normalized_failures
+        ]
+        warning_findings = [
+            {
+                "severity": "soft",
+                "message": message,
+                **({"category": category} if category is not None else {}),
+            }
+            for category, message in normalized_warnings
+        ]
+        named_hard = [
+            str(finding["message"])
+            for finding in failure_findings
+            if finding["severity"] == "hard"
+        ]
+        named_soft = [
+            f"{name}: {finding['message']}"
+            for finding in failure_findings
+            if finding["severity"] == "soft"
+        ]
+        hard_findings.extend(named_hard)
+        soft_findings.extend(named_soft)
+        informational_warnings.extend(
+            f"{name}: {finding['message']}" for finding in warning_findings
+        )
+        active_failure = bool(named_hard or (mode == "auto" and named_soft))
+        all_findings = failure_findings + warning_findings
+        checks.append({
+            "name": name,
+            "status": "fail" if active_failure else ("warn" if all_findings else "pass"),
+            "reasons": [
+                message for _category, message in normalized_failures + normalized_warnings
+            ],
+            "findings": all_findings,
+            **extra,
+        })
+
+    add_check("card_fact_packet", packet_failures)
 
     hero_failures = hero_findings(draft, cards_by_id)
-    failures.extend(hero_failures)
-    checks.append({
-        "name": "hero",
-        "status": "fail" if hero_failures else "pass",
-        "reasons": hero_failures,
-    })
+    add_check("hero", hero_failures)
 
     fetched: dict[str, str] = {}
     saved_articles = read_json(STATE / "articles.json", {})
     if not isinstance(saved_articles, dict):
         saved_articles = {}
-    source_failures: list[str] = []
+    source_failures: list[str] = list(source_structure_failures)
     source_warnings: list[str] = []
     draft_source_urls = {
         validate_public_http_url(str(source.get("url", "")))
@@ -1240,7 +1435,7 @@ def verify() -> dict[str, Any]:
                 if attempt == 0:
                     continue
         if url not in fetched:
-            source_failures.append(f"source fetch failed for {url}: {last_error}")
+            source_failures.append(f"{SOURCE_FETCH_PREFIX}{url}: {last_error}")
     for source in sources:
         url = str(source.get("url", ""))
         if url not in fetched:
@@ -1265,21 +1460,9 @@ def verify() -> dict[str, Any]:
     card_number_failures, card_number_warnings, illustrative_packet = check_card_number_findings(
         content_html, cards, list(fetched.values()), draft.get("calculations", []),
     )
-    failures.extend(card_number_failures)
-    warnings.extend(card_number_warnings)
-    checks.append({
-        "name": "card_numbers",
-        "status": "fail" if card_number_failures else ("warn" if card_number_warnings else "pass"),
-        "reasons": card_number_failures + card_number_warnings,
-    })
+    add_check("card_numbers", card_number_failures, card_number_warnings)
 
-    failures.extend(source_failures)
-    warnings.extend(source_warnings)
-    checks.append({
-        "name": "source_reachability_and_numbers",
-        "status": "fail" if source_failures else ("warn" if source_warnings else "pass"),
-        "reasons": source_failures + source_warnings,
-    })
+    add_check("source_reachability_and_numbers", source_failures, source_warnings)
 
     draft_grams = eight_grams(content_text)
     overlap_failures: list[str] = []
@@ -1292,25 +1475,13 @@ def verify() -> dict[str, Any]:
             overlap_failures.append(
                 f"source echo for {url}: {len(shared)} shared 8-grams (examples: {' | '.join(samples)})"
             )
-    failures.extend(overlap_failures)
-    checks.append({
-        "name": "source_8gram_overlap",
-        "status": "fail" if overlap_failures else "pass",
-        "reasons": overlap_failures,
-        "details": overlap_details,
-    })
+    add_check("source_8gram_overlap", overlap_failures, details=overlap_details)
 
     html_failures = validate_built_html(str(draft.get("slug", "")))
-    failures.extend(html_failures)
-    checks.append({"name": "built_html", "status": "fail" if html_failures else "pass", "reasons": html_failures})
+    add_check("built_html", html_failures)
 
     anecdote_failures = first_person_hard_rule_failures(content_html)
-    failures.extend(anecdote_failures)
-    checks.append({
-        "name": "first_person_singular",
-        "status": "fail" if anecdote_failures else "pass",
-        "reasons": anecdote_failures,
-    })
+    add_check("first_person_singular", anecdote_failures)
 
     prompt_template = (TOOLS / "prompts" / "verify.md").read_text(encoding="utf-8")
     article_tokens = numeric_tokens(content_text, key_numbers=True)
@@ -1322,19 +1493,18 @@ def verify() -> dict[str, Any]:
         "ILLUSTRATIVE_CLAIMS": json.dumps(illustrative_packet, ensure_ascii=False, indent=2),
     })
     verifier, llm_result, fallback_reason = independent_check(prompt)
-    if fallback_reason:
-        warnings.append(fallback_reason)
     llm_failures, llm_warnings = llm_review_findings(llm_result)
-    failures.extend(llm_failures)
-    warnings.extend(llm_warnings)
-    checks.append({
-        "name": "llm_review",
-        "status": "fail" if llm_failures else ("warn" if llm_warnings else "pass"),
-        "reasons": llm_failures + llm_warnings,
-    })
+    if fallback_reason:
+        llm_warnings.insert(0, (LLM_WARNING_CATEGORY, fallback_reason))
+    add_check("llm_review", llm_failures, llm_warnings)
+
+    passed, failures, warnings = verification_outcome(
+        mode, hard_findings, soft_findings, informational_warnings,
+    )
 
     report = {
-        "passed": not failures,
+        "passed": passed,
+        "mode": mode,
         "slug": draft.get("slug"),
         "type": post_type,
         "verified_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
@@ -1343,11 +1513,15 @@ def verify() -> dict[str, Any]:
         "checks": checks,
         "failures": failures,
         "warnings": warnings,
+        "soft_failures": soft_findings,
     }
     write_json(STATE / "verify-report.json", report)
     print("PASS" if report["passed"] else "FAIL")
     for reason in failures:
         print(f"- {reason}")
+    if mode == "review":
+        for reason in warnings:
+            print(f"- note: {reason}")
     return report
 
 
@@ -1355,13 +1529,16 @@ def main() -> int:
     try:
         report = verify()
     except Exception as error:
+        mode = os.environ.get("VERIFY_MODE", "auto")
         report = {
             "passed": False,
+            "mode": mode,
             "verified_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
             "verifier": "not-completed",
             "checks": [],
-            "failures": [f"verification crashed: {type(error).__name__}: {error}"],
+            "failures": [f"verification: verification crashed: {type(error).__name__}: {error}"],
             "warnings": [],
+            "soft_failures": [],
         }
         write_json(STATE / "verify-report.json", report)
         print(report["failures"][0], file=sys.stderr)

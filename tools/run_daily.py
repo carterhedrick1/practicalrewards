@@ -121,6 +121,33 @@ class DailyRunner:
         self.log(f"END {step}: exit {result.returncode}")
         return result.returncode
 
+    def verify_env(self) -> dict[str, str]:
+        review_mode = self.review and not self.dry_run
+        return {"VERIFY_MODE": "review" if review_mode else "auto"}
+
+    @staticmethod
+    def verifier_notes(report: Any) -> list[str]:
+        if not isinstance(report, dict):
+            return []
+        notes = report.get("soft_failures", [])
+        return [str(note) for note in notes] if isinstance(notes, list) else []
+
+    @staticmethod
+    def verifier_note_lines(notes: list[str]) -> list[str]:
+        if not notes:
+            return []
+        return [
+            f"{len(notes)} verifier notes",
+            *(
+                note if len(note) <= 140 else note[:137].rstrip() + "..."
+                for note in notes[:3]
+            ),
+        ]
+
+    def log_verifier_notes(self, notes: list[str]) -> None:
+        for note in notes:
+            self.log(f"verifier note: {note}")
+
     def is_tracked(self, path: Path) -> bool:
         relative = str(path.relative_to(ROOT))
         result = subprocess.run(
@@ -624,7 +651,7 @@ class DailyRunner:
             code = self.run_step("build")
             if code:
                 raise StepFailure("build", code)
-            verify_code = self.run_step("verify")
+            verify_code = self.run_step("verify", self.verify_env())
             report = read_json(STATE / "verify-report.json", {})
             passed = verify_code == 0 and isinstance(report, dict) and report.get("passed") is True
             if not passed:
@@ -663,7 +690,7 @@ class DailyRunner:
                     build_code = self.run_step("build")
                     if build_code:
                         raise StepFailure("build", build_code)
-                    verify_code = self.run_step("verify")
+                    verify_code = self.run_step("verify", self.verify_env())
                     report = read_json(STATE / "verify-report.json", {})
                     passed = (
                         verify_code == 0
@@ -680,10 +707,18 @@ class DailyRunner:
                         self.log(f"Verification passed after revision {revision_round}")
                         break
                 if not passed:
+                    verifier_notes = self.verifier_notes(report) if self.review else []
                     reason = self.hold_failed_post()
                     self.restore_build_state()
                     self.restore_pipeline_state()
-                    self.notify("Post held", f"Today's post was held — {reason}")
+                    held_message = f"Today's post was held — {reason}"
+                    if self.review:
+                        self.log_verifier_notes(verifier_notes)
+                        held_message = f"Today's post was held for a HARD reason — {reason}"
+                        note_lines = self.verifier_note_lines(verifier_notes)
+                        if note_lines:
+                            held_message += "\n" + "\n".join(note_lines)
+                    self.notify("Post held", held_message)
                     return 1
             draft = read_json(STATE / "draft.json", {})
             self.run_social_step(str(draft.get("slug", "")) if isinstance(draft, dict) else "")
@@ -696,12 +731,19 @@ class DailyRunner:
             title, slug = self.git_publish()
             if self.review:
                 preview_link = f"http://carters-mac-mini.tailb1c452.ts.net:8000/blog/{slug}.html"
+                verifier_notes = self.verifier_notes(report)
+                self.log_verifier_notes(verifier_notes)
+                notification_lines = [
+                    self.social_note or "Post ready for review",
+                    f"Blog: {preview_link}",
+                    *self.verifier_note_lines(verifier_notes),
+                ]
                 actions = [("Blog preview", preview_link)]
                 if self.social_ready:
                     actions.append(("Instagram preview", INSTAGRAM_PREVIEW_URL))
                 self.notify(
                     title,
-                    (self.social_note or "Post ready for review") + f"\nBlog: {preview_link}",
+                    "\n".join(notification_lines),
                     link=preview_link,
                     actions=actions,
                 )
@@ -765,7 +807,8 @@ def main() -> int:
     runner = DailyRunner(dry_run=args.dry_run, review=args.review)
     try:
         if args.step:
-            return runner.run_step(args.step)
+            env = runner.verify_env() if args.step == "verify" else None
+            return runner.run_step(args.step, env)
         return runner.run_full()
     finally:
         lock_handle.close()
