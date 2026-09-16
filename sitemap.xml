@@ -550,4 +550,10 @@
     <priority>0.6</priority>
   </url>
   <url><loc>https://practicalrewards.com/calculators/alaska-companion-fare.html</loc><lastmod>2026-09-16</lastmod></url>
+  <url>
+    <loc>https://practicalrewards.com/blog/atmos-ascent-vs-summit-which-alaska-card-fits-your-trips-34407e.html</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>
